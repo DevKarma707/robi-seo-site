@@ -1,0 +1,166 @@
+{
+  "meta": {
+    "title": "Robi AI | Logiciel de Facturation IA pour Freelances",
+    "description": "Créez vos devis et factures en 30 secondes avec l'IA. Relances automatiques, paiement Stripe intégré."
+  },
+  "nav": {
+    "features": "Fonctionnalités",
+    "industries": "Industries",
+    "pricing": "Tarifs",
+    "blog": "Blog",
+    "tools": "Outils",
+    "login": "Connexion",
+    "signup": "Essayer Gratuit",
+    "allIndustries": "Voir tout →"
+  },
+  "hero": {
+    "badge": "Nouveau : Relance facture par IA",
+    "title": "Stop Excel.",
+    "titleAccent": "Start Robi.",
+    "subtitle": "L'assistant IA qui vous fait gagner 10h par mois. Parlez, facturez, encaissez.",
+    "cta": "Démarrer Gratuitement",
+    "secondaryCta": "Voir la démo",
+    "socialProof": "Rejoint par",
+    "socialProofHighlight": "2000+",
+    "socialProofEnd": "freelances"
+  },
+  "features": {
+    "title": "Tout ce qu'il faut pour",
+    "titleAccent": "dominer",
+    "titleEnd": "le freelancing.",
+    "aiInvoicing": {
+      "title": "Facturation par IA",
+      "description": "Parlez, Robi facture. Créez des devis et factures en quelques secondes par simple conversation."
+    },
+    "automation": {
+      "title": "Automatisation Complète",
+      "description": "Relances automatiques, rappels de paiement et suivi des impayés sans lever le petit doigt."
+    },
+    "payments": {
+      "title": "Paiement Intégré",
+      "description": "Stripe et PayPal intégrés. Vos clients paient en un clic, vous êtes crédité instantanément."
+    },
+    "emails": {
+      "title": "Emails Personnalisés",
+      "description": "L'IA rédige des emails de relance polis et efficaces adaptés à chaque situation."
+    },
+    "dashboard": {
+      "title": "Tableau de Bord",
+      "description": "Visualisez votre CA, factures en attente et objectifs en temps réel."
+    },
+    "compliant": {
+      "title": "100% Conforme",
+      "description": "Factures conformes aux normes françaises. Mentions légales automatiques."
+    }
+  },
+  "process": {
+    "label": "Processus",
+    "title": "Votre assistant de poche,",
+    "titleAccent": "de A \u00e0 Z.",
+    "subtitle": "De la cr\u00e9ation du devis \u00e0 l'encaissement final, Robi s'occupe de tout.",
+    "step1": {
+      "title": "Cr\u00e9ez en parlant",
+      "description": "\"Pr\u00e9pare un devis de 500\u20ac pour Alice.\" C'est fait en 3 secondes."
+    },
+    "step2": {
+      "title": "Envoyez en 1 clic",
+      "description": "Une fois valid\u00e9, Robi envoie le lien de paiement \u00e0 votre client par email."
+    },
+    "step3": {
+      "title": "Soyez notifi\u00e9",
+      "description": "D\u00e8s que le client paie, vous recevez une notification instantan\u00e9ment."
+    },
+    "step4": {
+      "title": "Relance automatique",
+      "description": "Facture en retard ? Robi relance poliment vos clients \u00e0 votre place."
+    }
+  },
+  "payments": {
+    "title": "Simplifiez vos transactions avec PayPal & Stripe",
+    "subtitle": "Dites adieu aux retards de paiement. Proposez une exp\u00e9rience de paiement fluide et moderne \u00e0 vos clients.",
+    "cta": "Voir les paiements en ligne",
+    "integrations": "Int\u00e9grations :"
+  },
+  "testimonials": {
+    "title": "Ce qu'ils disent de",
+    "titleAccent": "Robi"
+  },
+  "pricing": {
+    "title": "Prix simples, ROI énorme.",
+    "subtitle": "Rejoignez les freelances malins qui économisent +10h par mois.",
+    "weekly": "Hebdomadaire",
+    "monthly": "Mensuel",
+    "yearly": "Annuel",
+    "week": "/semaine",
+    "month": "/mois",
+    "year": "/an",
+    "noCommitment": "Sans engagement",
+    "perMonth": "Soit {price}/mois",
+    "save": "Économisez {amount}",
+    "mostPopular": "Plus populaire",
+    "cta": "Commencer",
+    "features": {
+      "unlimitedAI": "IA Conversationnel illimité",
+      "unlimitedDocs": "Factures & devis illimités",
+      "customPDF": "PDF personnalisés",
+      "export": "Export Excel/PDF",
+      "prioritySupport": "Support prioritaire",
+      "autoReminders": "Relances automatiques",
+      "earlyAccess": "Accès anticipé nouveautés",
+      "phoneSupport": "Support téléphonique",
+      "training": "Formation personnalisée"
+    }
+  },
+  "faq": {
+    "title": "Questions fréquentes",
+    "q1": "Comment fonctionne l'essai gratuit ?",
+    "a1": "Vous pouvez créer jusqu'à 3 documents par mois gratuitement. Aucune carte bancaire n'est requise pour commencer.",
+    "q2": "Mes données sont-elles sécurisées ?",
+    "a2": "Oui, nous utilisons un chiffrement de niveau bancaire (AES-256) et Stripe pour sécuriser toutes vos transactions.",
+    "q3": "Puis-je personnaliser mes factures ?",
+    "a3": "Absolument. Vous pouvez ajouter votre logo, vos couleurs et choisir parmi plusieurs modèles premium.",
+    "q4": "Robi remplace-t-il mon comptable ?",
+    "a4": "Robi automatise votre gestion quotidienne, mais un comptable reste essentiel pour vos déclarations fiscales.",
+    "q5": "Que se passe-t-il si j'annule ?",
+    "a5": "Vous pouvez annuler en un clic. Vos données restent accessibles en lecture seule pendant 12 mois."
+  },
+  "cta": {
+    "title": "Prêt à automatiser votre facturation ?",
+    "subtitle": "Rejoignez 2000+ entrepreneurs qui facturent sans effort",
+    "button": "Démarrer avec Robi",
+    "subtext": "Sans carte • Annulation en 1 clic"
+  },
+  "footer": {
+    "description": "L'assistant IA qui vous fait gagner 10h par mois sur votre facturation.",
+    "product": "Produit",
+    "industries": "Industries",
+    "resources": "Ressources",
+    "company": "Entreprise",
+    "features": "Fonctionnalités",
+    "pricing": "Tarifs",
+    "integrations": "Intégrations",
+    "roadmap": "Roadmap",
+    "blog": "Blog",
+    "guides": "Guides",
+    "calculator": "Calculateur TJM",
+    "templates": "Templates",
+    "about": "À propos",
+    "contact": "Contact",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité",
+    "copyright": "© {year} Robi AI Technologies. Tous droits réservés."
+  },
+  "common": {
+    "learnMore": "En savoir plus",
+    "getStarted": "Commencer",
+    "freeTrial": "Essai gratuit",
+    "noCreditCard": "Sans carte bancaire",
+    "minutes": "minutes",
+    "hours": "heures",
+    "days": "jours",
+    "perDay": "/jour",
+    "perWeek": "/semaine",
+    "perMonth": "/mois",
+    "perYear": "/an"
+  }
+}

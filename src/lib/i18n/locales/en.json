@@ -1,0 +1,166 @@
+{
+  "meta": {
+    "title": "Robi AI | AI Invoicing Software for Freelancers",
+    "description": "Create quotes and invoices in 30 seconds with AI. Automatic reminders, integrated Stripe payments."
+  },
+  "nav": {
+    "features": "Features",
+    "industries": "Industries",
+    "pricing": "Pricing",
+    "blog": "Blog",
+    "tools": "Tools",
+    "login": "Login",
+    "signup": "Try Free",
+    "allIndustries": "See all →"
+  },
+  "hero": {
+    "badge": "New: AI Invoice Chasing",
+    "title": "Stop Excel.",
+    "titleAccent": "Start Robi.",
+    "subtitle": "The AI assistant that saves you 10 hours per month. Speak, invoice, get paid.",
+    "cta": "Start for Free",
+    "secondaryCta": "Watch Demo",
+    "socialProof": "Joined by",
+    "socialProofHighlight": "2,000+",
+    "socialProofEnd": "freelancers"
+  },
+  "features": {
+    "title": "Everything you need to",
+    "titleAccent": "dominate",
+    "titleEnd": "freelancing.",
+    "aiInvoicing": {
+      "title": "AI Invoicing",
+      "description": "Speak, Robi invoices. Create quotes and invoices in seconds through simple conversation."
+    },
+    "automation": {
+      "title": "Full Automation",
+      "description": "Automatic reminders, payment follow-ups and overdue tracking without lifting a finger."
+    },
+    "payments": {
+      "title": "Integrated Payments",
+      "description": "Stripe and PayPal built-in. Your clients pay in one click, you get credited instantly."
+    },
+    "emails": {
+      "title": "Smart Emails",
+      "description": "AI writes polite and effective reminder emails tailored to each situation."
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Visualize your revenue, pending invoices and goals in real-time."
+    },
+    "compliant": {
+      "title": "100% Compliant",
+      "description": "Invoices compliant with regulations. Automatic legal mentions."
+    }
+  },
+  "process": {
+    "label": "Process",
+    "title": "Your pocket assistant,",
+    "titleAccent": "from A to Z.",
+    "subtitle": "From quote creation to final payment, Robi handles everything.",
+    "step1": {
+      "title": "Speak to create",
+      "description": "\"Prepare a $500 quote for Alice.\" Done in 3 seconds."
+    },
+    "step2": {
+      "title": "Send in 1 click",
+      "description": "Once approved, Robi sends the payment link to your client by email."
+    },
+    "step3": {
+      "title": "Get notified",
+      "description": "As soon as the client pays, you get notified instantly."
+    },
+    "step4": {
+      "title": "Auto follow-ups",
+      "description": "Late invoice? Robi politely follows up with your clients for you."
+    }
+  },
+  "payments": {
+    "title": "Simplify transactions with PayPal & Stripe",
+    "subtitle": "Say goodbye to late payments. Offer a smooth and modern payment experience to your clients.",
+    "cta": "View online payments",
+    "integrations": "Integrations:"
+  },
+  "testimonials": {
+    "title": "What they say about",
+    "titleAccent": "Robi"
+  },
+  "pricing": {
+    "title": "Simple pricing, huge ROI.",
+    "subtitle": "Join smart freelancers saving 10+ hours per month.",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "week": "/week",
+    "month": "/month",
+    "year": "/year",
+    "noCommitment": "No commitment",
+    "perMonth": "Just {price}/month",
+    "save": "Save {amount}",
+    "mostPopular": "Most popular",
+    "cta": "Get Started",
+    "features": {
+      "unlimitedAI": "Unlimited Conversational AI",
+      "unlimitedDocs": "Unlimited invoices & quotes",
+      "customPDF": "Custom branded PDFs",
+      "export": "Excel/PDF Export",
+      "prioritySupport": "Priority support",
+      "autoReminders": "Automatic reminders",
+      "earlyAccess": "Early access to new features",
+      "phoneSupport": "Phone support",
+      "training": "Personalized training"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "q1": "How does the free trial work?",
+    "a1": "You can create up to 3 documents per month for free. No credit card required to start.",
+    "q2": "Is my data secure?",
+    "a2": "Yes, we use bank-level encryption (AES-256) and Stripe to secure all your transactions.",
+    "q3": "Can I customize my invoices?",
+    "a3": "Absolutely. You can add your logo, colors, and choose from several premium templates.",
+    "q4": "Does Robi replace my accountant?",
+    "a4": "Robi automates your daily management, but an accountant remains essential for tax filings.",
+    "q5": "What happens if I cancel?",
+    "a5": "You can cancel with one click. Your data remains accessible in read-only mode for 12 months."
+  },
+  "cta": {
+    "title": "Ready to automate your invoicing?",
+    "subtitle": "Join 2,000+ entrepreneurs invoicing effortlessly",
+    "button": "Start with Robi",
+    "subtext": "No card required • 1-click cancellation"
+  },
+  "footer": {
+    "description": "The AI assistant that saves you 10 hours per month on invoicing.",
+    "product": "Product",
+    "industries": "Industries",
+    "resources": "Resources",
+    "company": "Company",
+    "features": "Features",
+    "pricing": "Pricing",
+    "integrations": "Integrations",
+    "roadmap": "Roadmap",
+    "blog": "Blog",
+    "guides": "Guides",
+    "calculator": "Rate Calculator",
+    "templates": "Templates",
+    "about": "About",
+    "contact": "Contact",
+    "legal": "Legal Notice",
+    "privacy": "Privacy",
+    "copyright": "© {year} Robi AI Technologies. All rights reserved."
+  },
+  "common": {
+    "learnMore": "Learn more",
+    "getStarted": "Get started",
+    "freeTrial": "Free trial",
+    "noCreditCard": "No credit card required",
+    "minutes": "minutes",
+    "hours": "hours",
+    "days": "days",
+    "perDay": "/day",
+    "perWeek": "/week",
+    "perMonth": "/month",
+    "perYear": "/year"
+  }
+}

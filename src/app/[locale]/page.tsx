@@ -1,0 +1,102 @@
+import { Hero } from "@/components/sections/Hero";
+import { Process } from "@/components/sections/Process";
+import { Features } from "@/components/sections/Features";
+import { Payments } from "@/components/sections/Payments";
+import { Testimonials } from "@/components/sections/Testimonials";
+import { Pricing } from "@/components/sections/Pricing";
+import { FAQ } from "@/components/sections/FAQ";
+import { CTA } from "@/components/sections/CTA";
+import { Locale, locales, defaultLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+
+function getValidLocale(locale: string): Locale {
+  return locales.includes(locale as Locale) ? (locale as Locale) : defaultLocale;
+}
+
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: rawLocale } = await params;
+  const locale = getValidLocale(rawLocale);
+  const dict = await getDictionary(locale);
+
+  return (
+    <>
+      {/* JSON-LD Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: "Robi AI",
+            applicationCategory: "BusinessApplication",
+            operatingSystem: "Web, iOS, Android",
+            description: dict.meta.description,
+            offers: {
+              "@type": "Offer",
+              price: "14.99",
+              priceCurrency: "EUR",
+            },
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: "4.9",
+              ratingCount: "2000",
+            },
+          }),
+        }}
+      />
+
+      <Hero
+        badge={dict.hero.badge}
+        title={dict.hero.title}
+        titleAccent={dict.hero.titleAccent}
+        subtitle={dict.hero.subtitle}
+        ctaText={dict.hero.cta}
+        ctaHref={`/${locale}/signup`}
+        secondaryCtaText={dict.hero.secondaryCta}
+        secondaryCtaHref={`/${locale}/demo`}
+        variant="default"
+        socialProof={{
+          text: dict.hero.socialProof,
+          highlight: dict.hero.socialProofHighlight,
+          end: dict.hero.socialProofEnd,
+        }}
+      />
+
+      <Process dict={dict} />
+
+      <Features
+        title={dict.features.title}
+        titleAccent={dict.features.titleAccent}
+        subtitle={dict.features.titleEnd}
+        dict={dict}
+      />
+
+      <Payments dict={dict} locale={locale} />
+
+      <Testimonials
+        title={dict.testimonials.title}
+        titleAccent={dict.testimonials.titleAccent}
+      />
+
+      <Pricing
+        title={dict.pricing.title}
+        subtitle={dict.pricing.subtitle}
+        dict={dict}
+        locale={locale}
+      />
+
+      <FAQ title={dict.faq.title} dict={dict} />
+
+      <CTA
+        title={dict.cta.title}
+        subtitle={dict.cta.subtitle}
+        ctaText={dict.cta.button}
+        secondaryText={dict.cta.subtext}
+      />
+    </>
+  );
+}

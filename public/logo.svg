@@ -1,0 +1,41 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradation Premium ultra-propre -->
+    <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F7FFEE;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#BEF221;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Reflet Glossy simplifié (plus net) -->
+    <linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.5" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+  
+  <g>
+    <!-- Structure du Robot -->
+    <rect x="420" y="140" width="184" height="60" rx="30" fill="url(#grad)"/>
+    <rect x="80" y="350" width="100" height="160" rx="50" fill="url(#grad)"/>
+    <rect x="844" y="350" width="100" height="160" rx="50" fill="url(#grad)"/>
+    
+    <!-- Bordure principale -->
+    <rect x="180" y="220" width="664" height="100" rx="50" fill="url(#grad)"/>
+    <rect x="140" y="310" width="100" height="380" rx="50" fill="url(#grad)"/>
+    <rect x="784" y="310" width="100" height="380" rx="50" fill="url(#grad)"/>
+    <rect x="180" y="680" width="664" height="100" rx="50" fill="url(#grad)"/>
+    
+    <!-- Zone Intérieure (Contrastée) -->
+    <rect x="240" y="340" width="544" height="340" rx="40" fill="#0D0630"/>
+    
+    <!-- Yeux -->
+    <rect x="320" y="420" width="120" height="120" rx="25" fill="#FFFFFF"/>
+    <rect x="584" y="420" width="120" height="120" rx="25" fill="#FFFFFF"/>
+    
+    <!-- Bouche -->
+    <rect x="360" y="600" width="304" height="36" rx="18" fill="url(#grad)"/>
+    
+    <!-- Highlight Glossy global -->
+    <path d="M180 270 Q 512 240 844 270 L 844 220 Q 512 220 180 220 Z" fill="url(#shine)" opacity="0.6"/>
+  </g>
+</svg>

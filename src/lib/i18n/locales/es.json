@@ -1,0 +1,166 @@
+{
+  "meta": {
+    "title": "Robi AI | Software de Facturación IA para Freelancers",
+    "description": "Crea presupuestos y facturas en 30 segundos con IA. Recordatorios automáticos, pagos Stripe integrados."
+  },
+  "nav": {
+    "features": "Funciones",
+    "industries": "Industrias",
+    "pricing": "Precios",
+    "blog": "Blog",
+    "tools": "Herramientas",
+    "login": "Iniciar sesión",
+    "signup": "Prueba Gratis",
+    "allIndustries": "Ver todo →"
+  },
+  "hero": {
+    "badge": "Nuevo: Seguimiento de facturas con IA",
+    "title": "Stop Excel.",
+    "titleAccent": "Start Robi.",
+    "subtitle": "El asistente de IA que te ahorra 10 horas al mes. Habla, factura, cobra.",
+    "cta": "Empezar Gratis",
+    "secondaryCta": "Ver Demo",
+    "socialProof": "Se unieron",
+    "socialProofHighlight": "2.000+",
+    "socialProofEnd": "freelancers"
+  },
+  "features": {
+    "title": "Todo lo que necesitas para",
+    "titleAccent": "dominar",
+    "titleEnd": "el freelancing.",
+    "aiInvoicing": {
+      "title": "Facturación con IA",
+      "description": "Habla, Robi factura. Crea presupuestos y facturas en segundos mediante conversación."
+    },
+    "automation": {
+      "title": "Automatización Total",
+      "description": "Recordatorios automáticos, seguimiento de pagos y control de impagos sin esfuerzo."
+    },
+    "payments": {
+      "title": "Pagos Integrados",
+      "description": "Stripe y PayPal integrados. Tus clientes pagan en un clic, recibes el dinero al instante."
+    },
+    "emails": {
+      "title": "Emails Inteligentes",
+      "description": "La IA redacta emails de recordatorio educados y efectivos adaptados a cada situación."
+    },
+    "dashboard": {
+      "title": "Panel de Control",
+      "description": "Visualiza tu facturación, facturas pendientes y objetivos en tiempo real."
+    },
+    "compliant": {
+      "title": "100% Legal",
+      "description": "Facturas conformes con la normativa. Menciones legales automáticas."
+    }
+  },
+  "process": {
+    "label": "Proceso",
+    "title": "Tu asistente de bolsillo,",
+    "titleAccent": "de la A a la Z.",
+    "subtitle": "Desde la creaci\u00f3n del presupuesto hasta el cobro final, Robi se encarga de todo.",
+    "step1": {
+      "title": "Crea hablando",
+      "description": "\"Prepara un presupuesto de 500\u20ac para Alice.\" Listo en 3 segundos."
+    },
+    "step2": {
+      "title": "Env\u00eda en 1 clic",
+      "description": "Una vez aprobado, Robi env\u00eda el enlace de pago a tu cliente por email."
+    },
+    "step3": {
+      "title": "Recibe notificaciones",
+      "description": "En cuanto el cliente paga, recibes una notificaci\u00f3n al instante."
+    },
+    "step4": {
+      "title": "Seguimiento autom\u00e1tico",
+      "description": "\u00bfFactura atrasada? Robi hace seguimiento educado a tus clientes por ti."
+    }
+  },
+  "payments": {
+    "title": "Simplifica transacciones con PayPal y Stripe",
+    "subtitle": "Di adi\u00f3s a los retrasos en pagos. Ofrece una experiencia de pago fluida y moderna a tus clientes.",
+    "cta": "Ver pagos online",
+    "integrations": "Integraciones:"
+  },
+  "testimonials": {
+    "title": "Lo que dicen de",
+    "titleAccent": "Robi"
+  },
+  "pricing": {
+    "title": "Precios simples, ROI enorme.",
+    "subtitle": "Únete a los freelancers inteligentes que ahorran +10h al mes.",
+    "weekly": "Semanal",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "week": "/semana",
+    "month": "/mes",
+    "year": "/año",
+    "noCommitment": "Sin compromiso",
+    "perMonth": "Solo {price}/mes",
+    "save": "Ahorra {amount}",
+    "mostPopular": "Más popular",
+    "cta": "Empezar",
+    "features": {
+      "unlimitedAI": "IA Conversacional ilimitada",
+      "unlimitedDocs": "Facturas y presupuestos ilimitados",
+      "customPDF": "PDFs personalizados",
+      "export": "Exportar Excel/PDF",
+      "prioritySupport": "Soporte prioritario",
+      "autoReminders": "Recordatorios automáticos",
+      "earlyAccess": "Acceso anticipado a novedades",
+      "phoneSupport": "Soporte telefónico",
+      "training": "Formación personalizada"
+    }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "q1": "¿Cómo funciona la prueba gratuita?",
+    "a1": "Puedes crear hasta 3 documentos al mes gratis. No se requiere tarjeta de crédito.",
+    "q2": "¿Mis datos están seguros?",
+    "a2": "Sí, usamos cifrado de nivel bancario (AES-256) y Stripe para asegurar todas tus transacciones.",
+    "q3": "¿Puedo personalizar mis facturas?",
+    "a3": "Por supuesto. Puedes añadir tu logo, colores y elegir entre varias plantillas premium.",
+    "q4": "¿Robi reemplaza a mi contable?",
+    "a4": "Robi automatiza tu gestión diaria, pero un contable sigue siendo esencial para las declaraciones.",
+    "q5": "¿Qué pasa si cancelo?",
+    "a5": "Puedes cancelar con un clic. Tus datos permanecen accesibles en modo lectura durante 12 meses."
+  },
+  "cta": {
+    "title": "¿Listo para automatizar tu facturación?",
+    "subtitle": "Únete a 2.000+ emprendedores que facturan sin esfuerzo",
+    "button": "Empezar con Robi",
+    "subtext": "Sin tarjeta • Cancelación en 1 clic"
+  },
+  "footer": {
+    "description": "El asistente de IA que te ahorra 10 horas al mes en facturación.",
+    "product": "Producto",
+    "industries": "Industrias",
+    "resources": "Recursos",
+    "company": "Empresa",
+    "features": "Funciones",
+    "pricing": "Precios",
+    "integrations": "Integraciones",
+    "roadmap": "Roadmap",
+    "blog": "Blog",
+    "guides": "Guías",
+    "calculator": "Calculadora de Tarifas",
+    "templates": "Plantillas",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "legal": "Aviso Legal",
+    "privacy": "Privacidad",
+    "copyright": "© {year} Robi AI Technologies. Todos los derechos reservados."
+  },
+  "common": {
+    "learnMore": "Saber más",
+    "getStarted": "Empezar",
+    "freeTrial": "Prueba gratis",
+    "noCreditCard": "Sin tarjeta de crédito",
+    "minutes": "minutos",
+    "hours": "horas",
+    "days": "días",
+    "perDay": "/día",
+    "perWeek": "/semana",
+    "perMonth": "/mes",
+    "perYear": "/año"
+  }
+}
