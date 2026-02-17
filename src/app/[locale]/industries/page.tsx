@@ -1,21 +1,32 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { industries, industryCategories } from "@/data/seo-config";
+import { industries, industryCategories, t } from "@/data/seo-config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { CTA } from "@/components/sections/CTA";
 import { ArrowRight, Hammer, Code, Palette, PartyPopper, Briefcase, Heart } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Facturation par Industrie | Robi AI",
-  description:
-    "Découvrez comment Robi AI s'adapte à votre métier. Solutions de facturation sur-mesure pour plombiers, électriciens, consultants, développeurs et plus.",
-  keywords: [
-    "facturation par métier",
-    "logiciel facturation artisan",
-    "facturation freelance",
-  ],
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  const locale = rawLocale as Locale;
+  const dict = await getDictionary(locale);
+
+  return {
+    title: dict.pages.industries.title,
+    description: dict.pages.industries.description,
+    keywords: [
+      "facturation par métier",
+      "logiciel facturation artisan",
+      "facturation freelance",
+    ],
+  };
+}
 
 const categoryIcons: Record<string, any> = {
   btp: Hammer,
@@ -26,20 +37,29 @@ const categoryIcons: Record<string, any> = {
   sante: Heart,
 };
 
-export default function IndustriesPage() {
+export default async function IndustriesPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: rawLocale } = await params;
+  const locale = rawLocale as Locale;
+  const dict = await getDictionary(locale);
+  const ind = dict.pages.industries;
+
   // Group industries by category
   const industriesByCategory = industryCategories.map((category) => ({
     ...category,
-    industries: industries.filter((ind) => ind.category === category.id),
+    industries: industries.filter((i) => i.category === category.id),
   }));
 
   return (
     <>
       <Hero
-        badge="Solutions par métier"
-        title="Une solution adaptée"
-        titleAccent="à votre métier"
-        subtitle="Robi comprend les spécificités de chaque profession. Découvrez comment nous pouvons vous aider."
+        badge={ind.heroBadge}
+        title={ind.heroTitle}
+        titleAccent={ind.heroTitleAccent}
+        subtitle={ind.heroSubtitle}
         variant="centered"
       />
 
@@ -54,33 +74,33 @@ export default function IndustriesPage() {
                     <Icon className="w-6 h-6 text-[#BEF221]" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-black text-[#0D0630]">
-                    {category.name}
+                    {t(category.name, locale)}
                   </h2>
                   <span className="text-sm text-gray-400 ml-2">
-                    {category.industries.length} métiers
+                    {category.industries.length} {ind.professions}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {category.industries.map((industry) => (
-                    <Link key={industry.slug} href={`/fr/industries/${industry.slug}`}>
+                    <Link key={industry.slug} href={`/${locale}/industries/${industry.slug}`}>
                       <Card className="h-full group cursor-pointer hover:border-[#BEF221] transition-all">
                         <div className="flex items-start justify-between mb-3">
                           <h3 className="text-lg font-bold text-[#0D0630] group-hover:text-[#0D0630]">
-                            {industry.name}
+                            {t(industry.name, locale)}
                           </h3>
                           <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-[#BEF221] transition-colors flex-shrink-0" />
                         </div>
                         <p className="text-gray-600 text-sm line-clamp-2 mb-3">
-                          {industry.heroTitle}
+                          {t(industry.heroTitle, locale)}
                         </p>
                         <div className="flex flex-wrap gap-1">
-                          {industry.features.slice(0, 2).map((feature) => (
+                          {industry.features.slice(0, 2).map((feature, idx) => (
                             <span
-                              key={feature}
+                              key={idx}
                               className="text-xs bg-[#BEF221]/20 text-[#0D0630] px-2 py-0.5 rounded-full"
                             >
-                              {feature}
+                              {t(feature, locale)}
                             </span>
                           ))}
                         </div>
@@ -98,7 +118,7 @@ export default function IndustriesPage() {
       <section className="py-16 bg-[#0D0630]">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
-            Adapté à <span className="text-[#BEF221]">{industries.length}+ métiers</span>
+            {ind.adaptedTo} <span className="text-[#BEF221]">{industries.length}{ind.professionsSuffix}</span>
           </h2>
           <div className="grid grid-cols-3 gap-8">
             <div>
@@ -107,17 +127,22 @@ export default function IndustriesPage() {
             </div>
             <div>
               <p className="text-4xl font-black text-[#BEF221]">{industryCategories.length}</p>
-              <p className="text-white/50 text-sm">Catégories</p>
+              <p className="text-white/50 text-sm">{ind.categories}</p>
             </div>
             <div>
               <p className="text-4xl font-black text-[#BEF221]">∞</p>
-              <p className="text-white/50 text-sm">Personnalisation</p>
+              <p className="text-white/50 text-sm">{ind.customization}</p>
             </div>
           </div>
         </div>
       </section>
 
-      <CTA />
+      <CTA
+        title={dict.cta.title}
+        subtitle={dict.cta.subtitle}
+        ctaText={dict.cta.button}
+        secondaryText={dict.cta.subtext}
+      />
     </>
   );
 }

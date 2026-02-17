@@ -8,6 +8,8 @@ interface FooterProps {
 }
 
 export function Footer({ locale, dict }: FooterProps) {
+  const indCat = dict.footer.industryCategories;
+
   const footerLinks = {
     product: {
       title: dict.footer.product,
@@ -21,12 +23,12 @@ export function Footer({ locale, dict }: FooterProps) {
     industries: {
       title: dict.footer.industries,
       links: [
-        { name: "🔧 BTP & Artisans", href: `/${locale}/industries` },
-        { name: "💻 Tech & Digital", href: `/${locale}/industries` },
-        { name: "🎨 Créatifs", href: `/${locale}/industries` },
-        { name: "🎉 Événementiel", href: `/${locale}/industries` },
-        { name: "💼 Conseil", href: `/${locale}/industries` },
-        { name: "❤️ Santé", href: `/${locale}/industries` },
+        { name: `🔧 ${indCat.btp}`, href: `/${locale}/industries` },
+        { name: `💻 ${indCat.tech}`, href: `/${locale}/industries` },
+        { name: `🎨 ${indCat.creatif}`, href: `/${locale}/industries` },
+        { name: `🎉 ${indCat.evenementiel}`, href: `/${locale}/industries` },
+        { name: `💼 ${indCat.conseil}`, href: `/${locale}/industries` },
+        { name: `❤️ ${indCat.sante}`, href: `/${locale}/industries` },
       ],
     },
     resources: {

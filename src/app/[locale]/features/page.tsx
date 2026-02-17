@@ -1,17 +1,28 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { features } from "@/data/seo-config";
+import { features, t } from "@/data/seo-config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { CTA } from "@/components/sections/CTA";
 import { ArrowRight, Bot, Zap, Bell, CreditCard, BarChart3 } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Fonctionnalités | Robi AI",
-  description:
-    "Découvrez toutes les fonctionnalités de Robi AI : facturation IA, devis automatiques, relances, paiement en ligne et tableau de bord.",
-  keywords: ["fonctionnalités robi", "facturation ia", "logiciel facturation features"],
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  const locale = rawLocale as Locale;
+  const dict = await getDictionary(locale);
+
+  return {
+    title: `${dict.nav.features} | Robi AI`,
+    description: dict.meta.description,
+    keywords: ["fonctionnalités robi", "facturation ia", "logiciel facturation features"],
+  };
+}
 
 const featureIcons = {
   "facturation-ia": Bot,
@@ -21,14 +32,22 @@ const featureIcons = {
   "tableau-de-bord": BarChart3,
 };
 
-export default function FeaturesPage() {
+export default async function FeaturesPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: rawLocale } = await params;
+  const locale = rawLocale as Locale;
+  const dict = await getDictionary(locale);
+
   return (
     <>
       <Hero
-        badge="Fonctionnalités"
-        title="Tout ce dont vous avez besoin"
-        titleAccent="en un seul outil"
-        subtitle="Robi combine IA, automatisation et simplicité pour gérer votre facturation de A à Z."
+        badge={dict.nav.features}
+        title={dict.features.title}
+        titleAccent={dict.features.titleAccent}
+        subtitle={dict.features.titleEnd}
         variant="centered"
       />
 
@@ -42,7 +61,7 @@ export default function FeaturesPage() {
               return (
                 <Link
                   key={feature.slug}
-                  href={`/features/${feature.slug}`}
+                  href={`/${locale}/features/${feature.slug}`}
                   className={isLarge ? "md:col-span-2" : ""}
                 >
                   <Card
@@ -69,7 +88,7 @@ export default function FeaturesPage() {
                             index === 0 ? "text-white" : "text-[#0D0630]"
                           }`}
                         >
-                          {feature.name}
+                          {t(feature.name, locale)}
                         </h3>
                         <ArrowRight
                           className={`w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity ${
@@ -78,7 +97,7 @@ export default function FeaturesPage() {
                         />
                       </div>
                       <p className={index === 0 ? "text-white/70" : "text-gray-600"}>
-                        {feature.description}
+                        {t(feature.description, locale)}
                       </p>
                     </div>
                   </Card>
@@ -89,7 +108,12 @@ export default function FeaturesPage() {
         </div>
       </section>
 
-      <CTA />
+      <CTA
+        title={dict.cta.title}
+        subtitle={dict.cta.subtitle}
+        ctaText={dict.cta.button}
+        secondaryText={dict.cta.subtext}
+      />
     </>
   );
 }

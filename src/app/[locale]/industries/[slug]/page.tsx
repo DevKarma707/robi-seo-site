@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { industries } from "@/data/seo-config";
+import { industries, t } from "@/data/seo-config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -21,24 +23,25 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale: rawLocale } = await params;
+  const locale = rawLocale as Locale;
   const industry = industries.find((i) => i.slug === slug);
 
   if (!industry) {
     return {
-      title: "Page non trouvée",
+      title: "Page not found",
     };
   }
 
   return {
-    title: industry.title,
-    description: industry.description,
+    title: t(industry.title, locale),
+    description: t(industry.description, locale),
     keywords: industry.keywords,
     openGraph: {
-      title: industry.title,
-      description: industry.description,
+      title: t(industry.title, locale),
+      description: t(industry.description, locale),
       type: "website",
     },
   };
@@ -47,14 +50,19 @@ export async function generateMetadata({
 export default async function IndustryPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug } = await params;
+  const { slug, locale: rawLocale } = await params;
+  const locale = rawLocale as Locale;
+  const dict = await getDictionary(locale);
   const industry = industries.find((i) => i.slug === slug);
 
   if (!industry) {
     notFound();
   }
+
+  const industryName = t(industry.name, locale).toLowerCase();
+  const ind = dict.pages.industries;
 
   return (
     <>
@@ -65,9 +73,9 @@ export default async function IndustryPage({
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            name: `Robi AI pour ${industry.name}`,
+            name: `Robi AI - ${t(industry.name, locale)}`,
             applicationCategory: "BusinessApplication",
-            description: industry.description,
+            description: t(industry.description, locale),
             offers: {
               "@type": "Offer",
               price: "14.99",
@@ -78,10 +86,10 @@ export default async function IndustryPage({
       />
 
       <Hero
-        badge={`Solution pour ${industry.name}`}
-        title={industry.heroTitle}
-        subtitle={industry.description}
-        ctaText="Essayer Gratuitement"
+        badge={`${ind.solutionFor} ${t(industry.name, locale)}`}
+        title={t(industry.heroTitle, locale)}
+        subtitle={t(industry.description, locale)}
+        ctaText={ind.tryFree}
         ctaHref="/signup"
         variant="centered"
       />
@@ -92,10 +100,10 @@ export default async function IndustryPage({
           <div className="text-center mb-16">
             <Badge variant="warning" className="mb-4">
               <AlertTriangle className="w-3 h-3 mr-1" />
-              Problèmes courants
+              {ind.commonProblems}
             </Badge>
             <h2 className="text-3xl md:text-5xl font-black text-[#0D0630]">
-              Les défis des {industry.name.toLowerCase()}
+              {ind.challengesOf} {industryName}
             </h2>
           </div>
 
@@ -105,9 +113,9 @@ export default async function IndustryPage({
                 <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-red-100 flex items-center justify-center">
                   <X className="w-8 h-8 text-red-500" />
                 </div>
-                <h3 className="text-xl font-bold text-[#0D0630] mb-2">{pain}</h3>
+                <h3 className="text-xl font-bold text-[#0D0630] mb-2">{t(pain, locale)}</h3>
                 <p className="text-gray-600">
-                  Un problème que Robi résout automatiquement pour vous.
+                  {ind.robiSolves}
                 </p>
               </Card>
             ))}
@@ -121,10 +129,10 @@ export default async function IndustryPage({
           <div className="text-center mb-16">
             <Badge variant="success" className="mb-4">
               <Zap className="w-3 h-3 mr-1" />
-              Solutions Robi
+              {ind.solutionsRobi}
             </Badge>
             <h2 className="text-3xl md:text-5xl font-black text-[#0D0630]">
-              Fonctionnalités pour {industry.name.toLowerCase()}
+              {ind.featuresFor} {industryName}
             </h2>
           </div>
 
@@ -135,10 +143,10 @@ export default async function IndustryPage({
                   <Check className="w-8 h-8 text-[#0D0630]" />
                 </div>
                 <h3 className="text-xl font-bold text-[#0D0630] mb-2">
-                  {feature}
+                  {t(feature, locale)}
                 </h3>
                 <p className="text-gray-600">
-                  Intégré nativement dans Robi pour votre métier.
+                  {ind.builtIn}
                 </p>
               </Card>
             ))}
@@ -153,24 +161,23 @@ export default async function IndustryPage({
             <Clock className="w-10 h-10 text-[#BEF221]" />
           </div>
           <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
-            Gagnez 10h par mois
+            {ind.save10h}
           </h2>
           <p className="text-xl text-white/70 mb-8">
-            Les {industry.name.toLowerCase()} qui utilisent Robi économisent en moyenne 10 heures
-            par mois sur leur administratif. C'est du temps en plus pour vos clients.
+            {t(industry.name, locale)} {ind.save10hDesc}
           </p>
           <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div>
               <p className="text-4xl font-black text-[#BEF221]">30s</p>
-              <p className="text-white/50 text-sm">pour créer un devis</p>
+              <p className="text-white/50 text-sm">{ind.toCreateQuote}</p>
             </div>
             <div>
               <p className="text-4xl font-black text-[#BEF221]">2x</p>
-              <p className="text-white/50 text-sm">plus vite payé</p>
+              <p className="text-white/50 text-sm">{ind.paidFaster}</p>
             </div>
             <div>
               <p className="text-4xl font-black text-[#BEF221]">0</p>
-              <p className="text-white/50 text-sm">relance manuelle</p>
+              <p className="text-white/50 text-sm">{ind.manualReminder}</p>
             </div>
           </div>
         </div>
@@ -183,30 +190,27 @@ export default async function IndustryPage({
       <FAQ
         items={[
           {
-            question: `Robi est-il adapté aux ${industry.name.toLowerCase()} ?`,
-            answer: `Oui, Robi a été conçu pour s'adapter à tous les métiers indépendants, y compris les ${industry.name.toLowerCase()}. Nous proposons des templates et fonctionnalités spécifiques à votre activité.`,
+            question: ind.faq1q.replace("{name}", industryName),
+            answer: ind.faq1a.replace("{name}", industryName),
           },
           {
-            question: "Puis-je personnaliser mes devis et factures ?",
-            answer:
-              "Absolument. Vous pouvez ajouter votre logo, personnaliser les couleurs et utiliser des templates adaptés à votre métier.",
+            question: ind.faq2q,
+            answer: ind.faq2a,
           },
           {
-            question: "Comment fonctionne la relance automatique ?",
-            answer:
-              "Robi détecte automatiquement les factures en retard et envoie des emails de relance personnalisés à vos clients. Vous définissez les délais et le ton des messages.",
+            question: ind.faq3q,
+            answer: ind.faq3a,
           },
           {
-            question: "Mes données sont-elles sécurisées ?",
-            answer:
-              "Oui, nous utilisons un chiffrement de niveau bancaire. Vos données sont hébergées en Europe et conformes au RGPD.",
+            question: ind.faq4q,
+            answer: ind.faq4a,
           },
         ]}
       />
 
       <CTA
-        title={`Prêt à simplifier votre facturation ?`}
-        subtitle={`Rejoignez les ${industry.name.toLowerCase()} qui facturent sans effort`}
+        title={ind.readySimplify}
+        subtitle={ind.joinIndustry.replace("{name}", industryName)}
       />
     </>
   );

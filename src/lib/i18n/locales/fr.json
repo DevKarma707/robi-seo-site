@@ -56,30 +56,30 @@
   "process": {
     "label": "Processus",
     "title": "Votre assistant de poche,",
-    "titleAccent": "de A \u00e0 Z.",
-    "subtitle": "De la cr\u00e9ation du devis \u00e0 l'encaissement final, Robi s'occupe de tout.",
+    "titleAccent": "de A à Z.",
+    "subtitle": "De la création du devis à l'encaissement final, Robi s'occupe de tout.",
     "step1": {
-      "title": "Cr\u00e9ez en parlant",
-      "description": "\"Pr\u00e9pare un devis de 500\u20ac pour Alice.\" C'est fait en 3 secondes."
+      "title": "Créez en parlant",
+      "description": "\"Prépare un devis de 500€ pour Alice.\" C'est fait en 3 secondes."
     },
     "step2": {
       "title": "Envoyez en 1 clic",
-      "description": "Une fois valid\u00e9, Robi envoie le lien de paiement \u00e0 votre client par email."
+      "description": "Une fois validé, Robi envoie le lien de paiement à votre client par email."
     },
     "step3": {
-      "title": "Soyez notifi\u00e9",
-      "description": "D\u00e8s que le client paie, vous recevez une notification instantan\u00e9ment."
+      "title": "Soyez notifié",
+      "description": "Dès que le client paie, vous recevez une notification instantanément."
     },
     "step4": {
       "title": "Relance automatique",
-      "description": "Facture en retard ? Robi relance poliment vos clients \u00e0 votre place."
+      "description": "Facture en retard ? Robi relance poliment vos clients à votre place."
     }
   },
   "payments": {
     "title": "Simplifiez vos transactions avec PayPal & Stripe",
-    "subtitle": "Dites adieu aux retards de paiement. Proposez une exp\u00e9rience de paiement fluide et moderne \u00e0 vos clients.",
+    "subtitle": "Dites adieu aux retards de paiement. Proposez une expérience de paiement fluide et moderne à vos clients.",
     "cta": "Voir les paiements en ligne",
-    "integrations": "Int\u00e9grations :"
+    "integrations": "Intégrations :"
   },
   "testimonials": {
     "title": "Ce qu'ils disent de",
@@ -148,7 +148,15 @@
     "contact": "Contact",
     "legal": "Mentions légales",
     "privacy": "Confidentialité",
-    "copyright": "© {year} Robi AI Technologies. Tous droits réservés."
+    "copyright": "© {year} Robi AI Technologies. Tous droits réservés.",
+    "industryCategories": {
+      "btp": "BTP & Artisans",
+      "tech": "Tech & Digital",
+      "creatif": "Créatifs",
+      "evenementiel": "Événementiel",
+      "conseil": "Conseil",
+      "sante": "Santé"
+    }
   },
   "common": {
     "learnMore": "En savoir plus",
@@ -162,5 +170,105 @@
     "perWeek": "/semaine",
     "perMonth": "/mois",
     "perYear": "/an"
+  },
+  "pages": {
+    "industries": {
+      "title": "Facturation par Industrie | Robi AI",
+      "description": "Découvrez comment Robi AI s'adapte à votre métier. Solutions de facturation sur-mesure pour plombiers, électriciens, consultants, développeurs et plus.",
+      "heroTitle": "Une solution adaptée",
+      "heroTitleAccent": "à votre métier",
+      "heroSubtitle": "Robi comprend les spécificités de chaque profession. Découvrez comment nous pouvons vous aider.",
+      "heroBadge": "Solutions par métier",
+      "professions": "métiers",
+      "adaptedTo": "Adapté à",
+      "professionsSuffix": "+ métiers",
+      "categories": "Catégories",
+      "customization": "Personnalisation",
+      "solutionFor": "Solution pour",
+      "commonProblems": "Problèmes courants",
+      "challengesOf": "Les défis des",
+      "robiSolves": "Un problème que Robi résout automatiquement pour vous.",
+      "solutionsRobi": "Solutions Robi",
+      "featuresFor": "Fonctionnalités pour",
+      "builtIn": "Intégré nativement dans Robi pour votre métier.",
+      "save10h": "Gagnez 10h par mois",
+      "save10hDesc": "qui utilisent Robi économisent en moyenne 10 heures par mois sur leur administratif. C'est du temps en plus pour vos clients.",
+      "toCreateQuote": "pour créer un devis",
+      "paidFaster": "plus vite payé",
+      "manualReminder": "relance manuelle",
+      "tryFree": "Essayer Gratuitement",
+      "readySimplify": "Prêt à simplifier votre facturation ?",
+      "joinIndustry": "Rejoignez les {name} qui facturent sans effort",
+      "faq1q": "Robi est-il adapté aux {name} ?",
+      "faq1a": "Oui, Robi a été conçu pour s'adapter à tous les métiers indépendants, y compris les {name}. Nous proposons des templates et fonctionnalités spécifiques à votre activité.",
+      "faq2q": "Puis-je personnaliser mes devis et factures ?",
+      "faq2a": "Absolument. Vous pouvez ajouter votre logo, personnaliser les couleurs et utiliser des templates adaptés à votre métier.",
+      "faq3q": "Comment fonctionne la relance automatique ?",
+      "faq3a": "Robi détecte automatiquement les factures en retard et envoie des emails de relance personnalisés à vos clients. Vous définissez les délais et le ton des messages.",
+      "faq4q": "Mes données sont-elles sécurisées ?",
+      "faq4a": "Oui, nous utilisons un chiffrement de niveau bancaire. Vos données sont hébergées en Europe et conformes au RGPD."
+    },
+    "blog": {
+      "title": "Blog | Robi AI",
+      "description": "Conseils, guides et actualités pour les freelances et indépendants. Facturation, statuts juridiques, tarifs et plus.",
+      "heroTitle": "Ressources pour",
+      "heroTitleAccent": "freelances",
+      "heroSubtitle": "Guides pratiques, conseils juridiques et astuces pour développer votre activité indépendante.",
+      "heroBadge": "Blog",
+      "backToBlog": "Retour au blog",
+      "relatedPosts": "Articles similaires",
+      "share": "Partager",
+      "readTime": "min de lecture",
+      "putInPractice": "Mettez ces conseils en pratique",
+      "putInPracticeDesc": "Avec Robi AI, automatisez votre facturation et gagnez 10h par mois.",
+      "ctaTitle": "Passez à l'action",
+      "ctaSubtitle": "Appliquez ces conseils avec Robi AI",
+      "categories": {
+        "guides": "Guide",
+        "legal": "Juridique",
+        "tips": "Conseils",
+        "business": "Business"
+      }
+    },
+    "comparisons": {
+      "badge": "Comparatif 2024",
+      "detailedComparison": "Comparaison détaillée",
+      "discoverDifferences": "Découvrez les différences entre Robi AI et {competitor}",
+      "whyChoose": "Pourquoi choisir Robi AI ?",
+      "exclusiveAdvantages": "Avantages exclusifs",
+      "conversationalAI": "IA Conversationnelle",
+      "conversationalAIDesc": "Créez vos factures en parlant. Pas de formulaires compliqués, juste une conversation naturelle avec Robi.",
+      "smartReminders": "Relances Intelligentes",
+      "smartRemindersDesc": "Robi analyse le comportement de paiement de vos clients et adapte ses relances pour maximiser vos encaissements.",
+      "realTimeSaving": "Gain de temps réel",
+      "realTimeSavingDesc": "Nos utilisateurs économisent en moyenne 10 heures par mois sur leur gestion administrative.",
+      "switchFrom": "Passez de {competitor} à Robi AI",
+      "freeMigration": "Migration gratuite et accompagnement personnalisé",
+      "feature": "Fonctionnalité",
+      "included": "Inclus",
+      "partial": "Partiel",
+      "notIncluded": "Non inclus",
+      "comparisonFeatures": {
+        "invoiceCreation": "Création de factures",
+        "quoteCreation": "Création de devis",
+        "aiInvoicing": "Facturation par IA",
+        "autoReminders": "Relances automatiques",
+        "stripePaypal": "Paiement Stripe/PayPal",
+        "mobileApp": "Application mobile",
+        "localSupport": "Support français",
+        "customTemplates": "Templates personnalisables",
+        "accountingExport": "Export comptable",
+        "aiDashboards": "Tableaux de bord IA"
+      }
+    },
+    "featuresPage": {
+      "badge": "Fonctionnalité",
+      "benefits": "Avantages",
+      "whyYouWillLove": "Pourquoi vous allez adorer",
+      "howItWorks": "Comment ça marche",
+      "simpleAs123": "Simple comme 1, 2, 3",
+      "tryFeature": "Essayez {name}",
+      "freeFor14Days": "Gratuit pendant 14 jours, sans carte bancaire"
+    }
   }
 }

@@ -16,6 +16,8 @@ export function Header({ locale, dict }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
+  const indCat = dict.footer.industryCategories;
+
   const navigation = [
     {
       name: dict.nav.features,
@@ -31,16 +33,12 @@ export function Header({ locale, dict }: HeaderProps) {
       name: dict.nav.industries,
       href: `/${locale}/industries`,
       children: [
-        { name: "🔧 BTP & Artisans", href: `/${locale}/industries`, isCategory: true },
-        { name: "Plombiers", href: `/${locale}/industries/plombier` },
-        { name: "Électriciens", href: `/${locale}/industries/electricien` },
-        { name: "Maçons", href: `/${locale}/industries/macon` },
-        { name: "💻 Tech & Digital", href: `/${locale}/industries`, isCategory: true },
-        { name: "Développeurs", href: `/${locale}/industries/developpeur` },
-        { name: "Designers UX/UI", href: `/${locale}/industries/designer-ux` },
-        { name: "🎨 Créatifs", href: `/${locale}/industries`, isCategory: true },
-        { name: "Photographes", href: `/${locale}/industries/photographe` },
-        { name: "Graphistes", href: `/${locale}/industries/graphiste` },
+        { name: `🔧 ${indCat.btp}`, href: `/${locale}/industries`, isCategory: true },
+        { name: `💻 ${indCat.tech}`, href: `/${locale}/industries`, isCategory: true },
+        { name: `🎨 ${indCat.creatif}`, href: `/${locale}/industries`, isCategory: true },
+        { name: `🎉 ${indCat.evenementiel}`, href: `/${locale}/industries`, isCategory: true },
+        { name: `💼 ${indCat.conseil}`, href: `/${locale}/industries`, isCategory: true },
+        { name: `❤️ ${indCat.sante}`, href: `/${locale}/industries`, isCategory: true },
         { name: dict.nav.allIndustries, href: `/${locale}/industries` },
       ],
     },

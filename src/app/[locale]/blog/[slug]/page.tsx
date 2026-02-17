@@ -1,7 +1,9 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { blogPosts } from "@/data/seo-config";
+import { blogPosts, t } from "@/data/seo-config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { Locale } from "@/lib/i18n/config";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -17,9 +19,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale: rawLocale } = await params;
+  const locale = rawLocale as Locale;
   const post = blogPosts.find((p) => p.slug === slug);
 
   if (!post) {
@@ -27,12 +30,12 @@ export async function generateMetadata({
   }
 
   return {
-    title: post.title,
-    description: post.description,
+    title: t(post.title, locale),
+    description: t(post.description, locale),
     keywords: post.keywords,
     openGraph: {
-      title: post.title,
-      description: post.description,
+      title: t(post.title, locale),
+      description: t(post.description, locale),
       type: "article",
     },
   };
@@ -43,13 +46,6 @@ const categoryColors: Record<string, string> = {
   legal: "bg-purple-100 text-purple-700",
   tips: "bg-green-100 text-green-700",
   business: "bg-amber-100 text-amber-700",
-};
-
-const categoryNames: Record<string, string> = {
-  guides: "Guide",
-  legal: "Juridique",
-  tips: "Conseils",
-  business: "Business",
 };
 
 // Full article content for each post
@@ -406,9 +402,11 @@ Avec Robi AI, quelle que soit votre structure, vous pouvez facturer facilement e
 export default async function BlogPostPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug } = await params;
+  const { slug, locale: rawLocale } = await params;
+  const locale = rawLocale as Locale;
+  const dict = await getDictionary(locale);
   const post = blogPosts.find((p) => p.slug === slug);
 
   if (!post) {
@@ -427,8 +425,8 @@ export default async function BlogPostPage({
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
-            headline: post.title,
-            description: post.description,
+            headline: t(post.title, locale),
+            description: t(post.description, locale),
             author: {
               "@type": "Organization",
               name: "Robi AI",
@@ -448,22 +446,22 @@ export default async function BlogPostPage({
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back Link */}
           <Link
-            href="/blog"
+            href={`/${locale}/blog`}
             className="inline-flex items-center gap-2 text-gray-500 hover:text-[#0D0630] mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour au blog
+            {dict.pages.blog.backToBlog}
           </Link>
 
           {/* Header */}
           <header className="mb-12">
             <Badge className={categoryColors[post.category]}>
-              {categoryNames[post.category]}
+              {dict.pages.blog.categories[post.category as keyof typeof dict.pages.blog.categories]}
             </Badge>
             <h1 className="text-3xl md:text-5xl font-black text-[#0D0630] mt-4 mb-6 leading-tight">
-              {post.title}
+              {t(post.title, locale)}
             </h1>
-            <p className="text-xl text-gray-600 mb-6">{post.description}</p>
+            <p className="text-xl text-gray-600 mb-6">{t(post.description, locale)}</p>
             <div className="flex items-center gap-6 text-gray-500 text-sm">
               <span className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
@@ -471,11 +469,11 @@ export default async function BlogPostPage({
               </span>
               <span className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                8 min de lecture
+                8 {dict.pages.blog.readTime}
               </span>
               <button className="flex items-center gap-2 hover:text-[#0D0630]">
                 <Share2 className="w-4 h-4" />
-                Partager
+                {dict.pages.blog.share}
               </button>
             </div>
           </header>
@@ -489,12 +487,12 @@ export default async function BlogPostPage({
           <Card variant="accent" className="mt-12 text-center">
             <BookOpen className="w-12 h-12 text-[#0D0630] mx-auto mb-4" />
             <h3 className="text-xl font-bold text-[#0D0630] mb-2">
-              Mettez ces conseils en pratique
+              {dict.pages.blog.putInPractice}
             </h3>
             <p className="text-gray-600 mb-6">
-              Avec Robi AI, automatisez votre facturation et gagnez 10h par mois.
+              {dict.pages.blog.putInPracticeDesc}
             </p>
-            <Button href="/signup">Essayer Gratuitement</Button>
+            <Button href="/signup">{dict.pages.industries.tryFree}</Button>
           </Card>
         </div>
       </article>
@@ -503,20 +501,20 @@ export default async function BlogPostPage({
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-[#0D0630] mb-8">
-            Articles similaires
+            {dict.pages.blog.relatedPosts}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {otherPosts.map((relatedPost) => (
-              <Link key={relatedPost.slug} href={`/blog/${relatedPost.slug}`}>
+              <Link key={relatedPost.slug} href={`/${locale}/blog/${relatedPost.slug}`}>
                 <Card className="h-full group cursor-pointer">
                   <Badge className={categoryColors[relatedPost.category]}>
-                    {categoryNames[relatedPost.category]}
+                    {dict.pages.blog.categories[relatedPost.category as keyof typeof dict.pages.blog.categories]}
                   </Badge>
                   <h3 className="text-lg font-bold text-[#0D0630] mt-4 mb-2 group-hover:text-[#BEF221] transition-colors line-clamp-2">
-                    {relatedPost.title}
+                    {t(relatedPost.title, locale)}
                   </h3>
                   <p className="text-gray-600 text-sm line-clamp-2">
-                    {relatedPost.description}
+                    {t(relatedPost.description, locale)}
                   </p>
                 </Card>
               </Link>
@@ -525,7 +523,10 @@ export default async function BlogPostPage({
         </div>
       </section>
 
-      <CTA />
+      <CTA
+        title={dict.pages.blog.ctaTitle}
+        subtitle={dict.pages.blog.ctaSubtitle}
+      />
     </>
   );
 }

@@ -1,11 +1,13 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { comparisons } from "@/data/seo-config";
+import { comparisons, t } from "@/data/seo-config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { CTA } from "@/components/sections/CTA";
 import { Check, X, Minus } from "lucide-react";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { Locale } from "@/lib/i18n/config";
 
 export async function generateStaticParams() {
   return comparisons.map((comparison) => ({
@@ -16,54 +18,57 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const comparison = comparisons.find((c) => c.slug === slug);
 
   if (!comparison) {
-    return { title: "Comparaison non trouvée" };
+    return { title: "Comparison not found" };
   }
 
   return {
-    title: comparison.title,
-    description: comparison.description,
+    title: t(comparison.title, locale as Locale),
+    description: t(comparison.description, locale as Locale),
     keywords: comparison.keywords,
   };
 }
 
-// Comparison features matrix
-const comparisonFeatures = [
-  { name: "Création de factures", robi: true, competitor: true },
-  { name: "Création de devis", robi: true, competitor: true },
-  { name: "Facturation par IA", robi: true, competitor: false },
-  { name: "Relances automatiques", robi: true, competitor: "partial" },
-  { name: "Paiement Stripe/PayPal", robi: true, competitor: "partial" },
-  { name: "Application mobile", robi: true, competitor: "partial" },
-  { name: "Support français", robi: true, competitor: true },
-  { name: "Templates personnalisables", robi: true, competitor: true },
-  { name: "Export comptable", robi: true, competitor: true },
-  { name: "Tableaux de bord IA", robi: true, competitor: false },
-];
-
 export default async function ComparisonPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const comparison = comparisons.find((c) => c.slug === slug);
 
   if (!comparison) {
     notFound();
   }
 
+  const dict = await getDictionary(locale as Locale);
+  const comp = dict.pages.comparisons;
+
+  // Comparison features matrix using dict keys
+  const comparisonFeatures = [
+    { name: comp.comparisonFeatures.invoiceCreation, robi: true, competitor: true },
+    { name: comp.comparisonFeatures.quoteCreation, robi: true, competitor: true },
+    { name: comp.comparisonFeatures.aiInvoicing, robi: true, competitor: false },
+    { name: comp.comparisonFeatures.autoReminders, robi: true, competitor: "partial" as const },
+    { name: comp.comparisonFeatures.stripePaypal, robi: true, competitor: "partial" as const },
+    { name: comp.comparisonFeatures.mobileApp, robi: true, competitor: "partial" as const },
+    { name: comp.comparisonFeatures.localSupport, robi: true, competitor: true },
+    { name: comp.comparisonFeatures.customTemplates, robi: true, competitor: true },
+    { name: comp.comparisonFeatures.accountingExport, robi: true, competitor: true },
+    { name: comp.comparisonFeatures.aiDashboards, robi: true, competitor: false },
+  ];
+
   return (
     <>
       <Hero
-        badge="Comparatif 2024"
+        badge={comp.badge}
         title={`Robi AI vs ${comparison.competitor}`}
-        subtitle={comparison.description}
+        subtitle={t(comparison.description, locale as Locale)}
         variant="centered"
       />
 
@@ -72,17 +77,17 @@ export default async function ComparisonPage({
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-[#0D0630]">
-              Comparaison détaillée
+              {comp.detailedComparison}
             </h2>
             <p className="text-gray-600 mt-4">
-              Découvrez les différences entre Robi AI et {comparison.competitor}
+              {comp.discoverDifferences.replace("{competitor}", comparison.competitor)}
             </p>
           </div>
 
           <div className="bg-gray-50 rounded-3xl overflow-hidden">
             {/* Header */}
             <div className="grid grid-cols-3 bg-[#0D0630] text-white p-6">
-              <div className="font-bold">Fonctionnalité</div>
+              <div className="font-bold">{comp.feature}</div>
               <div className="text-center font-bold">
                 <span className="text-[#BEF221]">Robi AI</span>
               </div>
@@ -134,19 +139,19 @@ export default async function ComparisonPage({
               <div className="w-6 h-6 rounded-full bg-[#BEF221] flex items-center justify-center">
                 <Check className="w-4 h-4 text-[#0D0630]" />
               </div>
-              Inclus
+              {comp.included}
             </div>
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-yellow-100 flex items-center justify-center">
                 <Minus className="w-4 h-4 text-yellow-600" />
               </div>
-              Partiel
+              {comp.partial}
             </div>
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center">
                 <X className="w-4 h-4 text-red-500" />
               </div>
-              Non inclus
+              {comp.notIncluded}
             </div>
           </div>
         </div>
@@ -157,39 +162,36 @@ export default async function ComparisonPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge variant="accent" className="mb-4">
-              Avantages exclusifs
+              {comp.exclusiveAdvantages}
             </Badge>
             <h2 className="text-3xl md:text-4xl font-black text-[#0D0630]">
-              Pourquoi choisir Robi AI ?
+              {comp.whyChoose}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card variant="default">
               <h3 className="text-xl font-bold text-[#0D0630] mb-4">
-                IA Conversationnelle
+                {comp.conversationalAI}
               </h3>
               <p className="text-gray-600">
-                Créez vos factures en parlant. Pas de formulaires compliqués,
-                juste une conversation naturelle avec Robi.
+                {comp.conversationalAIDesc}
               </p>
             </Card>
             <Card variant="default">
               <h3 className="text-xl font-bold text-[#0D0630] mb-4">
-                Relances Intelligentes
+                {comp.smartReminders}
               </h3>
               <p className="text-gray-600">
-                Robi analyse le comportement de paiement de vos clients et adapte
-                ses relances pour maximiser vos encaissements.
+                {comp.smartRemindersDesc}
               </p>
             </Card>
             <Card variant="dark">
               <h3 className="text-xl font-bold text-white mb-4">
-                Gain de temps réel
+                {comp.realTimeSaving}
               </h3>
               <p className="text-white/70">
-                Nos utilisateurs économisent en moyenne 10 heures par mois sur
-                leur gestion administrative.
+                {comp.realTimeSavingDesc}
               </p>
             </Card>
           </div>
@@ -197,8 +199,8 @@ export default async function ComparisonPage({
       </section>
 
       <CTA
-        title={`Passez de ${comparison.competitor} à Robi AI`}
-        subtitle="Migration gratuite et accompagnement personnalisé"
+        title={comp.switchFrom.replace("{competitor}", comparison.competitor)}
+        subtitle={comp.freeMigration}
       />
     </>
   );

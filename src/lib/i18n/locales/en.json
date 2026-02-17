@@ -148,7 +148,15 @@
     "contact": "Contact",
     "legal": "Legal Notice",
     "privacy": "Privacy",
-    "copyright": "© {year} Robi AI Technologies. All rights reserved."
+    "copyright": "© {year} Robi AI Technologies. All rights reserved.",
+    "industryCategories": {
+      "btp": "Construction & Trades",
+      "tech": "Tech & Digital",
+      "creatif": "Creatives",
+      "evenementiel": "Events",
+      "conseil": "Consulting",
+      "sante": "Health"
+    }
   },
   "common": {
     "learnMore": "Learn more",
@@ -162,5 +170,105 @@
     "perWeek": "/week",
     "perMonth": "/month",
     "perYear": "/year"
+  },
+  "pages": {
+    "industries": {
+      "title": "Invoicing by Industry | Robi AI",
+      "description": "Discover how Robi AI adapts to your profession. Custom invoicing solutions for plumbers, electricians, consultants, developers and more.",
+      "heroTitle": "A solution tailored",
+      "heroTitleAccent": "to your profession",
+      "heroSubtitle": "Robi understands the specifics of each profession. Discover how we can help you.",
+      "heroBadge": "Solutions by profession",
+      "professions": "professions",
+      "adaptedTo": "Adapted to",
+      "professionsSuffix": "+ professions",
+      "categories": "Categories",
+      "customization": "Customization",
+      "solutionFor": "Solution for",
+      "commonProblems": "Common problems",
+      "challengesOf": "Challenges of",
+      "robiSolves": "A problem Robi solves automatically for you.",
+      "solutionsRobi": "Robi Solutions",
+      "featuresFor": "Features for",
+      "builtIn": "Built natively into Robi for your profession.",
+      "save10h": "Save 10 hours per month",
+      "save10hDesc": "who use Robi save an average of 10 hours per month on administration. That's more time for your clients.",
+      "toCreateQuote": "to create a quote",
+      "paidFaster": "paid faster",
+      "manualReminder": "manual reminders",
+      "tryFree": "Try for Free",
+      "readySimplify": "Ready to simplify your invoicing?",
+      "joinIndustry": "Join the {name} who invoice effortlessly",
+      "faq1q": "Is Robi suitable for {name}?",
+      "faq1a": "Yes, Robi is designed to adapt to all independent professions, including {name}. We offer templates and features specific to your activity.",
+      "faq2q": "Can I customize my quotes and invoices?",
+      "faq2a": "Absolutely. You can add your logo, customize colors and use templates tailored to your profession.",
+      "faq3q": "How do automatic reminders work?",
+      "faq3a": "Robi automatically detects overdue invoices and sends personalized reminder emails to your clients. You set the timing and tone of the messages.",
+      "faq4q": "Is my data secure?",
+      "faq4a": "Yes, we use bank-level encryption. Your data is hosted in Europe and GDPR compliant."
+    },
+    "blog": {
+      "title": "Blog | Robi AI",
+      "description": "Tips, guides and news for freelancers and self-employed. Invoicing, legal status, rates and more.",
+      "heroTitle": "Resources for",
+      "heroTitleAccent": "freelancers",
+      "heroSubtitle": "Practical guides, legal advice and tips to grow your independent business.",
+      "heroBadge": "Blog",
+      "backToBlog": "Back to blog",
+      "relatedPosts": "Related articles",
+      "share": "Share",
+      "readTime": "min read",
+      "putInPractice": "Put these tips into practice",
+      "putInPracticeDesc": "With Robi AI, automate your invoicing and save 10 hours per month.",
+      "ctaTitle": "Take action",
+      "ctaSubtitle": "Apply these tips with Robi AI",
+      "categories": {
+        "guides": "Guide",
+        "legal": "Legal",
+        "tips": "Tips",
+        "business": "Business"
+      }
+    },
+    "comparisons": {
+      "badge": "Comparison 2024",
+      "detailedComparison": "Detailed comparison",
+      "discoverDifferences": "Discover the differences between Robi AI and {competitor}",
+      "whyChoose": "Why choose Robi AI?",
+      "exclusiveAdvantages": "Exclusive advantages",
+      "conversationalAI": "Conversational AI",
+      "conversationalAIDesc": "Create your invoices by talking. No complicated forms, just a natural conversation with Robi.",
+      "smartReminders": "Smart Reminders",
+      "smartRemindersDesc": "Robi analyzes your clients' payment behavior and adapts reminders to maximize collections.",
+      "realTimeSaving": "Real time savings",
+      "realTimeSavingDesc": "Our users save an average of 10 hours per month on administrative management.",
+      "switchFrom": "Switch from {competitor} to Robi AI",
+      "freeMigration": "Free migration and personalized support",
+      "feature": "Feature",
+      "included": "Included",
+      "partial": "Partial",
+      "notIncluded": "Not included",
+      "comparisonFeatures": {
+        "invoiceCreation": "Invoice creation",
+        "quoteCreation": "Quote creation",
+        "aiInvoicing": "AI invoicing",
+        "autoReminders": "Automatic reminders",
+        "stripePaypal": "Stripe/PayPal payments",
+        "mobileApp": "Mobile app",
+        "localSupport": "Local support",
+        "customTemplates": "Custom templates",
+        "accountingExport": "Accounting export",
+        "aiDashboards": "AI dashboards"
+      }
+    },
+    "featuresPage": {
+      "badge": "Feature",
+      "benefits": "Benefits",
+      "whyYouWillLove": "Why you'll love it",
+      "howItWorks": "How it works",
+      "simpleAs123": "As simple as 1, 2, 3",
+      "tryFeature": "Try {name}",
+      "freeFor14Days": "Free for 14 days, no credit card required"
+    }
   }
 }
