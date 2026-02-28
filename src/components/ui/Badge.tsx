@@ -19,7 +19,7 @@ export function Badge({
     success: "bg-emerald-50 text-emerald-600 border-emerald-200",
     warning: "bg-amber-50 text-amber-600 border-amber-200",
     accent:
-      "bg-[#BEF221]/10 text-[#BEF221] border-[#BEF221]/30 animate-glow-breathe",
+      "bg-[#BEF221] text-[#0D0630] border-[#BEF221] font-black",
   };
 
   return (
