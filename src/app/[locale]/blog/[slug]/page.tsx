@@ -1019,20 +1019,68 @@ export default async function BlogPostPage({
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
+            "@id": `https://robi.ai/${locale}/blog/${slug}`,
             headline: t(post.title, locale),
             description: t(post.description, locale),
+            articleBody: content,
             inLanguage: locale,
+            keywords: post.keywords?.join(", ") || "",
             author: {
               "@type": "Organization",
               name: "Robi AI",
+              url: "https://robi.ai",
             },
             publisher: {
               "@type": "Organization",
               name: "Robi AI",
-              logo: "https://robi.ai/logo.png",
+              url: "https://robi.ai",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://robi.ai/logo.png",
+                width: 200,
+                height: 60,
+              },
+            },
+            image: {
+              "@type": "ImageObject",
+              url: "https://robi.ai/og.png",
+              width: 1200,
+              height: 630,
             },
             datePublished: "2024-02-15",
             dateModified: "2024-02-15",
+            articleSection: post.category,
+          }),
+        }}
+      />
+
+      {/* JSON-LD for BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Accueil",
+                item: `https://robi.ai/${locale}`,
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Blog",
+                item: `https://robi.ai/${locale}/blog`,
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: t(post.title, locale),
+                item: `https://robi.ai/${locale}/blog/${slug}`,
+              },
+            ],
           }),
         }}
       />

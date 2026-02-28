@@ -24,7 +24,7 @@ export default async function Home({
 
   return (
     <>
-      {/* JSON-LD Schema */}
+      {/* JSON-LD Schema - SoftwareApplication */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -45,6 +45,83 @@ export default async function Home({
               ratingValue: "4.9",
               ratingCount: "2000",
             },
+          }),
+        }}
+      />
+
+      {/* JSON-LD Schema - Organization */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Robi AI",
+            url: "https://robi.ai",
+            logo: "https://robi.ai/logo.png",
+            description: dict.meta.description,
+            sameAs: [
+              "https://twitter.com/robi_ai",
+              "https://linkedin.com/company/robi-ai",
+            ],
+            contactPoint: {
+              "@type": "ContactPoint",
+              contactType: "Customer Support",
+              availableLanguage: ["fr", "en", "es"],
+            },
+          }),
+        }}
+      />
+
+      {/* JSON-LD Schema - FAQPage */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: dict.faq.q1,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: dict.faq.a1,
+                },
+              },
+              {
+                "@type": "Question",
+                name: dict.faq.q2,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: dict.faq.a2,
+                },
+              },
+              {
+                "@type": "Question",
+                name: dict.faq.q3,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: dict.faq.a3,
+                },
+              },
+              {
+                "@type": "Question",
+                name: dict.faq.q4,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: dict.faq.a4,
+                },
+              },
+              {
+                "@type": "Question",
+                name: dict.faq.q5,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: dict.faq.a5,
+                },
+              },
+            ],
           }),
         }}
       />
