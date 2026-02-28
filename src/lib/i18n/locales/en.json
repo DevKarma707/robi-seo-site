@@ -461,6 +461,28 @@
       "faq4a": "Yes, we offer 50% off to associations and NGOs. Contact us with your registration number.",
       "faq5q": "Can I pay by bank transfer?",
       "faq5a": "Payments are made by credit card via Stripe. For annual payments, bank transfer is available on request."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "Get in touch with our team. We're here to help and answer any questions you might have.",
+      "form": {
+        "name": "Name",
+        "email": "Email",
+        "subject": "Subject",
+        "message": "Message",
+        "placeholder_name": "Your full name",
+        "placeholder_email": "your.email@example.com",
+        "placeholder_message": "Tell us what's on your mind...",
+        "submit": "Send Message",
+        "success": "Thank you! Your message has been sent successfully.",
+        "error": "Something went wrong. Please try again."
+      },
+      "subjects": {
+        "general": "General Inquiry",
+        "sales": "Sales",
+        "support": "Support",
+        "partnership": "Partnership"
+      }
     }
   }
 }

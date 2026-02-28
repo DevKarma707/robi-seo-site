@@ -46,7 +46,7 @@ export function Footer({ locale, dict }: FooterProps) {
         { name: dict.footer.legal, href: `/${locale}/legal` },
         { name: dict.footer.privacy, href: `/${locale}/privacy` },
         { name: dict.footer.terms, href: `/${locale}/terms` },
-        { name: dict.footer.contact, href: `mailto:contact@robi.ai` },
+        { name: dict.footer.contact, href: `/${locale}/contact` },
       ],
     },
   };

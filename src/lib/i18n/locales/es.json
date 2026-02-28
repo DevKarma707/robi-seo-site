@@ -461,6 +461,28 @@
       "faq4a": "Sí, ofrecemos un 50% de descuento a asociaciones y ONGs. Contáctanos con tu número de registro.",
       "faq5q": "¿Puedo pagar por transferencia bancaria?",
       "faq5a": "Los pagos se realizan con tarjeta a través de Stripe. Para pagos anuales, la transferencia está disponible bajo petición."
+    },
+    "contact": {
+      "title": "Contáctenos",
+      "subtitle": "Ponte en contacto con nuestro equipo. Estamos aquí para ayudarte y responder tus preguntas.",
+      "form": {
+        "name": "Nombre",
+        "email": "Email",
+        "subject": "Asunto",
+        "message": "Mensaje",
+        "placeholder_name": "Tu nombre completo",
+        "placeholder_email": "tu.email@example.com",
+        "placeholder_message": "Cuéntanos qué tienes en mente...",
+        "submit": "Enviar Mensaje",
+        "success": "¡Gracias! Tu mensaje ha sido enviado con éxito.",
+        "error": "Algo salió mal. Por favor, intenta de nuevo."
+      },
+      "subjects": {
+        "general": "Consulta General",
+        "sales": "Ventas",
+        "support": "Soporte",
+        "partnership": "Asociación"
+      }
     }
   }
 }

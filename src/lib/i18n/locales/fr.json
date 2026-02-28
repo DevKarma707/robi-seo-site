@@ -461,6 +461,28 @@
       "faq4a": "Oui, nous offrons 50% de réduction aux associations et ONG. Contactez-nous avec votre numéro RNA.",
       "faq5q": "Puis-je payer par virement ?",
       "faq5a": "Les paiements se font par carte bancaire via Stripe. Pour les paiements annuels, le virement est possible sur demande."
+    },
+    "contact": {
+      "title": "Nous Contacter",
+      "subtitle": "Entrez en contact avec notre équipe. Nous sommes là pour vous aider et répondre à vos questions.",
+      "form": {
+        "name": "Nom",
+        "email": "Email",
+        "subject": "Sujet",
+        "message": "Message",
+        "placeholder_name": "Votre nom complet",
+        "placeholder_email": "votre.email@example.com",
+        "placeholder_message": "Dites-nous ce qui vous préoccupe...",
+        "submit": "Envoyer le message",
+        "success": "Merci ! Votre message a été envoyé avec succès.",
+        "error": "Une erreur s'est produite. Veuillez réessayer."
+      },
+      "subjects": {
+        "general": "Demande générale",
+        "sales": "Ventes",
+        "support": "Support",
+        "partnership": "Partenariat"
+      }
     }
   }
 }
