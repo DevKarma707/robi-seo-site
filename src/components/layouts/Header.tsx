@@ -49,7 +49,7 @@ export function Header({ locale, dict }: HeaderProps) {
   return (
     <header className="fixed w-full z-50 bg-[#0D0630]/95 backdrop-blur-md border-b border-white/10">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-12">
           {/* Language Switcher - Left */}
           <div className="flex items-center gap-4">
             <LanguageSwitcher currentLocale={locale} />

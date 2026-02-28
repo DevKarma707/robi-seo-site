@@ -85,21 +85,6 @@ export function Hero({
               </Button>
             )}
           </div>
-
-          {/* Social proof */}
-          <div className={`mt-12 flex items-center gap-4 text-white/50 text-sm ${isCenter ? "justify-center" : ""}`}>
-            <div className="flex -space-x-2">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div
-                  key={i}
-                  className="w-8 h-8 rounded-full bg-gradient-to-br from-[#BEF221] to-[#0D0630] border-2 border-[#0D0630]"
-                />
-              ))}
-            </div>
-            <span>
-              {socialProof.text} <strong className="text-white">{socialProof.highlight}</strong> {socialProof.end}
-            </span>
-          </div>
         </div>
       </div>
     </section>
