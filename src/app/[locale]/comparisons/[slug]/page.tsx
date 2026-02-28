@@ -74,21 +74,21 @@ export default async function ComparisonPage({
       />
 
       {/* Comparison Table */}
-      <section className="py-24 bg-[#0D0630] relative">
+      <section className="py-24 bg-white relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-white">
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900">
               {comp.detailedComparison}
             </h2>
-            <p className="text-white/50 mt-4">
+            <p className="text-gray-500 mt-4">
               {comp.discoverDifferences.replace("{competitor}", comparison.competitor)}
             </p>
           </ScrollReveal>
 
           <ScrollReveal>
-            <div className="rounded-3xl overflow-hidden border border-white/10">
+            <div className="rounded-3xl overflow-hidden border border-gray-200">
               {/* Header */}
-              <div className="grid grid-cols-3 bg-[#120A3D] text-white p-6">
+              <div className="grid grid-cols-3 bg-gray-100 text-gray-900 p-6">
                 <div className="font-bold">{comp.feature}</div>
                 <div className="text-center font-bold">
                   <span className="text-[#BEF221]">Robi AI</span>
@@ -101,10 +101,10 @@ export default async function ComparisonPage({
                 <div
                   key={index}
                   className={`grid grid-cols-3 p-6 ${
-                    index % 2 === 0 ? "bg-[#0A0425]" : "bg-[#120A3D]/50"
+                    index % 2 === 0 ? "bg-gray-50" : "bg-white"
                   }`}
                 >
-                  <div className="font-medium text-white">{feature.name}</div>
+                  <div className="font-medium text-gray-900">{feature.name}</div>
                   <div className="flex justify-center">
                     {feature.robi ? (
                       <div className="w-8 h-8 rounded-full bg-[#BEF221] flex items-center justify-center">
@@ -137,7 +137,7 @@ export default async function ComparisonPage({
           </ScrollReveal>
 
           {/* Legend */}
-          <div className="flex justify-center gap-8 mt-8 text-sm text-white/50">
+          <div className="flex justify-center gap-8 mt-8 text-sm text-gray-500">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-[#BEF221] flex items-center justify-center">
                 <Check className="w-4 h-4 text-[#0D0630]" />
@@ -161,14 +161,13 @@ export default async function ComparisonPage({
       </section>
 
       {/* Why Choose Robi */}
-      <section className="py-24 bg-[#0A0425] relative">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(190,242,33,0.04),transparent_70%)]" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-gray-50 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <Badge variant="accent" className="mb-4">
               {comp.exclusiveAdvantages}
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-white">
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900">
               {comp.whyChoose}
             </h2>
           </ScrollReveal>
@@ -176,30 +175,30 @@ export default async function ComparisonPage({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <ScrollReveal delay={0}>
               <Card className="h-full">
-                <h3 className="text-xl font-bold text-white mb-4">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {comp.conversationalAI}
                 </h3>
-                <p className="text-white/50">
+                <p className="text-gray-500">
                   {comp.conversationalAIDesc}
                 </p>
               </Card>
             </ScrollReveal>
             <ScrollReveal delay={100}>
               <Card className="h-full">
-                <h3 className="text-xl font-bold text-white mb-4">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {comp.smartReminders}
                 </h3>
-                <p className="text-white/50">
+                <p className="text-gray-500">
                   {comp.smartRemindersDesc}
                 </p>
               </Card>
             </ScrollReveal>
             <ScrollReveal delay={200}>
               <Card variant="dark" className="h-full">
-                <h3 className="text-xl font-bold text-white mb-4">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {comp.realTimeSaving}
                 </h3>
-                <p className="text-white/70">
+                <p className="text-gray-600">
                   {comp.realTimeSavingDesc}
                 </p>
               </Card>

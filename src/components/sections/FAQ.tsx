@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 interface FAQItem {
   question: string;
@@ -45,42 +46,50 @@ export function FAQ({ title = "Questions fréquentes", dict, items }: FAQProps) 
     { question: dict.faq.q4, answer: dict.faq.a4 },
     { question: dict.faq.q5, answer: dict.faq.a5 },
   ] : defaultFAQs);
+
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="py-24 bg-gray-50">
+    <section id="faq" className="py-24 bg-white relative">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-black text-[#0D0630]">
+        <ScrollReveal className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-black text-gray-900">
             {title}
           </h2>
-        </div>
+        </ScrollReveal>
 
         <div className="space-y-4">
           {faqItems.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
-            >
-              <button
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex items-center justify-between p-6 text-left"
+            <ScrollReveal key={index} delay={index * 60}>
+              <div
+                className={`rounded-2xl border overflow-hidden transition-all duration-300 ${
+                  openIndex === index
+                    ? "bg-gray-50 border-[#BEF221]/20 shadow-[0_0_30px_rgba(190,242,33,0.05)]"
+                    : "bg-gray-50 border-gray-200 hover:border-gray-300"
+                }`}
               >
-                <span className="font-bold text-[#0D0630] pr-4">
-                  {item.question}
-                </span>
-                <ChevronDown
-                  className={`w-5 h-5 text-[#BEF221] transition-transform flex-shrink-0 ${
-                    openIndex === index ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              {openIndex === index && (
-                <div className="px-6 pb-6 text-gray-600 leading-relaxed">
-                  {item.answer}
+                <button
+                  onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                  className="w-full flex items-center justify-between p-6 text-left"
+                >
+                  <span className="font-bold text-gray-900 pr-4">
+                    {item.question}
+                  </span>
+                  <ChevronDown
+                    className={`w-5 h-5 text-[#BEF221] transition-transform duration-300 flex-shrink-0 ${
+                      openIndex === index ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                <div className={`faq-answer ${openIndex === index ? "open" : ""}`}>
+                  <div>
+                    <div className="px-6 pb-6 text-gray-500 leading-relaxed">
+                      {item.answer}
+                    </div>
+                  </div>
                 </div>
-              )}
-            </div>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

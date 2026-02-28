@@ -10,11 +10,11 @@ interface CTAProps {
 }
 
 export function CTA({
-  title = "Prêt à automatiser votre facturation ?",
-  subtitle = "Rejoignez 2000+ entrepreneurs qui facturent sans effort",
-  ctaText = "Démarrer avec Robi",
+  title = "Ready to automate your invoicing?",
+  subtitle = "Join 2000+ entrepreneurs who invoice effortlessly",
+  ctaText = "Start with Robi",
   ctaHref = "/signup",
-  secondaryText = "Sans carte • Annulation en 1 clic",
+  secondaryText = "No card • Cancel anytime",
 }: CTAProps) {
   return (
     <section className="py-24 md:py-32 bg-[#0D0630] relative overflow-hidden">

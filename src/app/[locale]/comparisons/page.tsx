@@ -46,9 +46,8 @@ export default async function ComparisonsPage({
         variant="centered"
       />
 
-      <section className="py-24 bg-[#0D0630] relative">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(190,242,33,0.04),transparent_70%)]" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-white relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {comparisons.map((comparison, index) => (
               <ScrollReveal key={comparison.slug} delay={index * 100}>
@@ -59,12 +58,12 @@ export default async function ComparisonsPage({
                         <Swords className="w-7 h-7 text-[#BEF221] group-hover:text-[#0D0630] transition-colors" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-white group-hover:text-[#BEF221] transition-colors">
+                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#BEF221] transition-colors">
                           Robi AI vs {comparison.competitor}
                         </h3>
                       </div>
                     </div>
-                    <p className="text-white/50 mb-6">
+                    <p className="text-gray-500 mb-6">
                       {t(comparison.description, locale)}
                     </p>
                     <span className="inline-flex items-center gap-2 text-[#BEF221] font-medium">

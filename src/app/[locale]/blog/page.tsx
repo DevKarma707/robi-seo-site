@@ -26,10 +26,10 @@ export async function generateMetadata({
 }
 
 const categoryColors: Record<string, string> = {
-  guides: "bg-blue-100 text-blue-700",
-  legal: "bg-purple-100 text-purple-700",
-  tips: "bg-green-100 text-green-700",
-  business: "bg-amber-100 text-amber-700",
+  guides: "bg-blue-500/10 text-blue-400",
+  legal: "bg-purple-500/10 text-purple-400",
+  tips: "bg-green-500/10 text-green-400",
+  business: "bg-amber-500/10 text-amber-400",
 };
 
 export default async function BlogPage({
@@ -59,17 +59,17 @@ export default async function BlogPage({
             <Card variant="dark" className="group cursor-pointer overflow-hidden">
               <div className="md:flex md:items-center md:gap-12">
                 <div className="md:w-1/2 mb-6 md:mb-0">
-                  <div className="aspect-video bg-gradient-to-br from-[#BEF221]/20 to-[#0D0630] rounded-2xl" />
+                  <div className="aspect-video bg-gradient-to-br from-[#BEF221]/20 to-gray-100 rounded-2xl" />
                 </div>
                 <div className="md:w-1/2">
                   <Badge className={categoryColors[blogPosts[0].category]}>
                     {blog.categories[blogPosts[0].category as keyof typeof blog.categories]}
                   </Badge>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mt-4 mb-4 group-hover:text-[#BEF221] transition-colors">
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mt-4 mb-4 group-hover:text-[#BEF221] transition-colors">
                     {t(blogPosts[0].title, locale)}
                   </h2>
-                  <p className="text-white/70 mb-6">{t(blogPosts[0].description, locale)}</p>
-                  <div className="flex items-center gap-4 text-white/50 text-sm">
+                  <p className="text-gray-600 mb-6">{t(blogPosts[0].description, locale)}</p>
+                  <div className="flex items-center gap-4 text-gray-500 text-sm">
                     <span className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
                       15/02/2024
@@ -87,15 +87,15 @@ export default async function BlogPage({
             {blogPosts.slice(1).map((post) => (
               <Link key={post.slug} href={`/${locale}/blog/${post.slug}`}>
                 <Card className="h-full group cursor-pointer">
-                  <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl mb-6" />
+                  <div className="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl mb-6" />
                   <Badge className={categoryColors[post.category]}>
                     {blog.categories[post.category as keyof typeof blog.categories]}
                   </Badge>
-                  <h3 className="text-xl font-bold text-[#0D0630] mt-4 mb-3 group-hover:text-[#BEF221] transition-colors line-clamp-2">
+                  <h3 className="text-xl font-bold text-gray-900 mt-4 mb-3 group-hover:text-[#BEF221] transition-colors line-clamp-2">
                     {t(post.title, locale)}
                   </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2">{t(post.description, locale)}</p>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
+                  <p className="text-gray-500 mb-4 line-clamp-2">{t(post.description, locale)}</p>
+                  <div className="flex items-center justify-between text-sm text-gray-400">
                     <span className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
                       10/02/2024

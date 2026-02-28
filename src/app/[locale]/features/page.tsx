@@ -73,11 +73,11 @@ export default async function FeaturesPage({
                         className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
                           index === 0
                             ? "bg-[#BEF221]/20 border border-[#BEF221]/30"
-                            : "bg-[#0D0630]/5 border border-[#0D0630]/10"
+                            : "bg-[#BEF221]/10 border border-[#BEF221]/20"
                         }`}
                       >
                         <Icon
-                          className={`w-8 h-8 ${index === 0 ? "text-[#BEF221]" : "text-[#0D0630]"}`}
+                          className={`w-8 h-8 ${index === 0 ? "text-[#BEF221]" : "text-[#BEF221]"}`}
                         />
                       </div>
                     </div>
@@ -85,18 +85,18 @@ export default async function FeaturesPage({
                       <div className="flex items-start justify-between mb-4">
                         <h3
                           className={`text-2xl font-bold group-hover:text-[#BEF221] transition-colors ${
-                            index === 0 ? "text-white" : "text-[#0D0630]"
+                            index === 0 ? "text-gray-900" : "text-gray-900"
                           }`}
                         >
                           {t(feature.name, locale)}
                         </h3>
                         <ArrowRight
                           className={`w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity ${
-                            index === 0 ? "text-[#BEF221]" : "text-[#0D0630]"
+                            index === 0 ? "text-[#BEF221]" : "text-[#BEF221]"
                           }`}
                         />
                       </div>
-                      <p className={index === 0 ? "text-white/70" : "text-gray-600"}>
+                      <p className={index === 0 ? "text-gray-500" : "text-gray-500"}>
                         {t(feature.description, locale)}
                       </p>
                     </div>

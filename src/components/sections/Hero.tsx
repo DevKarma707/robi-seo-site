@@ -26,15 +26,15 @@ export function Hero({
   title,
   titleAccent,
   subtitle,
-  ctaText = "Essayer Gratuitement",
+  ctaText = "Start Free",
   ctaHref = "/signup",
   secondaryCtaText,
   secondaryCtaHref,
   variant = "default",
   socialProof = {
-    text: "Rejoint par",
+    text: "Joined by",
     highlight: "2000+",
-    end: "freelances",
+    end: "freelancers",
   },
 }: HeroProps) {
   const isCenter = variant === "centered";

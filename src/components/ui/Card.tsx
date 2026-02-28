@@ -17,8 +17,8 @@ export function Card({
 
   const variants = {
     default: "bg-white border border-gray-100 shadow-xl shadow-gray-200/50",
-    glass: "bg-white/10 backdrop-blur-xl border border-white/20",
-    dark: "bg-[#0D0630] border border-white/10 text-white",
+    glass: "bg-gray-100 backdrop-blur-xl border border-gray-200",
+    dark: "bg-gray-50 border border-gray-200 text-gray-900",
     accent: "bg-[#BEF221]/10 border border-[#BEF221]/30",
   };
 

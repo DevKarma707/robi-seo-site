@@ -989,24 +989,24 @@ export default async function BlogPostPage({
   const htmlContent = content
     .split("\n")
     .map((line) => {
-      if (line.startsWith("## ")) return `<h2 class="text-2xl font-bold text-white mt-10 mb-4">${line.slice(3)}</h2>`;
-      if (line.startsWith("### ")) return `<h3 class="text-xl font-semibold text-white mt-8 mb-3">${line.slice(4)}</h3>`;
+      if (line.startsWith("## ")) return `<h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">${line.slice(3)}</h2>`;
+      if (line.startsWith("### ")) return `<h3 class="text-xl font-semibold text-gray-900 mt-8 mb-3">${line.slice(4)}</h3>`;
       if (line.startsWith("- **")) {
         const match = line.match(/- \*\*(.+?)\*\*\s*:?\s*(.*)/);
-        if (match) return `<li class="text-white/60 mb-2"><strong class="text-white">${match[1]}</strong>${match[2] ? " : " + match[2] : ""}</li>`;
+        if (match) return `<li class="text-gray-500 mb-2"><strong class="text-gray-900">${match[1]}</strong>${match[2] ? " : " + match[2] : ""}</li>`;
       }
-      if (line.startsWith("- ")) return `<li class="text-white/60 mb-2">${line.slice(2)}</li>`;
+      if (line.startsWith("- ")) return `<li class="text-gray-500 mb-2">${line.slice(2)}</li>`;
       if (line.startsWith("1. ") || line.startsWith("2. ") || line.startsWith("3. ") || line.startsWith("4. ") || line.startsWith("5. ") || line.startsWith("6. ") || line.startsWith("7. ") || line.startsWith("8. ")) {
         const text = line.replace(/^\d+\.\s/, "");
         const boldMatch = text.match(/\*\*(.+?)\*\*(.*)/);
-        if (boldMatch) return `<li class="text-white/60 mb-2 list-decimal ml-4"><strong class="text-white">${boldMatch[1]}</strong>${boldMatch[2]}</li>`;
-        return `<li class="text-white/60 mb-2 list-decimal ml-4">${text}</li>`;
+        if (boldMatch) return `<li class="text-gray-500 mb-2 list-decimal ml-4"><strong class="text-gray-900">${boldMatch[1]}</strong>${boldMatch[2]}</li>`;
+        return `<li class="text-gray-500 mb-2 list-decimal ml-4">${text}</li>`;
       }
-      if (line.startsWith("> ")) return `<blockquote class="border-l-4 border-[#BEF221]/40 pl-4 my-4 text-white/50 italic">${line.slice(2)}</blockquote>`;
+      if (line.startsWith("> ")) return `<blockquote class="border-l-4 border-[#BEF221]/40 pl-4 my-4 text-gray-500 italic">${line.slice(2)}</blockquote>`;
       if (line.trim() === "") return "";
       // Bold inline
-      const processed = line.replace(/\*\*(.+?)\*\*/g, '<strong class="text-white">$1</strong>');
-      return `<p class="text-white/60 mb-4 leading-relaxed">${processed}</p>`;
+      const processed = line.replace(/\*\*(.+?)\*\*/g, '<strong class="text-gray-900">$1</strong>');
+      return `<p class="text-gray-500 mb-4 leading-relaxed">${processed}</p>`;
     })
     .join("\n");
 
@@ -1037,12 +1037,12 @@ export default async function BlogPostPage({
         }}
       />
 
-      <article className="pt-32 pb-24 bg-[#0D0630]">
+      <article className="pt-32 pb-24 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back Link */}
           <Link
             href={`/${locale}/blog`}
-            className="inline-flex items-center gap-2 text-white/40 hover:text-[#BEF221] mb-8 transition-colors"
+            className="inline-flex items-center gap-2 text-gray-400 hover:text-[#BEF221] mb-8 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             {dict.pages.blog.backToBlog}
@@ -1053,11 +1053,11 @@ export default async function BlogPostPage({
             <Badge className={categoryColors[post.category]}>
               {dict.pages.blog.categories[post.category as keyof typeof dict.pages.blog.categories]}
             </Badge>
-            <h1 className="text-3xl md:text-5xl font-black text-white mt-4 mb-6 leading-tight">
+            <h1 className="text-3xl md:text-5xl font-black text-gray-900 mt-4 mb-6 leading-tight">
               {t(post.title, locale)}
             </h1>
-            <p className="text-xl text-white/50 mb-6">{t(post.description, locale)}</p>
-            <div className="flex items-center gap-6 text-white/40 text-sm">
+            <p className="text-xl text-gray-500 mb-6">{t(post.description, locale)}</p>
+            <div className="flex items-center gap-6 text-gray-400 text-sm">
               <span className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 15 février 2024
@@ -1075,17 +1075,17 @@ export default async function BlogPostPage({
 
           {/* Content */}
           <div
-            className="prose prose-lg prose-invert max-w-none"
+            className="prose prose-lg max-w-none"
             dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
 
           {/* CTA Box */}
           <Card variant="accent" className="mt-12 text-center">
-            <BookOpen className="w-12 h-12 text-white mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white mb-2">
+            <BookOpen className="w-12 h-12 text-gray-900 mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
               {dict.pages.blog.putInPractice}
             </h3>
-            <p className="text-white/50 mb-6">
+            <p className="text-gray-500 mb-6">
               {dict.pages.blog.putInPracticeDesc}
             </p>
             <Button href={`/${locale}/signup`}>{dict.pages.industries.tryFree}</Button>
@@ -1094,9 +1094,9 @@ export default async function BlogPostPage({
       </article>
 
       {/* Related Posts */}
-      <section className="py-24 bg-[#0A0425]">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-white mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">
             {dict.pages.blog.relatedPosts}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -1106,10 +1106,10 @@ export default async function BlogPostPage({
                   <Badge className={categoryColors[relatedPost.category]}>
                     {dict.pages.blog.categories[relatedPost.category as keyof typeof dict.pages.blog.categories]}
                   </Badge>
-                  <h3 className="text-lg font-bold text-white mt-4 mb-2 group-hover:text-[#BEF221] transition-colors line-clamp-2">
+                  <h3 className="text-lg font-bold text-gray-900 mt-4 mb-2 group-hover:text-[#BEF221] transition-colors line-clamp-2">
                     {t(relatedPost.title, locale)}
                   </h3>
-                  <p className="text-white/50 text-sm line-clamp-2">
+                  <p className="text-gray-500 text-sm line-clamp-2">
                     {t(relatedPost.description, locale)}
                   </p>
                 </Card>

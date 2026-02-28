@@ -102,7 +102,7 @@ export default async function IndustryPage({
               <AlertTriangle className="w-3 h-3 mr-1" />
               {ind.commonProblems}
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-[#0D0630]">
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900">
               {ind.challengesOf} {industryName}
             </h2>
           </div>
@@ -110,11 +110,11 @@ export default async function IndustryPage({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {industry.painPoints.map((pain, index) => (
               <Card key={index} variant="default" className="text-center">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-red-100 flex items-center justify-center">
-                  <X className="w-8 h-8 text-red-500" />
+                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-red-500/10 flex items-center justify-center">
+                  <X className="w-8 h-8 text-red-400" />
                 </div>
-                <h3 className="text-xl font-bold text-[#0D0630] mb-2">{t(pain, locale)}</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{t(pain, locale)}</h3>
+                <p className="text-gray-500">
                   {ind.robiSolves}
                 </p>
               </Card>
@@ -131,7 +131,7 @@ export default async function IndustryPage({
               <Zap className="w-3 h-3 mr-1" />
               {ind.solutionsRobi}
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-[#0D0630]">
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900">
               {ind.featuresFor} {industryName}
             </h2>
           </div>
@@ -142,10 +142,10 @@ export default async function IndustryPage({
                 <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#BEF221] flex items-center justify-center">
                   <Check className="w-8 h-8 text-[#0D0630]" />
                 </div>
-                <h3 className="text-xl font-bold text-[#0D0630] mb-2">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
                   {t(feature, locale)}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-500">
                   {ind.builtIn}
                 </p>
               </Card>
@@ -155,29 +155,29 @@ export default async function IndustryPage({
       </section>
 
       {/* Time Savings Section */}
-      <section className="py-24 bg-[#0D0630]">
+      <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#BEF221]/20 mb-8">
             <Clock className="w-10 h-10 text-[#BEF221]" />
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
+          <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">
             {ind.save10h}
           </h2>
-          <p className="text-xl text-white/70 mb-8">
+          <p className="text-xl text-gray-600 mb-8">
             {t(industry.name, locale)} {ind.save10hDesc}
           </p>
           <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div>
               <p className="text-4xl font-black text-[#BEF221]">30s</p>
-              <p className="text-white/50 text-sm">{ind.toCreateQuote}</p>
+              <p className="text-gray-500 text-sm">{ind.toCreateQuote}</p>
             </div>
             <div>
               <p className="text-4xl font-black text-[#BEF221]">2x</p>
-              <p className="text-white/50 text-sm">{ind.paidFaster}</p>
+              <p className="text-gray-500 text-sm">{ind.paidFaster}</p>
             </div>
             <div>
               <p className="text-4xl font-black text-[#BEF221]">0</p>
-              <p className="text-white/50 text-sm">{ind.manualReminder}</p>
+              <p className="text-gray-500 text-sm">{ind.manualReminder}</p>
             </div>
           </div>
         </div>

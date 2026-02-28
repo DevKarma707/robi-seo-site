@@ -78,19 +78,19 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
         variant="centered"
       />
 
-      <section className="py-24 bg-[#0D0630]">
+      <section className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Form */}
             <Card className="p-8">
-              <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+              <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
                 <Scale className="w-6 h-6 text-[#BEF221]" />
                 {dict.params || "Vos paramètres"}
               </h2>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-white/50 mb-2">
+                  <label className="block text-sm font-medium text-gray-500 mb-2">
                     {dict.annualRevenue || "Chiffre d'affaires annuel (€)"}
                   </label>
                   <input
@@ -100,11 +100,11 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
                     step="5000"
                     value={ca}
                     onChange={(e) => setCa(Number(e.target.value))}
-                    className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#BEF221]"
+                    className="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-[#BEF221]"
                   />
-                  <div className="flex justify-between text-sm text-white/40 mt-1">
+                  <div className="flex justify-between text-sm text-gray-400 mt-1">
                     <span>10k€</span>
-                    <span className="font-bold text-white">
+                    <span className="font-bold text-gray-900">
                       {ca.toLocaleString()}€
                     </span>
                     <span>200k€</span>
@@ -112,7 +112,7 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-white/50 mb-2">
+                  <label className="block text-sm font-medium text-gray-500 mb-2">
                     {dict.legalStatus || "Statut juridique"}
                   </label>
                   <div className="space-y-2">
@@ -122,7 +122,7 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
                         className={`flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
                           statut === key
                             ? "border-[#BEF221] bg-[#BEF221]/10"
-                            : "border-white/10 hover:border-white/20"
+                            : "border-gray-200 hover:border-gray-300"
                         }`}
                       >
                         <input
@@ -134,10 +134,10 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
                           className="mt-1 accent-[#BEF221]"
                         />
                         <div>
-                          <p className="font-medium text-white">
+                          <p className="font-medium text-gray-900">
                             {statutsConfig[key].label}
                           </p>
-                          <p className="text-sm text-white/40">
+                          <p className="text-sm text-gray-400">
                             {statutsConfig[key].description}
                           </p>
                         </div>
@@ -148,16 +148,16 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
 
                 {!isMicro && (
                   <div>
-                    <label className="block text-sm font-medium text-white/50 mb-2">
+                    <label className="block text-sm font-medium text-gray-500 mb-2">
                       {dict.expenses || "Frais professionnels annuels (€)"}
                     </label>
                     <input
                       type="number"
                       value={frais}
                       onChange={(e) => setFrais(Number(e.target.value))}
-                      className="w-full px-4 py-3 border border-white/10 rounded-xl bg-white/5 text-white focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
                     />
-                    <p className="text-xs text-white/40 mt-1">
+                    <p className="text-xs text-gray-400 mt-1">
                       {dict.expensesHint || "Matériel, déplacements, formations, etc."}
                     </p>
                   </div>
@@ -168,37 +168,37 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
             {/* Results */}
             <div className="space-y-6">
               <Card variant="dark" className="p-8">
-                <h2 className="text-xl font-bold text-white mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-6">
                   {dict.simulation || "Votre simulation"}
                 </h2>
 
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center py-3 border-b border-white/10">
-                    <span className="text-white/70">{dict.revenue || "Chiffre d'affaires"}</span>
-                    <span className="text-white font-bold">{ca.toLocaleString()}€</span>
+                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                    <span className="text-gray-600">{dict.revenue || "Chiffre d'affaires"}</span>
+                    <span className="text-gray-900 font-bold">{ca.toLocaleString()}€</span>
                   </div>
 
                   {!isMicro && (
-                    <div className="flex justify-between items-center py-3 border-b border-white/10">
-                      <span className="text-white/70">{dict.deductExpenses || "- Frais professionnels"}</span>
-                      <span className="text-white font-bold">-{frais.toLocaleString()}€</span>
+                    <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                      <span className="text-gray-600">{dict.deductExpenses || "- Frais professionnels"}</span>
+                      <span className="text-gray-900 font-bold">-{frais.toLocaleString()}€</span>
                     </div>
                   )}
 
-                  <div className="flex justify-between items-center py-3 border-b border-white/10">
-                    <span className="text-white/70">
+                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                    <span className="text-gray-600">
                       {(dict.socialCharges || "- Charges sociales ({rate}%)").replace("{rate}", (config.tauxCharges * 100).toFixed(1))}
                     </span>
                     <span className="text-red-400 font-bold">-{Math.round(charges).toLocaleString()}€</span>
                   </div>
 
-                  <div className="flex justify-between items-center py-3 border-b border-white/10">
-                    <span className="text-white/70">{dict.incomeTax || "- Impôt sur le revenu (estimé)"}</span>
+                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                    <span className="text-gray-600">{dict.incomeTax || "- Impôt sur le revenu (estimé)"}</span>
                     <span className="text-red-400 font-bold">-{Math.round(ir).toLocaleString()}€</span>
                   </div>
 
                   <div className="flex justify-between items-center py-4">
-                    <span className="text-white font-bold text-lg">{dict.netIncome || "Revenu net"}</span>
+                    <span className="text-gray-900 font-bold text-lg">{dict.netIncome || "Revenu net"}</span>
                     <span className="text-[#BEF221] font-black text-3xl">
                       {Math.round(netFinal).toLocaleString()}€
                     </span>
@@ -209,15 +209,15 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
               <div className="grid grid-cols-2 gap-4">
                 <Card className="p-6 text-center">
                   <TrendingDown className="w-8 h-8 text-red-400 mx-auto mb-3" />
-                  <p className="text-3xl font-bold text-white">{tauxEffectif}%</p>
-                  <p className="text-sm text-white/50">{dict.effectiveRate || "Taux de prélèvement"}</p>
+                  <p className="text-3xl font-bold text-gray-900">{tauxEffectif}%</p>
+                  <p className="text-sm text-gray-500">{dict.effectiveRate || "Taux de prélèvement"}</p>
                 </Card>
                 <Card className="p-6 text-center">
                   <PiggyBank className="w-8 h-8 text-[#BEF221] mx-auto mb-3" />
-                  <p className="text-3xl font-bold text-white">
+                  <p className="text-3xl font-bold text-gray-900">
                     {Math.round(netFinal / 12).toLocaleString()}€
                   </p>
-                  <p className="text-sm text-white/50">{dict.monthlyNet || "Net mensuel"}</p>
+                  <p className="text-sm text-gray-500">{dict.monthlyNet || "Net mensuel"}</p>
                 </Card>
               </div>
 

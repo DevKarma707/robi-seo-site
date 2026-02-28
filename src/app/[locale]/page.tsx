@@ -80,6 +80,7 @@ export default async function Home({
       <Testimonials
         title={dict.testimonials.title}
         titleAccent={dict.testimonials.titleAccent}
+        dict={dict}
       />
 
       <Pricing

@@ -185,11 +185,11 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
         variant="centered"
       />
 
-      <section className="py-24 bg-[#0D0630]">
+      <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {step === 1 && (
             <Card className="p-8">
-              <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+              <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
                 <FileText className="w-6 h-6 text-[#BEF221]" />
                 {dict.siteInfo || "Informations sur votre site"}
               </h2>
@@ -197,7 +197,7 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-white/50 mb-2">
+                    <label className="block text-sm font-medium text-gray-500 mb-2">
                       {dict.siteName || "Nom du site"}
                     </label>
                     <input
@@ -205,11 +205,11 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
                       value={formData.nomSite}
                       onChange={(e) => updateForm("nomSite", e.target.value)}
                       placeholder="Mon Super Site"
-                      className="w-full px-4 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder:text-white/20 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-white/50 mb-2">
+                    <label className="block text-sm font-medium text-gray-500 mb-2">
                       {dict.siteUrl || "URL du site"}
                     </label>
                     <input
@@ -217,19 +217,19 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
                       value={formData.urlSite}
                       onChange={(e) => updateForm("urlSite", e.target.value)}
                       placeholder="https://monsite.fr"
-                      className="w-full px-4 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder:text-white/20 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-white/50 mb-2">
+                  <label className="block text-sm font-medium text-gray-500 mb-2">
                     {dict.structureType || "Type de structure"}
                   </label>
                   <select
                     value={formData.typeStructure}
                     onChange={(e) => updateForm("typeStructure", e.target.value)}
-                    className="w-full px-4 py-3 border border-white/10 rounded-xl bg-white/5 text-white focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
                   >
                     <option value="micro">Micro-entreprise</option>
                     <option value="sasu">SASU</option>
@@ -241,7 +241,7 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-white/50 mb-2">
+                    <label className="block text-sm font-medium text-gray-500 mb-2">
                       {dict.companyName || "Raison sociale"}
                     </label>
                     <input
@@ -249,11 +249,11 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
                       value={formData.raisonSociale}
                       onChange={(e) => updateForm("raisonSociale", e.target.value)}
                       placeholder="Ma Société SAS"
-                      className="w-full px-4 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder:text-white/20 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-white/50 mb-2">
+                    <label className="block text-sm font-medium text-gray-500 mb-2">
                       {dict.siret || "Numéro SIRET"}
                     </label>
                     <input
@@ -261,13 +261,13 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
                       value={formData.siret}
                       onChange={(e) => updateForm("siret", e.target.value)}
                       placeholder="123 456 789 00001"
-                      className="w-full px-4 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder:text-white/20 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-white/50 mb-2">
+                  <label className="block text-sm font-medium text-gray-500 mb-2">
                     {dict.address || "Adresse du siège social"}
                   </label>
                   <textarea
@@ -275,13 +275,13 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
                     onChange={(e) => updateForm("adresse", e.target.value)}
                     placeholder="123 rue de Paris&#10;75001 Paris"
                     rows={2}
-                    className="w-full px-4 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder:text-white/20 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-white/50 mb-2">
+                    <label className="block text-sm font-medium text-gray-500 mb-2">
                       {dict.phone || "Téléphone"}
                     </label>
                     <input
@@ -289,11 +289,11 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
                       value={formData.telephone}
                       onChange={(e) => updateForm("telephone", e.target.value)}
                       placeholder="01 23 45 67 89"
-                      className="w-full px-4 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder:text-white/20 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-white/50 mb-2">
+                    <label className="block text-sm font-medium text-gray-500 mb-2">
                       {dict.email || "Email"}
                     </label>
                     <input
@@ -301,13 +301,13 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
                       value={formData.email}
                       onChange={(e) => updateForm("email", e.target.value)}
                       placeholder="contact@monsite.fr"
-                      className="w-full px-4 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder:text-white/20 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-white/50 mb-2">
+                  <label className="block text-sm font-medium text-gray-500 mb-2">
                     {dict.publicationDirector || "Directeur de la publication"}
                   </label>
                   <input
@@ -315,7 +315,7 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
                     value={formData.directeurPublication}
                     onChange={(e) => updateForm("directeurPublication", e.target.value)}
                     placeholder="Jean Dupont"
-                    className="w-full px-4 py-3 border border-white/10 rounded-xl bg-white/5 text-white placeholder:text-white/20 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#BEF221] focus:border-transparent"
                   />
                 </div>
 
@@ -330,7 +330,7 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
             <div className="space-y-6">
               <Card className="p-8">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                  <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
                     <FileText className="w-6 h-6 text-[#BEF221]" />
                     {dict.yourMentions || "Vos mentions légales"}
                   </h2>
@@ -358,8 +358,8 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
                   </div>
                 </div>
 
-                <div className="bg-white/5 rounded-xl p-6 max-h-[500px] overflow-y-auto border border-white/10">
-                  <pre className="whitespace-pre-wrap text-sm text-white/70 font-mono">
+                <div className="bg-gray-50 rounded-xl p-6 max-h-[500px] overflow-y-auto border border-gray-200">
+                  <pre className="whitespace-pre-wrap text-sm text-gray-600 font-mono">
                     {generateMentions()}
                   </pre>
                 </div>

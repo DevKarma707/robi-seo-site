@@ -1,4 +1,7 @@
+"use client";
+
 import { Bot, Wand, Bell, Zap } from "lucide-react";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 interface ProcessStep {
   icon: React.ElementType;
@@ -8,10 +11,6 @@ interface ProcessStep {
 }
 
 interface ProcessProps {
-  label?: string;
-  title?: string;
-  titleAccent?: string;
-  subtitle?: string;
   dict?: any;
 }
 
@@ -49,69 +48,58 @@ export function Process({ dict = defaultDict }: ProcessProps) {
   const t = dict.process || defaultDict.process;
 
   const steps: ProcessStep[] = [
-    {
-      icon: Bot,
-      number: 1,
-      title: t.step1.title,
-      description: t.step1.description,
-    },
-    {
-      icon: Wand,
-      number: 2,
-      title: t.step2.title,
-      description: t.step2.description,
-    },
-    {
-      icon: Bell,
-      number: 3,
-      title: t.step3.title,
-      description: t.step3.description,
-    },
-    {
-      icon: Zap,
-      number: 4,
-      title: t.step4.title,
-      description: t.step4.description,
-    },
+    { icon: Bot, number: 1, title: t.step1.title, description: t.step1.description },
+    { icon: Wand, number: 2, title: t.step2.title, description: t.step2.description },
+    { icon: Bell, number: 3, title: t.step3.title, description: t.step3.description },
+    { icon: Zap, number: 4, title: t.step4.title, description: t.step4.description },
   ];
 
   return (
-    <section id="process" className="py-24 bg-white relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+    <section id="process" className="py-24 bg-white relative overflow-hidden">
+      {/* Subtle grid background */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ScrollReveal className="text-center mb-16">
           <span className="text-[#BEF221] text-sm font-bold tracking-widest uppercase mb-4 block">
             {t.label}
           </span>
-          <h2 className="text-3xl md:text-5xl font-black text-[#0D0630] mb-4">
+          <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
             {t.title}{" "}
             <span className="text-[#BEF221]">{t.titleAccent}</span>
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-500 max-w-2xl mx-auto text-lg">
             {t.subtitle}
           </p>
-        </div>
+        </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 card-group">
+          {steps.map((step, index) => {
             const Icon = step.icon;
             return (
-              <div
-                key={step.number}
-                className="p-8 rounded-3xl bg-gray-50/50 border border-gray-100 group hover:border-[#BEF221]/30 transition-all duration-300"
-              >
-                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-gray-100 group-hover:scale-110 transition-transform relative">
-                  <Icon className="w-8 h-8 text-[#0D0630]" />
-                  <div className="absolute -top-2 -right-2 bg-[#BEF221] text-[#0D0630] font-black w-6 h-6 rounded-full flex items-center justify-center text-xs shadow-glow-sm">
-                    {step.number}
+              <ScrollReveal key={step.number} delay={index * 100}>
+                <div className="card-3d p-8 rounded-3xl bg-gray-50 border border-gray-200 group hover:border-[#BEF221]/30 transition-all duration-300 hover:shadow-[0_0_40px_rgba(190,242,33,0.08)]">
+                  <div className="w-16 h-16 bg-[#BEF221]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#BEF221]/20 group-hover:bg-[#BEF221]/20 group-hover:scale-110 transition-all duration-300 relative">
+                    <Icon className="w-8 h-8 text-[#BEF221]" />
+                    <div className="absolute -top-2 -right-2 bg-[#BEF221] text-[#0D0630] font-black w-6 h-6 rounded-full flex items-center justify-center text-xs shadow-glow-sm">
+                      {step.number}
+                    </div>
                   </div>
+                  <h3 className="text-xl font-bold mb-3 text-gray-900">
+                    {step.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">
+                    {step.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-[#0D0630]">
-                  {step.title}
-                </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
-                  {step.description}
-                </p>
-              </div>
+              </ScrollReveal>
             );
           })}
         </div>
