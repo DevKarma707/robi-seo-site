@@ -34,6 +34,31 @@ export default async function ContactPage({
 
   return (
     <>
+      {/* JSON-LD for BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: `https://robi.ai/${locale}`,
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: contact.title,
+                item: `https://robi.ai/${locale}/contact`,
+              },
+            ],
+          }),
+        }}
+      />
+
       <Hero
         badge="Support"
         title={contact.title}

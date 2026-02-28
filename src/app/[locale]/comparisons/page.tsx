@@ -38,6 +38,31 @@ export default async function ComparisonsPage({
 
   return (
     <>
+      {/* JSON-LD for BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: `https://robi.ai/${locale}`,
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: comp.badge,
+                item: `https://robi.ai/${locale}/comparisons`,
+              },
+            ],
+          }),
+        }}
+      />
+
       <Hero
         badge={comp.badge}
         title={comp.whyChoose.replace("?", "")}

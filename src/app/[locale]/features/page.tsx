@@ -43,6 +43,31 @@ export default async function FeaturesPage({
 
   return (
     <>
+      {/* JSON-LD for BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: `https://robi.ai/${locale}`,
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: dict.nav.features,
+                item: `https://robi.ai/${locale}/features`,
+              },
+            ],
+          }),
+        }}
+      />
+
       <Hero
         badge={dict.nav.features}
         title={dict.features.title}
