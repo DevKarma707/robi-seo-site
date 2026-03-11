@@ -108,7 +108,7 @@ export function Header({ locale, dict }: HeaderProps) {
             >
               {dict.nav.login}
             </Link>
-            <Button href="/signup" size="sm">
+            <Button href="https://www.robi-app.com" size="sm">
               {dict.nav.signup}
             </Button>
           </div>
@@ -159,7 +159,7 @@ export function Header({ locale, dict }: HeaderProps) {
                 >
                   {dict.nav.login}
                 </Link>
-                <Button href="/signup" className="w-full">
+                <Button href="https://www.robi-app.com" className="w-full">
                   {dict.nav.signup}
                 </Button>
               </div>

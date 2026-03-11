@@ -164,7 +164,7 @@ export function Pricing({
                 </ul>
 
                 <Button
-                  href={`/${locale}/signup`}
+                  href="https://www.robi-app.com"
                   variant={plan.popular ? "primary" : "outline"}
                   className="w-full"
                 >

@@ -13,7 +13,7 @@ export function CTA({
   title = "Ready to automate your invoicing?",
   subtitle = "Join 2000+ entrepreneurs who invoice effortlessly",
   ctaText = "Start with Robi",
-  ctaHref = "/signup",
+  ctaHref = "https://www.robi-app.com",
   secondaryText = "No card • Cancel anytime",
 }: CTAProps) {
   return (
