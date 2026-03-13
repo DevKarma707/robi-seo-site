@@ -145,7 +145,7 @@ export function CalculateurTJMClient({ dict, freeTool, ctaDict, locale }: Calcul
                 </h2>
                 <div className="text-6xl font-black text-[#BEF221] mb-4">
                   {tjmCalcule}€
-                  <span className="text-xl text-gray-500">/jour</span>
+                  <span className="text-xl text-gray-500">{dict.perDay || "/jour"}</span>
                 </div>
                 <p className="text-gray-600">
                   {(dict.toReach || "Pour atteindre votre objectif de {amount} net/an").replace("{amount}", salaireSouhaite.toLocaleString() + "€")}

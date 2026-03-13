@@ -312,7 +312,8 @@
         "sasu": "SASU/EURL",
         "sasuRate": "45%",
         "sasuDiv": "SASU avec dividendes",
-        "sasuDivRate": "50%"
+        "sasuDivRate": "50%",
+        "perDay": "/jour"
       },
       "simulateur": {
         "title": "Simulateur de Charges",
