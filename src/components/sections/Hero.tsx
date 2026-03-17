@@ -49,41 +49,49 @@ export function Hero({
       <div className="absolute bottom-20 right-10 w-32 h-32 bg-[#BEF221]/5 rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`${isCenter ? "text-center max-w-4xl mx-auto" : "max-w-3xl"}`}>
-          {badge && (
-            <div className={`mb-6 ${isCenter ? "flex justify-center" : ""}`}>
-              <Badge variant="accent">
-                <Sparkles className="w-3 h-3 mr-1" />
-                {badge}
-              </Badge>
-            </div>
-          )}
-
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight mb-6 tracking-tight">
-            {title}
-            {titleAccent && (
-              <>
-                <br />
-                <span className="text-[#BEF221]">{titleAccent}</span>
-              </>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left side - Content */}
+          <div className={`${isCenter ? "text-center max-w-4xl mx-auto" : "max-w-3xl"}`}>
+            {badge && (
+              <div className={`mb-6 ${isCenter ? "flex justify-center" : ""}`}>
+                <Badge variant="accent">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  {badge}
+                </Badge>
+              </div>
             )}
-          </h1>
 
-          <p className={`text-lg md:text-xl text-white/70 mb-10 leading-relaxed ${isCenter ? "max-w-2xl mx-auto" : "max-w-2xl"}`}>
-            {subtitle}
-          </p>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight mb-6 tracking-tight">
+              {title}
+              {titleAccent && (
+                <>
+                  <br />
+                  <span className="text-[#BEF221]">{titleAccent}</span>
+                </>
+              )}
+            </h1>
 
-          <div className={`flex flex-col sm:flex-row gap-4 ${isCenter ? "justify-center" : ""}`}>
-            <Button href={ctaHref} size="lg">
-              {ctaText}
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
+            <p className={`text-lg md:text-xl text-white/70 mb-10 leading-relaxed ${isCenter ? "max-w-2xl mx-auto" : "max-w-2xl"}`}>
+              {subtitle}
+            </p>
 
-            {secondaryCtaText && secondaryCtaHref && (
-              <Button href={secondaryCtaHref} variant="outline" size="lg" className="border-white/20 text-white hover:bg-white/10 hover:border-white/40">
-                {secondaryCtaText}
+            <div className={`flex flex-col sm:flex-row gap-4 ${isCenter ? "justify-center" : ""}`}>
+              <Button href={ctaHref} size="lg">
+                {ctaText}
+                <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
-            )}
+            </div>
+          </div>
+
+          {/* Right side - Spline 3D iPhone */}
+          <div className="hidden lg:block h-[600px] relative rounded-2xl overflow-hidden bg-[#0D0630]/50">
+            <iframe
+              src="https://my.spline.design/QMKnuGcpbcOwFxnD/scene"
+              frameBorder="0"
+              width="100%"
+              height="100%"
+              className="w-full h-full"
+            />
           </div>
         </div>
       </div>
