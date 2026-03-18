@@ -3,6 +3,7 @@
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { HeroMockups } from "@/components/ui/HeroMockups";
 
 interface HeroProps {
   badge?: string;
@@ -51,7 +52,7 @@ export function Hero({
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Content */}
-          <div className={`${isCenter ? "text-center max-w-4xl mx-auto" : "max-w-3xl"}`}>
+          <div className={`${isCenter ? "text-center max-w-4xl mx-auto lg:col-span-2" : "max-w-3xl"}`}>
             {badge && (
               <div className={`mb-6 ${isCenter ? "flex justify-center" : ""}`}>
                 <Badge variant="accent">
@@ -83,16 +84,12 @@ export function Hero({
             </div>
           </div>
 
-          {/* Right side - Spline 3D iPhone */}
-          <div className="hidden lg:block h-[600px] relative rounded-2xl overflow-hidden bg-[#0D0630]/50">
-            <iframe
-              src="https://my.spline.design/QMKnuGcpbcOwFxnD/scene"
-              frameBorder="0"
-              width="100%"
-              height="100%"
-              className="w-full h-full"
-            />
-          </div>
+          {/* Right side - Interactive Mockups */}
+          {!isCenter && (
+            <div className="hidden lg:block h-[600px] relative">
+              <HeroMockups />
+            </div>
+          )}
         </div>
       </div>
     </section>
