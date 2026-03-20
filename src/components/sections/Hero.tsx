@@ -41,7 +41,7 @@ export function Hero({
   const isCenter = variant === "centered";
 
   return (
-    <section className="relative pt-24 pb-24 md:pt-28 md:pb-28 overflow-hidden bg-[#0D0630]">
+    <section className="relative pt-20 pb-10 md:pt-24 md:pb-10 overflow-hidden bg-[#0D0630]">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(190,242,33,0.1),transparent_50%)]" />
 
