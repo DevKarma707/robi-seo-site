@@ -126,7 +126,6 @@ export default async function Home({
       />
 
       <Hero
-        badge={dict.hero.badge}
         title={dict.hero.title}
         titleAccent={dict.hero.titleAccent}
         subtitle={dict.hero.subtitle}
