@@ -41,7 +41,7 @@ export function Hero({
   const isCenter = variant === "centered";
 
   return (
-    <section className="relative pt-20 pb-10 md:pt-24 md:pb-10 overflow-hidden bg-[#0D0630]">
+    <section className="relative pt-20 pb-20 md:pt-[72px] md:pb-16 overflow-hidden bg-[#0D0630]">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(190,242,33,0.1),transparent_50%)]" />
 
@@ -50,7 +50,7 @@ export function Hero({
       <div className="absolute bottom-20 right-10 w-32 h-32 bg-[#BEF221]/5 rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left side - Content */}
           <div className={`${isCenter ? "text-center max-w-4xl mx-auto lg:col-span-2" : "max-w-3xl"}`}>
             {badge && (
@@ -86,7 +86,7 @@ export function Hero({
 
           {/* Right side - Interactive Mockups */}
           {!isCenter && (
-            <div className="hidden lg:block h-[600px] relative">
+            <div className="hidden lg:block h-[520px] relative">
               <HeroMockups />
             </div>
           )}
