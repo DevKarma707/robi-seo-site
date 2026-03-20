@@ -2,7 +2,6 @@ import { Hero } from "@/components/sections/Hero";
 import { Process } from "@/components/sections/Process";
 import { Features } from "@/components/sections/Features";
 import { Payments } from "@/components/sections/Payments";
-import { Testimonials } from "@/components/sections/Testimonials";
 import { Pricing } from "@/components/sections/Pricing";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
@@ -153,12 +152,6 @@ export default async function Home({
       />
 
       <Payments dict={dict} locale={locale} />
-
-      <Testimonials
-        title={dict.testimonials.title}
-        titleAccent={dict.testimonials.titleAccent}
-        dict={dict}
-      />
 
       <Pricing
         title={dict.pricing.title}
