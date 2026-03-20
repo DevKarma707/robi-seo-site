@@ -49,24 +49,20 @@ export function Header({ locale, dict }: HeaderProps) {
   return (
     <header className="fixed w-full z-50 bg-[#0D0630]/95 backdrop-blur-md border-b border-white/10">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-12">
-          {/* Language Switcher - Left */}
-          <div className="flex items-center gap-4">
-            <LanguageSwitcher currentLocale={locale} />
-          </div>
+        <div className="flex items-center h-14 gap-8">
 
-          {/* Logo - Center */}
-          <Link href={`/${locale}`} className="flex items-center gap-2">
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 px-4 py-2 rounded-full flex items-center gap-2">
-              <Bot className="w-6 h-6 text-[#BEF221]" />
-              <span className="text-lg font-bold text-white">
+          {/* Left — Logo */}
+          <Link href={`/${locale}`} className="flex items-center gap-2 flex-shrink-0">
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 px-4 py-1.5 rounded-full flex items-center gap-2">
+              <Bot className="w-5 h-5 text-[#BEF221]" />
+              <span className="text-base font-bold text-white">
                 Robi <span className="text-[#BEF221]">AI</span>
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-6">
+          {/* Center — Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-6 flex-1 justify-center">
             {navigation.map((item) => (
               <div
                 key={item.name}
@@ -82,7 +78,6 @@ export function Header({ locale, dict }: HeaderProps) {
                   {item.children && <ChevronDown className="w-4 h-4" />}
                 </Link>
 
-                {/* Dropdown */}
                 {item.children && openDropdown === item.name && (
                   <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
                     {item.children.map((child) => (
@@ -100,26 +95,28 @@ export function Header({ locale, dict }: HeaderProps) {
             ))}
           </div>
 
-          {/* CTA Buttons - Right */}
-          <div className="hidden md:flex items-center gap-4">
-            <Link
-              href="/login"
-              className="text-sm font-medium text-white/70 hover:text-white transition-colors"
-            >
-              {dict.nav.login}
-            </Link>
+          {/* Right — Language + Single CTA */}
+          <div className="hidden lg:flex items-center gap-4 flex-shrink-0 ml-auto">
+            <LanguageSwitcher currentLocale={locale} />
             <Button href="https://www.robi-app.com" size="sm">
-              {dict.nav.signup}
+              {dict.nav.login}
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 text-white"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Mobile — Language + App button + Hamburger */}
+          <div className="flex lg:hidden items-center gap-2 ml-auto">
+            <LanguageSwitcher currentLocale={locale} />
+            <Button href="https://www.robi-app.com" size="sm" className="text-xs px-3 py-1.5">
+              {dict.nav.login}
+            </Button>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 text-white"
+              aria-label="Menu"
+            >
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -136,7 +133,7 @@ export function Header({ locale, dict }: HeaderProps) {
                     {item.name}
                   </Link>
                   {item.children && (
-                    <div className="pl-4 mt-2 space-y-2">
+                    <div className="pl-4 mt-1 space-y-1">
                       {item.children.map((child) => (
                         <Link
                           key={child.name}
@@ -151,18 +148,6 @@ export function Header({ locale, dict }: HeaderProps) {
                   )}
                 </div>
               ))}
-              <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
-                <Link
-                  href="/login"
-                  className="text-center py-2 text-white/70"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {dict.nav.login}
-                </Link>
-                <Button href="https://www.robi-app.com" className="w-full">
-                  {dict.nav.signup}
-                </Button>
-              </div>
             </div>
           </div>
         )}
