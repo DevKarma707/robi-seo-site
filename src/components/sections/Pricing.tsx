@@ -112,7 +112,7 @@ export function Pricing({
               <Button
                 href="https://www.robi-app.com"
                 variant="outline"
-                className="w-full font-black tracking-wider text-sm"
+                className="w-full font-black tracking-wider text-sm !border-white/40 !text-white hover:!bg-white hover:!text-[#0D0630]"
               >
                 {p.ctaMonthly || "CHOISIR MENSUEL"}
               </Button>
@@ -200,7 +200,7 @@ export function Pricing({
               <Button
                 href="https://www.robi-app.com"
                 variant="outline"
-                className="w-full font-black tracking-wider text-sm"
+                className="w-full font-black tracking-wider text-sm !border-white/40 !text-white hover:!bg-white hover:!text-[#0D0630]"
               >
                 {p.ctaBiYearly || "CHOISIR BI-ANNUEL"}
               </Button>
