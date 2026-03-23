@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Bot } from "lucide-react";
+import { ArrowRight, CreditCard, Apple, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
@@ -16,6 +16,7 @@ const defaultDict = {
       "Dites adieu aux retards de paiement. Proposez une expérience de paiement fluide et moderne à vos clients.",
     cta: "Voir les paiements en ligne",
     integrations: "Intégrations :",
+    poweredBy: "Propulsé par",
   },
 };
 
@@ -39,56 +40,63 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
                   {t.integrations}
                 </h3>
 
-                <div className="grid grid-cols-3 gap-y-12 gap-x-8 items-center justify-items-center mb-16">
-                  <div className="text-gray-900 font-black italic tracking-tighter text-3xl opacity-60 hover:opacity-100 hover:text-[#BEF221] transition-all duration-300">
-                    VISA
-                  </div>
-                  <div className="flex">
-                    <div className="w-10 h-10 bg-gray-50 rounded-full border border-gray-200 flex items-center justify-center">
-                      <div className="w-5 h-5 bg-[#EB001B] rounded-full translate-x-1.5 opacity-80" />
-                      <div className="w-5 h-5 bg-[#F79E1B] rounded-full -translate-x-1.5 opacity-80" />
+                <div className="grid grid-cols-2 gap-6 mb-12">
+                  {/* CB / Carte Bancaire */}
+                  <div className="flex items-center gap-4 p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                    <div className="w-12 h-12 bg-white rounded-xl border border-gray-200 flex items-center justify-center shadow-sm">
+                      <CreditCard className="w-6 h-6 text-[#0D0630]" />
                     </div>
-                  </div>
-                  <div className="text-gray-900 font-black text-xl italic tracking-tighter opacity-60 hover:opacity-100 hover:text-[#BEF221] transition-all duration-300 leading-none">
-                    AMEX
-                  </div>
-
-                  <div className="flex items-center gap-2 text-gray-900 font-bold text-2xl group cursor-default">
-                    <div className="w-8 h-8 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center">
-                      <Bot className="w-5 h-5 text-[#BEF221]" />
-                    </div>
-                    <span>Pay</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-900 font-bold text-2xl opacity-60 hover:opacity-100 transition-opacity">
-                    <span className="text-gray-900">G</span>
-                    <span>Pay</span>
-                  </div>
-                  <div className="text-center group cursor-default">
-                    <div className="text-gray-900 font-black text-2xl leading-none">
-                      ACH
-                    </div>
-                    <div className="text-[8px] text-[#BEF221] font-black uppercase tracking-[0.3em] mt-1">
-                      Transfer
+                    <div className="text-left">
+                      <div className="text-gray-900 font-bold text-base">CB</div>
+                      <div className="text-gray-400 text-xs">Carte Bancaire</div>
                     </div>
                   </div>
 
-                  <div className="text-gray-400 font-black text-sm italic tracking-widest hover:text-[#BEF221] transition-colors duration-300 cursor-default capitalize">
-                    Klarna.
+                  {/* Visa */}
+                  <div className="flex items-center gap-4 p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                    <div className="w-12 h-12 bg-[#1A1F71] rounded-xl flex items-center justify-center shadow-sm">
+                      <span className="text-white font-black italic text-sm tracking-tighter">VISA</span>
+                    </div>
+                    <div className="text-left">
+                      <div className="text-gray-900 font-bold text-base">Visa</div>
+                      <div className="text-gray-400 text-xs">Credit & Debit</div>
+                    </div>
                   </div>
-                  <div className="text-gray-900 font-black text-3xl tracking-tighter">
-                    S
-                    <span className="text-[#BEF221] underline decoration-2 underline-offset-4 font-serif">
-                      €
-                    </span>
-                    PA
+
+                  {/* Apple Pay */}
+                  <div className="flex items-center gap-4 p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shadow-sm">
+                      <Apple className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-gray-900 font-bold text-base">Apple Pay</div>
+                      <div className="text-gray-400 text-xs">Sans contact</div>
+                    </div>
                   </div>
-                  <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center border border-gray-200 hover:bg-[#BEF221] transition-all duration-300 group/arrow">
-                    <ArrowRight className="w-6 h-6 text-gray-900 group-hover/arrow:text-[#0D0630] transition-colors" />
+
+                  {/* PayPal */}
+                  <div className="flex items-center gap-4 p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                    <div className="w-12 h-12 bg-[#003087] rounded-xl flex items-center justify-center shadow-sm">
+                      <span className="text-white font-black text-xs">PP</span>
+                    </div>
+                    <div className="text-left">
+                      <div className="text-gray-900 font-bold text-base">PayPal</div>
+                      <div className="text-gray-400 text-xs">Paiement sécurisé</div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="bg-[#BEF221] text-[#0D0630] font-black py-5 rounded-2xl text-xl shadow-[0_20px_40px_-10px_rgba(190,242,33,0.4)] transform hover:scale-[1.03] transition-all cursor-pointer flex items-center justify-center">
-                  Connect account
+                {/* Powered by Stripe & PayPal */}
+                <div className="flex items-center justify-center gap-6 pt-6 border-t border-gray-100">
+                  <span className="text-gray-400 text-xs font-medium uppercase tracking-wider">{t.poweredBy}</span>
+                  <div className="flex items-center gap-1.5 text-[#635BFF] font-black text-lg tracking-tight">
+                    <Smartphone className="w-5 h-5" />
+                    Stripe
+                  </div>
+                  <div className="w-px h-5 bg-gray-200" />
+                  <div className="text-[#003087] font-black text-lg tracking-tight">
+                    PayPal
+                  </div>
                 </div>
               </div>
             </div>
