@@ -246,6 +246,8 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
       <CTA
         title={dict.ctaTitle || ctaDict.title}
         subtitle={dict.ctaSubtitle || ctaDict.subtitle}
+        ctaText={ctaDict.button}
+        secondaryText={ctaDict.subtext}
       />
     </>
   );

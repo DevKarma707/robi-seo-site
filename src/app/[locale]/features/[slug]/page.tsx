@@ -6,7 +6,6 @@ import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { Testimonials } from "@/components/sections/Testimonials";
 import { Pricing } from "@/components/sections/Pricing";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
@@ -235,13 +234,13 @@ export default async function FeaturePage({
         </div>
       </section>
 
-      <Testimonials />
-
-      <Pricing />
+      <Pricing locale={locale} dict={dict} />
 
       <CTA
         title={fp.tryFeature.replace("{name}", t(feature.name, locale))}
         subtitle={fp.freeFor14Days}
+        ctaText={dict.cta.button}
+        secondaryText={dict.cta.subtext}
       />
     </>
   );

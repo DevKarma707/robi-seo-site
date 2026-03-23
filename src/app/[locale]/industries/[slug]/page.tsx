@@ -6,7 +6,6 @@ import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { Testimonials } from "@/components/sections/Testimonials";
 import { Pricing } from "@/components/sections/Pricing";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
@@ -183,9 +182,7 @@ export default async function IndustryPage({
         </div>
       </section>
 
-      <Testimonials />
-
-      <Pricing />
+      <Pricing locale={locale} dict={dict} />
 
       <FAQ
         items={[
@@ -211,6 +208,8 @@ export default async function IndustryPage({
       <CTA
         title={ind.readySimplify}
         subtitle={ind.joinIndustry.replace("{name}", industryName)}
+        ctaText={dict.cta.button}
+        secondaryText={dict.cta.subtext}
       />
     </>
   );

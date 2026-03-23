@@ -380,6 +380,8 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
       <CTA
         title={dict.ctaTitle || ctaDict.title}
         subtitle={dict.ctaSubtitle || ctaDict.subtitle}
+        ctaText={ctaDict.button}
+        secondaryText={ctaDict.subtext}
       />
     </>
   );

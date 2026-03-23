@@ -203,6 +203,8 @@ export function CalculateurTJMClient({ dict, freeTool, ctaDict, locale }: Calcul
       <CTA
         title={dict.ctaTitle || ctaDict.title}
         subtitle={dict.ctaSubtitle || ctaDict.subtitle}
+        ctaText={ctaDict.button}
+        secondaryText={ctaDict.subtext}
       />
     </>
   );

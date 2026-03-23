@@ -137,6 +137,8 @@ export default async function BlogPage({
       <CTA
         title={blog.ctaTitle}
         subtitle={blog.ctaSubtitle}
+        ctaText={dict.cta.button}
+        secondaryText={dict.cta.subtext}
       />
     </>
   );
