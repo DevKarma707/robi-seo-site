@@ -145,10 +145,10 @@ body {
    ======================================== */
 .hero-mockups-wrapper {
   position: relative;
-  top: 10px;
+  top: -10px;
   left: 20px;
   width: 630px;
-  height: 630px;
+  height: 520px;
   perspective: 5000px;
   perspective-origin: bottom left;
   transform-style: flat;
@@ -209,7 +209,7 @@ body {
 .mockup1 {
   width: 210px;
   height: 138px;
-  top: 130px;
+  top: 10px;
   left: 10px;
   background: radial-gradient(218% 281% at 100% 100%, rgba(190, 242, 33, 0.6) 0%, rgba(13, 6, 48, 0.6) 45.83%, rgba(13, 6, 48, 0.6) 100%);
 }
@@ -220,7 +220,7 @@ body {
 .mockup2 {
   width: 210px;
   height: 138px;
-  top: 130px;
+  top: 10px;
   left: 230px;
   background: linear-gradient(192deg, #0D0630 12%, rgba(190, 242, 33, 0.4) 54%, #BEF221 100%);
 }
@@ -231,7 +231,7 @@ body {
 .mockup3 {
   width: 575px;
   height: 351px;
-  top: 190px;
+  top: 70px;
   left: 30px;
   backdrop-filter: blur(10px);
   background: rgba(13, 6, 48, 0.3);
@@ -243,7 +243,7 @@ body {
 .mockup4 {
   width: 322px;
   height: 207px;
-  top: 350px;
+  top: 230px;
   left: 70px;
   backdrop-filter: blur(10px);
   background: rgba(13, 6, 48, 0.2);
@@ -255,7 +255,7 @@ body {
 .mockup5 {
   width: 184px;
   height: 334px;
-  top: 270px;
+  top: 150px;
   left: 400px;
   backdrop-filter: blur(10px);
   background: rgba(13, 6, 48, 0.2);
