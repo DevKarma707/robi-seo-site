@@ -76,12 +76,14 @@ export function Hero({
               {subtitle}
             </p>
 
-            <div className={`flex flex-col sm:flex-row gap-4 ${isCenter ? "justify-center" : ""}`}>
-              <Button href={ctaHref} size="lg">
-                {ctaText}
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </div>
+            {ctaText && (
+              <div className={`flex flex-col sm:flex-row gap-4 ${isCenter ? "justify-center" : ""}`}>
+                <Button href={ctaHref} size="lg">
+                  {ctaText}
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Right side - Interactive Mockups */}

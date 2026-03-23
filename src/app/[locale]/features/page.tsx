@@ -71,33 +71,62 @@ export default async function FeaturesPage({
         badge={dict.nav.features}
         title={dict.features.title}
         titleAccent={dict.features.titleAccent}
-        subtitle={dict.features.titleEnd}
+        subtitle=""
+        ctaText=""
         variant="centered"
       />
 
-      <section className="py-24 bg-[#0D0630]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => {
+      <section className="py-20 bg-[#0D0630]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* First row - 3 cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {features.slice(0, 3).map((feature) => {
               const Icon = featureIcons[feature.slug as keyof typeof featureIcons] || Bot;
-
               return (
                 <Link
                   key={feature.slug}
                   href={`/${locale}/features/${feature.slug}`}
                   className="group"
                 >
-                  <div className="h-full rounded-3xl p-8 border border-white/10 bg-white/5 backdrop-blur-sm transition-all duration-300 hover:border-[#BEF221]/40 hover:bg-white/10 hover:-translate-y-1">
-                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-[#BEF221]/10 border border-[#BEF221]/20 group-hover:bg-[#BEF221]/20 transition-colors">
-                      <Icon className="w-7 h-7 text-[#BEF221]" />
+                  <div className="h-full rounded-2xl p-7 bg-white border border-gray-100 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-[#BEF221]/40">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-[#BEF221]/10 border border-[#BEF221]/20 group-hover:bg-[#BEF221]/20 transition-colors">
+                      <Icon className="w-6 h-6 text-[#BEF221]" />
                     </div>
-                    <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-xl font-bold text-white group-hover:text-[#BEF221] transition-colors">
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="text-lg font-bold text-[#0D0630] group-hover:text-[#BEF221] transition-colors">
                         {t(feature.name, locale)}
                       </h3>
-                      <ArrowRight className="w-5 h-5 text-[#BEF221] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
+                      <ArrowRight className="w-4 h-4 text-[#BEF221] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
                     </div>
-                    <p className="text-white/60 leading-relaxed">
+                    <p className="text-gray-500 text-sm leading-relaxed">
+                      {t(feature.description, locale)}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+          {/* Second row - 2 cards centered */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[calc(66.666%+0.75rem)] mx-auto">
+            {features.slice(3).map((feature) => {
+              const Icon = featureIcons[feature.slug as keyof typeof featureIcons] || Bot;
+              return (
+                <Link
+                  key={feature.slug}
+                  href={`/${locale}/features/${feature.slug}`}
+                  className="group"
+                >
+                  <div className="h-full rounded-2xl p-7 bg-white border border-gray-100 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-[#BEF221]/40">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-[#BEF221]/10 border border-[#BEF221]/20 group-hover:bg-[#BEF221]/20 transition-colors">
+                      <Icon className="w-6 h-6 text-[#BEF221]" />
+                    </div>
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="text-lg font-bold text-[#0D0630] group-hover:text-[#BEF221] transition-colors">
+                        {t(feature.name, locale)}
+                      </h3>
+                      <ArrowRight className="w-4 h-4 text-[#BEF221] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
+                    </div>
+                    <p className="text-gray-500 text-sm leading-relaxed">
                       {t(feature.description, locale)}
                     </p>
                   </div>
