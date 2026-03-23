@@ -50,7 +50,7 @@ export function Hero({
       <div className="absolute bottom-20 right-10 w-32 h-32 bg-[#BEF221]/5 rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Content */}
           <div className={`${isCenter ? "text-center max-w-4xl mx-auto lg:col-span-2" : "max-w-3xl"}`}>
             {badge && (
