@@ -27,7 +27,7 @@ export function Hero({
   title,
   titleAccent,
   subtitle,
-  ctaText = "Start Free",
+  ctaText = "",
   ctaHref = "https://www.robi-app.com",
   secondaryCtaText,
   secondaryCtaHref,
