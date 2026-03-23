@@ -4,7 +4,6 @@ import { features, t } from "@/data/seo-config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
-import { Card } from "@/components/ui/Card";
 import { CTA } from "@/components/sections/CTA";
 import { ArrowRight, Bot, Zap, Bell, CreditCard, BarChart3 } from "lucide-react";
 
@@ -76,56 +75,32 @@ export default async function FeaturesPage({
         variant="centered"
       />
 
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#0D0630]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => {
               const Icon = featureIcons[feature.slug as keyof typeof featureIcons] || Bot;
-              const isLarge = index === 0 || index === features.length - 1;
 
               return (
                 <Link
                   key={feature.slug}
                   href={`/${locale}/features/${feature.slug}`}
-                  className={isLarge ? "md:col-span-2" : ""}
+                  className="group"
                 >
-                  <Card
-                    variant={index === 0 ? "dark" : "default"}
-                    className={`h-full group cursor-pointer ${isLarge ? "md:flex md:items-center md:gap-12" : ""}`}
-                  >
-                    <div className={`${isLarge ? "md:w-1/3" : ""}`}>
-                      <div
-                        className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
-                          index === 0
-                            ? "bg-[#BEF221]/20 border border-[#BEF221]/30"
-                            : "bg-[#BEF221]/10 border border-[#BEF221]/20"
-                        }`}
-                      >
-                        <Icon
-                          className={`w-8 h-8 ${index === 0 ? "text-[#BEF221]" : "text-[#BEF221]"}`}
-                        />
-                      </div>
+                  <div className="h-full rounded-3xl p-8 border border-white/10 bg-white/5 backdrop-blur-sm transition-all duration-300 hover:border-[#BEF221]/40 hover:bg-white/10 hover:-translate-y-1">
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-[#BEF221]/10 border border-[#BEF221]/20 group-hover:bg-[#BEF221]/20 transition-colors">
+                      <Icon className="w-7 h-7 text-[#BEF221]" />
                     </div>
-                    <div className={`${isLarge ? "md:w-2/3" : ""}`}>
-                      <div className="flex items-start justify-between mb-4">
-                        <h3
-                          className={`text-2xl font-bold group-hover:text-[#BEF221] transition-colors ${
-                            index === 0 ? "text-gray-900" : "text-gray-900"
-                          }`}
-                        >
-                          {t(feature.name, locale)}
-                        </h3>
-                        <ArrowRight
-                          className={`w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity ${
-                            index === 0 ? "text-[#BEF221]" : "text-[#BEF221]"
-                          }`}
-                        />
-                      </div>
-                      <p className={index === 0 ? "text-gray-500" : "text-gray-500"}>
-                        {t(feature.description, locale)}
-                      </p>
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="text-xl font-bold text-white group-hover:text-[#BEF221] transition-colors">
+                        {t(feature.name, locale)}
+                      </h3>
+                      <ArrowRight className="w-5 h-5 text-[#BEF221] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
                     </div>
-                  </Card>
+                    <p className="text-white/60 leading-relaxed">
+                      {t(feature.description, locale)}
+                    </p>
+                  </div>
                 </Link>
               );
             })}
