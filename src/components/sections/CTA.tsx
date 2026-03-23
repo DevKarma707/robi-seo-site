@@ -24,7 +24,7 @@ export function CTA({
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#BEF221]/5 rounded-full blur-3xl" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-        <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 tracking-tight">
+        <h2 className="text-2xl md:text-3xl font-black text-white mb-6 tracking-tight">
           {title}
         </h2>
         <p className="text-xl text-white/70 mb-12">{subtitle}</p>

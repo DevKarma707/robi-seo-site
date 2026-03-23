@@ -185,7 +185,7 @@ export default async function FeaturePage({
               <Sparkles className="w-3 h-3 mr-1" />
               {fp.benefits}
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900">
+            <h2 className="text-2xl md:text-3xl font-black text-gray-900">
               {fp.whyYouWillLove}
             </h2>
           </div>
@@ -211,7 +211,7 @@ export default async function FeaturePage({
               <Zap className="w-3 h-3 mr-1" />
               {fp.howItWorks}
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900">
+            <h2 className="text-2xl md:text-3xl font-black text-gray-900">
               {fp.simpleAs123}
             </h2>
           </div>

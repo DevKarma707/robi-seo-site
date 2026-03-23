@@ -104,7 +104,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
 
           {/* Text Content */}
           <ScrollReveal className="flex-1 text-left" delay={200}>
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-8 leading-[1.1] tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-8 leading-[1.1] tracking-tight">
               {t.title}
             </h2>
             <p className="text-xl text-gray-500 leading-relaxed mb-10 max-w-lg font-medium">

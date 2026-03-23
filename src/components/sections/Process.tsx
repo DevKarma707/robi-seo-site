@@ -71,7 +71,7 @@ export function Process({ dict = defaultDict }: ProcessProps) {
           <span className="text-[#BEF221] text-sm font-bold tracking-widest uppercase mb-4 block">
             {t.label}
           </span>
-          <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+          <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-4">
             {t.title}{" "}
             <span className="text-[#BEF221]">{t.titleAccent}</span>
           </h2>
