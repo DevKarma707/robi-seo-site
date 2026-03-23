@@ -181,10 +181,6 @@ export default async function FeaturePage({
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <Badge variant="accent" className="mb-4">
-              <Sparkles className="w-3 h-3 mr-1" />
-              {fp.benefits}
-            </Badge>
             <h2 className="text-2xl md:text-3xl font-black text-gray-900">
               {fp.whyYouWillLove}
             </h2>
@@ -207,10 +203,6 @@ export default async function FeaturePage({
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <Badge variant="default" className="mb-4">
-              <Zap className="w-3 h-3 mr-1" />
-              {fp.howItWorks}
-            </Badge>
             <h2 className="text-2xl md:text-3xl font-black text-gray-900">
               {fp.simpleAs123}
             </h2>

@@ -53,15 +53,6 @@ export function Hero({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Content */}
           <div className={`${isCenter ? "text-center max-w-4xl mx-auto lg:col-span-2" : "max-w-3xl"}`}>
-            {badge && (
-              <div className={`mb-6 ${isCenter ? "flex justify-center" : ""}`}>
-                <Badge variant="accent">
-                  <Sparkles className="w-3 h-3 mr-1" />
-                  {badge}
-                </Badge>
-              </div>
-            )}
-
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight mb-6 tracking-tight">
               {title}
               {titleAccent && (
