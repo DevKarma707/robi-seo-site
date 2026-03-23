@@ -143,7 +143,7 @@
   "cta": {
     "title": "¿Listo para automatizar tu facturación?",
     "subtitle": "Únete a 2.000+ emprendedores que facturan sin esfuerzo",
-    "button": "Empezar con Robi",
+    "button": "Empezar gratis",
     "subtext": "Sin tarjeta • Cancelación en 1 clic"
   },
   "footer": {
@@ -283,7 +283,7 @@
       "whyYouWillLove": "Por qué te va a encantar",
       "howItWorks": "Cómo funciona",
       "simpleAs123": "Fácil como 1, 2, 3",
-      "tryFeature": "Prueba {name}",
+      "tryFeature": "Prueba Robi AI",
       "freeFor14Days": "Gratis durante 14 días, sin tarjeta de crédito"
     },
     "tools": {

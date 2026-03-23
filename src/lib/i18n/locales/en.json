@@ -143,7 +143,7 @@
   "cta": {
     "title": "Ready to automate your invoicing?",
     "subtitle": "Join 2,000+ entrepreneurs invoicing effortlessly",
-    "button": "Start with Robi",
+    "button": "Start for free",
     "subtext": "No card required • 1-click cancellation"
   },
   "footer": {
@@ -283,7 +283,7 @@
       "whyYouWillLove": "Why you'll love it",
       "howItWorks": "How it works",
       "simpleAs123": "As simple as 1, 2, 3",
-      "tryFeature": "Try {name}",
+      "tryFeature": "Try Robi AI",
       "freeFor14Days": "Free for 14 days, no credit card required"
     },
     "tools": {
