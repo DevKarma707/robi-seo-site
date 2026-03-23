@@ -88,17 +88,17 @@ export default async function FeaturesPage({
                   href={`/${locale}/features/${feature.slug}`}
                   className="group"
                 >
-                  <div className="h-full rounded-2xl p-7 bg-white border border-gray-100 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-[#BEF221]/40">
+                  <div className="h-full rounded-2xl p-7 bg-white/5 border border-white/10 backdrop-blur-sm transition-all duration-300 hover:border-[#BEF221]/40 hover:bg-white/10 hover:-translate-y-1">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-[#BEF221]/10 border border-[#BEF221]/20 group-hover:bg-[#BEF221]/20 transition-colors">
                       <Icon className="w-6 h-6 text-[#BEF221]" />
                     </div>
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-lg font-bold text-[#0D0630] group-hover:text-[#BEF221] transition-colors">
+                      <h3 className="text-lg font-bold text-white group-hover:text-[#BEF221] transition-colors">
                         {t(feature.name, locale)}
                       </h3>
                       <ArrowRight className="w-4 h-4 text-[#BEF221] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
                     </div>
-                    <p className="text-gray-500 text-sm leading-relaxed">
+                    <p className="text-white/60 text-sm leading-relaxed">
                       {t(feature.description, locale)}
                     </p>
                   </div>
@@ -116,17 +116,17 @@ export default async function FeaturesPage({
                   href={`/${locale}/features/${feature.slug}`}
                   className="group"
                 >
-                  <div className="h-full rounded-2xl p-7 bg-white border border-gray-100 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-[#BEF221]/40">
+                  <div className="h-full rounded-2xl p-7 bg-white/5 border border-white/10 backdrop-blur-sm transition-all duration-300 hover:border-[#BEF221]/40 hover:bg-white/10 hover:-translate-y-1">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-[#BEF221]/10 border border-[#BEF221]/20 group-hover:bg-[#BEF221]/20 transition-colors">
                       <Icon className="w-6 h-6 text-[#BEF221]" />
                     </div>
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-lg font-bold text-[#0D0630] group-hover:text-[#BEF221] transition-colors">
+                      <h3 className="text-lg font-bold text-white group-hover:text-[#BEF221] transition-colors">
                         {t(feature.name, locale)}
                       </h3>
                       <ArrowRight className="w-4 h-4 text-[#BEF221] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
                     </div>
-                    <p className="text-gray-500 text-sm leading-relaxed">
+                    <p className="text-white/60 text-sm leading-relaxed">
                       {t(feature.description, locale)}
                     </p>
                   </div>
