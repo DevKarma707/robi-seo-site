@@ -68,9 +68,6 @@ export function Process({ dict = defaultDict }: ProcessProps) {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal className="text-center mb-16">
-          <span className="text-[#BEF221] text-sm font-bold tracking-widest uppercase mb-4 block">
-            {t.label}
-          </span>
           <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-4">
             {t.title}{" "}
             <span className="text-[#BEF221]">{t.titleAccent}</span>

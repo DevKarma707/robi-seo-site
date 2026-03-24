@@ -36,10 +36,8 @@ export function CTA({
 }: CTAProps) {
   return (
     <section className="py-24 md:py-32 bg-[#0D0630] relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(190,242,33,0.1),transparent_70%)]" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#BEF221]/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#BEF221]/5 rounded-full blur-3xl" />
+      {/* Subtle background line only */}
+      <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
         <h2 className="text-2xl md:text-3xl font-black text-white mb-6 tracking-tight">

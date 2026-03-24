@@ -199,9 +199,8 @@
     "invoicesTab": "Factures",
     "statusSigned": "Signé",
     "statusPaid": "Payé",
-    "convertToInvoice": "Transformer en facture",
+    "convertToInvoice": "Convertir en facture",
     "duplicate": "Dupliquer",
-    "convertToReport": "Rapport d'intervention",
     "markRefused": "Marquer comme refusé",
     "export": "Exporter"
   },
@@ -221,7 +220,7 @@
     "tooltipMonth": "Avril 2024"
   },
   "cta": {
-    "title": "Prêt à automatiser votre facturation ?",
+    "title": "Prêt à simplifier votre gestion et faire décoller vos ventes ?",
     "subtitle": "Rejoignez 2000+ entrepreneurs qui facturent sans effort",
     "button": "Démarrer gratuitement",
     "subtext": "2 documents gratuits • Sans carte bancaire"

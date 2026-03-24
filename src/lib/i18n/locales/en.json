@@ -201,7 +201,6 @@
     "statusPaid": "Paid",
     "convertToInvoice": "Convert to invoice",
     "duplicate": "Duplicate",
-    "convertToReport": "Intervention report",
     "markRefused": "Mark as refused",
     "export": "Export"
   },
@@ -221,7 +220,7 @@
     "tooltipMonth": "April 2024"
   },
   "cta": {
-    "title": "Ready to automate your invoicing?",
+    "title": "Ready to simplify your workflow and skyrocket your sales?",
     "subtitle": "Join 2,000+ entrepreneurs invoicing effortlessly",
     "button": "Start for free",
     "subtext": "2 free documents • No credit card required"
