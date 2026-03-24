@@ -41,7 +41,7 @@ export function Hero({
   const isCenter = variant === "centered";
 
   return (
-    <section className="relative pt-20 pb-20 md:pt-[72px] md:pb-16 overflow-hidden bg-[#0D0630]">
+    <section className={`relative pt-20 md:pt-[72px] overflow-hidden bg-[#0D0630] ${ctaText ? "pb-20 md:pb-16" : "pb-12 md:pb-10"}`}>
       {/* Background gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(190,242,33,0.1),transparent_50%)]" />
 
@@ -50,10 +50,9 @@ export function Hero({
       <div className="absolute bottom-20 right-10 w-32 h-32 bg-[#BEF221]/5 rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left side - Content */}
-          <div className={`${isCenter ? "text-center max-w-4xl mx-auto lg:col-span-2" : "max-w-3xl"}`}>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight mb-6 tracking-tight">
+        {isCenter ? (
+          <div className="text-center max-w-4xl mx-auto">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 tracking-tight">
               {title}
               {titleAccent && (
                 <>
@@ -63,12 +62,12 @@ export function Hero({
               )}
             </h1>
 
-            <p className={`text-lg md:text-xl text-white/70 mb-10 leading-relaxed ${isCenter ? "max-w-2xl mx-auto" : "max-w-2xl"}`}>
+            <p className="text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-2xl mx-auto">
               {subtitle}
             </p>
 
             {ctaText && (
-              <div className={`flex flex-col sm:flex-row gap-4 ${isCenter ? "justify-center" : ""}`}>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button href={ctaHref} size="lg">
                   {ctaText}
                   <ArrowRight className="ml-2 w-5 h-5" />
@@ -76,14 +75,40 @@ export function Hero({
               </div>
             )}
           </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left side - Content */}
+            <div className="max-w-3xl">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 tracking-tight">
+                {title}
+                {titleAccent && (
+                  <>
+                    <br />
+                    <span className="text-[#BEF221]">{titleAccent}</span>
+                  </>
+                )}
+              </h1>
 
-          {/* Right side - Interactive Mockups */}
-          {!isCenter && (
+              <p className="text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-2xl">
+                {subtitle}
+              </p>
+
+              {ctaText && (
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button href={ctaHref} size="lg">
+                    {ctaText}
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            {/* Right side - Interactive Mockups */}
             <div className="hidden lg:block h-[520px] relative">
               <HeroMockups />
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -9,10 +9,28 @@ interface CTAProps {
   secondaryText?: string;
 }
 
+function StyledRobiTitle({ text }: { text: string }) {
+  // Split on "Robi AI" and render AI in green to match nav pill
+  const parts = text.split(/(Robi\s*AI)/gi);
+  return (
+    <>
+      {parts.map((part, i) =>
+        /Robi\s*AI/i.test(part) ? (
+          <span key={i} className="font-black">
+            Robi <span className="text-[#BEF221]">AI</span>
+          </span>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
+
 export function CTA({
   title = "Ready to automate your invoicing?",
   subtitle = "Join 2000+ entrepreneurs who invoice effortlessly",
-  ctaText = "Start with Robi",
+  ctaText = "Start with Robi AI",
   ctaHref = "https://www.robi-app.com",
   secondaryText = "No card • Cancel anytime",
 }: CTAProps) {
@@ -25,7 +43,7 @@ export function CTA({
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
         <h2 className="text-2xl md:text-3xl font-black text-white mb-6 tracking-tight">
-          {title}
+          <StyledRobiTitle text={title} />
         </h2>
         <p className="text-xl text-white/70 mb-12">{subtitle}</p>
 

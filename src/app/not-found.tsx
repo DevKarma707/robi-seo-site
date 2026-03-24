@@ -61,7 +61,7 @@ export default function NotFound() {
 
             {/* Branding */}
             <p className="mt-16 text-white/20 text-sm font-medium uppercase tracking-widest">
-              Robi AI
+              Robi <span className="text-[#BEF221]">AI</span>
             </p>
           </div>
         </div>

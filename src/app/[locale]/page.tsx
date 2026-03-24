@@ -1,8 +1,13 @@
 import { Hero } from "@/components/sections/Hero";
 import { Process } from "@/components/sections/Process";
 import { Features } from "@/components/sections/Features";
+import { Dashboard } from "@/components/sections/Dashboard";
+import { QuoteSignature } from "@/components/sections/QuoteSignature";
+import { AdminSimplicity } from "@/components/sections/AdminSimplicity";
 import { Payments } from "@/components/sections/Payments";
 import { Pricing } from "@/components/sections/Pricing";
+import { MadeForYou } from "@/components/sections/MadeForYou";
+import { Trust } from "@/components/sections/Trust";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
 import { Locale, locales, defaultLocale } from "@/lib/i18n/config";
@@ -150,6 +155,12 @@ export default async function Home({
         dict={dict}
       />
 
+      <QuoteSignature dict={dict} />
+
+      <AdminSimplicity dict={dict} />
+
+      <Dashboard dict={dict} />
+
       <Payments dict={dict} locale={locale} />
 
       <Pricing
@@ -159,7 +170,11 @@ export default async function Home({
         locale={locale}
       />
 
-      <FAQ title={dict.faq.title} dict={dict} />
+      <MadeForYou dict={dict} />
+
+      <Trust dict={dict} />
+
+      <FAQ title={dict.faq.title} badge={dict.faq.badge} dict={dict} />
 
       <CTA
         title={dict.cta.title}
