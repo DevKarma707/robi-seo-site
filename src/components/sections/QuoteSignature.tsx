@@ -108,7 +108,7 @@ export function QuoteSignature({ dict }: QuoteSignatureProps) {
 
           {/* Right - Text */}
           <div className="order-1 lg:order-2">
-            <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-black text-[#0D0630] leading-tight mb-6 tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-black text-[#0D0630] leading-tight mb-6 tracking-tight">
               {qs.title}
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-8">

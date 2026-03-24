@@ -16,7 +16,7 @@ export function Dashboard({ dict }: DashboardProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left - Text */}
           <div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#0D0630] leading-tight mb-6 tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-black text-[#0D0630] leading-tight mb-6 tracking-tight">
               {d.title}
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-8">

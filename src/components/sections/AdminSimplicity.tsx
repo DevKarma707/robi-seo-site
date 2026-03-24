@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { ArrowRight, CheckCircle, FileText, RefreshCw, Copy, FileOutput, XCircle, Download } from "lucide-react";
+import { ArrowRight, CheckCircle, RefreshCw, Copy, XCircle, Download } from "lucide-react";
 
 interface AdminSimplicityProps {
   dict: any;
@@ -16,7 +16,7 @@ export function AdminSimplicity({ dict }: AdminSimplicityProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left - Text */}
           <div>
-            <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-black text-[#0D0630] leading-tight mb-6 tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-black text-[#0D0630] leading-tight mb-6 tracking-tight">
               {ad.title}
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-8">
@@ -77,8 +77,8 @@ export function AdminSimplicity({ dict }: AdminSimplicityProps) {
               {/* Filter tabs */}
               <div className="flex gap-2 mb-4">
                 <span className="bg-[#BEF221] text-[#0D0630] text-[10px] font-bold px-3 py-1 rounded-full">{ad.all}</span>
-                <span className="bg-white/10 text-white/60 text-[10px] font-medium px-3 py-1 rounded-full">{ad.quotesTab}</span>
-                <span className="bg-white/10 text-white/60 text-[10px] font-medium px-3 py-1 rounded-full">{ad.invoicesTab}</span>
+                <span className="bg-white/20 text-white text-[10px] font-semibold px-3 py-1 rounded-full">{ad.quotesTab}</span>
+                <span className="bg-white/20 text-white text-[10px] font-semibold px-3 py-1 rounded-full">{ad.invoicesTab}</span>
               </div>
 
               {/* Document rows */}
@@ -114,7 +114,6 @@ export function AdminSimplicity({ dict }: AdminSimplicityProps) {
                   {[
                     { icon: RefreshCw, label: ad.convertToInvoice, highlight: true },
                     { icon: Copy, label: ad.duplicate, highlight: false },
-                    { icon: FileOutput, label: ad.convertToReport, highlight: false },
                     { icon: XCircle, label: ad.markRefused, highlight: false },
                     { icon: Download, label: ad.export, highlight: false },
                   ].map((action, i) => (

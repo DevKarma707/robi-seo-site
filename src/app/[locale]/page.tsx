@@ -148,14 +148,14 @@ export default async function Home({
 
       <Process dict={dict} />
 
+      <QuoteSignature dict={dict} />
+
       <Features
         title={dict.features.title}
         titleAccent={dict.features.titleAccent}
         subtitle={dict.features.titleEnd}
         dict={dict}
       />
-
-      <QuoteSignature dict={dict} />
 
       <AdminSimplicity dict={dict} />
 
