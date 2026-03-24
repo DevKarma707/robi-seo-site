@@ -16,8 +16,6 @@ export function Header({ locale, dict }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  const indCat = dict.footer.industryCategories;
-
   const navigation = [
     {
       name: dict.nav.features,
@@ -27,19 +25,6 @@ export function Header({ locale, dict }: HeaderProps) {
         { name: dict.features.automation.title, href: `/${locale}/features/devis-automatique` },
         { name: dict.features.emails.title, href: `/${locale}/features/relance-automatique` },
         { name: dict.features.payments.title, href: `/${locale}/features/paiement-en-ligne` },
-      ],
-    },
-    {
-      name: dict.nav.industries,
-      href: `/${locale}/industries`,
-      children: [
-        { name: `🔧 ${indCat.btp}`, href: `/${locale}/industries`, isCategory: true },
-        { name: `💻 ${indCat.tech}`, href: `/${locale}/industries`, isCategory: true },
-        { name: `🎨 ${indCat.creatif}`, href: `/${locale}/industries`, isCategory: true },
-        { name: `🎉 ${indCat.evenementiel}`, href: `/${locale}/industries`, isCategory: true },
-        { name: `💼 ${indCat.conseil}`, href: `/${locale}/industries`, isCategory: true },
-        { name: `❤️ ${indCat.sante}`, href: `/${locale}/industries`, isCategory: true },
-        { name: dict.nav.allIndustries, href: `/${locale}/industries` },
       ],
     },
     { name: dict.nav.pricing, href: `/${locale}/pricing` },
