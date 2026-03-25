@@ -434,7 +434,7 @@ export default async function BlogPostPage({
             publisher: {
               "@type": "Organization",
               name: "Robi AI",
-              logo: "https://robi.ai/logo.png",
+              logo: "https://robi-app.com/logo.png",
             },
             datePublished: "2024-02-15",
             dateModified: "2024-02-15",

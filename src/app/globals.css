@@ -1,14 +1,46 @@
 @import "tailwindcss";
 
 :root {
-  /* Robi AI Brand Colors */
+  /* === ROBI AI BRAND === */
   --primary: #0D0630;
   --primary-hover: #18314F;
   --secondary: #18314F;
   --accent: #BEF221;
-  --background: #FFFFFF;
-  --foreground: #09090B;
-  --muted: #F4F4F5;
+
+  /* === DARK SURFACES === */
+  --surface-base: #0D0630;
+  --surface-alt: #0A0425;
+  --surface-card: #120A3D;
+  --surface-overlay: #1A1050;
+
+  /* === LIME VERT SYSTEM === */
+  --lime: #BEF221;
+  --lime-glow: rgba(190, 242, 33, 0.3);
+  --lime-glow-strong: rgba(190, 242, 33, 0.5);
+  --lime-border: rgba(190, 242, 33, 0.20);
+  --lime-border-hover: rgba(190, 242, 33, 0.40);
+  --lime-bg: rgba(190, 242, 33, 0.10);
+
+  /* === TEXT === */
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.70);
+  --text-tertiary: rgba(255, 255, 255, 0.40);
+  --text-accent: #BEF221;
+
+  /* === BORDERS === */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.10);
+
+  /* === ANIMATION TIMING === */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-normal: 0.5s;
+  --duration-slow: 0.8s;
+  --duration-reveal: 1.2s;
+
+  /* Legacy compat */
+  --background: #0D0630;
+  --foreground: #FFFFFF;
+  --muted: #1A1050;
   --destructive: #EF4444;
   --success: #10B981;
   --warning: #F59E0B;
@@ -28,29 +60,147 @@
   --font-sans: "Inter", "Outfit", sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: "Inter", "Outfit", sans-serif;
+/* === BASE === */
+html {
+  scroll-behavior: smooth;
 }
 
-/* Utility Classes */
+body {
+  background: var(--surface-base);
+  color: var(--text-primary);
+  font-family: "Inter", "Outfit", sans-serif;
+  overflow-x: hidden;
+}
+
+/* === CUSTOM SCROLLBAR (LIME) === */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--surface-base); }
+::-webkit-scrollbar-thumb {
+  background: var(--lime-glow);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--lime-glow-strong);
+}
+
+/* === LIME GRADIENT TEXT === */
 .text-gradient {
-  background: linear-gradient(135deg, var(--accent) 0%, #9FE000 100%);
+  background: linear-gradient(135deg, #BEF221 0%, #9FE000 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+.text-gradient-animated {
+  background: linear-gradient(135deg, #BEF221 0%, #9FE000 50%, #BEF221 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === GLOW SHADOWS (LIME) === */
 .shadow-glow {
-  box-shadow: 0 0 30px rgba(190, 242, 33, 0.3);
+  box-shadow: 0 0 30px var(--lime-glow);
 }
 
 .shadow-glow-sm {
   box-shadow: 0 0 15px rgba(190, 242, 33, 0.2);
 }
 
-/* Animations */
+.shadow-glow-lg {
+  box-shadow: 0 0 60px var(--lime-glow);
+}
+
+/* === SCROLL REVEAL === */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity var(--duration-slow) var(--ease-out-expo),
+              transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.clip-reveal {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path var(--duration-reveal) var(--ease-out-expo);
+}
+
+.clip-reveal.revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Reduced motion: skip animations */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .clip-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+}
+
+/* === 3D CARD SYSTEM === */
+.perspective-container {
+  perspective: 50vw;
+  perspective-origin: center;
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s var(--ease-out-expo),
+              opacity 0.4s ease,
+              border-color 0.4s ease,
+              box-shadow 0.4s ease;
+}
+
+.card-group:hover .card-3d {
+  opacity: 0.5;
+}
+
+.card-group:hover .card-3d:hover {
+  opacity: 1;
+  transform: scale(1.025) translateZ(20px);
+}
+
+/* === BUTTON TEXT SLIDE === */
+.btn-text-wrapper {
+  display: inline-flex;
+  overflow: hidden;
+  height: 1.5em;
+  position: relative;
+  align-items: center;
+}
+
+.btn-text-original,
+.btn-text-hover {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.btn-text-hover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+.btn-slide:hover .btn-text-original {
+  transform: translateY(-100%);
+}
+
+.btn-slide:hover .btn-text-hover {
+  transform: translateY(-100%);
+}
+
+/* === KEYFRAMES === */
 @keyframes shimmer {
   0% { transform: translateX(-150%) skewX(-15deg); }
   100% { transform: translateX(150%) skewX(-15deg); }
@@ -66,14 +216,41 @@ body {
   50% { box-shadow: 0 0 40px rgba(190, 242, 33, 0.5); }
 }
 
-.animate-shimmer {
-  animation: shimmer 3s infinite;
+@keyframes glow-breathe {
+  0%, 100% { box-shadow: 0 0 20px rgba(190, 242, 33, 0.15); }
+  50% { box-shadow: 0 0 60px rgba(190, 242, 33, 0.30); }
 }
 
-.animate-float {
-  animation: float 3s ease-in-out infinite;
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes reveal-up {
+  from { clip-path: inset(100% 0 0 0); opacity: 0; }
+  to { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+
+/* === UTILITY ANIMATIONS === */
+.animate-shimmer { animation: shimmer 3s infinite; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-glow-breathe { animation: glow-breathe 3s ease-in-out infinite; }
+
+/* === LINK UNDERLINE ANIMATION (LIME) === */
+.link-underline {
+  background-image: linear-gradient(#BEF221, #BEF221);
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  background-position: left bottom;
+  transition: background-size 0.3s ease;
+}
+
+.link-underline:hover {
+  background-size: 100% 1px;
 }

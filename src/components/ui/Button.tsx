@@ -20,17 +20,17 @@ export function Button({
   onClick,
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center font-bold rounded-full transition-all transform hover:scale-105 active:scale-95";
+    "btn-slide inline-flex items-center justify-center font-bold rounded-full transition-all duration-300";
 
   const variants = {
     primary:
-      "bg-[#BEF221] text-[#0D0630] hover:bg-[#a8d61e] shadow-lg shadow-[#BEF221]/20",
+      "bg-[#BEF221] text-[#0D0630] hover:shadow-[0_0_30px_rgba(190,242,33,0.4)] shadow-lg shadow-[#BEF221]/20",
     secondary:
-      "bg-[#0D0630] text-white hover:bg-[#18314F]",
+      "bg-white/10 border border-white/20 text-white hover:bg-white/20 hover:border-white/30",
     outline:
-      "border-2 border-[#0D0630] text-[#0D0630] hover:bg-[#0D0630] hover:text-white",
+      "border border-[#BEF221]/30 text-[#BEF221] hover:border-[#BEF221] hover:bg-[#BEF221]/10",
     ghost:
-      "text-[#0D0630] hover:bg-[#0D0630]/10",
+      "text-white/70 hover:text-[#BEF221]",
   };
 
   const sizes = {
@@ -41,17 +41,24 @@ export function Button({
 
   const combinedClassName = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
 
+  const content = (
+    <span className="btn-text-wrapper">
+      <span className="btn-text-original">{children}</span>
+      <span className="btn-text-hover" aria-hidden="true">{children}</span>
+    </span>
+  );
+
   if (href) {
     return (
       <a href={href} className={combinedClassName}>
-        {children}
+        {content}
       </a>
     );
   }
 
   return (
     <button onClick={onClick} className={combinedClassName}>
-      {children}
+      {content}
     </button>
   );
 }

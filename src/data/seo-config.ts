@@ -7,8 +7,8 @@ import { Locale } from "@/lib/i18n/config";
 export const siteConfig = {
   name: "Robi AI",
   description: "Logiciel de facturation IA pour freelances et indépendants",
-  url: "https://robi.ai",
-  ogImage: "https://robi.ai/og.png",
+  url: "https://robi-app.com",
+  ogImage: "https://robi-app.com/og.png",
   links: {
     twitter: "https://twitter.com/robi_ai",
     linkedin: "https://linkedin.com/company/robi-ai",
