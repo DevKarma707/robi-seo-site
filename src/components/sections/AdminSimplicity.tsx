@@ -11,28 +11,28 @@ export function AdminSimplicity({ dict }: AdminSimplicityProps) {
   const ad = dict.adminSimplicity;
 
   return (
-    <section className="py-24 md:py-32 bg-white overflow-hidden">
+    <section className="py-14 md:py-32 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left - Text */}
           <div>
-            <h2 className="text-2xl md:text-3xl font-black text-[#0D0630] leading-tight mb-6 tracking-tight">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-[#0D0630] leading-tight mb-4 md:mb-6 tracking-tight">
               {ad.title}
             </h2>
-            <p className="text-lg text-gray-600 leading-relaxed mb-8">
+            <p className="text-sm md:text-lg text-gray-600 leading-relaxed mb-6 md:mb-8">
               {ad.description}
             </p>
-            <Button href="https://www.robi-app.com" size="lg">
+            <Button href="https://www.robi-app.com" size="sm" className="!text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-lg">
               {ad.cta}
-              <ArrowRight className="ml-2 w-5 h-5" />
+              <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-5 md:h-5" />
             </Button>
           </div>
 
           {/* Right - Mockup */}
           <div className="relative">
             <div className="flex flex-col lg:flex-row items-start gap-4">
-              {/* Notification feed - Left side */}
-              <div className="space-y-2.5 w-56 flex-shrink-0">
+              {/* Notification feed - Left side (hidden on mobile) */}
+              <div className="hidden lg:block space-y-2.5 w-56 flex-shrink-0">
                 {[
                   { name: "Jean Delois", amount: "600,00", time: "1 min" },
                   { name: "Anne Lafosse", amount: "520,00", time: "12 min" },

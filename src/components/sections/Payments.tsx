@@ -24,7 +24,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
   const t = dict.payments || defaultDict.payments;
 
   return (
-    <section id="payments" className="py-24 bg-gray-50 relative overflow-hidden">
+    <section id="payments" className="py-14 md:py-24 bg-gray-50 relative overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#BEF221]/[0.06] rounded-full blur-3xl" />
 
@@ -32,17 +32,17 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
         <div className="flex flex-col lg:flex-row items-center gap-16 md:gap-24">
           {/* Payment Methods Visual */}
           <ScrollReveal className="flex-1 w-full max-w-xl">
-            <div className="bg-white p-12 rounded-[3.5rem] relative group border border-gray-200 hover:border-[#BEF221]/20 transition-all duration-500 shadow-xl">
+            <div className="bg-white p-6 md:p-12 rounded-[2rem] md:rounded-[3.5rem] relative group border border-gray-200 hover:border-[#BEF221]/20 transition-all duration-500 shadow-xl">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#BEF221]/10 blur-3xl rounded-full" />
 
               <div className="relative text-center">
-                <h3 className="text-gray-400 text-sm font-black uppercase tracking-widest mb-14">
+                <h3 className="text-gray-400 text-xs md:text-sm font-black uppercase tracking-widest mb-6 md:mb-14">
                   {t.integrations}
                 </h3>
 
-                <div className="grid grid-cols-2 gap-6 mb-12">
+                <div className="grid grid-cols-2 gap-3 md:gap-6 mb-6 md:mb-12">
                   {/* CB / Carte Bancaire */}
-                  <div className="flex items-center gap-4 p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                  <div className="flex items-center gap-2.5 md:gap-4 p-3 md:p-5 rounded-xl md:rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
                     <div className="w-12 h-12 bg-white rounded-xl border border-gray-200 flex items-center justify-center shadow-sm">
                       <CreditCard className="w-6 h-6 text-[#0D0630]" />
                     </div>
@@ -53,7 +53,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
                   </div>
 
                   {/* Visa */}
-                  <div className="flex items-center gap-4 p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                  <div className="flex items-center gap-2.5 md:gap-4 p-3 md:p-5 rounded-xl md:rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
                     <div className="w-12 h-12 bg-[#1A1F71] rounded-xl flex items-center justify-center shadow-sm">
                       <span className="text-white font-black italic text-sm tracking-tighter">VISA</span>
                     </div>
@@ -64,7 +64,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
                   </div>
 
                   {/* Apple Pay */}
-                  <div className="flex items-center gap-4 p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                  <div className="flex items-center gap-2.5 md:gap-4 p-3 md:p-5 rounded-xl md:rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
                     <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shadow-sm">
                       <Apple className="w-6 h-6 text-white" />
                     </div>
@@ -75,7 +75,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
                   </div>
 
                   {/* PayPal */}
-                  <div className="flex items-center gap-4 p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                  <div className="flex items-center gap-2.5 md:gap-4 p-3 md:p-5 rounded-xl md:rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
                     <div className="w-12 h-12 bg-[#003087] rounded-xl flex items-center justify-center shadow-sm">
                       <span className="text-white font-black text-xs">PP</span>
                     </div>
@@ -104,19 +104,19 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
 
           {/* Text Content */}
           <ScrollReveal className="flex-1 text-left" delay={200}>
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-8 leading-[1.1] tracking-tight">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-gray-900 mb-4 md:mb-8 leading-[1.1] tracking-tight">
               {t.title}
             </h2>
-            <p className="text-xl text-gray-500 leading-relaxed mb-10 max-w-lg font-medium">
+            <p className="text-sm md:text-xl text-gray-500 leading-relaxed mb-6 md:mb-10 max-w-lg font-medium">
               {t.subtitle}
             </p>
             <Button
               href={`/${locale}/features/paiement-en-ligne`}
-              size="lg"
-              className="inline-flex"
+              size="sm"
+              className="inline-flex !text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-lg"
             >
               {t.cta}
-              <ArrowRight className="ml-2 w-5 h-5" />
+              <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-5 md:h-5" />
             </Button>
           </ScrollReveal>
         </div>

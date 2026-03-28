@@ -35,13 +35,13 @@ export function MadeForYou({ dict }: MadeForYouProps) {
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-gray-50">
+    <section className="py-14 md:py-32 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ScrollReveal className="text-center mb-16">
+        <ScrollReveal className="text-center mb-10 md:mb-16">
           <p className="text-[#BEF221] font-bold text-sm uppercase tracking-wider mb-3 bg-[#0D0630] inline-block px-4 py-1.5 rounded-full">
             {m.badge}
           </p>
-          <h2 className="text-2xl md:text-3xl font-black text-[#0D0630]">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-[#0D0630]">
             {m.title}
           </h2>
         </ScrollReveal>

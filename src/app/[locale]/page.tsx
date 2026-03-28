@@ -8,8 +8,11 @@ import { Payments } from "@/components/sections/Payments";
 import { Pricing } from "@/components/sections/Pricing";
 import { MadeForYou } from "@/components/sections/MadeForYou";
 import { Trust } from "@/components/sections/Trust";
+import { Testimonials } from "@/components/sections/Testimonials";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
+import { StickyMobileCTA } from "@/components/ui/StickyMobileCTA";
+import { InlineCTA } from "@/components/ui/InlineCTA";
 import { Locale, locales, defaultLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
@@ -144,11 +147,26 @@ export default async function Home({
           highlight: dict.hero.socialProofHighlight,
           end: dict.hero.socialProofEnd,
         }}
+        launchOffer={{
+          text: dict.pricing?.launchOfferBadge || "OFFRE LIMITEE",
+          highlight: "59€ — " + (dict.pricing?.launchOfferLifetime || "Acces a vie"),
+        }}
       />
 
       <Process dict={dict} />
 
+      <InlineCTA
+        text={dict.hero.cta}
+        showOffer
+        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
+      />
+
       <QuoteSignature dict={dict} />
+
+      <InlineCTA
+        text={dict.hero.cta}
+        subtext={dict.cta.subtext}
+      />
 
       <Features
         title={dict.features.title}
@@ -157,9 +175,26 @@ export default async function Home({
         dict={dict}
       />
 
+      <InlineCTA
+        text={dict.hero.cta}
+        showOffer
+        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
+      />
+
       <AdminSimplicity dict={dict} />
 
+      <InlineCTA
+        text={dict.hero.cta}
+        subtext={dict.cta.subtext}
+      />
+
       <Dashboard dict={dict} />
+
+      <InlineCTA
+        text={dict.hero.cta}
+        showOffer
+        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
+      />
 
       <Payments dict={dict} locale={locale} />
 
@@ -170,7 +205,21 @@ export default async function Home({
         locale={locale}
       />
 
+      <InlineCTA
+        text={dict.hero.cta}
+        subtext={dict.cta.subtext}
+        variant="dark"
+      />
+
+      <Testimonials dict={dict} />
+
       <MadeForYou dict={dict} />
+
+      <InlineCTA
+        text={dict.hero.cta}
+        showOffer
+        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
+      />
 
       <Trust dict={dict} />
 
@@ -182,6 +231,9 @@ export default async function Home({
         ctaText={dict.cta.button}
         secondaryText={dict.cta.subtext}
       />
+
+      {/* Sticky mobile CTA bar */}
+      <StickyMobileCTA text={dict.hero.cta} />
     </>
   );
 }

@@ -11,16 +11,16 @@ export function Trust({ dict }: TrustProps) {
   const tr = dict.trust;
 
   return (
-    <section className="py-24 md:py-32 bg-[#0D0630] relative overflow-hidden">
+    <section className="py-14 md:py-32 bg-[#0D0630] relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(190,242,33,0.08),transparent_60%)]" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ScrollReveal className="text-center mb-16">
+        <ScrollReveal className="text-center mb-10 md:mb-16">
           <p className="text-[#0D0630] font-bold text-sm uppercase tracking-wider mb-3 bg-[#BEF221] inline-block px-4 py-1.5 rounded-full">
             {tr.badge}
           </p>
-          <h2 className="text-2xl md:text-3xl font-black text-white">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white">
             {tr.title}
           </h2>
         </ScrollReveal>

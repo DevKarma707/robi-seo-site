@@ -29,24 +29,24 @@ export function Pricing({
   ];
 
   return (
-    <section id="pricing" className="py-24 bg-[#0D0630] relative overflow-hidden">
+    <section id="pricing" className="py-14 md:py-24 bg-[#0D0630] relative overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#BEF221]/[0.04] rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <ScrollReveal className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-black text-white mb-4">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white mb-3 md:mb-4">
             {title || p.title || "Choisissez votre plan"}
           </h2>
-          <p className="text-lg text-white/60">
+          <p className="text-sm md:text-lg text-white/60">
             {subtitle || p.subtitle || "Passez à la vitesse supérieure avec Robi Pro"}
           </p>
         </ScrollReveal>
 
         {/* Launch offer banner */}
         <ScrollReveal className="mb-10">
-          <div className="relative rounded-2xl border border-[#BEF221]/30 bg-[#BEF221]/5 p-8 overflow-hidden">
+          <div className="relative rounded-2xl border border-[#BEF221]/30 bg-[#BEF221]/5 p-5 md:p-8 overflow-hidden">
             <div className="absolute top-4 right-4 text-[#BEF221]/20">
               <TrendingUp className="w-12 h-12" />
             </div>
@@ -54,14 +54,14 @@ export function Pricing({
               <span className="inline-block mb-3 px-3 py-1 rounded-full bg-[#BEF221] text-[#0D0630] text-xs font-black uppercase tracking-wider">
                 {p.launchOfferBadge || "OFFRE LIMITÉE"}
               </span>
-              <h3 className="text-2xl md:text-3xl font-black text-[#BEF221] mb-2">
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-black text-[#BEF221] mb-2">
                 {p.launchOfferTitle || "OFFRE DE LANCEMENT EXCLUSIVE"}
               </h3>
-              <p className="text-white/70 mb-6">
+              <p className="text-xs md:text-base text-white/70 mb-4 md:mb-6">
                 {p.launchOfferSubtitle || "Pour les 1000 premiers utilisateurs uniquement"}
               </p>
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <span className="text-6xl font-black text-white">59€</span>
+              <div className="flex items-center justify-center gap-3 md:gap-4 mb-4 md:mb-6">
+                <span className="text-3xl md:text-6xl font-black text-white">59€</span>
                 <div className="text-left">
                   <p className="text-white/40 line-through text-sm">
                     {p.launchOfferNormalPrice || "Prix normal"} : 149€
@@ -74,7 +74,7 @@ export function Pricing({
               <Button
                 href="https://www.robi-app.com"
                 variant="primary"
-                className="w-full max-w-md font-black tracking-wider"
+                className="w-full max-w-md font-black tracking-wider !text-xs md:!text-base"
               >
                 {p.launchOfferCta || "PROFITER DE L'OFFRE (59€)"}
               </Button>
@@ -86,13 +86,13 @@ export function Pricing({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Mensuel */}
           <ScrollReveal delay={0}>
-            <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-6">
-              <div className="text-center mb-6">
-                <p className="text-white/50 text-sm font-bold uppercase tracking-widest mb-3">
+            <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-5 md:p-6">
+              <div className="text-center mb-5 md:mb-6">
+                <p className="text-white/50 text-xs md:text-sm font-bold uppercase tracking-widest mb-2 md:mb-3">
                   {p.monthly || "Mensuel"}
                 </p>
                 <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-5xl font-black text-white">14€</span>
+                  <span className="text-3xl md:text-5xl font-black text-white">14€</span>
                   <span className="text-white/50">{p.month || "/mois"}</span>
                 </div>
                 <p className="text-white/40 text-sm mt-2">
@@ -121,18 +121,18 @@ export function Pricing({
 
           {/* Annuel — LE PLUS POPULAIRE */}
           <ScrollReveal delay={100}>
-            <div className="flex flex-col h-full rounded-2xl border-2 border-[#BEF221] bg-white/5 p-6 relative scale-[1.02] shadow-[0_0_40px_rgba(190,242,33,0.15)]">
+            <div className="flex flex-col h-full rounded-2xl border-2 border-[#BEF221] bg-white/5 p-5 md:p-6 relative scale-[1.02] shadow-[0_0_40px_rgba(190,242,33,0.15)]">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span className="px-4 py-1 rounded-full bg-[#BEF221] text-[#0D0630] text-xs font-black uppercase tracking-wider whitespace-nowrap">
+                <span className="px-3 md:px-4 py-1 rounded-full bg-[#BEF221] text-[#0D0630] text-[10px] md:text-xs font-black uppercase tracking-wider whitespace-nowrap">
                   {p.mostPopular || "LE PLUS POPULAIRE"}
                 </span>
               </div>
-              <div className="text-center mb-6 pt-2">
-                <p className="text-[#BEF221] text-sm font-bold uppercase tracking-widest mb-3">
+              <div className="text-center mb-5 md:mb-6 pt-2">
+                <p className="text-[#BEF221] text-xs md:text-sm font-bold uppercase tracking-widest mb-2 md:mb-3">
                   {p.yearly || "Annuel"}
                 </p>
                 <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-5xl font-black text-white">89€</span>
+                  <span className="text-3xl md:text-5xl font-black text-white">89€</span>
                   <span className="text-white/50">{p.year || "/an"}</span>
                 </div>
                 <p className="text-white/60 text-sm mt-1">
@@ -164,18 +164,18 @@ export function Pricing({
 
           {/* Bi-annuel — MEILLEURE OFFRE */}
           <ScrollReveal delay={200}>
-            <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-6 relative">
+            <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-5 md:p-6 relative">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span className="px-4 py-1 rounded-full bg-[#1a1040] border border-white/20 text-white text-xs font-black uppercase tracking-wider whitespace-nowrap">
+                <span className="px-3 md:px-4 py-1 rounded-full bg-[#1a1040] border border-white/20 text-white text-[10px] md:text-xs font-black uppercase tracking-wider whitespace-nowrap">
                   {p.bestOffer || "MEILLEURE OFFRE"}
                 </span>
               </div>
-              <div className="text-center mb-6 pt-2">
-                <p className="text-white/50 text-sm font-bold uppercase tracking-widest mb-3">
+              <div className="text-center mb-5 md:mb-6 pt-2">
+                <p className="text-white/50 text-xs md:text-sm font-bold uppercase tracking-widest mb-2 md:mb-3">
                   {p.biYearly || "Bi-annuel"}
                 </p>
                 <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-5xl font-black text-white">149€</span>
+                  <span className="text-3xl md:text-5xl font-black text-white">149€</span>
                 </div>
                 <p className="text-white/60 text-sm mt-1">
                   {p.perMonthBiYearly || "6,21€/mes"}

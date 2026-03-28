@@ -278,6 +278,26 @@ body {
 }
 
 /* ========================================
+   HIDE SCROLLBAR (for carousels)
+   ======================================== */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ========================================
+   STICKY MOBILE CTA - bottom padding
+   ======================================== */
+@media (max-width: 1023px) {
+  body {
+    padding-bottom: 60px;
+  }
+}
+
+/* ========================================
    CUSTOM SCROLLBAR
    ======================================== */
 ::-webkit-scrollbar {

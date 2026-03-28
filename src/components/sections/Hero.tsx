@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { HeroMockups } from "@/components/ui/HeroMockups";
@@ -20,6 +20,10 @@ interface HeroProps {
     highlight: string;
     end: string;
   };
+  launchOffer?: {
+    text: string;
+    highlight: string;
+  };
 }
 
 export function Hero({
@@ -37,11 +41,33 @@ export function Hero({
     highlight: "2000+",
     end: "freelancers",
   },
+  launchOffer,
 }: HeroProps) {
   const isCenter = variant === "centered";
 
+  const ctaBlock = ctaText && (
+    <div className="flex flex-col gap-3 items-start">
+      <div className="flex flex-col sm:flex-row gap-4">
+        <Button href={ctaHref} size="sm" className="!text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-base">
+          {ctaText}
+          <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-5 md:h-5" />
+        </Button>
+      </div>
+      {/* Launch offer pill - mobile highlight */}
+      {launchOffer && (
+        <div className="flex items-center gap-2 bg-white/5 border border-[#BEF221]/20 rounded-full px-3 py-1.5">
+          <Zap className="w-3.5 h-3.5 text-[#BEF221]" />
+          <span className="text-white/70 text-xs">
+            {launchOffer.text}{" "}
+            <span className="text-[#BEF221] font-bold">{launchOffer.highlight}</span>
+          </span>
+        </div>
+      )}
+    </div>
+  );
+
   return (
-    <section className={`relative pt-28 md:pt-32 overflow-hidden bg-[#0D0630] ${ctaText ? "pb-20 md:pb-16" : "pb-12 md:pb-10"}`}>
+    <section className={`relative pt-24 md:pt-32 overflow-hidden bg-[#0D0630] ${ctaText ? "pb-14 md:pb-16" : "pb-10 md:pb-10"}`}>
       {/* Background gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(190,242,33,0.1),transparent_50%)]" />
 
@@ -52,7 +78,7 @@ export function Hero({
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {isCenter ? (
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 tracking-tight">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-4 md:mb-6 tracking-tight">
               {title}
               {titleAccent && (
                 <>
@@ -62,24 +88,33 @@ export function Hero({
               )}
             </h1>
 
-            <p className="text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-white/70 mb-8 md:mb-10 leading-relaxed max-w-2xl mx-auto">
               {subtitle}
             </p>
 
             {ctaText && (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button href={ctaHref} size="lg">
+              <div className="flex flex-col items-center gap-3">
+                <Button href={ctaHref} size="sm" className="!text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-base">
                   {ctaText}
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-5 md:h-5" />
                 </Button>
+                {launchOffer && (
+                  <div className="flex items-center gap-2 bg-white/5 border border-[#BEF221]/20 rounded-full px-3 py-1.5">
+                    <Zap className="w-3.5 h-3.5 text-[#BEF221]" />
+                    <span className="text-white/70 text-xs">
+                      {launchOffer.text}{" "}
+                      <span className="text-[#BEF221] font-bold">{launchOffer.highlight}</span>
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left side - Content */}
             <div className="max-w-3xl">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 tracking-tight">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-4 md:mb-6 tracking-tight">
                 {title}
                 {titleAccent && (
                   <>
@@ -89,18 +124,11 @@ export function Hero({
                 )}
               </h1>
 
-              <p className="text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-2xl">
+              <p className="text-base md:text-xl text-white/70 mb-6 md:mb-10 leading-relaxed max-w-2xl">
                 {subtitle}
               </p>
 
-              {ctaText && (
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button href={ctaHref} size="lg">
-                    {ctaText}
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                </div>
-              )}
+              {ctaBlock}
             </div>
 
             {/* Right side - Interactive Mockups */}

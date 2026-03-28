@@ -17,7 +17,7 @@ export function Header({ locale, dict }: HeaderProps) {
 
   const navigation = [
     { name: dict.nav.features, href: `/${locale}/#features` },
-    { name: dict.nav.pricing, href: `/${locale}/pricing` },
+    { name: dict.nav.pricing, href: `/${locale}/#pricing` },
     { name: dict.nav.blog, href: `/${locale}/blog` },
     { name: dict.nav.faq, href: `/${locale}/#faq` },
   ];
