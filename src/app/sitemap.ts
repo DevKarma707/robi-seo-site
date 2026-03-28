@@ -9,7 +9,7 @@ import {
 import { locales } from "@/lib/i18n/config";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://robi-app.com";
+  const baseUrl = "https://www.robi-app.com";
 
   // Helper: generate URLs for all locales
   function localizedUrls(

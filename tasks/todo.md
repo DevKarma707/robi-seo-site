@@ -9,12 +9,15 @@
     - [x] Configurer mcp_servers.json dans Antigravity
 - [x] Préparation du site SEO pour les animations Spline
     - [x] Créer le composant `SplineScene.tsx` dans `robi-seo-site`
-    - [ ] Installer les dépendances Spline (Action utilisateur ou via ajout workspace)
+    - [x] Pousser le site SEO sur Git
+- [x] Configurer les domaines (www pour SEO, root pour App)
+- [x] Mettre à jour les métadonnées SEO et canonicals
+- [ ] Finaliser DNS Hostinger (En attente utilisateur)
 - [x] Mise à jour des canonicals vers robi-app.com
     - [x] Mise à jour de `src/data/seo-config.ts`
     - [x] Mise à jour de `src/app/sitemap.ts`
     - [x] Mise à jour de `src/app/robots.ts`
     - [x] Mise à jour des layouts (`layout.tsx`)
-- [/] Déploiement sur Vercel (`robi-app.com`)
-    - [ ] Vérification du build
-    - [ ] Déploiement de production
+- [x] Déploiement sur Vercel (`robi-app.com`)
+    - [x] Vérification du build (via Push Git)
+    - [x] Déploiement de production effectué
