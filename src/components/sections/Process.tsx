@@ -55,7 +55,7 @@ export function Process({ dict = defaultDict }: ProcessProps) {
   ];
 
   return (
-    <section id="process" className="py-14 md:py-24 bg-white relative overflow-hidden">
+    <section id="process" className="py-8 md:py-14 lg:py-24 bg-white relative overflow-hidden">
       {/* Subtle grid background */}
       <div
         className="absolute inset-0 opacity-[0.03]"
@@ -67,32 +67,32 @@ export function Process({ dict = defaultDict }: ProcessProps) {
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ScrollReveal className="text-center mb-10 md:mb-16">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-gray-900 mb-3 md:mb-4">
+        <ScrollReveal className="text-center mb-6 md:mb-10 lg:mb-16">
+          <h2 className="text-lg md:text-2xl lg:text-3xl font-black text-gray-900 mb-2 md:mb-4">
             {t.title}{" "}
             <span className="text-[#BEF221]">{t.titleAccent}</span>
           </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto text-sm md:text-lg">
+          <p className="text-gray-500 max-w-2xl mx-auto text-xs md:text-base lg:text-lg">
             {t.subtitle}
           </p>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 card-group">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-8 card-group">
           {steps.map((step, index) => {
             const Icon = step.icon;
             return (
               <ScrollReveal key={step.number} delay={index * 100}>
-                <div className="card-3d p-8 rounded-3xl bg-gray-50 border border-gray-200 group hover:border-[#BEF221]/30 transition-all duration-300 hover:shadow-[0_0_40px_rgba(190,242,33,0.08)]">
-                  <div className="w-16 h-16 bg-[#BEF221]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#BEF221]/20 group-hover:bg-[#BEF221]/20 group-hover:scale-110 transition-all duration-300 relative">
-                    <Icon className="w-8 h-8 text-[#BEF221]" />
-                    <div className="absolute -top-2 -right-2 bg-[#BEF221] text-[#0D0630] font-black w-6 h-6 rounded-full flex items-center justify-center text-xs shadow-glow-sm">
+                <div className="card-3d p-4 md:p-6 lg:p-8 rounded-2xl md:rounded-3xl bg-gray-50 border border-gray-200 group hover:border-[#BEF221]/30 transition-all duration-300 hover:shadow-[0_0_40px_rgba(190,242,33,0.08)]">
+                  <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-[#BEF221]/10 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-5 lg:mb-6 border border-[#BEF221]/20 group-hover:bg-[#BEF221]/20 group-hover:scale-110 transition-all duration-300 relative">
+                    <Icon className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-[#BEF221]" />
+                    <div className="absolute -top-1.5 -right-1.5 bg-[#BEF221] text-[#0D0630] font-black w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-xs shadow-glow-sm">
                       {step.number}
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-gray-900">
+                  <h3 className="text-sm md:text-base lg:text-xl font-bold mb-2 md:mb-3 text-gray-900">
                     {step.title}
                   </h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">
+                  <p className="text-gray-500 text-xs md:text-sm lg:text-sm leading-relaxed">
                     {step.description}
                   </p>
                 </div>
