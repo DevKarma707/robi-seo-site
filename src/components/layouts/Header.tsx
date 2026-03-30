@@ -102,13 +102,15 @@ export function Header({ locale, dict }: HeaderProps) {
 
           {/* CTA Buttons - Right */}
           <div className="hidden md:flex items-center gap-4">
-            <Link
-              href="/login"
+            <a
+              href="https://app.robi-app.com/login"
               className="text-sm font-medium text-white/70 hover:text-white transition-colors"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {dict.nav.login}
-            </Link>
-            <Button href="/signup" size="sm">
+            </a>
+            <Button href="https://app.robi-app.com/signup" size="sm">
               {dict.nav.signup}
             </Button>
           </div>
@@ -152,14 +154,16 @@ export function Header({ locale, dict }: HeaderProps) {
                 </div>
               ))}
               <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
-                <Link
-                  href="/login"
+                <a
+                  href="https://app.robi-app.com/login"
                   className="text-center py-2 text-white/70"
                   onClick={() => setIsOpen(false)}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   {dict.nav.login}
-                </Link>
-                <Button href="/signup" className="w-full">
+                </a>
+                <Button href="https://app.robi-app.com/signup" className="w-full">
                   {dict.nav.signup}
                 </Button>
               </div>
