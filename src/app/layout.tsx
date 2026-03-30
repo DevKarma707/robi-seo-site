@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "fr_FR",
-    url: "https://www.robi-app.com",
+    url: "https://robi-app.com",
     title: "Robi AI | Logiciel de Facturation IA pour Freelances",
     description:
       "Créez vos devis et factures en 30 secondes avec l'IA. Relances automatiques, paiement Stripe intégré.",

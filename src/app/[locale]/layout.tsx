@@ -35,11 +35,11 @@ export async function generateMetadata({
     },
     description: dict.meta.description,
     alternates: {
-      canonical: `https://www.robi-app.com/${locale}`,
+      canonical: `https://robi-app.com/${locale}`,
       languages: {
-        fr: "https://www.robi-app.com/fr",
-        en: "https://www.robi-app.com/en",
-        es: "https://www.robi-app.com/es",
+        fr: "https://robi-app.com/fr",
+        en: "https://robi-app.com/en",
+        es: "https://robi-app.com/es",
       },
     },
   };

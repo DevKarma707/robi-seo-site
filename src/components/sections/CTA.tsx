@@ -13,7 +13,7 @@ export function CTA({
   title = "Prêt à automatiser votre facturation ?",
   subtitle = "Rejoignez 2000+ entrepreneurs qui facturent sans effort",
   ctaText = "Démarrer avec Robi",
-  ctaHref = "https://app.robi-app.com/signup",
+  ctaHref = "https://www.robi-app.com/signup",
   secondaryText = "Sans carte • Annulation en 1 clic",
 }: CTAProps) {
   return (
