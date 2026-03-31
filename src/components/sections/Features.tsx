@@ -52,10 +52,10 @@ export function Features({
   };
 
   return (
-    <section id="features" className="py-14 md:py-24 bg-white relative">
+    <section id="features" className="py-8 md:py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ScrollReveal className="text-center mb-10 md:mb-16">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-gray-900 mb-3 md:mb-4">
+        <ScrollReveal className="text-center mb-6 md:mb-16">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-gray-900 mb-2 md:mb-4">
             {title}{" "}
             {titleAccent && (
               <span className="text-[#BEF221] drop-shadow-[0_0_20px_rgba(190,242,33,0.3)]">
@@ -68,19 +68,19 @@ export function Features({
           )}
         </ScrollReveal>
 
-        <div className={`grid ${gridCols[layout]} gap-8 card-group`}>
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8 card-group">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
               <ScrollReveal key={index} delay={index * 80}>
-                <Card variant={index === features.length - 1 ? "dark" : "default"} className="flex flex-col h-full">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-[#BEF221]/10 border border-[#BEF221]/20">
-                    <Icon className="w-7 h-7 text-[#BEF221]" />
+                <Card variant={index === features.length - 1 ? "dark" : "default"} className="flex flex-col h-full !p-4 md:!p-6 lg:!p-8">
+                  <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 bg-[#BEF221]/10 border border-[#BEF221]/20">
+                    <Icon className="w-5 h-5 md:w-7 md:h-7 text-[#BEF221]" />
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-gray-900">
+                  <h3 className="text-sm md:text-xl font-bold mb-1.5 md:mb-3 text-gray-900 leading-tight">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-500">{feature.description}</p>
+                  <p className="text-gray-500 text-xs md:text-base leading-snug">{feature.description}</p>
                 </Card>
               </ScrollReveal>
             );
