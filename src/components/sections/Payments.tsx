@@ -24,7 +24,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
   const t = dict.payments || defaultDict.payments;
 
   return (
-    <section id="payments" className="py-8 md:py-14 lg:py-24 bg-gray-50 relative overflow-hidden">
+    <section id="payments" className="hidden md:block py-8 md:py-14 lg:py-24 bg-gray-50 relative overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#BEF221]/[0.06] rounded-full blur-3xl" />
 
@@ -110,14 +110,6 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
             <p className="text-xs md:text-base lg:text-xl text-gray-500 leading-relaxed mb-4 md:mb-8 lg:mb-10 max-w-lg font-medium">
               {t.subtitle}
             </p>
-            <Button
-              href={`/${locale}/features/paiement-en-ligne`}
-              size="sm"
-              className="inline-flex !text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-lg"
-            >
-              {t.cta}
-              <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-5 md:h-5" />
-            </Button>
           </ScrollReveal>
         </div>
       </div>

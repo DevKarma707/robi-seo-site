@@ -10,7 +10,7 @@
     "blog": "Blog",
     "tools": "Outils",
     "login": "Connexion",
-    "signup": "Essayer Gratuit",
+    "signup": "Démarrer gratuitement",
     "allIndustries": "Voir tout →",
     "faq": "FAQ"
   },
@@ -177,7 +177,7 @@
   "quoteSignature": {
     "title": "Ne perdez plus une vente à cause d'un devis envoyé trop tard",
     "description": "Créez un devis en moins d'une minute depuis votre téléphone et faites-le signer sur place. Votre client n'est pas là ? Envoyez-le pour signature à distance. Les signatures sont illimitées et gratuites, et vous êtes notifié dès que votre client ouvre ou signe le devis.",
-    "cta": "Essayer gratuitement",
+    "cta": "Démarrer gratuitement",
     "mockupQuoteTitle": "Devis - Refonte site web",
     "stepCreated": "Devis créé par l'IA",
     "stepSent": "Envoyé au client",
@@ -189,7 +189,7 @@
   "adminSimplicity": {
     "title": "Vos tâches administratives deviennent un jeu d'enfant",
     "description": "Transformez vos devis signés en factures en un clic. Gérez facilement les paiements en plusieurs fois grâce aux factures d'acompte, traquez vos impayés en temps réel et complétez vos attestations TVA pour être 100% en règle.",
-    "cta": "Essayer gratuitement",
+    "cta": "Démarrer gratuitement",
     "acceptedQuote": "a accepté votre devis",
     "quoteOf": "devis de",
     "ago": "il y a",
@@ -209,7 +209,7 @@
   "dashboard": {
     "title": "Suivez vos performances en temps réel et traquez vos impayés",
     "description": "Prenez les bonnes décisions grâce à des rapports chiffrés pertinents pour votre activité. Consultez votre ratio de devis acceptés, vos encaissements par période, gardez un oeil sur vos devis en attente pour relancer vos clients au bon moment, et identifiez facilement vos impayés pour un meilleur recouvrement.",
-    "cta": "Essayer gratuitement",
+    "cta": "Démarrer gratuitement",
     "quotes": "Devis",
     "invoices": "Factures",
     "awaitingSignature": "En attente de signature",
@@ -294,7 +294,7 @@
       "toCreateQuote": "pour créer un devis",
       "paidFaster": "plus vite payé",
       "manualReminder": "relance manuelle",
-      "tryFree": "Essayer Gratuitement",
+      "tryFree": "Démarrer gratuitement",
       "readySimplify": "Prêt à simplifier votre facturation ?",
       "joinIndustry": "Rejoignez les {name} qui facturent sans effort",
       "faq1q": "Robi est-il adapté aux {name} ?",

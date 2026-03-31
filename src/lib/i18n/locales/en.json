@@ -10,7 +10,7 @@
     "blog": "Blog",
     "tools": "Tools",
     "login": "Login",
-    "signup": "Try Free",
+    "signup": "Get Started Free",
     "allIndustries": "See all →",
     "faq": "FAQ"
   },
@@ -294,7 +294,7 @@
       "toCreateQuote": "to create a quote",
       "paidFaster": "paid faster",
       "manualReminder": "manual reminders",
-      "tryFree": "Try for Free",
+      "tryFree": "Get Started Free",
       "readySimplify": "Ready to simplify your invoicing?",
       "joinIndustry": "Join the {name} who invoice effortlessly",
       "faq1q": "Is Robi suitable for {name}?",

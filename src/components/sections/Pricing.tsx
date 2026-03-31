@@ -29,14 +29,14 @@ export function Pricing({
   ];
 
   return (
-    <section id="pricing" className="py-14 md:py-24 bg-[#0D0630] relative overflow-hidden">
+    <section id="pricing" className="py-8 md:py-24 bg-[#0D0630] relative overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#BEF221]/[0.04] rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <ScrollReveal className="text-center mb-12">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white mb-3 md:mb-4">
+        <ScrollReveal className="text-center mb-5 md:mb-12">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white mb-2 md:mb-4">
             {title || p.title || "Choisissez votre plan"}
           </h2>
           <p className="text-sm md:text-lg text-white/60">
@@ -45,28 +45,28 @@ export function Pricing({
         </ScrollReveal>
 
         {/* Launch offer banner */}
-        <ScrollReveal className="mb-10">
-          <div className="relative rounded-2xl border border-[#BEF221]/30 bg-[#BEF221]/5 p-5 md:p-8 overflow-hidden">
+        <ScrollReveal className="mb-4 md:mb-10">
+          <div className="relative rounded-2xl border border-[#BEF221]/30 bg-[#BEF221]/5 p-4 md:p-8 overflow-hidden">
             <div className="absolute top-4 right-4 text-[#BEF221]/20">
-              <TrendingUp className="w-12 h-12" />
+              <TrendingUp className="w-8 h-8 md:w-12 md:h-12" />
             </div>
             <div className="text-center">
-              <span className="inline-block mb-3 px-3 py-1 rounded-full bg-[#BEF221] text-[#0D0630] text-xs font-black uppercase tracking-wider">
+              <span className="inline-block mb-2 md:mb-3 px-3 py-1 rounded-full bg-[#BEF221] text-[#0D0630] text-xs font-black uppercase tracking-wider">
                 {p.launchOfferBadge || "OFFRE LIMITÉE"}
               </span>
-              <h3 className="text-xl md:text-2xl lg:text-3xl font-black text-[#BEF221] mb-2">
+              <h3 className="text-lg md:text-2xl lg:text-3xl font-black text-[#BEF221] mb-1 md:mb-2">
                 {p.launchOfferTitle || "OFFRE DE LANCEMENT EXCLUSIVE"}
               </h3>
-              <p className="text-xs md:text-base text-white/70 mb-4 md:mb-6">
+              <p className="text-xs md:text-base text-white/70 mb-3 md:mb-6">
                 {p.launchOfferSubtitle || "Pour les 1000 premiers utilisateurs uniquement"}
               </p>
-              <div className="flex items-center justify-center gap-3 md:gap-4 mb-4 md:mb-6">
-                <span className="text-3xl md:text-6xl font-black text-white">59€</span>
+              <div className="flex items-center justify-center gap-3 md:gap-4 mb-3 md:mb-6">
+                <span className="text-4xl md:text-6xl font-black text-white">59€</span>
                 <div className="text-left">
-                  <p className="text-white/40 line-through text-sm">
+                  <p className="text-white/40 line-through text-xs md:text-sm">
                     {p.launchOfferNormalPrice || "Prix normal"} : 149€
                   </p>
-                  <p className="text-[#BEF221] font-bold text-sm">
+                  <p className="text-[#BEF221] font-bold text-xs md:text-sm">
                     {p.launchOfferLifetime || "Accès à vie • Robi Pro"}
                   </p>
                 </div>
@@ -82,11 +82,11 @@ export function Pricing({
           </div>
         </ScrollReveal>
 
-        {/* 3 Plans */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* 3 Plans - scroll horizontal sur mobile */}
+        <div className="flex md:grid md:grid-cols-3 gap-3 md:gap-6 overflow-x-auto pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory">
           {/* Mensuel */}
-          <ScrollReveal delay={0}>
-            <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-5 md:p-6">
+          <ScrollReveal delay={0} className="min-w-[75vw] md:min-w-0 snap-center">
+            <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-4 md:p-6">
               <div className="text-center mb-5 md:mb-6">
                 <p className="text-white/50 text-xs md:text-sm font-bold uppercase tracking-widest mb-2 md:mb-3">
                   {p.monthly || "Mensuel"}
@@ -120,8 +120,8 @@ export function Pricing({
           </ScrollReveal>
 
           {/* Annuel — LE PLUS POPULAIRE */}
-          <ScrollReveal delay={100}>
-            <div className="flex flex-col h-full rounded-2xl border-2 border-[#BEF221] bg-white/5 p-5 md:p-6 relative scale-[1.02] shadow-[0_0_40px_rgba(190,242,33,0.15)]">
+          <ScrollReveal delay={100} className="min-w-[75vw] md:min-w-0 snap-center">
+            <div className="flex flex-col h-full rounded-2xl border-2 border-[#BEF221] bg-white/5 p-4 md:p-6 relative md:scale-[1.02] shadow-[0_0_40px_rgba(190,242,33,0.15)]">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                 <span className="px-3 md:px-4 py-1 rounded-full bg-[#BEF221] text-[#0D0630] text-[10px] md:text-xs font-black uppercase tracking-wider whitespace-nowrap">
                   {p.mostPopular || "LE PLUS POPULAIRE"}
@@ -163,8 +163,8 @@ export function Pricing({
           </ScrollReveal>
 
           {/* Bi-annuel — MEILLEURE OFFRE */}
-          <ScrollReveal delay={200}>
-            <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-5 md:p-6 relative">
+          <ScrollReveal delay={200} className="min-w-[75vw] md:min-w-0 snap-center">
+            <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-4 md:p-6 relative">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                 <span className="px-3 md:px-4 py-1 rounded-full bg-[#1a1040] border border-white/20 text-white text-[10px] md:text-xs font-black uppercase tracking-wider whitespace-nowrap">
                   {p.bestOffer || "MEILLEURE OFFRE"}
