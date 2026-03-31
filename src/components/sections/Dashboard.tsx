@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
-import { ArrowRight, TrendingUp, Clock, CheckCircle, XCircle, AlertTriangle, FileText } from "lucide-react";
+import { TrendingUp, Clock, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 
 interface DashboardProps {
   dict: any;
@@ -11,25 +10,21 @@ export function Dashboard({ dict }: DashboardProps) {
   const d = dict.dashboard;
 
   return (
-    <section className="py-14 md:py-32 bg-white overflow-hidden">
+    <section className="py-8 md:py-32 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left - Text */}
           <div>
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-[#0D0630] leading-tight mb-4 md:mb-6 tracking-tight">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-[#0D0630] leading-tight mb-3 md:mb-6 tracking-tight">
               {d.title}
             </h2>
-            <p className="text-sm md:text-lg text-gray-600 leading-relaxed mb-6 md:mb-8">
+            <p className="text-sm md:text-lg text-gray-600 leading-relaxed mb-0 md:mb-8">
               {d.description}
             </p>
-            <Button href="https://go.robi-app.com" size="sm" className="!text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-lg">
-              {d.cta}
-              <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-5 md:h-5" />
-            </Button>
           </div>
 
-          {/* Right - Dashboard Mockup */}
-          <div className="relative">
+          {/* Right - Dashboard Mockup (hidden on mobile) */}
+          <div className="relative hidden md:block">
             <div className="bg-[#0D0630] rounded-3xl p-6 shadow-2xl shadow-[#0D0630]/20">
               {/* Tabs */}
               <div className="flex gap-6 mb-6">
