@@ -22,6 +22,10 @@ export function Dashboard({ dict }: DashboardProps) {
             <p className="text-sm md:text-lg text-gray-600 leading-relaxed mb-6 md:mb-8">
               {d.description}
             </p>
+            <Button href="https://go.robi-app.com" size="sm" className="!text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-lg">
+              {d.cta}
+              <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-5 md:h-5" />
+            </Button>
           </div>
 
           {/* Right - Dashboard Mockup */}

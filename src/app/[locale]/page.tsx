@@ -11,7 +11,6 @@ import { Trust } from "@/components/sections/Trust";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
 import { StickyMobileCTA } from "@/components/ui/StickyMobileCTA";
-import { InlineCTA } from "@/components/ui/InlineCTA";
 import { Locale, locales, defaultLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
@@ -154,26 +153,9 @@ export default async function Home({
 
       <Process dict={dict} />
 
-      <InlineCTA
-        text={dict.hero.cta}
-        showOffer
-        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
-      />
-
       <QuoteSignature dict={dict} />
 
-      <InlineCTA
-        text={dict.hero.cta}
-        subtext={dict.cta.subtext}
-      />
-
       <AdminSimplicity dict={dict} />
-
-      <InlineCTA
-        text={dict.hero.cta}
-        showOffer
-        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
-      />
 
       <Features
         title={dict.features.title}
@@ -182,18 +164,7 @@ export default async function Home({
         dict={dict}
       />
 
-      <InlineCTA
-        text={dict.hero.cta}
-        subtext={dict.cta.subtext}
-      />
-
       <Dashboard dict={dict} />
-
-      <InlineCTA
-        text={dict.hero.cta}
-        showOffer
-        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
-      />
 
       <Payments dict={dict} locale={locale} />
 
@@ -204,19 +175,7 @@ export default async function Home({
         locale={locale}
       />
 
-      <InlineCTA
-        text={dict.hero.cta}
-        subtext={dict.cta.subtext}
-        variant="dark"
-      />
-
       <MadeForYou dict={dict} />
-
-      <InlineCTA
-        text={dict.hero.cta}
-        showOffer
-        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
-      />
 
       <Trust dict={dict} />
 
