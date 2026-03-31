@@ -1,11 +1,17 @@
 import { Hero } from "@/components/sections/Hero";
 import { Process } from "@/components/sections/Process";
 import { Features } from "@/components/sections/Features";
+import { Dashboard } from "@/components/sections/Dashboard";
+import { QuoteSignature } from "@/components/sections/QuoteSignature";
+import { AdminSimplicity } from "@/components/sections/AdminSimplicity";
 import { Payments } from "@/components/sections/Payments";
-import { Testimonials } from "@/components/sections/Testimonials";
 import { Pricing } from "@/components/sections/Pricing";
+import { MadeForYou } from "@/components/sections/MadeForYou";
+import { Trust } from "@/components/sections/Trust";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
+import { StickyMobileCTA } from "@/components/ui/StickyMobileCTA";
+import { InlineCTA } from "@/components/ui/InlineCTA";
 import { Locale, locales, defaultLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
@@ -24,7 +30,7 @@ export default async function Home({
 
   return (
     <>
-      {/* JSON-LD Schema */}
+      {/* JSON-LD Schema - SoftwareApplication */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -49,24 +55,125 @@ export default async function Home({
         }}
       />
 
+      {/* JSON-LD Schema - Organization */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Robi AI",
+            url: "https://robi.ai",
+            logo: "https://robi.ai/logo.png",
+            description: dict.meta.description,
+            sameAs: [
+              "https://twitter.com/robi_ai",
+              "https://linkedin.com/company/robi-ai",
+            ],
+            contactPoint: {
+              "@type": "ContactPoint",
+              contactType: "Customer Support",
+              availableLanguage: ["fr", "en", "es"],
+            },
+          }),
+        }}
+      />
+
+      {/* JSON-LD Schema - FAQPage */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: dict.faq.q1,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: dict.faq.a1,
+                },
+              },
+              {
+                "@type": "Question",
+                name: dict.faq.q2,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: dict.faq.a2,
+                },
+              },
+              {
+                "@type": "Question",
+                name: dict.faq.q3,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: dict.faq.a3,
+                },
+              },
+              {
+                "@type": "Question",
+                name: dict.faq.q4,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: dict.faq.a4,
+                },
+              },
+              {
+                "@type": "Question",
+                name: dict.faq.q5,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: dict.faq.a5,
+                },
+              },
+            ],
+          }),
+        }}
+      />
+
       <Hero
-        badge={dict.hero.badge}
         title={dict.hero.title}
         titleAccent={dict.hero.titleAccent}
         subtitle={dict.hero.subtitle}
         ctaText={dict.hero.cta}
-        ctaHref={`/${locale}/signup`}
+        ctaHref="https://www.robi-app.com"
         secondaryCtaText={dict.hero.secondaryCta}
-        secondaryCtaHref={`/${locale}/demo`}
+        secondaryCtaHref="https://www.robi-app.com"
         variant="default"
         socialProof={{
           text: dict.hero.socialProof,
           highlight: dict.hero.socialProofHighlight,
           end: dict.hero.socialProofEnd,
         }}
+        launchOffer={{
+          text: dict.pricing?.launchOfferBadge || "OFFRE LIMITEE",
+          highlight: "59€ — " + (dict.pricing?.launchOfferLifetime || "Acces a vie"),
+        }}
       />
 
       <Process dict={dict} />
+
+      <InlineCTA
+        text={dict.hero.cta}
+        showOffer
+        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
+      />
+
+      <QuoteSignature dict={dict} />
+
+      <InlineCTA
+        text={dict.hero.cta}
+        subtext={dict.cta.subtext}
+      />
+
+      <AdminSimplicity dict={dict} />
+
+      <InlineCTA
+        text={dict.hero.cta}
+        showOffer
+        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
+      />
 
       <Features
         title={dict.features.title}
@@ -75,12 +182,20 @@ export default async function Home({
         dict={dict}
       />
 
-      <Payments dict={dict} locale={locale} />
-
-      <Testimonials
-        title={dict.testimonials.title}
-        titleAccent={dict.testimonials.titleAccent}
+      <InlineCTA
+        text={dict.hero.cta}
+        subtext={dict.cta.subtext}
       />
+
+      <Dashboard dict={dict} />
+
+      <InlineCTA
+        text={dict.hero.cta}
+        showOffer
+        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
+      />
+
+      <Payments dict={dict} locale={locale} />
 
       <Pricing
         title={dict.pricing.title}
@@ -89,7 +204,23 @@ export default async function Home({
         locale={locale}
       />
 
-      <FAQ title={dict.faq.title} dict={dict} />
+      <InlineCTA
+        text={dict.hero.cta}
+        subtext={dict.cta.subtext}
+        variant="dark"
+      />
+
+      <MadeForYou dict={dict} />
+
+      <InlineCTA
+        text={dict.hero.cta}
+        showOffer
+        offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
+      />
+
+      <Trust dict={dict} />
+
+      <FAQ title={dict.faq.title} badge={dict.faq.badge} dict={dict} />
 
       <CTA
         title={dict.cta.title}
@@ -97,6 +228,9 @@ export default async function Home({
         ctaText={dict.cta.button}
         secondaryText={dict.cta.subtext}
       />
+
+      {/* Sticky mobile CTA bar */}
+      <StickyMobileCTA text={dict.hero.cta} />
     </>
   );
 }

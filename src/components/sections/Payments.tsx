@@ -1,5 +1,8 @@
-import { ArrowRight, Bot } from "lucide-react";
+"use client";
+
+import { ArrowRight, CreditCard, Apple, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 interface PaymentsProps {
   dict?: any;
@@ -13,6 +16,7 @@ const defaultDict = {
       "Dites adieu aux retards de paiement. Proposez une expérience de paiement fluide et moderne à vos clients.",
     cta: "Voir les paiements en ligne",
     integrations: "Intégrations :",
+    poweredBy: "Propulsé par",
   },
 };
 
@@ -20,91 +24,101 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
   const t = dict.payments || defaultDict.payments;
 
   return (
-    <section id="payments" className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center gap-16 md:gap-24">
+    <section id="payments" className="py-8 md:py-14 lg:py-24 bg-gray-50 relative overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#BEF221]/[0.06] rounded-full blur-3xl" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-16 lg:gap-24">
           {/* Payment Methods Visual */}
-          <div className="flex-1 w-full max-w-xl">
-            <div className="bg-[#0D0630] p-12 rounded-[3.5rem] relative group border-4 border-[#BEF221]/10 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)]">
+          <ScrollReveal className="flex-1 w-full max-w-xl">
+            <div className="bg-white p-4 md:p-8 lg:p-12 rounded-xl md:rounded-3xl lg:rounded-[3.5rem] relative group border border-gray-200 hover:border-[#BEF221]/20 transition-all duration-500 shadow-xl">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#BEF221]/10 blur-3xl rounded-full" />
 
               <div className="relative text-center">
-                <h3 className="text-white/40 text-sm font-black uppercase tracking-widest mb-14">
+                <h3 className="text-gray-400 text-xs md:text-sm font-black uppercase tracking-widest mb-4 md:mb-8 lg:mb-14">
                   {t.integrations}
                 </h3>
 
-                <div className="grid grid-cols-3 gap-y-12 gap-x-8 items-center justify-items-center mb-16">
-                  <div className="text-white font-black italic tracking-tighter text-3xl opacity-80 hover:opacity-100 transition-opacity">
-                    VISA
-                  </div>
-                  <div className="flex">
-                    <div className="w-10 h-10 bg-white/10 rounded-full border border-white/20 flex items-center justify-center">
-                      <div className="w-5 h-5 bg-[#EB001B] rounded-full translate-x-1.5 opacity-80" />
-                      <div className="w-5 h-5 bg-[#F79E1B] rounded-full -translate-x-1.5 opacity-80" />
+                <div className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-6 mb-4 md:mb-8 lg:mb-12">
+                  {/* CB / Carte Bancaire */}
+                  <div className="flex items-center gap-2 md:gap-3 lg:gap-4 p-2 md:p-3 lg:p-5 rounded-lg md:rounded-xl lg:rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                    <div className="w-10 h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 bg-white rounded-lg md:rounded-xl border border-gray-200 flex items-center justify-center shadow-sm flex-shrink-0">
+                      <CreditCard className="w-5 h-5 md:w-5.5 md:h-5.5 lg:w-6 lg:h-6 text-[#0D0630]" />
                     </div>
-                  </div>
-                  <div className="text-white font-black text-xl italic tracking-tighter opacity-80 hover:opacity-100 transition-opacity leading-none">
-                    AMEX
-                  </div>
-
-                  <div className="flex items-center gap-2 text-white font-bold text-2xl group cursor-default">
-                    <div className="w-8 h-8 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center">
-                      <Bot className="w-5 h-5 text-[#BEF221]" />
-                    </div>
-                    <span>Pay</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white font-bold text-2xl opacity-80 hover:opacity-100 transition-opacity">
-                    <span className="text-white">G</span>
-                    <span>Pay</span>
-                  </div>
-                  <div className="text-center group cursor-default">
-                    <div className="text-white font-black text-2xl leading-none">
-                      ACH
-                    </div>
-                    <div className="text-[8px] text-[#BEF221] font-black uppercase tracking-[0.3em] mt-1">
-                      Transfer
+                    <div className="text-left min-w-0">
+                      <div className="text-gray-900 font-bold text-sm md:text-base">CB</div>
+                      <div className="text-gray-400 text-xs">Carte Bancaire</div>
                     </div>
                   </div>
 
-                  <div className="text-white/40 font-black text-sm italic tracking-widest hover:text-white transition-colors cursor-default capitalize">
-                    Klarna.
+                  {/* Visa */}
+                  <div className="flex items-center gap-2 md:gap-3 lg:gap-4 p-2 md:p-3 lg:p-5 rounded-lg md:rounded-xl lg:rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                    <div className="w-10 h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 bg-[#1A1F71] rounded-lg md:rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+                      <span className="text-white font-black italic text-xs md:text-sm tracking-tighter">VISA</span>
+                    </div>
+                    <div className="text-left min-w-0">
+                      <div className="text-gray-900 font-bold text-sm md:text-base">Visa</div>
+                      <div className="text-gray-400 text-xs">Credit & Debit</div>
+                    </div>
                   </div>
-                  <div className="text-white font-black text-3xl tracking-tighter">
-                    S
-                    <span className="text-[#BEF221] underline decoration-2 underline-offset-4 font-serif">
-                      €
-                    </span>
-                    PA
+
+                  {/* Apple Pay */}
+                  <div className="flex items-center gap-2 md:gap-3 lg:gap-4 p-2 md:p-3 lg:p-5 rounded-lg md:rounded-xl lg:rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                    <div className="w-10 h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 bg-black rounded-lg md:rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+                      <Apple className="w-5 h-5 md:w-5.5 md:h-5.5 lg:w-6 lg:h-6 text-white" />
+                    </div>
+                    <div className="text-left min-w-0">
+                      <div className="text-gray-900 font-bold text-sm md:text-base">Apple Pay</div>
+                      <div className="text-gray-400 text-xs">Sans contact</div>
+                    </div>
                   </div>
-                  <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 hover:bg-[#BEF221] transition-all group">
-                    <ArrowRight className="w-6 h-6 text-white group-hover:text-[#0D0630] transition-colors" />
+
+                  {/* PayPal */}
+                  <div className="flex items-center gap-2 md:gap-3 lg:gap-4 p-2 md:p-3 lg:p-5 rounded-lg md:rounded-xl lg:rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#BEF221]/30 transition-all duration-300 group/item">
+                    <div className="w-10 h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 bg-[#003087] rounded-lg md:rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+                      <span className="text-white font-black text-xs">PP</span>
+                    </div>
+                    <div className="text-left min-w-0">
+                      <div className="text-gray-900 font-bold text-sm md:text-base">PayPal</div>
+                      <div className="text-gray-400 text-xs">Paiement sécurisé</div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="bg-[#BEF221] text-[#0D0630] font-black py-5 rounded-2xl text-xl shadow-[0_20px_40px_-10px_rgba(190,242,33,0.4)] transform hover:scale-[1.03] transition-all cursor-pointer border border-[#BEF221]/20 flex items-center justify-center">
-                  Connect account
+                {/* Powered by Stripe & PayPal */}
+                <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 lg:gap-6 pt-4 md:pt-5 lg:pt-6 border-t border-gray-100">
+                  <span className="text-gray-400 text-xs font-medium uppercase tracking-wider">{t.poweredBy}</span>
+                  <div className="flex items-center gap-1.5 text-[#635BFF] font-black text-sm md:text-base lg:text-lg tracking-tight">
+                    <Smartphone className="w-4 h-4 md:w-5 md:h-5" />
+                    Stripe
+                  </div>
+                  <div className="hidden md:block w-px h-5 bg-gray-200" />
+                  <div className="text-[#003087] font-black text-sm md:text-base lg:text-lg tracking-tight">
+                    PayPal
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Text Content */}
-          <div className="flex-1 text-left">
-            <h2 className="text-4xl md:text-5xl font-black text-[#0D0630] mb-8 leading-[1.1] tracking-tight">
+          <ScrollReveal className="flex-1 text-left" delay={200}>
+            <h2 className="text-lg md:text-2xl lg:text-3xl font-black text-gray-900 mb-3 md:mb-6 lg:mb-8 leading-[1.1] tracking-tight">
               {t.title}
             </h2>
-            <p className="text-xl text-gray-600 leading-relaxed mb-10 max-w-lg font-medium">
+            <p className="text-xs md:text-base lg:text-xl text-gray-500 leading-relaxed mb-4 md:mb-8 lg:mb-10 max-w-lg font-medium">
               {t.subtitle}
             </p>
             <Button
               href={`/${locale}/features/paiement-en-ligne`}
-              size="lg"
-              className="inline-flex"
+              size="sm"
+              className="inline-flex !text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-lg"
             >
               {t.cta}
-              <ArrowRight className="ml-2 w-5 h-5" />
+              <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-5 md:h-5" />
             </Button>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

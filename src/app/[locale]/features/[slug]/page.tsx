@@ -6,7 +6,6 @@ import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { Testimonials } from "@/components/sections/Testimonials";
 import { Pricing } from "@/components/sections/Pricing";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
@@ -171,7 +170,7 @@ export default async function FeaturePage({
                 <p className="text-4xl md:text-5xl font-black text-[#BEF221]">
                   {stat.value}
                 </p>
-                <p className="text-gray-600 mt-2">{t(stat.label, locale)}</p>
+                <p className="text-gray-500 mt-2">{t(stat.label, locale)}</p>
               </div>
             ))}
           </div>
@@ -182,11 +181,7 @@ export default async function FeaturePage({
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <Badge variant="accent" className="mb-4">
-              <Sparkles className="w-3 h-3 mr-1" />
-              {fp.benefits}
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-[#0D0630]">
+            <h2 className="text-2xl md:text-3xl font-black text-gray-900">
               {fp.whyYouWillLove}
             </h2>
           </div>
@@ -197,7 +192,7 @@ export default async function FeaturePage({
                 <div className="w-10 h-10 rounded-full bg-[#BEF221] flex items-center justify-center flex-shrink-0">
                   <Check className="w-5 h-5 text-[#0D0630]" />
                 </div>
-                <p className="text-lg text-[#0D0630] font-medium">{t(benefit, locale)}</p>
+                <p className="text-lg text-gray-900 font-medium">{t(benefit, locale)}</p>
               </Card>
             ))}
           </div>
@@ -208,11 +203,7 @@ export default async function FeaturePage({
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <Badge variant="default" className="mb-4">
-              <Zap className="w-3 h-3 mr-1" />
-              {fp.howItWorks}
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-[#0D0630]">
+            <h2 className="text-2xl md:text-3xl font-black text-gray-900">
               {fp.simpleAs123}
             </h2>
           </div>
@@ -224,10 +215,10 @@ export default async function FeaturePage({
                   {index + 1}
                 </div>
                 <Card className="relative z-10 h-full">
-                  <h3 className="text-xl font-bold text-[#0D0630] mb-3">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">
                     {t(step.title, locale)}
                   </h3>
-                  <p className="text-gray-600">{t(step.description, locale)}</p>
+                  <p className="text-gray-500">{t(step.description, locale)}</p>
                 </Card>
               </div>
             ))}
@@ -235,13 +226,13 @@ export default async function FeaturePage({
         </div>
       </section>
 
-      <Testimonials />
-
-      <Pricing />
+      <Pricing locale={locale} dict={dict} />
 
       <CTA
         title={fp.tryFeature.replace("{name}", t(feature.name, locale))}
         subtitle={fp.freeFor14Days}
+        ctaText={dict.cta.button}
+        secondaryText={dict.cta.subtext}
       />
     </>
   );

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 interface FAQItem {
   question: string;
@@ -10,78 +11,99 @@ interface FAQItem {
 
 interface FAQProps {
   title?: string;
+  badge?: string;
   dict?: any;
   items?: FAQItem[];
 }
 
-const defaultFAQs: FAQItem[] = [
-  {
-    question: "Comment fonctionne l'essai gratuit ?",
-    answer: "Vous pouvez créer jusqu'à 3 documents par mois gratuitement. Aucune carte bancaire n'est requise pour commencer.",
-  },
-  {
-    question: "Mes données sont-elles sécurisées ?",
-    answer: "Oui, nous utilisons un chiffrement de niveau bancaire (AES-256) et Stripe pour sécuriser toutes vos transactions.",
-  },
-  {
-    question: "Puis-je personnaliser mes factures ?",
-    answer: "Absolument. Vous pouvez ajouter votre logo, vos couleurs et choisir parmi plusieurs modèles premium.",
-  },
-  {
-    question: "Robi remplace-t-il mon comptable ?",
-    answer: "Robi automatise votre gestion quotidienne, mais un comptable reste essentiel pour vos déclarations fiscales.",
-  },
-  {
-    question: "Que se passe-t-il si j'annule ?",
-    answer: "Vous pouvez annuler en un clic. Vos données restent accessibles en lecture seule pendant 12 mois.",
-  },
-];
-
-export function FAQ({ title = "Questions fréquentes", dict, items }: FAQProps) {
+export function FAQ({ title = "Questions fréquentes", badge, dict, items }: FAQProps) {
   const faqItems: FAQItem[] = items || (dict ? [
     { question: dict.faq.q1, answer: dict.faq.a1 },
     { question: dict.faq.q2, answer: dict.faq.a2 },
     { question: dict.faq.q3, answer: dict.faq.a3 },
     { question: dict.faq.q4, answer: dict.faq.a4 },
     { question: dict.faq.q5, answer: dict.faq.a5 },
-  ] : defaultFAQs);
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+    { question: dict.faq.q6, answer: dict.faq.a6 },
+    { question: dict.faq.q7, answer: dict.faq.a7 },
+    { question: dict.faq.q8, answer: dict.faq.a8 },
+    { question: dict.faq.q9, answer: dict.faq.a9 },
+    { question: dict.faq.q10, answer: dict.faq.a10 },
+  ].filter(item => item.question && item.answer) : []);
+
+  const [openIndices, setOpenIndices] = useState<Set<number>>(new Set([0]));
+
+  const toggleIndex = (index: number) => {
+    setOpenIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  };
+
+  // Split into 2 columns
+  const midPoint = Math.ceil(faqItems.length / 2);
+  const leftColumn = faqItems.slice(0, midPoint);
+  const rightColumn = faqItems.slice(midPoint);
+
+  const faqBadge = badge || (dict ? dict.faq.badge : "Pas encore convaincu ?");
+
+  const renderItem = (item: FAQItem, index: number) => (
+    <ScrollReveal key={index} delay={index * 40}>
+      <div
+        className={`rounded-2xl border overflow-hidden transition-all duration-300 ${
+          openIndices.has(index)
+            ? "bg-gray-50 border-[#BEF221]/30 shadow-[0_0_20px_rgba(190,242,33,0.06)]"
+            : "bg-gray-50 border-gray-200 hover:border-gray-300"
+        }`}
+      >
+        <button
+          onClick={() => toggleIndex(index)}
+          className="w-full flex items-center justify-between p-5 text-left gap-3"
+        >
+          <span className="font-bold text-gray-900 text-sm leading-snug">
+            {item.question}
+          </span>
+          <ChevronDown
+            className={`w-4 h-4 text-[#BEF221] transition-transform duration-300 flex-shrink-0 ${
+              openIndices.has(index) ? "rotate-180" : ""
+            }`}
+          />
+        </button>
+        <div className={`faq-answer ${openIndices.has(index) ? "open" : ""}`}>
+          <div>
+            <div className="px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+              {item.answer}
+            </div>
+          </div>
+        </div>
+      </div>
+    </ScrollReveal>
+  );
 
   return (
-    <section id="faq" className="py-24 bg-gray-50">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-black text-[#0D0630]">
+    <section id="faq" className="py-14 md:py-24 bg-white relative">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ScrollReveal className="text-center mb-12">
+          <p className="text-[#BEF221] font-bold text-sm uppercase tracking-wider mb-3 bg-[#0D0630] inline-block px-4 py-1.5 rounded-full">
+            {faqBadge}
+          </p>
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-gray-900">
             {title}
           </h2>
-        </div>
+        </ScrollReveal>
 
-        <div className="space-y-4">
-          {faqItems.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
-            >
-              <button
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex items-center justify-between p-6 text-left"
-              >
-                <span className="font-bold text-[#0D0630] pr-4">
-                  {item.question}
-                </span>
-                <ChevronDown
-                  className={`w-5 h-5 text-[#BEF221] transition-transform flex-shrink-0 ${
-                    openIndex === index ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              {openIndex === index && (
-                <div className="px-6 pb-6 text-gray-600 leading-relaxed">
-                  {item.answer}
-                </div>
-              )}
-            </div>
-          ))}
+        {/* Two column layout on desktop */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="space-y-4">
+            {leftColumn.map((item, i) => renderItem(item, i))}
+          </div>
+          <div className="space-y-4">
+            {rightColumn.map((item, i) => renderItem(item, i + midPoint))}
+          </div>
         </div>
       </div>
     </section>

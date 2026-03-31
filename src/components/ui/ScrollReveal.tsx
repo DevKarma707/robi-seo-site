@@ -1,4 +1,5 @@
 "use client";
+
 import { ReactNode } from "react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
@@ -12,7 +13,7 @@ interface ScrollRevealProps {
 export function ScrollReveal({
   children,
   className = "",
-  delay = 0,
+  delay,
   variant = "fade",
 }: ScrollRevealProps) {
   const ref = useScrollReveal<HTMLDivElement>();

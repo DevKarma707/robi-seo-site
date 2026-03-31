@@ -70,10 +70,10 @@ export default async function IndustriesPage({
             return (
               <div key={category.id} className="mb-16 last:mb-0">
                 <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-[#0D0630] flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-[#BEF221]/10 border border-[#BEF221]/20 flex items-center justify-center">
                     <Icon className="w-6 h-6 text-[#BEF221]" />
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-black text-[#0D0630]">
+                  <h2 className="text-2xl md:text-3xl font-black text-gray-900">
                     {t(category.name, locale)}
                   </h2>
                   <span className="text-sm text-gray-400 ml-2">
@@ -86,19 +86,19 @@ export default async function IndustriesPage({
                     <Link key={industry.slug} href={`/${locale}/industries/${industry.slug}`}>
                       <Card className="h-full group cursor-pointer hover:border-[#BEF221] transition-all">
                         <div className="flex items-start justify-between mb-3">
-                          <h3 className="text-lg font-bold text-[#0D0630] group-hover:text-[#0D0630]">
+                          <h3 className="text-lg font-bold text-gray-900 group-hover:text-gray-900">
                             {t(industry.name, locale)}
                           </h3>
                           <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-[#BEF221] transition-colors flex-shrink-0" />
                         </div>
-                        <p className="text-gray-600 text-sm line-clamp-2 mb-3">
+                        <p className="text-gray-500 text-sm line-clamp-2 mb-3">
                           {t(industry.heroTitle, locale)}
                         </p>
                         <div className="flex flex-wrap gap-1">
                           {industry.features.slice(0, 2).map((feature, idx) => (
                             <span
                               key={idx}
-                              className="text-xs bg-[#BEF221]/20 text-[#0D0630] px-2 py-0.5 rounded-full"
+                              className="text-xs bg-[#BEF221]/10 text-[#BEF221] px-2 py-0.5 rounded-full"
                             >
                               {t(feature, locale)}
                             </span>
@@ -115,23 +115,23 @@ export default async function IndustriesPage({
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-[#0D0630]">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
+          <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8">
             {ind.adaptedTo} <span className="text-[#BEF221]">{industries.length}{ind.professionsSuffix}</span>
           </h2>
           <div className="grid grid-cols-3 gap-8">
             <div>
               <p className="text-4xl font-black text-[#BEF221]">{industries.length}</p>
-              <p className="text-white/50 text-sm">Industries</p>
+              <p className="text-gray-500 text-sm">Industries</p>
             </div>
             <div>
               <p className="text-4xl font-black text-[#BEF221]">{industryCategories.length}</p>
-              <p className="text-white/50 text-sm">{ind.categories}</p>
+              <p className="text-gray-500 text-sm">{ind.categories}</p>
             </div>
             <div>
               <p className="text-4xl font-black text-[#BEF221]">∞</p>
-              <p className="text-white/50 text-sm">{ind.customization}</p>
+              <p className="text-gray-500 text-sm">{ind.customization}</p>
             </div>
           </div>
         </div>

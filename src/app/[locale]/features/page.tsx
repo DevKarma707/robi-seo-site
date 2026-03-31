@@ -4,7 +4,6 @@ import { features, t } from "@/data/seo-config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
-import { Card } from "@/components/ui/Card";
 import { CTA } from "@/components/sections/CTA";
 import { ArrowRight, Bot, Zap, Bell, CreditCard, BarChart3 } from "lucide-react";
 
@@ -43,64 +42,94 @@ export default async function FeaturesPage({
 
   return (
     <>
+      {/* JSON-LD for BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: `https://robi.ai/${locale}`,
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: dict.nav.features,
+                item: `https://robi.ai/${locale}/features`,
+              },
+            ],
+          }),
+        }}
+      />
+
       <Hero
         badge={dict.nav.features}
         title={dict.features.title}
         titleAccent={dict.features.titleAccent}
-        subtitle={dict.features.titleEnd}
+        subtitle=""
+        ctaText=""
         variant="centered"
       />
 
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {features.map((feature, index) => {
+      <section className="py-20 bg-[#0D0630]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* First row - 3 cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {features.slice(0, 3).map((feature) => {
               const Icon = featureIcons[feature.slug as keyof typeof featureIcons] || Bot;
-              const isLarge = index === 0 || index === features.length - 1;
-
               return (
                 <Link
                   key={feature.slug}
                   href={`/${locale}/features/${feature.slug}`}
-                  className={isLarge ? "md:col-span-2" : ""}
+                  className="group"
                 >
-                  <Card
-                    variant={index === 0 ? "dark" : "default"}
-                    className={`h-full group cursor-pointer ${isLarge ? "md:flex md:items-center md:gap-12" : ""}`}
-                  >
-                    <div className={`${isLarge ? "md:w-1/3" : ""}`}>
-                      <div
-                        className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
-                          index === 0
-                            ? "bg-[#BEF221]/20 border border-[#BEF221]/30"
-                            : "bg-[#0D0630]/5 border border-[#0D0630]/10"
-                        }`}
-                      >
-                        <Icon
-                          className={`w-8 h-8 ${index === 0 ? "text-[#BEF221]" : "text-[#0D0630]"}`}
-                        />
-                      </div>
+                  <div className="h-full rounded-2xl p-7 bg-white/5 border border-white/10 backdrop-blur-sm transition-all duration-300 hover:border-[#BEF221]/40 hover:bg-white/10 hover:-translate-y-1">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-[#BEF221]/10 border border-[#BEF221]/20 group-hover:bg-[#BEF221]/20 transition-colors">
+                      <Icon className="w-6 h-6 text-[#BEF221]" />
                     </div>
-                    <div className={`${isLarge ? "md:w-2/3" : ""}`}>
-                      <div className="flex items-start justify-between mb-4">
-                        <h3
-                          className={`text-2xl font-bold group-hover:text-[#BEF221] transition-colors ${
-                            index === 0 ? "text-white" : "text-[#0D0630]"
-                          }`}
-                        >
-                          {t(feature.name, locale)}
-                        </h3>
-                        <ArrowRight
-                          className={`w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity ${
-                            index === 0 ? "text-[#BEF221]" : "text-[#0D0630]"
-                          }`}
-                        />
-                      </div>
-                      <p className={index === 0 ? "text-white/70" : "text-gray-600"}>
-                        {t(feature.description, locale)}
-                      </p>
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="text-lg font-bold text-white group-hover:text-[#BEF221] transition-colors">
+                        {t(feature.name, locale)}
+                      </h3>
+                      <ArrowRight className="w-4 h-4 text-[#BEF221] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
                     </div>
-                  </Card>
+                    <p className="text-white/60 text-sm leading-relaxed">
+                      {t(feature.description, locale)}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+          {/* Second row - 2 cards centered */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[calc(66.666%+0.75rem)] mx-auto">
+            {features.slice(3).map((feature) => {
+              const Icon = featureIcons[feature.slug as keyof typeof featureIcons] || Bot;
+              return (
+                <Link
+                  key={feature.slug}
+                  href={`/${locale}/features/${feature.slug}`}
+                  className="group"
+                >
+                  <div className="h-full rounded-2xl p-7 bg-white/5 border border-white/10 backdrop-blur-sm transition-all duration-300 hover:border-[#BEF221]/40 hover:bg-white/10 hover:-translate-y-1">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-[#BEF221]/10 border border-[#BEF221]/20 group-hover:bg-[#BEF221]/20 transition-colors">
+                      <Icon className="w-6 h-6 text-[#BEF221]" />
+                    </div>
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="text-lg font-bold text-white group-hover:text-[#BEF221] transition-colors">
+                        {t(feature.name, locale)}
+                      </h3>
+                      <ArrowRight className="w-4 h-4 text-[#BEF221] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
+                    </div>
+                    <p className="text-white/60 text-sm leading-relaxed">
+                      {t(feature.description, locale)}
+                    </p>
+                  </div>
                 </Link>
               );
             })}

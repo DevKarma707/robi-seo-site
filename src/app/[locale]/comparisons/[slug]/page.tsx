@@ -8,6 +8,7 @@ import { CTA } from "@/components/sections/CTA";
 import { Check, X, Minus } from "lucide-react";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale } from "@/lib/i18n/config";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export async function generateStaticParams() {
   return comparisons.map((comparison) => ({
@@ -73,68 +74,70 @@ export default async function ComparisonPage({
       />
 
       {/* Comparison Table */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-[#0D0630]">
+          <ScrollReveal className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900">
               {comp.detailedComparison}
             </h2>
-            <p className="text-gray-600 mt-4">
+            <p className="text-gray-500 mt-4">
               {comp.discoverDifferences.replace("{competitor}", comparison.competitor)}
             </p>
-          </div>
+          </ScrollReveal>
 
-          <div className="bg-gray-50 rounded-3xl overflow-hidden">
-            {/* Header */}
-            <div className="grid grid-cols-3 bg-[#0D0630] text-white p-6">
-              <div className="font-bold">{comp.feature}</div>
-              <div className="text-center font-bold">
-                <span className="text-[#BEF221]">Robi AI</span>
+          <ScrollReveal>
+            <div className="rounded-3xl overflow-hidden border border-gray-200">
+              {/* Header */}
+              <div className="grid grid-cols-3 bg-gray-100 text-gray-900 p-6">
+                <div className="font-bold">{comp.feature}</div>
+                <div className="text-center font-bold">
+                  <span className="text-[#BEF221]">Robi AI</span>
+                </div>
+                <div className="text-center font-bold">{comparison.competitor}</div>
               </div>
-              <div className="text-center font-bold">{comparison.competitor}</div>
+
+              {/* Rows */}
+              {comparisonFeatures.map((feature, index) => (
+                <div
+                  key={index}
+                  className={`grid grid-cols-3 p-6 ${
+                    index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                  }`}
+                >
+                  <div className="font-medium text-gray-900">{feature.name}</div>
+                  <div className="flex justify-center">
+                    {feature.robi ? (
+                      <div className="w-8 h-8 rounded-full bg-[#BEF221] flex items-center justify-center">
+                        <Check className="w-5 h-5 text-[#0D0630]" />
+                      </div>
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
+                        <X className="w-5 h-5 text-red-400" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex justify-center">
+                    {feature.competitor === true ? (
+                      <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                        <Check className="w-5 h-5 text-green-400" />
+                      </div>
+                    ) : feature.competitor === "partial" ? (
+                      <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                        <Minus className="w-5 h-5 text-yellow-400" />
+                      </div>
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
+                        <X className="w-5 h-5 text-red-400" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-
-            {/* Rows */}
-            {comparisonFeatures.map((feature, index) => (
-              <div
-                key={index}
-                className={`grid grid-cols-3 p-6 ${
-                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                }`}
-              >
-                <div className="font-medium text-[#0D0630]">{feature.name}</div>
-                <div className="flex justify-center">
-                  {feature.robi ? (
-                    <div className="w-8 h-8 rounded-full bg-[#BEF221] flex items-center justify-center">
-                      <Check className="w-5 h-5 text-[#0D0630]" />
-                    </div>
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
-                      <X className="w-5 h-5 text-red-500" />
-                    </div>
-                  )}
-                </div>
-                <div className="flex justify-center">
-                  {feature.competitor === true ? (
-                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                      <Check className="w-5 h-5 text-green-600" />
-                    </div>
-                  ) : feature.competitor === "partial" ? (
-                    <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
-                      <Minus className="w-5 h-5 text-yellow-600" />
-                    </div>
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
-                      <X className="w-5 h-5 text-red-500" />
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+          </ScrollReveal>
 
           {/* Legend */}
-          <div className="flex justify-center gap-8 mt-8 text-sm text-gray-600">
+          <div className="flex justify-center gap-8 mt-8 text-sm text-gray-500">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-[#BEF221] flex items-center justify-center">
                 <Check className="w-4 h-4 text-[#0D0630]" />
@@ -142,14 +145,14 @@ export default async function ComparisonPage({
               {comp.included}
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-yellow-100 flex items-center justify-center">
-                <Minus className="w-4 h-4 text-yellow-600" />
+              <div className="w-6 h-6 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                <Minus className="w-4 h-4 text-yellow-400" />
               </div>
               {comp.partial}
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center">
-                <X className="w-4 h-4 text-red-500" />
+              <div className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center">
+                <X className="w-4 h-4 text-red-400" />
               </div>
               {comp.notIncluded}
             </div>
@@ -158,42 +161,48 @@ export default async function ComparisonPage({
       </section>
 
       {/* Why Choose Robi */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-gray-50 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <ScrollReveal className="text-center mb-16">
             <Badge variant="accent" className="mb-4">
               {comp.exclusiveAdvantages}
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-[#0D0630]">
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900">
               {comp.whyChoose}
             </h2>
-          </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card variant="default">
-              <h3 className="text-xl font-bold text-[#0D0630] mb-4">
-                {comp.conversationalAI}
-              </h3>
-              <p className="text-gray-600">
-                {comp.conversationalAIDesc}
-              </p>
-            </Card>
-            <Card variant="default">
-              <h3 className="text-xl font-bold text-[#0D0630] mb-4">
-                {comp.smartReminders}
-              </h3>
-              <p className="text-gray-600">
-                {comp.smartRemindersDesc}
-              </p>
-            </Card>
-            <Card variant="dark">
-              <h3 className="text-xl font-bold text-white mb-4">
-                {comp.realTimeSaving}
-              </h3>
-              <p className="text-white/70">
-                {comp.realTimeSavingDesc}
-              </p>
-            </Card>
+            <ScrollReveal delay={0}>
+              <Card className="h-full">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  {comp.conversationalAI}
+                </h3>
+                <p className="text-gray-500">
+                  {comp.conversationalAIDesc}
+                </p>
+              </Card>
+            </ScrollReveal>
+            <ScrollReveal delay={100}>
+              <Card className="h-full">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  {comp.smartReminders}
+                </h3>
+                <p className="text-gray-500">
+                  {comp.smartRemindersDesc}
+                </p>
+              </Card>
+            </ScrollReveal>
+            <ScrollReveal delay={200}>
+              <Card variant="dark" className="h-full">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  {comp.realTimeSaving}
+                </h3>
+                <p className="text-gray-600">
+                  {comp.realTimeSavingDesc}
+                </p>
+              </Card>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -201,6 +210,8 @@ export default async function ComparisonPage({
       <CTA
         title={comp.switchFrom.replace("{competitor}", comparison.competitor)}
         subtitle={comp.freeMigration}
+        ctaText={dict.cta.button}
+        secondaryText={dict.cta.subtext}
       />
     </>
   );

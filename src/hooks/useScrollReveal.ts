@@ -1,11 +1,18 @@
 "use client";
+
 import { useEffect, useRef } from "react";
 
+interface ScrollRevealOptions {
+  threshold?: number;
+  rootMargin?: string;
+  once?: boolean;
+}
+
 export function useScrollReveal<T extends HTMLElement>(
-  options: { threshold?: number; rootMargin?: string; once?: boolean } = {}
+  options: ScrollRevealOptions = {}
 ) {
+  const { threshold = 0.15, rootMargin = "0px 0px -60px 0px", once = true } = options;
   const ref = useRef<T>(null);
-  const { threshold = 0.15, rootMargin = "0px 0px -50px 0px", once = true } = options;
 
   useEffect(() => {
     const el = ref.current;
