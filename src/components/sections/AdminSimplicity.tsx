@@ -18,7 +18,7 @@ export function AdminSimplicity({ dict }: AdminSimplicityProps) {
             <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-[#0D0630] leading-tight mb-4 md:mb-6 tracking-tight">
               {ad.title}
             </h2>
-            <p className="text-sm md:text-lg text-gray-600 leading-relaxed mb-6 md:mb-8">
+            <p className="text-sm md:text-lg text-gray-600 leading-relaxed mb-0 md:mb-8">
               {ad.description}
             </p>
           </div>

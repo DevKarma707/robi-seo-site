@@ -87,25 +87,25 @@ export function Pricing({
           {/* Mensuel */}
           <ScrollReveal delay={0} className="min-w-[75vw] md:min-w-0 snap-center">
             <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-4 md:p-6">
-              <div className="text-center mb-5 md:mb-6">
-                <p className="text-white/50 text-xs md:text-sm font-bold uppercase tracking-widest mb-2 md:mb-3">
+              <div className="text-center mb-3 md:mb-6">
+                <p className="text-white/50 text-xs md:text-sm font-bold uppercase tracking-widest mb-1 md:mb-3">
                   {p.monthly || "Mensuel"}
                 </p>
                 <div className="flex items-baseline justify-center gap-1">
                   <span className="text-3xl md:text-5xl font-black text-white">14€</span>
-                  <span className="text-white/50">{p.month || "/mois"}</span>
+                  <span className="text-white/50 text-xs md:text-base">{p.month || "/mois"}</span>
                 </div>
-                <p className="text-white/40 text-sm mt-2">
+                <p className="text-white/40 text-xs md:text-sm mt-1 md:mt-2">
                   {p.noCommitment || "Sans engagement"}
                 </p>
               </div>
-              <ul className="space-y-3 mb-8 flex-1">
+              <ul className="space-y-2 md:space-y-3 mb-4 md:mb-8 flex-1">
                 {features.map((f, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <div className="w-5 h-5 rounded-full flex items-center justify-center bg-white/10 flex-shrink-0 mt-0.5">
                       <Check className="w-3 h-3 text-white/60" />
                     </div>
-                    <span className="text-sm text-white/60">{f}</span>
+                    <span className="text-xs md:text-sm text-white/60">{f}</span>
                   </li>
                 ))}
               </ul>
@@ -142,7 +142,7 @@ export function Pricing({
                   {p.monthsSaved || "= 2 MOIS OFFERTS"}
                 </span>
               </div>
-              <ul className="space-y-3 mb-8 flex-1">
+              <ul className="space-y-2 md:space-y-3 mb-4 md:mb-8 flex-1">
                 {features.map((f, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <div className="w-5 h-5 rounded-full flex items-center justify-center bg-[#BEF221] flex-shrink-0 mt-0.5">
@@ -187,13 +187,13 @@ export function Pricing({
                   {p.exclusiveWebOffer || "Offre exclusive web"}
                 </p>
               </div>
-              <ul className="space-y-3 mb-8 flex-1">
+              <ul className="space-y-2 md:space-y-3 mb-4 md:mb-8 flex-1">
                 {features.map((f, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <div className="w-5 h-5 rounded-full flex items-center justify-center bg-white/10 flex-shrink-0 mt-0.5">
                       <Check className="w-3 h-3 text-white/60" />
                     </div>
-                    <span className="text-sm text-white/60">{f}</span>
+                    <span className="text-xs md:text-sm text-white/60">{f}</span>
                   </li>
                 ))}
               </ul>
