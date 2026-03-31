@@ -7,8 +7,8 @@ import { Locale } from "@/lib/i18n/config";
 export const siteConfig = {
   name: "Robi AI",
   description: "Logiciel de facturation IA pour freelances et indépendants",
-  url: "https://robi.ai",
-  ogImage: "https://robi.ai/og.png",
+  url: "https://robi-app.com",
+  ogImage: "https://robi-app.com/og.png",
   links: {
     twitter: "https://twitter.com/robi_ai",
     linkedin: "https://linkedin.com/company/robi-ai",
@@ -798,11 +798,56 @@ export const features = [
 
 // ===== BLOG POSTS =====
 export const blogPosts = [
-  { slug: "comment-facturer-premier-client", title: { fr: "Comment Facturer Son Premier Client : Guide Complet 2024", en: "How to Invoice Your First Client: Complete Guide 2024", es: "Cómo Facturar a Tu Primer Cliente: Guía Completa 2024" }, description: { fr: "Tout ce que vous devez savoir pour émettre votre première facture.", en: "Everything you need to know to issue your first invoice.", es: "Todo lo que necesitas saber para emitir tu primera factura." }, keywords: ["première facture freelance"], category: "guides" },
-  { slug: "mentions-obligatoires-facture", title: { fr: "Les Mentions Obligatoires sur une Facture en 2024", en: "Mandatory Information on an Invoice in 2024", es: "Información Obligatoria en una Factura en 2024" }, description: { fr: "Liste complète des mentions légales obligatoires sur vos factures.", en: "Complete list of mandatory legal mentions on your invoices.", es: "Lista completa de las menciones legales obligatorias en tus facturas." }, keywords: ["mentions obligatoires facture"], category: "legal" },
-  { slug: "relancer-client-impaye", title: { fr: "Comment Relancer un Client qui ne Paie Pas ?", en: "How to Follow Up on an Unpaid Client?", es: "¿Cómo Reclamar a un Cliente que No Paga?" }, description: { fr: "5 techniques efficaces pour relancer vos clients.", en: "5 effective techniques to follow up on clients.", es: "5 técnicas efectivas para reclamar a tus clientes." }, keywords: ["relance client impayé"], category: "tips" },
-  { slug: "tarif-journalier-moyen-freelance", title: { fr: "TJM Freelance 2024 : Quel Tarif Journalier Moyen ?", en: "Freelance Day Rate 2024: What's the Average?", es: "Tarifa Diaria Freelance 2024: ¿Cuál es la Media?" }, description: { fr: "Découvrez les TJM par métier et région.", en: "Discover day rates by profession and region.", es: "Descubre las tarifas diarias por profesión y región." }, keywords: ["tjm freelance"], category: "business" },
-  { slug: "micro-entreprise-vs-sasu", title: { fr: "Micro-Entreprise vs SASU : Quel Statut Choisir ?", en: "Sole Trader vs LLC: Which Status to Choose?", es: "Autónomo vs Sociedad: ¿Qué Estatus Elegir?" }, description: { fr: "Comparatif complet des statuts juridiques pour freelances.", en: "Complete comparison of legal statuses for freelancers.", es: "Comparativa completa de estatus legales para freelancers." }, keywords: ["micro entreprise vs sasu"], category: "legal" },
+  {
+    slug: "comment-facturer-premier-client",
+    title: { fr: "Comment Facturer Son Premier Client : Guide Complet 2025", en: "How to Invoice Your First Client: Complete Guide 2025", es: "Cómo Facturar a Tu Primer Cliente: Guía Completa 2025" },
+    description: { fr: "Tout ce que vous devez savoir pour émettre votre première facture conforme et être payé rapidement.", en: "Everything you need to know to issue your first compliant invoice and get paid fast.", es: "Todo lo que necesitas saber para emitir tu primera factura conforme y cobrar rápido." },
+    keywords: ["première facture freelance", "comment facturer client", "facture auto-entrepreneur"],
+    category: "guides",
+    date: "2025-03-10",
+    readTime: { fr: 8, en: 8, es: 8 },
+    author: "Équipe Robi AI",
+  },
+  {
+    slug: "mentions-obligatoires-facture",
+    title: { fr: "Les Mentions Obligatoires sur une Facture en 2025", en: "Mandatory Information on an Invoice in 2025", es: "Información Obligatoria en una Factura en 2025" },
+    description: { fr: "Liste complète et à jour des mentions légales obligatoires sur vos factures pour éviter tout litige.", en: "Complete and up-to-date list of mandatory legal mentions on your invoices to avoid disputes.", es: "Lista completa y actualizada de las menciones legales obligatorias en tus facturas." },
+    keywords: ["mentions obligatoires facture", "facture légale", "facture conforme 2025"],
+    category: "legal",
+    date: "2025-02-20",
+    readTime: { fr: 6, en: 6, es: 6 },
+    author: "Équipe Robi AI",
+  },
+  {
+    slug: "relancer-client-impaye",
+    title: { fr: "Comment Relancer un Client qui ne Paie Pas ? (5 Méthodes)", en: "How to Follow Up on an Unpaid Client? (5 Methods)", es: "¿Cómo Reclamar a un Cliente que No Paga? (5 Métodos)" },
+    description: { fr: "5 techniques éprouvées pour relancer efficacement vos clients en retard sans abîmer la relation.", en: "5 proven techniques to effectively follow up on late clients without damaging the relationship.", es: "5 técnicas probadas para reclamar eficazmente a tus clientes morosos sin dañar la relación." },
+    keywords: ["relance client impayé", "recouvrement freelance", "facture impayée"],
+    category: "tips",
+    date: "2025-02-05",
+    readTime: { fr: 5, en: 5, es: 5 },
+    author: "Équipe Robi AI",
+  },
+  {
+    slug: "tarif-journalier-moyen-freelance",
+    title: { fr: "TJM Freelance 2025 : Quel Tarif Journalier Moyen ?", en: "Freelance Day Rate 2025: What's the Average?", es: "Tarifa Diaria Freelance 2025: ¿Cuál es la Media?" },
+    description: { fr: "Découvrez les TJM par métier et région en 2025 pour fixer votre tarif au juste prix et booster vos revenus.", en: "Discover 2025 day rates by profession and region to set the right price and boost your income.", es: "Descubre las tarifas diarias 2025 por profesión y región para fijar el precio correcto." },
+    keywords: ["tjm freelance", "tarif journalier moyen 2025", "salaire freelance"],
+    category: "business",
+    date: "2025-01-15",
+    readTime: { fr: 10, en: 10, es: 10 },
+    author: "Équipe Robi AI",
+  },
+  {
+    slug: "micro-entreprise-vs-sasu",
+    title: { fr: "Micro-Entreprise vs SASU : Quel Statut Choisir en 2025 ?", en: "Sole Trader vs LLC: Which Status to Choose in 2025?", es: "Autónomo vs Sociedad: ¿Qué Estatus Elegir en 2025?" },
+    description: { fr: "Comparatif complet des statuts juridiques micro-entreprise et SASU : charges, avantages et inconvénients.", en: "Complete comparison of sole trader and LLC legal statuses: taxes, pros and cons.", es: "Comparativa completa de estatus legales autónomo y sociedad: impuestos, ventajas e inconvenientes." },
+    keywords: ["micro entreprise vs sasu", "statut juridique freelance", "auto entrepreneur 2025"],
+    category: "legal",
+    date: "2025-01-03",
+    readTime: { fr: 12, en: 12, es: 12 },
+    author: "Équipe Robi AI",
+  },
 ];
 
 // ===== TOOLS =====
@@ -818,8 +863,8 @@ export const schemaTemplates = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Robi AI",
-    url: "https://robi.ai",
-    logo: "https://robi.ai/logo.png",
+    url: "https://robi-app.com",
+    logo: "https://robi-app.com/logo.png",
     description: "AI invoicing software for freelancers",
     sameAs: [
       "https://twitter.com/robi_ai",

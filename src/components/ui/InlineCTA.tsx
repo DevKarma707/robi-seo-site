@@ -13,7 +13,7 @@ interface InlineCTAProps {
 
 export function InlineCTA({
   text = "Essayer gratuitement",
-  href = "https://www.robi-app.com",
+  href = "https://go.robi-app.com",
   subtext,
   variant = "light",
   showOffer = false,

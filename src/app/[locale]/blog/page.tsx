@@ -56,13 +56,13 @@ export default async function BlogPage({
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: `https://robi.ai/${locale}`,
+                item: `https://robi-app.com/${locale}`,
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: blog.heroBadge,
-                item: `https://robi.ai/${locale}/blog`,
+                item: `https://robi-app.com/${locale}/blog`,
               },
             ],
           }),
@@ -97,10 +97,10 @@ export default async function BlogPage({
                   <div className="flex items-center gap-4 text-gray-500 text-sm">
                     <span className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
-                      15/02/2024
+                      {new Date(blogPosts[0].date).toLocaleDateString(locale === "fr" ? "fr-FR" : locale === "es" ? "es-ES" : "en-GB", { day: "2-digit", month: "long", year: "numeric" })}
                     </span>
                     <span>•</span>
-                    <span>8 {blog.readTime}</span>
+                    <span>{typeof blogPosts[0].readTime === "object" ? blogPosts[0].readTime[locale as keyof typeof blogPosts[0].readTime] : blogPosts[0].readTime} {blog.readTime}</span>
                   </div>
                 </div>
               </div>
@@ -123,7 +123,7 @@ export default async function BlogPage({
                   <div className="flex items-center justify-between text-sm text-gray-400">
                     <span className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
-                      10/02/2024
+                      {new Date(post.date).toLocaleDateString(locale === "fr" ? "fr-FR" : locale === "es" ? "es-ES" : "en-GB", { day: "2-digit", month: "short", year: "numeric" })}
                     </span>
                     <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-[#BEF221]" />
                   </div>

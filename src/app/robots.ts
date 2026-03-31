@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/admin/", "/_next/"],
       },
     ],
-    sitemap: "https://robi.ai/sitemap.xml",
+    sitemap: "https://robi-app.com/sitemap.xml",
   };
 }

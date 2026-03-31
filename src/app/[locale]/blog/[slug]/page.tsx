@@ -1019,7 +1019,7 @@ export default async function BlogPostPage({
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
-            "@id": `https://robi.ai/${locale}/blog/${slug}`,
+            "@id": `https://robi-app.com/${locale}/blog/${slug}`,
             headline: t(post.title, locale),
             description: t(post.description, locale),
             articleBody: content,
@@ -1028,22 +1028,22 @@ export default async function BlogPostPage({
             author: {
               "@type": "Organization",
               name: "Robi AI",
-              url: "https://robi.ai",
+              url: "https://robi-app.com",
             },
             publisher: {
               "@type": "Organization",
               name: "Robi AI",
-              url: "https://robi.ai",
+              url: "https://robi-app.com",
               logo: {
                 "@type": "ImageObject",
-                url: "https://robi.ai/logo.png",
+                url: "https://robi-app.com/logo.png",
                 width: 200,
                 height: 60,
               },
             },
             image: {
               "@type": "ImageObject",
-              url: "https://robi.ai/og.png",
+              url: "https://robi-app.com/og.png",
               width: 1200,
               height: 630,
             },
@@ -1066,19 +1066,19 @@ export default async function BlogPostPage({
                 "@type": "ListItem",
                 position: 1,
                 name: "Accueil",
-                item: `https://robi.ai/${locale}`,
+                item: `https://robi-app.com/${locale}`,
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "Blog",
-                item: `https://robi.ai/${locale}/blog`,
+                item: `https://robi-app.com/${locale}/blog`,
               },
               {
                 "@type": "ListItem",
                 position: 3,
                 name: t(post.title, locale),
-                item: `https://robi.ai/${locale}/blog/${slug}`,
+                item: `https://robi-app.com/${locale}/blog/${slug}`,
               },
             ],
           }),
@@ -1136,7 +1136,7 @@ export default async function BlogPostPage({
             <p className="text-gray-500 mb-6">
               {dict.pages.blog.putInPracticeDesc}
             </p>
-            <Button href="https://www.robi-app.com">{dict.pages.industries.tryFree}</Button>
+            <Button href="https://go.robi-app.com">{dict.pages.industries.tryFree}</Button>
           </Card>
         </div>
       </article>
