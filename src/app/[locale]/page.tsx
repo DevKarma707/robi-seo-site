@@ -63,8 +63,8 @@ export default async function Home({
             "@context": "https://schema.org",
             "@type": "Organization",
             name: "Robi AI",
-            url: "https://robi.ai",
-            logo: "https://robi.ai/logo.png",
+            url: "https://robi-app.com",
+            logo: "https://robi-app.com/logo.png",
             description: dict.meta.description,
             sameAs: [
               "https://twitter.com/robi_ai",
@@ -137,9 +137,9 @@ export default async function Home({
         titleAccent={dict.hero.titleAccent}
         subtitle={dict.hero.subtitle}
         ctaText={dict.hero.cta}
-        ctaHref="https://www.robi-app.com"
+        ctaHref="https://go.robi-app.com"
         secondaryCtaText={dict.hero.secondaryCta}
-        secondaryCtaHref="https://www.robi-app.com"
+        secondaryCtaHref="https://go.robi-app.com"
         variant="default"
         socialProof={{
           text: dict.hero.socialProof,

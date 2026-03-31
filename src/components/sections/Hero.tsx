@@ -32,7 +32,7 @@ export function Hero({
   titleAccent,
   subtitle,
   ctaText = "",
-  ctaHref = "https://www.robi-app.com",
+  ctaHref = "https://go.robi-app.com",
   secondaryCtaText,
   secondaryCtaHref,
   variant = "default",
