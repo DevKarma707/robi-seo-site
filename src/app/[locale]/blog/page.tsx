@@ -42,6 +42,12 @@ export default async function BlogPage({
   const dict = await getDictionary(locale);
   const blog = dict.pages.blog;
 
+  const getReadTime = (post: typeof blogPosts[0]) => {
+    const rt = post.readTime;
+    if (typeof rt === "object") return (rt as Record<string, number>)[locale] ?? (rt as Record<string, number>).fr;
+    return rt;
+  };
+
   return (
     <>
       {/* JSON-LD for BreadcrumbList */}
@@ -100,7 +106,7 @@ export default async function BlogPage({
                       {new Date(blogPosts[0].date).toLocaleDateString(locale === "fr" ? "fr-FR" : locale === "es" ? "es-ES" : "en-GB", { day: "2-digit", month: "long", year: "numeric" })}
                     </span>
                     <span>•</span>
-                    <span>{typeof blogPosts[0].readTime === "object" ? blogPosts[0].readTime[locale as keyof typeof blogPosts[0].readTime] : blogPosts[0].readTime} {blog.readTime}</span>
+                    <span>{getReadTime(blogPosts[0])} {blog.readTime}</span>
                   </div>
                 </div>
               </div>
