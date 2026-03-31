@@ -8,7 +8,6 @@ import { Payments } from "@/components/sections/Payments";
 import { Pricing } from "@/components/sections/Pricing";
 import { MadeForYou } from "@/components/sections/MadeForYou";
 import { Trust } from "@/components/sections/Trust";
-import { Testimonials } from "@/components/sections/Testimonials";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
 import { StickyMobileCTA } from "@/components/ui/StickyMobileCTA";
@@ -168,12 +167,7 @@ export default async function Home({
         subtext={dict.cta.subtext}
       />
 
-      <Features
-        title={dict.features.title}
-        titleAccent={dict.features.titleAccent}
-        subtitle={dict.features.titleEnd}
-        dict={dict}
-      />
+      <AdminSimplicity dict={dict} />
 
       <InlineCTA
         text={dict.hero.cta}
@@ -181,7 +175,12 @@ export default async function Home({
         offerText={`59€ ${dict.pricing?.launchOfferNormalPrice || "au lieu de"} 149€ — ${dict.pricing?.launchOfferLifetime || "Accès à vie"}`}
       />
 
-      <AdminSimplicity dict={dict} />
+      <Features
+        title={dict.features.title}
+        titleAccent={dict.features.titleAccent}
+        subtitle={dict.features.titleEnd}
+        dict={dict}
+      />
 
       <InlineCTA
         text={dict.hero.cta}
@@ -210,8 +209,6 @@ export default async function Home({
         subtext={dict.cta.subtext}
         variant="dark"
       />
-
-      <Testimonials dict={dict} />
 
       <MadeForYou dict={dict} />
 
