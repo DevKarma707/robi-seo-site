@@ -83,7 +83,10 @@ export function Pricing({
         </ScrollReveal>
 
         {/* 3 Plans - scroll horizontal sur mobile */}
-        <div className="flex md:grid md:grid-cols-3 gap-3 md:gap-6 overflow-x-auto pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory">
+        <div
+          className="flex md:grid md:grid-cols-3 gap-3 md:gap-6 overflow-x-auto pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
+        >
           {/* Mensuel */}
           <ScrollReveal delay={0} className="min-w-[75vw] md:min-w-0 snap-center">
             <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-4 md:p-6">
@@ -122,12 +125,12 @@ export function Pricing({
           {/* Annuel — LE PLUS POPULAIRE */}
           <ScrollReveal delay={100} className="min-w-[75vw] md:min-w-0 snap-center">
             <div className="flex flex-col h-full rounded-2xl border-2 border-[#BEF221] bg-white/5 p-4 md:p-6 relative md:scale-[1.02] shadow-[0_0_40px_rgba(190,242,33,0.15)]">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+              <div className="hidden md:block absolute -top-4 left-1/2 -translate-x-1/2">
                 <span className="px-3 md:px-4 py-1 rounded-full bg-[#BEF221] text-[#0D0630] text-[10px] md:text-xs font-black uppercase tracking-wider whitespace-nowrap">
                   {p.mostPopular || "LE PLUS POPULAIRE"}
                 </span>
               </div>
-              <div className="text-center mb-5 md:mb-6 pt-2">
+              <div className="text-center mb-5 md:mb-6 pt-0 md:pt-2">
                 <p className="text-[#BEF221] text-xs md:text-sm font-bold uppercase tracking-widest mb-2 md:mb-3">
                   {p.yearly || "Annuel"}
                 </p>
@@ -165,12 +168,12 @@ export function Pricing({
           {/* Bi-annuel — MEILLEURE OFFRE */}
           <ScrollReveal delay={200} className="min-w-[75vw] md:min-w-0 snap-center">
             <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-4 md:p-6 relative">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+              <div className="hidden md:block absolute -top-4 left-1/2 -translate-x-1/2">
                 <span className="px-3 md:px-4 py-1 rounded-full bg-[#1a1040] border border-white/20 text-white text-[10px] md:text-xs font-black uppercase tracking-wider whitespace-nowrap">
                   {p.bestOffer || "MEILLEURE OFFRE"}
                 </span>
               </div>
-              <div className="text-center mb-5 md:mb-6 pt-2">
+              <div className="text-center mb-5 md:mb-6 pt-0 md:pt-2">
                 <p className="text-white/50 text-xs md:text-sm font-bold uppercase tracking-widest mb-2 md:mb-3">
                   {p.biYearly || "Bi-annuel"}
                 </p>

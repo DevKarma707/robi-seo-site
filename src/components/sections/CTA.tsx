@@ -43,7 +43,7 @@ export function CTA({
         <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white mb-3 md:mb-6 tracking-tight">
           <StyledRobiTitle text={title} />
         </h2>
-        <p className="text-sm md:text-xl text-white/70 mb-6 md:mb-12">{subtitle}</p>
+        <p className="text-sm md:text-lg text-white/60 mb-6 md:mb-12">{subtitle}</p>
 
         <div className="flex flex-col items-center gap-3 md:gap-4">
           <Button href={ctaHref} size="sm" className="!text-xs !px-5 !py-2.5 md:!text-xl md:!px-10 md:!py-5">
