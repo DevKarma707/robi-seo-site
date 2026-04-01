@@ -58,6 +58,12 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
+      <head>
+        {/* Warm up go.robi-app.com before the user clicks a CTA */}
+        <link rel="preconnect" href="https://go.robi-app.com" />
+        <link rel="dns-prefetch" href="https://go.robi-app.com" />
+        <link rel="prefetch" href="https://go.robi-app.com" />
+      </head>
       <body className={`${inter.variable} antialiased`}>
         <Header locale={locale} dict={dict} />
         <main>{children}</main>
