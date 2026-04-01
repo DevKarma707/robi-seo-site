@@ -17,9 +17,6 @@ export function Trust({ dict }: TrustProps) {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal className="text-center mb-5 md:mb-16">
-          <p className="hidden md:inline-block text-[#0D0630] font-bold text-xs md:text-sm uppercase tracking-wider mb-2 md:mb-3 bg-[#BEF221] px-3 md:px-4 py-1 md:py-1.5 rounded-full">
-            {tr.badge}
-          </p>
           <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white">
             {tr.title}
           </h2>

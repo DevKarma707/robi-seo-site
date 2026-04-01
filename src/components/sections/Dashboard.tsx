@@ -1,6 +1,7 @@
 "use client";
 
-import { TrendingUp, Clock, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
+import { TrendingUp, Clock, CheckCircle, XCircle, AlertTriangle, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 interface DashboardProps {
   dict: any;
@@ -21,6 +22,12 @@ export function Dashboard({ dict }: DashboardProps) {
             <p className="text-sm md:text-lg text-gray-600 leading-relaxed mb-0 md:mb-8">
               {d.description}
             </p>
+            <div className="hidden md:block">
+              <Button href="https://go.robi-app.com" size="lg">
+                {d.cta}
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </div>
           </div>
 
           {/* Right - Dashboard Mockup (hidden on mobile) */}

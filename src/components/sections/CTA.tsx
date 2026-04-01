@@ -50,7 +50,7 @@ export function CTA({
             {ctaText}
             <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-6 md:h-6" />
           </Button>
-          <p className="text-white/40 text-[10px] md:text-sm font-medium uppercase tracking-widest">
+          <p className="text-white/40 text-[10px] md:text-base font-medium uppercase tracking-widest">
             {secondaryText}
           </p>
         </div>

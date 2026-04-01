@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, CheckCircle, RefreshCw, Copy, XCircle, Download } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 interface AdminSimplicityProps {
   dict: any;
@@ -21,6 +22,12 @@ export function AdminSimplicity({ dict }: AdminSimplicityProps) {
             <p className="text-sm md:text-lg text-gray-600 leading-relaxed mb-0 md:mb-8">
               {ad.description}
             </p>
+            <div className="hidden md:block">
+              <Button href="https://go.robi-app.com" size="lg">
+                {ad.cta}
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </div>
           </div>
 
           {/* Right - Mockup */}

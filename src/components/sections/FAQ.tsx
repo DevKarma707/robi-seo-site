@@ -88,9 +88,6 @@ export function FAQ({ title = "Questions fréquentes", badge, dict, items }: FAQ
     <section id="faq" className="py-8 md:py-24 bg-white relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal className="text-center mb-6 md:mb-12">
-          <p className="hidden md:inline-block text-[#BEF221] font-bold text-[10px] md:text-sm uppercase tracking-wider mb-2 md:mb-3 bg-[#0D0630] px-3 md:px-4 py-1 md:py-1.5 rounded-full">
-            {faqBadge}
-          </p>
           <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-gray-900">
             {title}
           </h2>

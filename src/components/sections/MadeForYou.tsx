@@ -38,9 +38,6 @@ export function MadeForYou({ dict }: MadeForYouProps) {
     <section className="py-8 md:py-32 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal className="text-center mb-5 md:mb-16">
-          <p className="hidden md:inline-block text-[#BEF221] font-bold text-xs md:text-sm uppercase tracking-wider mb-2 md:mb-3 bg-[#0D0630] px-3 md:px-4 py-1 md:py-1.5 rounded-full">
-            {m.badge}
-          </p>
           <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-[#0D0630]">
             {m.title}
           </h2>
