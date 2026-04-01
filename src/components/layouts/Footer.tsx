@@ -45,7 +45,9 @@ export function Footer({ locale, dict }: FooterProps) {
       links: [
         { name: dict.footer.legal, href: `/${locale}/legal` },
         { name: dict.footer.privacy, href: `/${locale}/privacy` },
-        { name: dict.footer.terms, href: `/${locale}/terms` },
+        { name: dict.footer.cguWeb || "CGU (app web)", href: `/${locale}/terms` },
+        { name: dict.footer.cguMobile || "CGU (app mobile)", href: `/${locale}/cgu-mobile` },
+        { name: dict.footer.cgv || "CGV", href: `/${locale}/cgv` },
         { name: dict.footer.contact, href: `/${locale}/contact` },
       ],
     },
