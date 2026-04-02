@@ -59,6 +59,8 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <head>
+        {/* Favicon — same method as go.robi-app.com */}
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         {/* Warm up go.robi-app.com before the user clicks a CTA */}
         <link rel="preconnect" href="https://go.robi-app.com" />
         <link rel="dns-prefetch" href="https://go.robi-app.com" />
