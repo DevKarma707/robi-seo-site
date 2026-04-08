@@ -10,7 +10,8 @@ export const siteConfig = {
   url: "https://robi-app.com",
   ogImage: "https://robi-app.com/og.png",
   links: {
-    twitter: "https://twitter.com/robi_ai",
+    instagram: "https://instagram.com/robi.ai.app",
+    twitter: "https://x.com/iamrobiai",
     linkedin: "https://linkedin.com/company/robi-ai",
   },
 };
@@ -867,7 +868,8 @@ export const schemaTemplates = {
     logo: "https://robi-app.com/logo.png",
     description: "AI invoicing software for freelancers",
     sameAs: [
-      "https://twitter.com/robi_ai",
+      "https://instagram.com/robi.ai.app",
+      "https://x.com/iamrobiai",
       "https://linkedin.com/company/robi-ai",
     ],
   },

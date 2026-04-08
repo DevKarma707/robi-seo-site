@@ -38,6 +38,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...localizedUrls("/industries", "weekly", 0.8),
     ...localizedUrls("/blog", "daily", 0.8),
     ...localizedUrls("/tools", "monthly", 0.7),
+    ...localizedUrls("/contact", "monthly", 0.6),
+    ...localizedUrls("/legal", "yearly", 0.3),
+    ...localizedUrls("/privacy", "yearly", 0.3),
+    ...localizedUrls("/terms", "yearly", 0.3),
   ];
 
   // Industry pages

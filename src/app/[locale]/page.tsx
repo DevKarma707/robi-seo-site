@@ -66,7 +66,8 @@ export default async function Home({
             logo: "https://robi-app.com/logo.png",
             description: dict.meta.description,
             sameAs: [
-              "https://twitter.com/robi_ai",
+              "https://instagram.com/robi.ai.app",
+              "https://x.com/iamrobiai",
               "https://linkedin.com/company/robi-ai",
             ],
             contactPoint: {

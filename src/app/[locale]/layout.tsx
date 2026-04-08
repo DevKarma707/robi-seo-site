@@ -42,6 +42,29 @@ export async function generateMetadata({
         es: "https://robi-app.com/es",
       },
     },
+    openGraph: {
+      title: dict.meta.title,
+      description: dict.meta.description,
+      url: `https://robi-app.com/${locale}`,
+      siteName: "Robi AI",
+      locale: locale === "fr" ? "fr_FR" : locale === "es" ? "es_ES" : "en_US",
+      type: "website",
+      images: [
+        {
+          url: "https://robi-app.com/og.png",
+          width: 1200,
+          height: 630,
+          alt: "Robi AI - Facturation IA pour Freelances",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.meta.title,
+      description: dict.meta.description,
+      images: ["https://robi-app.com/og.png"],
+      creator: "@iamrobiai",
+    },
   };
 }
 
