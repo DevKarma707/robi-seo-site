@@ -11,7 +11,7 @@ import { Trust } from "@/components/sections/Trust";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
 import { StickyMobileCTA } from "@/components/ui/StickyMobileCTA";
-import { Locale, locales, defaultLocale } from "@/lib/i18n/config";
+import { Locale, locales, defaultLocale, localeCurrencies, priceMap } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
 function getValidLocale(locale: string): Locale {
@@ -26,6 +26,9 @@ export default async function Home({
   const { locale: rawLocale } = await params;
   const locale = getValidLocale(rawLocale);
   const dict = await getDictionary(locale);
+
+  const prices = priceMap[locale] || priceMap["fr"];
+  const currencyInfo = localeCurrencies[locale] || localeCurrencies["fr"];
 
   return (
     <>
@@ -60,8 +63,8 @@ export default async function Home({
             description: dict.meta.description,
             offers: {
               "@type": "Offer",
-              price: "14.99",
-              priceCurrency: "EUR",
+              price: prices.monthly,
+              priceCurrency: currencyInfo.currency,
             },
             aggregateRating: {
               "@type": "AggregateRating",

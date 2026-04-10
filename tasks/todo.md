@@ -49,4 +49,5 @@
 - [x] [Localisation / Social Proof] Adaptation des témoignages avec des noms et contextes locaux pour le Maroc, le Mexique et la Colombie.
 - [x] [Pricing / Automation] Automatisation du calcul des économies et des prix mensuels dans les cartes de tarifs pour une cohérence parfaite inter-marchés.
 - [x] [SEO Advanced] Implémentation du Schéma de Données Structurées BreadcrumbList pour un affichage premium dans les SERP Google.
+- [x] [Build Hotfix] Correction d'une erreur de syntaxe JSX (fragment manquant) dans `page.tsx` ayant causé l'échec du build Vercel.
 

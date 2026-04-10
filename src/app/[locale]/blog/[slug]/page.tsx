@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { CTA } from "@/components/sections/CTA";
 import { ArrowLeft, Calendar, Clock, Share2, BookOpen } from "lucide-react";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 
 export async function generateStaticParams() {
   return blogPosts.map((post) => ({
@@ -1379,6 +1380,14 @@ export default async function BlogPostPage({
             <ArrowLeft className="w-4 h-4" />
             {dict.pages.blog.backToBlog}
           </Link>
+
+          <Breadcrumbs
+            locale={locale}
+            items={[
+              { label: "Blog", href: `/${locale}/blog` },
+              { label: t(post.title, locale) },
+            ]}
+          />
 
           {/* Header */}
           <header className="mb-12">

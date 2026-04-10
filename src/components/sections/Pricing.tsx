@@ -3,7 +3,7 @@
 import { Check, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { Locale, localeCurrencies } from "@/lib/i18n/config";
+import { Locale, localeCurrencies, priceMap } from "@/lib/i18n/config";
 
 interface PricingProps {
   title?: string;
@@ -11,17 +11,6 @@ interface PricingProps {
   dict?: any;
   locale?: Locale;
 }
-
-const priceMap: Record<Locale, { launch: number; normal: number; monthly: number; yearly: number; biYearly: number; }> = {
-  fr: { launch: 59, normal: 149, monthly: 14, yearly: 89, biYearly: 149 },
-  en: { launch: 69, normal: 159, monthly: 15, yearly: 99, biYearly: 159 },
-  es: { launch: 59, normal: 149, monthly: 14, yearly: 89, biYearly: 149 },
-  "pt-BR": { launch: 299, normal: 749, monthly: 69, yearly: 449, biYearly: 749 },
-  "fr-MA": { launch: 599, normal: 1499, monthly: 139, yearly: 899, biYearly: 1499 },
-  "es-419": { launch: 69, normal: 159, monthly: 15, yearly: 99, biYearly: 159 },
-  "es-MX": { launch: 999, normal: 2499, monthly: 249, yearly: 1499, biYearly: 2499 },
-  "es-CO": { launch: 249000, normal: 600000, monthly: 59000, yearly: 379000, biYearly: 600000 },
-};
 
 export function Pricing({
   title,

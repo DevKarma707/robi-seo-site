@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/Button";
 import { CTA } from "@/components/sections/CTA";
 import { Scale, TrendingDown, PiggyBank, AlertCircle } from "lucide-react";
 
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+
 type Statut = "micro-bnc" | "micro-bic" | "sasu" | "eurl-is" | "eurl-ir";
 
 interface SimulateurChargesClientProps {
@@ -71,6 +73,18 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
 
   return (
     <>
+      <div className="bg-white pt-24 pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            locale={locale as any}
+            items={[
+              { label: "Tools", href: `/${locale}/tools` },
+              { label: dict.title },
+            ]}
+          />
+        </div>
+      </div>
+
       <Hero
         badge={freeTool}
         title={dict.title || "Simulateur de Charges"}

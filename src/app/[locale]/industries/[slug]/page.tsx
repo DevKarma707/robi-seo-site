@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { industries, t } from "@/data/seo-config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { Locale } from "@/lib/i18n/config";
+import { Locale, localeCurrencies, priceMap } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -10,6 +10,7 @@ import { Pricing } from "@/components/sections/Pricing";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
 import { Check, X, Zap, Clock, AlertTriangle } from "lucide-react";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 
 // Generate static pages for all industries
 export async function generateStaticParams() {
@@ -56,6 +57,9 @@ export default async function IndustryPage({
   const dict = await getDictionary(locale);
   const industry = industries.find((i) => i.slug === slug);
 
+  const prices = priceMap[locale] || priceMap["fr"];
+  const currencyInfo = localeCurrencies[locale] || localeCurrencies["fr"];
+
   if (!industry) {
     notFound();
   }
@@ -77,12 +81,24 @@ export default async function IndustryPage({
             description: t(industry.description, locale),
             offers: {
               "@type": "Offer",
-              price: "14.99",
-              priceCurrency: "EUR",
+              price: prices.monthly,
+              priceCurrency: currencyInfo.currency,
             },
           }),
         }}
       />
+
+      <div className="bg-gray-50 pt-24 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            locale={locale}
+            items={[
+              { label: ind.title, href: `/${locale}/industries` },
+              { label: t(industry.name, locale) },
+            ]}
+          />
+        </div>
+      </div>
 
       <Hero
         badge={`${ind.solutionFor} ${t(industry.name, locale)}`}
