@@ -96,7 +96,7 @@ export function Pricing({
                 </div>
               </div>
               <Button
-                href="https://buy.polar.sh/31d8e236-d14b-488c-920f-6e57e6492280"
+                href="https://go.robi-app.com"
                 variant="primary"
                 className="w-full max-w-md font-black tracking-wider !text-xs md:!text-base"
               >
@@ -133,7 +133,7 @@ export function Pricing({
                 ))}
               </ul>
               <Button
-                href="https://buy.polar.sh/02038653-1a96-44f8-986d-9413230fabcd"
+                href="https://go.robi-app.com"
                 variant="outline"
                 className="w-full font-black tracking-wider text-sm !border-white/40 !text-white hover:!bg-white hover:!text-[#0D0630]"
               >
@@ -176,7 +176,7 @@ export function Pricing({
                 ))}
               </ul>
               <Button
-                href="https://buy.polar.sh/a9e0f26b-6f6b-43e3-a389-26f65163a990"
+                href="https://go.robi-app.com"
                 variant="primary"
                 className="w-full font-black tracking-wider text-sm"
               >
@@ -221,7 +221,7 @@ export function Pricing({
                 ))}
               </ul>
               <Button
-                href="https://buy.polar.sh/ae917001-d953-4a8f-a76d-717e3f405266"
+                href="https://go.robi-app.com"
                 variant="outline"
                 className="w-full font-black tracking-wider text-sm !border-white/40 !text-white hover:!bg-white hover:!text-[#0D0630]"
               >

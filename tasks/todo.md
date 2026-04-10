@@ -15,7 +15,7 @@
 - [x] Mise à jour de `src/app/robots.ts`
 - [x] Mise à jour des layouts (`layout.tsx`)
 - [x] Déploiement sur Vercel (via Push Git)
-- [x] Redirect CTA buttons vers go.robi-app.com (commit 565a098)
+- [x] Redirect CTA buttons (Header, Hero, Pricing, Footers) vers go.robi-app.com (commit 565a098 + fix Pricing)
 
 ## Tâches en cours
 - [x] Correction stratégie d'URLs (canonicals incohérents)
