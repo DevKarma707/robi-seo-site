@@ -206,7 +206,7 @@ export function CalculateurTJMClient({ dict, freeTool, ctaDict, locale }: Calcul
                 </p>
               </Card>
 
-              <Button href="https://app.robi-app.com" className="w-full" size="lg">
+              <Button href="https://go.robi-app.com" className="w-full" size="lg">
                 {dict.ctaButton || "Facturer avec Robi AI"}
               </Button>
             </div>

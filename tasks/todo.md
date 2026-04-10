@@ -15,17 +15,17 @@
 - [x] Mise à jour de `src/app/robots.ts`
 - [x] Mise à jour des layouts (`layout.tsx`)
 - [x] Déploiement sur Vercel (via Push Git)
-- [x] Redirect CTA buttons vers app.robi-app.com (commit 565a098)
+- [x] Redirect CTA buttons vers go.robi-app.com (commit 565a098)
 
 ## Tâches en cours
-- [/] Correction stratégie d'URLs (canonicals incohérents)
-    - [/] Clarifier: robi-app.com = SEO, www.robi-app.com = app OU app.robi-app.com = app
-    - [ ] Corriger les canonicals SEO -> robi-app.com (sans www)
-    - [ ] Aligner tous les CTA vers le même sous-domaine app
-- [/] Redéploiement du site SEO avec la dernière version Git
-    - [ ] Corriger les URLs dans le code
-    - [ ] Commit + Push
-    - [ ] Vérifier le déploiement auto Vercel
+- [x] Correction stratégie d'URLs (canonicals incohérents)
+    - [x] Clarifier: robi-app.com = SEO, www.robi-app.com = app OU go.robi-app.com = app
+    - [x] Corriger les canonicals SEO -> robi-app.com (sans www)
+    - [x] Aligner tous les CTA vers le même sous-domaine app
+- [x] Redéploiement du site SEO avec la dernière version Git
+    - [x] Corriger les URLs dans le code
+    - [x] Commit + Push
+    - [/] Vérifier le déploiement auto Vercel (en cours)
 - [ ] Configuration DNS Hostinger (en attente utilisateur)
     - [ ] Configurer DNS pour robi-app.com -> Vercel (site SEO)
     - [ ] Configurer DNS pour www.robi-app.com -> App (Vercel/autre)

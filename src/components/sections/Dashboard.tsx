@@ -23,7 +23,7 @@ export function Dashboard({ dict }: DashboardProps) {
               {d.description}
             </p>
             <div className="hidden md:block">
-              <Button href="https://app.robi-app.com" size="lg">
+              <Button href="https://go.robi-app.com" size="lg">
                 {d.cta}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>

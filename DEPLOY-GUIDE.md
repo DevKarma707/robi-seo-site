@@ -40,6 +40,7 @@ NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX   # Remplacer par ton vrai ID Google Analytics 4
 ```
 
 Optionnel (pour le formulaire de contact par email) :
+
 ```
 RESEND_API_KEY=re_xxxxx          # Créer un compte sur resend.com si besoin
 ```
@@ -53,6 +54,7 @@ RESEND_API_KEY=re_xxxxx          # Créer un compte sur resend.com si besoin
 ### 5. Configuration DNS (chez ton registrar de domaine)
 
 Ajouter un enregistrement A :
+
 ```
 Type: A
 Name: @ (ou vide)
@@ -63,22 +65,22 @@ Value: 76.76.21.21  (IP Vercel)
 
 ### 6. Vérification post-déploiement
 
-- [ ] `robi-app.com` affiche la landing page SEO
-- [ ] `www.robi-app.com` affiche toujours l'app (login/dashboard)
-- [ ] Cliquer "Démarrer Gratuitement" redirige vers `https://www.robi-app.com`
-- [ ] Cliquer "Essayer Gratuit" (header) redirige vers `https://www.robi-app.com`
-- [ ] Toutes les pages pricing CTA redirigent vers `https://www.robi-app.com`
-- [ ] Les 3 langues fonctionnent : `/fr`, `/en`, `/es`
-- [ ] Google Analytics reçoit des données (si GA4 ID configuré)
+- [X] `robi-app.com` affiche la landing page SEO
+- [X] `www.robi-app.com` affiche toujours l'app (login/dashboard)
+- [X] Cliquer "Démarrer Gratuitement" redirige vers `https://www.robi-app.com`
+- [X] Cliquer "Essayer Gratuit" (header) redirige vers `https://www.robi-app.com`
+- [X] Toutes les pages pricing CTA redirigent vers `https://www.robi-app.com`
+- [X] Les 3 langues fonctionnent : `/fr`, `/en`, `/es`
+- [X] Google Analytics reçoit des données (si GA4 ID configuré)
 
 ## Résultat attendu
 
-| URL | Affiche |
-|-----|---------|
-| `robi-app.com` | Landing page SEO (ce projet) |
-| `robi-app.com/fr` | Landing page en français |
-| `robi-app.com/en` | Landing page en anglais |
-| `robi-app.com/es` | Landing page en espagnol |
+| URL                  | Affiche                              |
+| -------------------- | ------------------------------------ |
+| `robi-app.com`     | Landing page SEO (ce projet)         |
+| `robi-app.com/fr`  | Landing page en français            |
+| `robi-app.com/en`  | Landing page en anglais              |
+| `robi-app.com/es`  | Landing page en espagnol             |
 | `www.robi-app.com` | App principale (login) — inchangée |
 
 ## Infos projet

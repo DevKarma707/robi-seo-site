@@ -53,7 +53,7 @@ export function Header({ locale, dict }: HeaderProps) {
           {/* Right — Language + Single CTA */}
           <div className="hidden lg:flex items-center gap-4 flex-shrink-0 ml-auto">
             <LanguageSwitcher currentLocale={locale} />
-            <Button href="https://app.robi-app.com" size="sm">
+            <Button href="https://go.robi-app.com" size="sm">
               {dict.nav.login}
             </Button>
           </div>
@@ -61,7 +61,7 @@ export function Header({ locale, dict }: HeaderProps) {
           {/* Mobile — Language + App button + Hamburger */}
           <div className="flex lg:hidden items-center gap-2 ml-auto">
             <LanguageSwitcher currentLocale={locale} />
-            <Button href="https://app.robi-app.com" size="sm" className="text-xs px-3 py-1.5">
+            <Button href="https://go.robi-app.com" size="sm" className="text-xs px-3 py-1.5">
               {dict.nav.login}
             </Button>
             <button
