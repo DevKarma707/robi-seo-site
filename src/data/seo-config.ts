@@ -26,12 +26,12 @@ interface IndustryCategory {
 }
 
 export const industryCategories: IndustryCategory[] = [
-  { id: "btp", name: { fr: "Métiers du BTP", en: "Construction & Trades", es: "Construcción y Oficios" }, icon: "Hammer" },
-  { id: "tech", name: { fr: "Tech & Digital", en: "Tech & Digital", es: "Tech & Digital" }, icon: "Code" },
-  { id: "creatif", name: { fr: "Créatifs", en: "Creatives", es: "Creativos" }, icon: "Palette" },
-  { id: "evenementiel", name: { fr: "Événementiel", en: "Events", es: "Eventos" }, icon: "PartyPopper" },
-  { id: "conseil", name: { fr: "Conseil & Services", en: "Consulting & Services", es: "Consultoría y Servicios" }, icon: "Briefcase" },
-  { id: "sante", name: { fr: "Santé & Bien-être", en: "Health & Wellness", es: "Salud y Bienestar" }, icon: "Heart" },
+  { id: "btp", name: { fr: "Métiers du BTP", en: "Construction & Trades", es: "Construcción y Oficios", "pt-BR": "Construção & Obras" }, icon: "Hammer" },
+  { id: "tech", name: { fr: "Tech & Digital", en: "Tech & Digital", es: "Tech & Digital", "pt-BR": "Tecnologia & Digital" }, icon: "Code" },
+  { id: "creatif", name: { fr: "Créatifs", en: "Creatives", es: "Creativos", "pt-BR": "Criativos" }, icon: "Palette" },
+  { id: "evenementiel", name: { fr: "Événementiel", en: "Events", es: "Eventos", "pt-BR": "Eventos" }, icon: "PartyPopper" },
+  { id: "conseil", name: { fr: "Conseil & Services", en: "Consulting & Services", es: "Consultoría y Servicios", "pt-BR": "Consultoria & Serviços" }, icon: "Briefcase" },
+  { id: "sante", name: { fr: "Santé & Bien-être", en: "Health & Wellness", es: "Salud y Bienestar", "pt-BR": "Saúde & Bem-estar" }, icon: "Heart" },
 ];
 
 // ===== INDUSTRY TYPE =====
@@ -243,21 +243,21 @@ export const industries: Industry[] = [
   // ==================== TECH & DIGITAL ====================
   {
     slug: "developpeur",
-    name: { fr: "Développeurs", en: "Developers", es: "Desarrolladores" },
+    name: { fr: "Développeurs", en: "Developers", es: "Desarrolladores", "pt-BR": "Desenvolvedores" },
     category: "tech",
-    title: { fr: "Logiciel de Facturation pour Développeurs | Robi AI", en: "Invoicing Software for Developers | Robi AI", es: "Software de Facturación para Desarrolladores | Robi AI" },
-    description: { fr: "Facturez vos projets de développement.", en: "Invoice your development projects.", es: "Factura tus proyectos de desarrollo." },
-    keywords: ["facturation développeur", "facturation freelance dev"],
-    heroTitle: { fr: "Facturez vos projets dev comme un pro", en: "Invoice your dev projects like a pro", es: "Factura tus proyectos de desarrollo como un profesional" },
+    title: { fr: "Logiciel de Facturation pour Développeurs | Robi AI", en: "Invoicing Software for Developers | Robi AI", es: "Software de Facturación para Desarrolladores | Robi AI", "pt-BR": "Software de Faturamento para Desenvolvedores | Robi AI" },
+    description: { fr: "Facturez vos projets de développement.", en: "Invoice your development projects.", es: "Factura tus proyectos de desarrollo.", "pt-BR": "Fature seus projetos de desenvolvimento." },
+    keywords: ["faturamento desenvolvedor", "freelance dev brasil"],
+    heroTitle: { fr: "Facturez vos projets dev comme un pro", en: "Invoice your dev projects like a pro", es: "Factura tus proyectos de desarrollo como un profesional", "pt-BR": "Fature seus projetos dev como um profissional" },
     painPoints: [
-      { fr: "Estimation des projets", en: "Project estimation", es: "Estimación de proyectos" },
-      { fr: "Facturation des sprints", en: "Sprint billing", es: "Facturación de sprints" },
-      { fr: "Maintenance récurrente", en: "Recurring maintenance", es: "Mantenimiento recurrente" },
+      { fr: "Estimation des projets", en: "Project estimation", es: "Estimación de proyectos", "pt-BR": "Estimativa de projetos" },
+      { fr: "Facturation des sprints", en: "Sprint billing", es: "Facturación de sprints", "pt-BR": "Faturamento de sprints" },
+      { fr: "Maintenance récurrente", en: "Recurring maintenance", es: "Mantenimiento recurrente", "pt-BR": "Manutenção recorrente" },
     ],
     features: [
-      { fr: "Facturation TJM/sprint", en: "Day rate/sprint billing", es: "Facturación tarifa diaria/sprint" },
-      { fr: "Contrats maintenance", en: "Maintenance contracts", es: "Contratos de mantenimiento" },
-      { fr: "Timetracking Git", en: "Git time tracking", es: "Seguimiento de tiempo Git" },
+      { fr: "Facturation TJM/sprint", en: "Day rate/sprint billing", es: "Facturación tarifa diaria/sprint", "pt-BR": "Faturamento por valor diário/sprint" },
+      { fr: "Contrats maintenance", en: "Maintenance contracts", es: "Contratos de mantenimiento", "pt-BR": "Contratos de manutenção" },
+      { fr: "Timetracking Git", en: "Git time tracking", es: "Seguimiento de tiempo Git", "pt-BR": "Rastreamento de tempo via Git" },
     ],
   },
   {
@@ -847,6 +847,26 @@ export const blogPosts = [
     category: "legal",
     date: "2025-01-03",
     readTime: { fr: 12, en: 12, es: 12 },
+    author: "Équipe Robi AI",
+  },
+  {
+    slug: "facturacion-electronica-mexico-guia-cfdi",
+    title: { 
+      fr: "Facturation Électronique au Mexique : Guide CFDI 4.0 pour Freelances", 
+      en: "Electronic Invoicing in Mexico: Complete CFDI 4.0 Guide for Freelancers", 
+      es: "Facturación Electrónica en México: Guía Completa CFDI 4.0 para Freelances",
+      "pt-BR": "Faturamento Eletrônico no México: Guia CFDI 4.0"
+    },
+    description: { 
+      fr: "Tout comprendre au système CFDI 4.0 au Mexique : obligations, délais et outils pour les auto-entrepreneurs.", 
+      en: "Learn everything about the CFDI 4.0 system in Mexico: obligations, deadlines, and tools for self-employed.", 
+      es: "Aprende todo sobre el sistema CFDI 4.0 en México: obligaciones, plazos y herramientas para independientes.",
+      "pt-BR": "Tudo sobre o sistema CFDI 4.0 no México: obrigações e ferramentas para freelancers." 
+    },
+    keywords: ["facturación electrónica méxico", "guía cfdi 4.0 freelance", "sat méxico facturación"],
+    category: "guides",
+    date: "2025-03-15",
+    readTime: { fr: 15, en: 15, es: 15 },
     author: "Équipe Robi AI",
   },
 ];

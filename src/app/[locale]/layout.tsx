@@ -36,17 +36,21 @@ export async function generateMetadata({
     description: dict.meta.description,
     metadataBase: new URL("https://robi-app.com"),
     alternates: {
-      languages: locales.reduce(
-        (acc, l) => ({ ...acc, [l]: `/${l}` }),
-        {} as Record<string, string>
-      ),
+      canonical: `/${locale}`,
+      languages: {
+        ...locales.reduce(
+          (acc, l) => ({ ...acc, [l]: `/${l}` }),
+          {} as Record<string, string>
+        ),
+        "x-default": "/fr",
+      },
     },
     openGraph: {
       title: dict.meta.title,
       description: dict.meta.description,
       url: `https://robi-app.com/${locale}`,
       siteName: "Robi AI",
-      locale: locale === "fr" ? "fr_FR" : locale === "es" ? "es_ES" : "en_US",
+      locale: locale.replace("-", "_"),
       type: "website",
       images: [
         {
