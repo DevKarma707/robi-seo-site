@@ -1243,7 +1243,8 @@ Diferenças essenciais entre MEI e ME (Simples):
 Sua modalidade depende estritamente das suas projeções anuais de CA (vendas) e do Cadastro de sua profissão no Brasil (CNAE). 
 
 Com ou sem MEI, o importante é ser legalizado! Use o **Robi AI** para centralizar suas Notas Fiscais e pagamentos corporativos facilmente em toda a américa latina.`,
-    "facturacion-electronica-mexico-guia-cfdi": {
+  },
+  "facturacion-electronica-mexico-guia-cfdi": {
     es: `## Introducción a la Facturación Electrónica en México
 
 Si eres freelance o emprendedor en México, seguramente has escuchado hablar del **CFDI 4.0**. Desde 2023, esta es la única versión válida para emitir comprobantes fiscales ante el **SAT**.
