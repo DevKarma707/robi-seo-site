@@ -51,3 +51,9 @@
 - [x] [SEO Advanced] Implémentation du Schéma de Données Structurées BreadcrumbList pour un affichage premium dans les SERP Google.
 - [x] [Build Hotfix] Correction d'une erreur de syntaxe JSX (fragment manquant) dans `page.tsx` ayant causé l'échec du build Vercel.
 
+- [x] [UI Redesign] Hero section redesign inspired by Letterly.app
+    - [x] Create WordRotator with vertical fade animation (slide-up-fade)
+    - [x] Refactor H1 structure (localized titles + rotating words)
+    - [x] Remove trailing dots from titles for a cleaner look
+    - [x] Implement multi-line bold subtitle ("Laissez l'IA s'occuper de tout")
+    - [x] Synchronize all 8 locales (FR, EN, ES, PT) with the new structure

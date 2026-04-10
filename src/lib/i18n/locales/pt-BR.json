@@ -16,9 +16,10 @@
   },
   "hero": {
     "badge": "Novo: Lembretes Inteligentes via IA",
-    "title": "Pare com o Excel.",
-    "titleAccent": "Comece com o Robi.",
-    "subtitle": "O assistente de IA para seus orçamentos e faturas que salva seu tempo todos os dias! Fale, fature, receba.",
+    "title": "Fale",
+    "titleAccent": "Receba",
+    "rotatingWords": ["Fature", "Envie", "Cobre", "Notifique"],
+    "subtitle": "Deixe a IA cuidar de tudo.\nSimplifique suas faturas e receba mais rápido.",
     "cta": "Comece Grátis",
     "secondaryCta": "Ver Demonstração",
     "socialProof": "Junte-se a",

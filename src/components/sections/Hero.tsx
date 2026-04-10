@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { ArrowRight, Sparkles, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -24,6 +25,32 @@ interface HeroProps {
     text: string;
     highlight: string;
   };
+  rotatingWords?: string[];
+}
+
+function WordRotator({ words }: { words: string[] }) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (!words || words.length === 0) return;
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % words.length);
+    }, 2500);
+    return () => clearInterval(timer);
+  }, [words]);
+
+  if (!words || words.length === 0) return null;
+
+  return (
+    <span className="relative inline-flex h-[1.1em] items-center overflow-hidden align-bottom">
+      <span
+        key={index}
+        className="animate-slide-up-fade text-[#BEF221]"
+      >
+        {words[index]}
+      </span>
+    </span>
+  );
 }
 
 export function Hero({
@@ -42,6 +69,7 @@ export function Hero({
     end: "freelancers",
   },
   launchOffer,
+  rotatingWords = ["Facture", "Envoi", "Relance", "Notifie"],
 }: HeroProps) {
   const isCenter = variant === "centered";
 
@@ -78,23 +106,21 @@ export function Hero({
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {isCenter ? (
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-4 md:mb-6 tracking-tight">
-              {title}
-              {titleAccent && (
-                <>
-                  <br />
-                  <span className="text-[#BEF221]">{titleAccent}</span>
-                </>
-              )}
+            <h1 className="text-4xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] mb-6 md:mb-8 tracking-tighter">
+              <span className="block opacity-90">{title}</span>
+              <span className="flex items-center justify-center gap-3">
+                Robi <WordRotator words={rotatingWords} />
+              </span>
+              <span className="block text-[#BEF221]">{titleAccent}</span>
             </h1>
 
-            <p className="text-base md:text-xl text-white/70 mb-8 md:mb-10 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-white/90 font-medium mb-8 md:mb-10 leading-relaxed max-w-2xl mx-auto bg-[#0D0630]/50 backdrop-blur-sm p-4 rounded-2xl border border-white/5 whitespace-pre-line">
               {subtitle}
             </p>
 
             {ctaText && (
               <div className="flex flex-col items-center gap-3">
-                <Button href={ctaHref} size="sm" className="!text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-base">
+                <Button href={ctaHref} size="sm" className="!text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-base shadow-glow-sm hover:shadow-glow transition-all duration-300">
                   {ctaText}
                   <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-5 md:h-5" />
                 </Button>
@@ -113,18 +139,16 @@ export function Hero({
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left side - Content */}
-            <div className="max-w-3xl">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-4 md:mb-6 tracking-tight">
-                {title}
-                {titleAccent && (
-                  <>
-                    <br />
-                    <span className="text-[#BEF221]">{titleAccent}</span>
-                  </>
-                )}
+            <div className="max-w-3x1">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6 md:mb-8 tracking-tighter">
+                <span className="block opacity-90">{title}</span>
+                <span className="flex items-center gap-3">
+                  Robi <WordRotator words={rotatingWords} />
+                </span>
+                <span className="block text-[#BEF221]">{titleAccent}</span>
               </h1>
 
-              <p className="text-base md:text-xl text-white/70 mb-6 md:mb-10 leading-relaxed max-w-2xl">
+              <p className="text-base md:text-xl text-white/90 font-medium mb-6 md:mb-10 leading-relaxed max-w-2xl whitespace-pre-line">
                 {subtitle}
               </p>
 

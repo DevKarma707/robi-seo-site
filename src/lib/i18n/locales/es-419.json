@@ -16,9 +16,10 @@
   },
   "hero": {
     "badge": "Nuevo: Seguimiento de facturas con IA",
-    "title": "Stop Excel.",
-    "titleAccent": "Start Robi.",
-    "subtitle": "El asistente de IA para tus presupuestos y facturas que te ahorra tiempo cada día! Habla, factura, cobra.",
+    "title": "Habla",
+    "titleAccent": "Cobra",
+    "rotatingWords": ["Factura", "Envía", "Reclama", "Notifica"],
+    "subtitle": "Deja que la IA se encargue de todo.\nSimplifica tus facturas y cobra más rápido.",
     "cta": "Empezar Gratis",
     "secondaryCta": "Ver Demo",
     "socialProof": "Se unieron",

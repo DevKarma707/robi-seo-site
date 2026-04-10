@@ -231,6 +231,13 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes slide-up-fade {
+  0% { opacity: 0; transform: translateY(20px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
+
 @keyframes reveal-up {
   from { clip-path: inset(100% 0 0 0); opacity: 0; }
   to { clip-path: inset(0 0 0 0); opacity: 1; }
@@ -241,6 +248,7 @@ body {
 .animate-float { animation: float 3s ease-in-out infinite; }
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 .animate-glow-breathe { animation: glow-breathe 3s ease-in-out infinite; }
+.animate-slide-up-fade { animation: slide-up-fade 2.5s ease-in-out infinite; }
 
 /* === LINK UNDERLINE ANIMATION (LIME) === */
 .link-underline {
