@@ -17,7 +17,7 @@ export const siteConfig = {
 };
 
 // ===== INDUSTRY CATEGORIES =====
-type LocaleStrings = Record<Locale, string>;
+type LocaleStrings = Partial<Record<Locale, string>> & { fr: string };
 
 interface IndustryCategory {
   id: string;
