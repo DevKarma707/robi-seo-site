@@ -154,9 +154,9 @@ export default async function Home({
         titleAccent={dict.hero.titleAccent}
         subtitle={dict.hero.subtitle}
         ctaText={dict.hero.cta}
-        ctaHref="https://go.robi-app.com"
+        ctaHref="https://app.robi-app.com"
         secondaryCtaText={dict.hero.secondaryCta}
-        secondaryCtaHref="https://go.robi-app.com"
+        secondaryCtaHref="https://app.robi-app.com"
         variant="default"
         socialProof={{
           text: dict.hero.socialProof,

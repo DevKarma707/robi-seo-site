@@ -107,11 +107,11 @@ export function Pricing({
                 </div>
               </div>
               <Button
-                href="https://go.robi-app.com"
+                href="https://app.robi-app.com"
                 variant="primary"
                 className="w-full max-w-md font-black tracking-wider !text-xs md:!text-base"
               >
-                {p.launchOfferCta || `PROFITER DE L'OFFRE (${formatPrice(prices.launch)})`}
+                {p.launchOfferCta ? `${p.launchOfferCta} (${formatPrice(prices.launch)})` : `PROFITER DE L'OFFRE (${formatPrice(prices.launch)})`}
               </Button>
             </div>
           </div>
@@ -144,7 +144,7 @@ export function Pricing({
                 ))}
               </ul>
               <Button
-                href="https://go.robi-app.com"
+                href="https://app.robi-app.com"
                 variant="outline"
                 className="w-full font-black tracking-wider text-sm !border-white/40 !text-white hover:!bg-white hover:!text-[#0D0630]"
               >
@@ -187,7 +187,7 @@ export function Pricing({
                 ))}
               </ul>
               <Button
-                href="https://go.robi-app.com"
+                href="https://app.robi-app.com"
                 variant="primary"
                 className="w-full font-black tracking-wider text-sm"
               >
@@ -232,7 +232,7 @@ export function Pricing({
                 ))}
               </ul>
               <Button
-                href="https://go.robi-app.com"
+                href="https://app.robi-app.com"
                 variant="outline"
                 className="w-full font-black tracking-wider text-sm !border-white/40 !text-white hover:!bg-white hover:!text-[#0D0630]"
               >

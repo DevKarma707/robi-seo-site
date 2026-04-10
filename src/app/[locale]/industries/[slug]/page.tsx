@@ -89,7 +89,7 @@ export default async function IndustryPage({
         title={t(industry.heroTitle, locale)}
         subtitle={t(industry.description, locale)}
         ctaText={ind.tryFree}
-        ctaHref="https://go.robi-app.com"
+        ctaHref="https://app.robi-app.com"
         variant="centered"
       />
 

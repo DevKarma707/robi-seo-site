@@ -235,7 +235,7 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
                 </div>
               </Card>
 
-              <Button href="https://go.robi-app.com" className="w-full" size="lg">
+              <Button href="https://app.robi-app.com" className="w-full" size="lg">
                 {dict.ctaButton || "Facturer avec Robi AI"}
               </Button>
             </div>
