@@ -982,7 +982,13 @@ export default async function BlogPostPage({
   }
 
   const localeContent = articleContent[slug];
-  const content = localeContent?.[locale] || localeContent?.fr || "";
+  
+  // Smart fallback logic
+  let fallbackLocale = "fr";
+  if (locale.startsWith("es")) fallbackLocale = "es";
+  if (locale === "pt-BR") fallbackLocale = "en"; // English is better than French for BR fallback
+  
+  const content = localeContent?.[locale] || localeContent?.[fallbackLocale] || localeContent?.fr || "";
   const otherPosts = blogPosts.filter((p) => p.slug !== slug).slice(0, 3);
 
   // Simple markdown to HTML

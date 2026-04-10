@@ -890,5 +890,11 @@ export const schemaTemplates = {
 // ===== HELPER: Get localized string =====
 export function t(obj: LocaleStrings | string, locale: Locale): string {
   if (typeof obj === "string") return obj;
-  return obj[locale] || obj.fr;
+  if (obj[locale]) return obj[locale] as string;
+  
+  // Smart fallbacks
+  if (locale.startsWith("es")) return obj.es as string;
+  if (locale === "pt-BR") return (obj.en || obj.fr) as string;
+  
+  return obj.fr as string;
 }
