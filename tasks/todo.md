@@ -38,4 +38,5 @@
 - [x] [SEO International] Fix : Fallback temporaire des dictionnaires dans `dictionaries.ts` pour éviter le crash des nouvelles routes (500 Server Error)
 - [x] [SEO International] Traduction des sections Hero et Pricing en `pt-BR` avec prix locaux para test utilisateur
 - [x] [SEO International] Traduction 100% complète de l'application en Portugais Brésilien (`pt-BR.json`)
-
+- [x] [SEO International] Déploiement en production via Push Git (`feat(seo): international expansion...`)
+- [x] [UI Hotfix] Retrait du mini-scroll horizontal indésirable sur les conteneurs de la section Pricing (Desktop)
