@@ -1243,6 +1243,63 @@ Diferenças essenciais entre MEI e ME (Simples):
 Sua modalidade depende estritamente das suas projeções anuais de CA (vendas) e do Cadastro de sua profissão no Brasil (CNAE). 
 
 Com ou sem MEI, o importante é ser legalizado! Use o **Robi AI** para centralizar suas Notas Fiscais e pagamentos corporativos facilmente em toda a américa latina.`,
+    "facturacion-electronica-mexico-guia-cfdi": {
+    es: `## Introducción a la Facturación Electrónica en México
+
+Si eres freelance o emprendedor en México, seguramente has escuchado hablar del **CFDI 4.0**. Desde 2023, esta es la única versión válida para emitir comprobantes fiscales ante el **SAT**.
+
+Entender cómo funciona no solo es una obligación legal, sino que también transmite profesionalismo a tus clientes y te permite cobrar tus honorarios sin retrasos.
+
+## 1. ¿Qué es el CFDI 4.0?
+
+El **Comprobante Fiscal Digital por Internet (CFDI)** es la factura electrónica que avala una transacción comercial. La versión 4.0 introdujo cambios importantes en la validación de datos:
+- **RFC exacto**: Debe coincidir con tu Constancia de Situación Fiscal.
+- **Nombre o Razón Social**: Debe escribirse tal cual aparece en la constancia (en mayúsculas y sin régimen capital como S.A. de C.V.).
+- **Código Postal**: El domicilio fiscal de quien emite y quien recibe es ahora obligatorio y debe estar validado.
+
+## 2. Requisitos para Facturar como Freelance
+
+Para empezar a emitir facturas, necesitas:
+1. **RFC**: Estar inscrito en el Registro Federal de Contribuyentes.
+2. **e.firma (Firma Electrónica)**: Tus archivos .cer y .key vigentes.
+3. **Certificado de Sello Digital (CSD)**: Indispensable para sellar las facturas.
+4. **Régimen Fiscal**: Generalmente, los freelances tributan bajo el **RESICO** (Régimen Simplificado de Confianza) o **Actividad Empresarial y Profesional**.
+
+## 3. El SAT y los PACs
+
+Puedes facturar directamente en el portal del SAT (gratuito pero a veces lento) o utilizar un **PAC** (Proveedor Autorizado de Certificación) integrado en herramientas como **Robi AI**. Esto automatiza el proceso y te permite enviar la factura en PDF y XML a tu cliente con un solo clic.
+
+## 4. Conceptos y Claves de Producto
+
+Un error común es usar claves de producto incorrectas. Asegúrate de:
+- Elegir la clave de servicio que mejor describa tu actividad profesional.
+- Indicar correctamente la **Forma de Pago** (ej. Transferencia electrónica) y el **Uso del CFDI** (ej. Gastos en general).
+
+## 5. Complementos de Pago
+
+Si emites una factura con método de pago "PPD" (Pago en Parcialidades o Diferido), recuerda que es obligatorio emitir un **Complemento de Recepción de Pagos** una vez que tu cliente te deposite. Sin esto, la factura no es deducible para ellos.
+
+## Conclusión
+
+La facturation electrónica en México puede parecer compleja, pero con el orden adecuado y las herramientas correctas, se vuelve un proceso de pocos minutos. ¡Usa **Robi AI** para simplificar tu administración y enfocarte en lo que mejor sabes hacer!`,
+    fr: `## Introduction à la Facturation Électronique au Mexique
+
+Si vous êtes freelance ou entrepreneur au Mexique, vous avez sûrement entendu parler du **CFDI 4.0**. Depuis 2023, c'est la seule version valide pour émettre des justificatifs fiscaux auprès du **SAT**.
+
+## 1. Qu'est-ce que le CFDI 4.0 ?
+
+Le **Comprobante Fiscal Digital por Internet (CFDI)** est la facture électronique au Mexique. La version 4.0 impose des règles strictes sur le nom, le code postal et le régime fiscal du destinataire.
+
+## 2. Les pré-requis pour les Freelances
+
+Pour facturer, vous devez posséder :
+- Un **RFC** valide.
+- Votre **e.firma** (signature électronique).
+- Un **Certificat de Sceau Numérique (CSD)**.
+
+## 3. Simplifier avec Robi AI
+
+Plutôt que d'utiliser le portail complexe du SAT, **Robi AI** vous permet de générer vos documents conformes rapidement et de les envoyer au format XML et PDF à vos clients mexicains.`,
   },
 };
 
