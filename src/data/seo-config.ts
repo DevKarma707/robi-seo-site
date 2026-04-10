@@ -801,8 +801,8 @@ export const features = [
 export const blogPosts = [
   {
     slug: "comment-facturer-premier-client",
-    title: { fr: "Comment Facturer Son Premier Client : Guide Complet 2025", en: "How to Invoice Your First Client: Complete Guide 2025", es: "Cómo Facturar a Tu Primer Cliente: Guía Completa 2025" },
-    description: { fr: "Tout ce que vous devez savoir pour émettre votre première facture conforme et être payé rapidement.", en: "Everything you need to know to issue your first compliant invoice and get paid fast.", es: "Todo lo que necesitas saber para emitir tu primera factura conforme y cobrar rápido." },
+    title: { fr: "Comment Facturer Son Premier Client : Guide Complet 2025", en: "How to Invoice Your First Client: Complete Guide 2025", es: "Cómo Facturar a Tu Primer Cliente: Guía Completa 2025", "pt-BR": "Como Faturar Seu Primeiro Cliente: Guia Completo 2025" },
+    description: { fr: "Tout ce que vous devez savoir pour émettre votre première facture conforme et être payé rapidement.", en: "Everything you need to know to issue your first compliant invoice and get paid fast.", es: "Todo lo que necesitas saber para emitir tu primera factura conforme y cobrar rápido.", "pt-BR": "Tudo o que você precisa saber para emitir sua primeira fatura conforme as regras e receber rápido." },
     keywords: ["première facture freelance", "comment facturer client", "facture auto-entrepreneur"],
     category: "guides",
     date: "2025-03-10",
@@ -811,8 +811,8 @@ export const blogPosts = [
   },
   {
     slug: "mentions-obligatoires-facture",
-    title: { fr: "Les Mentions Obligatoires sur une Facture en 2025", en: "Mandatory Information on an Invoice in 2025", es: "Información Obligatoria en una Factura en 2025" },
-    description: { fr: "Liste complète et à jour des mentions légales obligatoires sur vos factures pour éviter tout litige.", en: "Complete and up-to-date list of mandatory legal mentions on your invoices to avoid disputes.", es: "Lista completa y actualizada de las menciones legales obligatorias en tus facturas." },
+    title: { fr: "Les Mentions Obligatoires sur une Facture en 2025", en: "Mandatory Information on an Invoice in 2025", es: "Información Obligatoria en una Factura en 2025", "pt-BR": "Informações Obrigatórias em uma Fatura em 2025" },
+    description: { fr: "Liste complète et à jour des mentions légales obligatoires sur vos factures pour éviter tout litige.", en: "Complete and up-to-date list of mandatory legal mentions on your invoices to avoid disputes.", es: "Lista completa y actualizada de las menciones legales obligatorias en tus facturas.", "pt-BR": "Lista completa e atualizada de informações legais obrigatórias nas suas faturas para evitar litígios." },
     keywords: ["mentions obligatoires facture", "facture légale", "facture conforme 2025"],
     category: "legal",
     date: "2025-02-20",
@@ -821,8 +821,8 @@ export const blogPosts = [
   },
   {
     slug: "relancer-client-impaye",
-    title: { fr: "Comment Relancer un Client qui ne Paie Pas ? (5 Méthodes)", en: "How to Follow Up on an Unpaid Client? (5 Methods)", es: "¿Cómo Reclamar a un Cliente que No Paga? (5 Métodos)" },
-    description: { fr: "5 techniques éprouvées pour relancer efficacement vos clients en retard sans abîmer la relation.", en: "5 proven techniques to effectively follow up on late clients without damaging the relationship.", es: "5 técnicas probadas para reclamar eficazmente a tus clientes morosos sin dañar la relación." },
+    title: { fr: "Comment Relancer un Client qui ne Paie Pas ? (5 Méthodes)", en: "How to Follow Up on an Unpaid Client? (5 Methods)", es: "¿Cómo Reclamar a un Cliente que No Paga? (5 Métodos)", "pt-BR": "Como Cobrar um Cliente que Não Paga? (5 Métodos)" },
+    description: { fr: "5 techniques éprouvées pour relancer efficacement vos clients en retard sans abîmer la relation.", en: "5 proven techniques to effectively follow up on late clients without damaging the relationship.", es: "5 técnicas probadas para reclamar eficazmente a tus clientes morosos sin dañar la relación.", "pt-BR": "5 técnicas comprovadas para cobrar clientes atrasados com eficácia sem prejudicar o relacionamento." },
     keywords: ["relance client impayé", "recouvrement freelance", "facture impayée"],
     category: "tips",
     date: "2025-02-05",
@@ -831,8 +831,8 @@ export const blogPosts = [
   },
   {
     slug: "tarif-journalier-moyen-freelance",
-    title: { fr: "TJM Freelance 2025 : Quel Tarif Journalier Moyen ?", en: "Freelance Day Rate 2025: What's the Average?", es: "Tarifa Diaria Freelance 2025: ¿Cuál es la Media?" },
-    description: { fr: "Découvrez les TJM par métier et région en 2025 pour fixer votre tarif au juste prix et booster vos revenus.", en: "Discover 2025 day rates by profession and region to set the right price and boost your income.", es: "Descubre las tarifas diarias 2025 por profesión y región para fijar el precio correcto." },
+    title: { fr: "TJM Freelance 2025 : Quel Tarif Journalier Moyen ?", en: "Freelance Day Rate 2025: What's the Average?", es: "Tarifa Diaria Freelance 2025: ¿Cuál es la Media?", "pt-BR": "Diária Freelance 2025: Qual é a Média Ideal?" },
+    description: { fr: "Découvrez les TJM par métier et région en 2025 pour fixer votre tarif au juste prix et booster vos revenus.", en: "Discover 2025 day rates by profession and region to set the right price and boost your income.", es: "Descubre las tarifas diarias 2025 por profesión y región para fijar el precio correcto.", "pt-BR": "Descubra os valores de diárias por profissão e região em 2025 para definir o preço certo e aumentar sua receita." },
     keywords: ["tjm freelance", "tarif journalier moyen 2025", "salaire freelance"],
     category: "business",
     date: "2025-01-15",
@@ -841,8 +841,8 @@ export const blogPosts = [
   },
   {
     slug: "micro-entreprise-vs-sasu",
-    title: { fr: "Micro-Entreprise vs SASU : Quel Statut Choisir en 2025 ?", en: "Sole Trader vs LLC: Which Status to Choose in 2025?", es: "Autónomo vs Sociedad: ¿Qué Estatus Elegir en 2025?" },
-    description: { fr: "Comparatif complet des statuts juridiques micro-entreprise et SASU : charges, avantages et inconvénients.", en: "Complete comparison of sole trader and LLC legal statuses: taxes, pros and cons.", es: "Comparativa completa de estatus legales autónomo y sociedad: impuestos, ventajas e inconvenientes." },
+    title: { fr: "Micro-Entreprise vs SASU : Quel Statut Choisir en 2025 ?", en: "Sole Trader vs LLC: Which Status to Choose in 2025?", es: "Autónomo vs Sociedad: ¿Qué Estatus Elegir en 2025?", "pt-BR": "MEI vs Empresa Simples: Qual Status Escolher em 2025?" },
+    description: { fr: "Comparatif complet des statuts juridiques micro-entreprise et SASU : charges, avantages et inconvénients.", en: "Complete comparison of sole trader and LLC legal statuses: taxes, pros and cons.", es: "Comparativa completa de estatus legales autónomo y sociedad: impuestos, ventajas e inconvenientes.", "pt-BR": "Comparativo completo entre os status jurídicos empresariais: impostos, vantagens e desvantagens." },
     keywords: ["micro entreprise vs sasu", "statut juridique freelance", "auto entrepreneur 2025"],
     category: "legal",
     date: "2025-01-03",

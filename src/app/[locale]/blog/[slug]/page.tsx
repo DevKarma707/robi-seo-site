@@ -203,6 +203,57 @@ No dejes que se acumulen los impagos:
 ## Conclusión
 
 Facturar correctamente desde el principio te ahorrará muchos problemas. Con una herramienta como Robi AI, puedes automatizar todo el proceso y concentrarte en lo que mejor sabes hacer.`,
+    
+    "pt-BR": `## Introdução
+
+Parabéns! Você acaba de conquistar seu primeiro cliente como freelancer. Agora vem a pergunta crucial: como faturar corretamente?
+
+Este guia acompanha você passo a passo para emitir sua primeira fatura de forma totalmente legal.
+
+## 1. Verifique sua situação legal
+
+Antes de faturar, certifique-se de ter uma estrutura jurídica:
+- **Autônomo/MEI** : a forma mais simples de começar
+- **Microempresa (ME)** : para receitas maiores
+- **Cooperativa** : se preferir evitar a burocracia contábil
+
+## 2. Informações obrigatórias
+
+Sua fatura deve obrigatoriamente conter:
+- Seu nome/razão social e endereço
+- Cadastro Nacional (CNPJ/CPF)
+- Nome e endereço do cliente
+- Data da fatura e de vencimento
+- Número sequencial único
+- Descrição detalhada do serviço
+- Valores base e totais
+- Taxas e tributos (ou isenção, caso MEI)
+- Condições de pagamento
+
+## 3. Defina seus prazos de pagamento
+
+Prazos padrão no mercado:
+- **Pagamento à vista** : ideal para valores menores
+- **30 dias (30 ddl)** : padrão profissional corporativo
+- **45 a 60 dias** : para grandes multinacionais
+
+## 4. Envie sua fatura
+
+Várias opções:
+- Por e-mail com PDF em anexo
+- Usando um software inteligente como o Robi AI
+- Por correspondência (para montantes públicos muito altos)
+
+## 5. Acompanhe os pagamentos
+
+Não deixe que os pagamentos atrasados se acumulem:
+- Envie um lembrete educado após 7 dias
+- Envie uma notificação formal após 30 dias
+- Considere medidas legais se estritamente necessário
+
+## Conclusão
+
+Faturar corretamente desde o primeiro dia evitará muitas dores de cabeça no futuro. Com uma ferramenta ágil como o Robi AI, você automatiza todo esse processo chato e foca apenas no que faz de melhor.`,
   },
 
   "mentions-obligatoires-facture": {
@@ -382,6 +433,62 @@ Una factura no conforme puede conllevar:
 ## Conclusión
 
 Con Robi AI, toda la información obligatoria se añade automáticamente. Puedes concentrarte en tu negocio con total conformidad.`,
+    
+    "pt-BR": `## Informações obrigatórias em faturas 2024
+
+A legislação exige informações específicas nas suas faturas. Aqui está a lista completa para manter a conformidade legal.
+
+## Informações da sua empresa
+
+1. **Nome ou Razão Social**
+2. **Endereço da sede social**
+3. **CNPJ (ou CPF para autônomos sem CNPJ)**
+4. **CNAE (Código de atividade)**
+5. **Forma jurídica** (para empresas)
+6. **Inscrição Municipal/Estadual** (conforme o caso)
+
+## Informações do cliente
+
+1. **Nome ou Razão Social**
+2. **Endereço de faturamento**
+3. **CNPJ/CPF do cliente**
+
+## Detalhes da fatura / Nota Fiscal
+
+1. **Número da fatura único** e sequencial
+2. **Data de emissão**
+3. **Data da prestação do serviço**
+4. **Quantidade e descrição precisa** dos produtos/serviços
+5. **Preço unitário bruto**
+6. **Taxas e Impostos aplicáveis** (ISS, ICMS, etc. ou aviso de optante pelo Simples Nacional)
+7. **Valor total líquido e bruto**
+8. **Descontos aplicados**
+
+## Informações de pagamento
+
+1. **Data de vencimento**
+2. **Condições de desconto por pagamento antecipado** (se houver)
+3. **Taxa de juros e multas por atraso**
+4. **Dados bancários / Chave PIX**
+
+## Casos especiais
+
+### MEI (Microempreendedor Individual)
+Adicionar: "Documento emitido por MEI - Optante pelo SIMEI. Não gera direito a crédito fiscal de IPI."
+
+### Profissional Liberal
+Adicionar: Número de registro no respectivo conselho (CRM, OAB, CREA, etc.)
+
+## Penalidades
+
+Uma nota fiscal ou fatura irregular pode resultar em:
+- Multas pesadas por sonegação ou erro na emissão
+- Processos por quebra de conformidade fiscal
+- Rejeição na dedutibilidade de despesas para o cliente
+
+## Conclusão
+
+Com o Robi AI, as informações vitais são preenchidas automaticamente. Você foca no seu negócio com conformidade total.`,
   },
 
   "relancer-client-impaye": {
@@ -546,6 +653,60 @@ Robi puede:
 - Enviar recordatorios personalizados
 - Hacer seguimiento de aperturas de email
 - Alertarte cuando se necesita acción manual`,
+    
+    "pt-BR": `## Como cobrar com eficácia um cliente inadimplente
+
+Pagamentos atrasados são o pesadelo de todo freelancer. Aqui estão 5 métodos para recuperar seu dinheiro sem destruir o relacionamento com seu cliente.
+
+## 1. O lembrete amigável (Dia +7)
+
+**Tom** : Empático, presuma que foi um esquecimento
+
+Envie um e-mail curto e educado lembrando a fatura e sua data de vencimento. Anexe a fatura novamente para facilitar.
+
+## 2. A cobrança formal (Dia +15)
+
+**Tom** : Profissional, direto
+
+Escreva uma mensagem mais assertiva, referenciando o número da fatura, os itens e solicitando o pagamento com urgência.
+
+## 3. A ligação de contato (Dia +20)
+
+Às vezes, telefonar é melhor do que um e-mail:
+- Peça para falar com o departamento financeiro
+- Mantenha a calma e seja objetivo
+- Ofereça soluções alternativas (parcelamento, etc.)
+- Faça anotações e envie um e-mail formalizando o que foi acordado
+
+## 4. A notificação extrajudicial (Dia +30)
+
+Este é o último passo antes de medidas judiciais:
+- Envie por correspondência registrada com Aviso de Recebimento (AR)
+- Mencione os juros de mora e as multas por atraso
+- Defina um prazo legal irredutível (ex: 5 dias úteis)
+- Guarde uma via assinada
+
+## 5. Ação Legal / Protesto (Dia +45)
+
+Se nada funcionar:
+- **Protesto em cartório** : rápido e bloqueia o crédito da empresa
+- **Empresa de cobrança** : útil para valores muito expressivos
+- **Juizado Especial Cível** : como última barreira institucional
+
+## Dicas para evitar calotes
+
+1. Sempre exija um sinal (30-50%) antes de começar a trabalhar
+2. Fature e avise o vencimento rapidamente e de forma clara
+3. Verifique a credibilidade e solvência de novos clientes
+4. Use links de pagamento online para facilitar
+
+## Automatize com o Robi AI
+
+O Robi é capaz de:
+- Detectar pagamentos vencidos de forma inteligente
+- Disparar lembretes totalmente personalizados
+- Rastrear se o e-mail foi aberto pelo cliente
+- Avisar quando uma notificação formal é inevitável`,
   },
 
   "tarif-journalier-moyen-freelance": {
@@ -746,6 +907,64 @@ Tu tarifa diaria es LA pregunta que se hace todo freelancer. Aquí tienes una gu
 ## Conclusión
 
 Tu tarifa diaria debe cubrir tus gastos, financiar tu protección social y permitirte vivir cómodamente. ¡Usa nuestra calculadora gratuita para encontrar la tuya!`,
+    
+    "pt-BR": `## Diária Freelance 2024: Quanto cobrar?
+
+O valor da diária de trabalho é a grande dúvida de todo freelancer. Aqui está um guia prático para ajudá-lo a definir a sua.
+
+## Média de diárias por área em 2024 (Brasil)
+
+### Tech & Inovação
+- Desenvolvedor(a) Web: R$300-800, dependendo da senioridade
+- Cientista de Dados: R$450-1.200
+- Engenheiro(a) DevOps: R$400-950
+- Designer UX/UI: R$350-900
+
+### Consultoria e Negócios
+- Consultor(a) de Marketing: R$350-1.000
+- Consultor(a) de RH: R$300-900
+- Coach Executivo: R$400-1.500
+
+### Criação Visual
+- Diretor de Arte / Designer: R$250-700
+- Motion Designer: R$350-1.000
+- Fotógrafo(a): R$300-1.100
+
+## Como calcular a sua Diária?
+
+### Método reverso
+
+1. **Salário líquido anual desejado** : R$ 100.000
+2. **Encargos e impostos** (~15%) : R$ 15.000
+3. **Receita bruta necessária** : R$ 115.000
+4. **Dias de trabalho faturáveis** (~200 ao ano) : 200 dias
+5. **Sua diária (Valor/Dia)** = 115.000 / 200 = **R$ 575/dia**
+
+### Lembre-se de contabilizar o seguinte:
+
+- Férias (25-30 dias)
+- Licença saúde / Imprevistos (5-10 dias)
+- Prospecção e reuniões (20-30 dias)
+- Atualização e Cursos (10 dias)
+- Obrigações administrativas (10 dias)
+
+## Fatores que elevam a sua diária
+
+- Conhecimento altamente específico e escasso (nichos rentáveis)
+- Portfólio renomado e cases com ROI claro
+- Urgência dramática por parte do cliente
+- Contratos de altíssimo risco e longos prazos
+
+## Dicas cruciais de negociação
+
+1. **Nunca forneça uma "faixa" ou estimativa genérica**: indique o número exato, justificado
+2. **Baseie seu valor no Retorno**: Mostre o ROI direto que o seu parceiro vai ter
+3. **Ofereça opções flexíveis**: Preço fixo da obra vs Diária solta vs Contrato recorrente
+4. **Tenha coragem para dizer NÃO**: Aceitar diárias ruins por medo sai muito caro a longo prazo
+
+## Conclusão
+
+Sua diária deve arcar com todas as suas despesas, proteger sua saúde bancária e possibilitar um estilo de vida excelente. Use a Calculadora Inteligente do Robi AI para projetá-la com base em robótica de dados e impostos do Brasil!`,
   },
 
   "micro-entreprise-vs-sasu": {
@@ -964,6 +1183,65 @@ Principales diferencias entre Autónomo y Sociedad:
 La estructura correcta depende de tu situación personal. No dudes en consultar a un contable para una simulación personalizada.
 
 ¡Con Robi AI, sea cual sea tu estructura, puedes facturar fácilmente y con total conformidad!`,
+    
+    "pt-BR": `## MEI vs Empresa Individual/Simples: Qual modelo adotar?
+
+Está formalizando sua atuação freelance no Brasil e não sabe se abre um MEI (Microempreendedor Individual) ou parte direto para uma Microempresa (ME) no Simples Nacional? Veja as diferenças e escolha com segurança.
+
+## Comparativo Direto
+
+Diferenças essenciais entre MEI e ME (Simples):
+- **Custo de abertura** : Gratuito e on-line (MEI) vs Demanda Contador e taxas (~R$500 a R$1000 para ME)
+- **Obrigações contábeis** : Declaração simplificada anual (MEI) vs Contabilidade Mensal rigorosa (ME)
+- **Tributos** : Taxa única mensal (DAS MEI ~R$75) vs Alíquotas percentuais progressivas (iniciando em 6% sobre faturamento no Simples/Anexo III)
+- **Limite de Faturamento Bruto** : R$ 81.000 ao ano (MEI) vs Até R$ 4,8 milhões (EPP/Simples)
+- **Emissão NFs** : Emitidas via portal único sem entraves
+
+## MEI: Para quem vale a pena?
+
+### Vantagens do MEI
+- Abertura imediata pelo Portal do Empreendedor
+- Sem necessidade exigida de contador
+- Imposto fixo minúsculo, independente da renda e dos serviços (desde que no limite)
+- Garantia de Direitos Previdenciários (Aposentadoria, auxílio-doença)
+- Alvará facilitado e rápido
+
+### Desvantagens
+- Teto de faturamento extremamente baixo (R$ 6.750 em média por mês)
+- Não abrange muitas atividades intelectuais ou categorias regulamentadas (Advogados, Programadores, Arquitetos, Publicitários)
+- Máximo de 1 funcionário contratado
+
+### Ideal para
+- Testar um negócio secundário ou nova frente
+- Atendimentos muito simples ou manuais previstos na tabela
+- Expectativa inicial de faturamento controlada
+
+## ME (Simples Nacional): Para quem é?
+
+### Vantagens
+- Inúmeras profissões autorizadas (Tech, Finanças, Saúde, Marketing)
+- Limite elástico (Microempresa fatura até R$ 360 mil/ano)
+- Possibilidade de contratação robusta de equipe
+- Mais credibilidade diante de multinacionais (fornecimento homologado)
+
+### Desvantagens
+- Abertura lenta, dependente da Junta Comercial
+- Você é obrigado a ter contador mensal (fator de custo fixo)
+- O imposto sobe com a variação do Cnae e faixas de faturamento
+- Declarações acessórias de muita complexidade, sujeitas a multas se o contador errar
+
+## Quando migrar?
+
+1. **Faturamento ultrapassa R$ 81k/ano** → Desvinculação do MEI obigatória
+2. **Sua profissão não consta no MEI** → Abra sua ME e garanta a CNAE correta (ex: Programador)
+3. **Plano de negócios agressivo** → A empresa vai contratar e crescer agressivamente
+4. **Grandes B2Bs não contratam MEIs** → Migração forçada pela complacência do cliente Corporativo
+
+## Conclusão
+
+Sua modalidade depende estritamente das suas projeções anuais de CA (vendas) e do Cadastro de sua profissão no Brasil (CNAE). 
+
+Com ou sem MEI, o importante é ser legalizado! Use o **Robi AI** para centralizar suas Notas Fiscais e pagamentos corporativos facilmente em toda a américa latina.`,
   },
 };
 
