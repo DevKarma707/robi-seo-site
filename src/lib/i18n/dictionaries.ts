@@ -12,6 +12,37 @@ const dictionaries: Record<Locale, () => Promise<any>> = {
   "es-CO": () => import("./locales/es-CO.json").then((module) => module.default),
 };
 
+// Deep merge utility to prevent undefined UI errors
+function isObject(item: any) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+function deepMerge(target: any, source: any): any {
+  const output = { ...target };
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach(key => {
+      if (isObject(source[key])) {
+        if (!(key in target)) {
+          output[key] = source[key];
+        } else {
+          output[key] = deepMerge(target[key], source[key]);
+        }
+      } else {
+        output[key] = source[key];
+      }
+    });
+  }
+  return output;
+}
+
 export const getDictionary = async (locale: Locale) => {
-  return dictionaries[locale]();
+  const dict = await dictionaries[locale]();
+  if (locale === "fr") return dict;
+  
+  // Safe dict: always merge missing keys from 'en' or 'fr'
+  const fallbackLocale = locale === "pt-BR" ? "en" : "fr";
+  const fallbackDict = await dictionaries[fallbackLocale]();
+  
+  // The locale dict overrides the fallback dict
+  return deepMerge(fallbackDict, dict);
 };
