@@ -77,8 +77,8 @@
     }
   },
   "payments": {
-    "title": "Simplifique suas transações com Stripe & PayPal",
-    "subtitle": "Diga adeus aos atrasos. Ofereça uma experiência rápida, online e moderna para aumentar suas conversões de pagamento.",
+    "title": "Simplifique suas transações com PIX, Stripe & PayPal",
+    "subtitle": "Diga adeus aos atrasos. Ofereça PIX ou cartão e aumente suas conversões de pagamento instantaneamente.",
     "cta": "Conhecer pagamentos online",
     "integrations": "Nossas integrações:",
     "poweredBy": "Processado via"

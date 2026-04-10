@@ -42,6 +42,14 @@ export function Pricing({
     }).format(amount);
   };
 
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currencyInfo.currency,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  };
+
   const features = [
     p.features?.unlimitedInvoices || "Factures et devis illimités",
     p.features?.autoReminders || "Relances et notifications automatiques",
@@ -50,36 +58,41 @@ export function Pricing({
     p.features?.oneClickPayment || "Paiement en un clic",
   ];
 
-  return (
-    <section id="pricing" className="py-8 md:py-24 bg-[#0D0630] relative overflow-hidden">
-      {/* Ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#BEF221]/[0.04] rounded-full blur-3xl pointer-events-none" />
+  const yearlyPerMonth = formatCurrency(prices.yearly / 12);
+  const biYearlyPerMonth = formatCurrency(prices.biYearly / 24);
+  const biYearlySavings = formatPrice(Math.round(prices.monthly * 24 - prices.biYearly));
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <ScrollReveal className="text-center mb-5 md:mb-12">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white mb-2 md:mb-4">
-            {title || p.title || "Choisissez votre plan"}
+  return (
+    <section id="pricing" className="py-24 bg-[#0D0630] relative overflow-hidden">
+      {/* Background patterns */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#BEF221_1px,transparent_1px)] [background-size:40px_40px]" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <ScrollReveal className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">
+            {title || "Des prix simples, sans frais cachés"}
           </h2>
-          <p className="text-sm md:text-lg text-white/60">
-            {subtitle || p.subtitle || "Passez à la vitesse supérieure avec Robi Pro"}
+          <p className="text-xl text-white/60 max-w-2xl mx-auto">
+            {subtitle || "Choisissez le plan qui correspond à votre croissance."}
           </p>
         </ScrollReveal>
 
-        {/* Launch offer banner */}
-        <ScrollReveal className="mb-4 md:mb-10">
-          <div className="relative rounded-2xl border border-[#BEF221]/30 bg-[#BEF221]/5 p-4 md:p-8 overflow-hidden">
-            <div className="absolute top-4 right-4 text-[#BEF221]/20">
-              <TrendingUp className="w-8 h-8 md:w-12 md:h-12" />
-            </div>
-            <div className="text-center">
-              <span className="inline-block mb-2 md:mb-3 px-3 py-1 rounded-full bg-[#BEF221] text-[#0D0630] text-xs font-black uppercase tracking-wider">
+        {/* Launch Offer Banner */}
+        <ScrollReveal className="mb-12 max-w-4xl mx-auto">
+          <div className="bg-[#BEF221] rounded-3xl p-1 relative overflow-hidden">
+            <div className="bg-[#0D0630] rounded-[calc(1.5rem-4px)] p-6 md:p-10 text-center relative">
+              <div className="absolute top-0 right-0 p-4">
+                <TrendingUp className="text-[#BEF221] w-8 h-8 opacity-20" />
+              </div>
+              <span className="inline-block px-4 py-1.5 rounded-full bg-[#BEF221] text-[#0D0630] text-xs font-black uppercase tracking-wider mb-6">
                 {p.launchOfferBadge || "OFFRE LIMITÉE"}
               </span>
-              <h3 className="text-lg md:text-2xl lg:text-3xl font-black text-[#BEF221] mb-1 md:mb-2">
-                {p.launchOfferTitle || "OFFRE DE LANCEMENT EXCLUSIVE"}
+              <h3 className="text-2xl md:text-3xl font-black text-white mb-4">
+                {p.launchOfferTitle || "Accès à Vie - Robi Pro"}
               </h3>
-              <p className="text-xs md:text-base text-white/70 mb-3 md:mb-6">
+              <p className="text-white/60 mb-8 max-w-lg mx-auto">
                 {p.launchOfferSubtitle || "Pour les 1000 premiers utilisateurs uniquement"}
               </p>
               <div className="flex items-center justify-center gap-3 md:gap-4 mb-3 md:mb-6">
@@ -104,15 +117,11 @@ export function Pricing({
           </div>
         </ScrollReveal>
 
-        {/* 3 Plans - scroll horizontal sur mobile */}
-        <div
-          className="flex md:grid md:grid-cols-3 gap-3 md:gap-6 overflow-x-auto md:overflow-visible pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory md:snap-none [&::-webkit-scrollbar]:hidden md:pt-6"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
-        >
+        <div className="flex flex-row md:grid md:grid-cols-3 gap-6 overflow-x-auto pb-8 md:pb-0 snap-x snap-mandatory hide-scrollbar md:overflow-visible">
           {/* Mensuel */}
-          <ScrollReveal delay={0} className="min-w-[75vw] md:min-w-0 snap-center">
+          <ScrollReveal className="min-w-[75vw] md:min-w-0 snap-center">
             <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-4 md:p-6">
-              <div className="text-center mb-3 md:mb-6">
+              <div className="text-center mb-5 md:mb-8">
                 <p className="text-white/50 text-xs md:text-sm font-bold uppercase tracking-widest mb-1 md:mb-3">
                   {p.monthly || "Mensuel"}
                 </p>
@@ -144,8 +153,8 @@ export function Pricing({
             </div>
           </ScrollReveal>
 
-          {/* Annuel — LE PLUS POPULAIRE */}
-          <ScrollReveal delay={100} className="min-w-[75vw] md:min-w-0 snap-center">
+          {/* Annuel */}
+          <ScrollReveal className="min-w-[75vw] md:min-w-0 snap-center">
             <div className="flex flex-col h-full rounded-2xl border-2 border-[#BEF221] bg-white/5 p-4 md:p-6 relative md:scale-[1.02] shadow-[0_0_40px_rgba(190,242,33,0.15)]">
               <div className="hidden md:block absolute -top-4 left-1/2 -translate-x-1/2">
                 <span className="px-3 md:px-4 py-1 rounded-full bg-[#BEF221] text-[#0D0630] text-[10px] md:text-xs font-black uppercase tracking-wider whitespace-nowrap">
@@ -161,7 +170,7 @@ export function Pricing({
                   <span className="text-white/50">{p.year || "/an"}</span>
                 </div>
                 <p className="text-white/60 text-sm mt-1">
-                  {p.perMonthAnnual || "7,42€/mois"}
+                  {yearlyPerMonth}{p.month || "/mois"}
                 </p>
                 <span className="inline-block mt-2 px-3 py-1 rounded-full bg-[#BEF221] text-[#0D0630] text-xs font-black">
                   {p.monthsSaved || "= 2 MOIS OFFERTS"}
@@ -187,8 +196,8 @@ export function Pricing({
             </div>
           </ScrollReveal>
 
-          {/* Bi-annuel — MEILLEURE OFFRE */}
-          <ScrollReveal delay={200} className="min-w-[75vw] md:min-w-0 snap-center">
+          {/* Bi-annuel */}
+          <ScrollReveal className="min-w-[75vw] md:min-w-0 snap-center">
             <div className="flex flex-col h-full rounded-2xl border border-white/10 bg-white/5 p-4 md:p-6 relative">
               <div className="hidden md:block absolute -top-4 left-1/2 -translate-x-1/2">
                 <span className="px-3 md:px-4 py-1 rounded-full bg-[#1a1040] border border-white/20 text-white text-[10px] md:text-xs font-black uppercase tracking-wider whitespace-nowrap">
@@ -203,10 +212,10 @@ export function Pricing({
                   <span className="text-3xl md:text-5xl font-black text-white">{formatPrice(prices.biYearly)}</span>
                 </div>
                 <p className="text-white/60 text-sm mt-1">
-                  {p.perMonthBiYearly || "6,21€/mes"}
+                  {biYearlyPerMonth}{p.month || "/mois"}
                 </p>
                 <p className="text-[#BEF221] text-sm font-bold mt-1">
-                  {p.savingsBiYearly || "Économisez 210€"}
+                  {(p.savingsBiYearly || "Économisez").replace(/[0-9€$R]/g, '')} {biYearlySavings}
                 </p>
                 <p className="text-white/40 text-xs mt-1">
                   {p.exclusiveWebOffer || "Offre exclusive web"}

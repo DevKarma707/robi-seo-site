@@ -87,12 +87,12 @@
     "title": "Lo que dicen de",
     "titleAccent": "Robi",
     "items": [
-      { "name": "Marie Dupont", "role": "Disenadora Freelance", "content": "Robi me ahorra 5 horas a la semana. Hablo, el factura. Es magico!" },
-      { "name": "Thomas Bernard", "role": "Desarrollador Web", "content": "Se acabaron las hojas de calculo! Robi gestiona mis facturas y hace seguimiento a mis clientes automaticamente." },
-      { "name": "Sophie Martin", "role": "Consultora de RRHH", "content": "La integracion con Stripe es perfecta. Mis clientes pagan en un clic, cobro al dia siguiente." },
-      { "name": "Lucas Petit", "role": "Fotografo", "content": "Las plantillas de presupuestos son geniales. Mis clientes quedan impresionados por el profesionalismo." },
-      { "name": "Emma Garcia", "role": "Coach de Negocios", "content": "El seguimiento automatico me cambio la vida. Ya no tengo que perseguir a mis clientes." },
-      { "name": "Antoine Moreau", "role": "Fontanero", "content": "Facturo directamente desde mi furgoneta despues de cada trabajo. Simple y rapido." }
+      { "name": "Carlos Rodríguez", "role": "Diseñador Freelance", "content": "¡Robi me ahorró 5 horas a la semana! Hablo, él factura en pesos. ¡Es magia!" },
+      { "name": "Ximena Hernández", "role": "Desarrolladora Web", "content": "¡Se acabaron los archivos de Excel! Robi gestiona mis facturas y cobra automáticamente." },
+      { "name": "Mateo García", "role": "Consultor de Marketing", "content": "La integración con Stripe es perfecta. Mis clientes en México y el extranjero pagan en un clic." },
+      { "name": "Valeria Martínez", "role": "Fotógrafa", "content": "Las plantillas de presupuestos son increíbles. Mis clientes están impresionados por mi profesionalismo." },
+      { "name": "Sebastián López", "role": "Coach de Negocios", "content": "El seguimiento automático cambió mi vida. Ya no tengo que perseguir a mis clientes para que paguen." },
+      { "name": "Diego Sánchez", "role": "Arquitecto", "content": "Facturo directamente desde la obra después de cada visita. Simple y súper rápido." }
     ]
   },
   "pricing": {

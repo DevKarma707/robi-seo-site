@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, CreditCard, Apple, Smartphone } from "lucide-react";
+import { ArrowRight, CreditCard, Apple, Smartphone, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
@@ -89,6 +89,15 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
                 {/* Powered by Stripe & PayPal */}
                 <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 lg:gap-6 pt-4 md:pt-5 lg:pt-6 border-t border-gray-100">
                   <span className="text-gray-400 text-xs font-medium uppercase tracking-wider">{t.poweredBy}</span>
+                  {locale === "pt-BR" && (
+                    <>
+                      <div className="flex items-center gap-1.5 text-[#32BCAD] font-black text-sm md:text-base lg:text-lg tracking-tight">
+                        <Zap className="w-4 h-4 md:w-5 md:h-5" />
+                        PIX
+                      </div>
+                      <div className="hidden md:block w-px h-5 bg-gray-200" />
+                    </>
+                  )}
                   <div className="flex items-center gap-1.5 text-[#635BFF] font-black text-sm md:text-base lg:text-lg tracking-tight">
                     <Smartphone className="w-4 h-4 md:w-5 md:h-5" />
                     Stripe

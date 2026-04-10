@@ -77,8 +77,8 @@
     }
   },
   "payments": {
-    "title": "Simplifica transacciones con PayPal y Stripe",
-    "subtitle": "Di adiós a los retrasos en pagos. Ofrece una experiencia de pago fluida y moderna a tus clientes.",
+    "title": "Simplifique transacciones con PayPal y Stripe",
+    "subtitle": "Diga adiós a los retrasos en pagos. Ofrezca una experiencia de pago fluida y moderna a sus clientes.",
     "cta": "Ver pagos online",
     "integrations": "Integraciones:",
     "poweredBy": "Impulsado por"
@@ -87,12 +87,12 @@
     "title": "Lo que dicen de",
     "titleAccent": "Robi",
     "items": [
-      { "name": "Marie Dupont", "role": "Disenadora Freelance", "content": "Robi me ahorra 5 horas a la semana. Hablo, el factura. Es magico!" },
-      { "name": "Thomas Bernard", "role": "Desarrollador Web", "content": "Se acabaron las hojas de calculo! Robi gestiona mis facturas y hace seguimiento a mis clientes automaticamente." },
-      { "name": "Sophie Martin", "role": "Consultora de RRHH", "content": "La integracion con Stripe es perfecta. Mis clientes pagan en un clic, cobro al dia siguiente." },
-      { "name": "Lucas Petit", "role": "Fotografo", "content": "Las plantillas de presupuestos son geniales. Mis clientes quedan impresionados por el profesionalismo." },
-      { "name": "Emma Garcia", "role": "Coach de Negocios", "content": "El seguimiento automatico me cambio la vida. Ya no tengo que perseguir a mis clientes." },
-      { "name": "Antoine Moreau", "role": "Fontanero", "content": "Facturo directamente desde mi furgoneta despues de cada trabajo. Simple y rapido." }
+      { "name": "Andrés Felipe Castro", "role": "Desarrollador de Software", "content": "¡Robi me ahorró un montón de tiempo! Ahora facturo en pesos colombianos con solo hablarle. ¡Es genial!" },
+      { "name": "Carolina Gómez", "role": "Diseñadora Gráfica", "content": "¡Por fin dejé de usar Excel! Robi organiza mis facturas y me avisa cuando me pagan." },
+      { "name": "Juan David Posada", "role": "Consultor Independiente", "content": "La opción de pago online le facilita la vida a mis clientes. Cobro más rápido que nunca." },
+      { "name": "Isabella Restrepo", "role": "Arquitecta", "content": "Los presupuestos se ven súper profesionales. Mis clientes en Medellín y Bogotá están encantados." },
+      { "name": "Santiago Uribe", "role": "Coach de Emprendimiento", "content": "El sistema de cobro automático es una maravilla. Ya no pierdo tiempo cobrando deudas." },
+      { "name": "Mariana Correa", "role": "Fotógrafa", "content": "Genero mis facturas desde el celular apenas termino una sesión. Práctico y muy veloz." }
     ]
   },
   "pricing": {

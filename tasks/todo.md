@@ -45,6 +45,8 @@
 - [x] [SEO Content] Traduction complète et adaptation (fiscalité, plafonds) des 5 articles de Blog SEO pour le Brésil (`pt-BR`).
 - [x] [Vercel Hotfix] Injection des propriétés UI `blog.categories` manquantes dans le dictionnaire `pt-BR.json` causant des erreurs 500 au Pre-Render.
 - [x] [Architecture Core] Implémentation d'un utilitaire `deepMerge` dans le dictionnaire pour que chaque langue utilise un Fallback Absolu (FR / EN). Vercel est désormais totalement immunisé contre tout crash dû à des objets JSON incomplets.
-- [x] [Conversion / Tarifs] Branchement de l'API `Intl.NumberFormat` sur les Pricing Cards pour adapter dynamiquement la devise locale (R$ / MXN$ / €) et le pouvoir d'achat au marché cible.
-- [x] [SEO Core] Suppression du `canonical` hardcodé et intégration du `metadataBase` avec résolution automatique du `hreflang` pour indexer Google sans cannibalisation des sous-pages (blog, industries).
+- [x] [Brésil / PIX] Intégration du message PIX dans la section Paiements pour booster la conversion locale.
+- [x] [Localisation / Social Proof] Adaptation des témoignages avec des noms et contextes locaux pour le Maroc, le Mexique et la Colombie.
+- [x] [Pricing / Automation] Automatisation du calcul des économies et des prix mensuels dans les cartes de tarifs pour une cohérence parfaite inter-marchés.
+- [x] [SEO Advanced] Implémentation du Schéma de Données Structurées BreadcrumbList pour un affichage premium dans les SERP Google.
 

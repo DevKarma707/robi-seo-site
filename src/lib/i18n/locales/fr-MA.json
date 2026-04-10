@@ -87,12 +87,12 @@
     "title": "Ce qu'ils disent de",
     "titleAccent": "Robi",
     "items": [
-      { "name": "Marie Dupont", "role": "Designer Freelance", "content": "Robi m'a fait gagner 5 heures par semaine. Je parle, il facture. C'est magique !" },
-      { "name": "Thomas Bernard", "role": "Développeur Web", "content": "Fini les tableurs Excel ! Robi gère mes factures et relance mes clients automatiquement." },
-      { "name": "Sophie Martin", "role": "Consultante RH", "content": "L'intégration Stripe est parfaite. Mes clients paient en un clic, je suis payée le lendemain." },
-      { "name": "Lucas Petit", "role": "Photographe", "content": "Les templates de devis sont superbes. Mes clients sont impressionnés par le professionnalisme." },
-      { "name": "Emma Garcia", "role": "Coach Business", "content": "La relance automatique a changé ma vie. Plus besoin de courir après mes clients." },
-      { "name": "Antoine Moreau", "role": "Plombier", "content": "Je facture directement depuis mon van après chaque intervention. Simple et rapide." }
+      { "name": "Yassine El Amrani", "role": "Développeur Fullstack", "content": "Robi m'a fait gagner 5 heures par semaine. Je parle, il facture en DH. C'est magique !" },
+      { "name": "Fatima-Zahra Bennani", "role": "Graphiste Freelance", "content": "Fini les tableurs Excel compliqués ! Robi gère mes devis et mes clients me paient plus vite." },
+      { "name": "Mehdi Sadiki", "role": "Consultant Marketing", "content": "L'intégration des paiements est parfaite. Mes clients au Maroc et à l'étranger paient en un clic." },
+      { "name": "Siham Mansouri", "role": "Architecte d'intérieur", "content": "Les templates de devis sont superbes. Mes clients sont impressionnés par le professionnalisme de mes documents." },
+      { "name": "Omar Alaoui", "role": "Coach Business", "content": "La relance automatique a changé ma vie d'auto-entrepreneur. Plus besoin de courir après les impayés." },
+      { "name": "Amine Chraibi", "role": "Photographe", "content": "Je facture directement depuis mon téléphone dès la fin de mon shooting. Simple et ultra rapide." }
     ]
   },
   "pricing": {
