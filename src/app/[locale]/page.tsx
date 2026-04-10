@@ -28,6 +28,7 @@ export default async function Home({
   const dict = await getDictionary(locale);
 
   return (
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
