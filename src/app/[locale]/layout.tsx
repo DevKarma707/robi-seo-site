@@ -34,13 +34,12 @@ export async function generateMetadata({
       template: `%s | Robi AI`,
     },
     description: dict.meta.description,
+    metadataBase: new URL("https://robi-app.com"),
     alternates: {
-      canonical: `https://robi-app.com/${locale}`,
-      languages: {
-        fr: "https://robi-app.com/fr",
-        en: "https://robi-app.com/en",
-        es: "https://robi-app.com/es",
-      },
+      languages: locales.reduce(
+        (acc, l) => ({ ...acc, [l]: `/${l}` }),
+        {} as Record<string, string>
+      ),
     },
     openGraph: {
       title: dict.meta.title,

@@ -3,7 +3,7 @@
 import { Check, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { Locale } from "@/lib/i18n/config";
+import { Locale, localeCurrencies } from "@/lib/i18n/config";
 
 interface PricingProps {
   title?: string;
@@ -12,6 +12,17 @@ interface PricingProps {
   locale?: Locale;
 }
 
+const priceMap: Record<Locale, { launch: number; normal: number; monthly: number; yearly: number; biYearly: number; }> = {
+  fr: { launch: 59, normal: 149, monthly: 14, yearly: 89, biYearly: 149 },
+  en: { launch: 69, normal: 159, monthly: 15, yearly: 99, biYearly: 159 },
+  es: { launch: 59, normal: 149, monthly: 14, yearly: 89, biYearly: 149 },
+  "pt-BR": { launch: 299, normal: 749, monthly: 69, yearly: 449, biYearly: 749 },
+  "fr-MA": { launch: 599, normal: 1499, monthly: 139, yearly: 899, biYearly: 1499 },
+  "es-419": { launch: 69, normal: 159, monthly: 15, yearly: 99, biYearly: 159 },
+  "es-MX": { launch: 999, normal: 2499, monthly: 249, yearly: 1499, biYearly: 2499 },
+  "es-CO": { launch: 249000, normal: 600000, monthly: 59000, yearly: 379000, biYearly: 600000 },
+};
+
 export function Pricing({
   title,
   subtitle,
@@ -19,6 +30,17 @@ export function Pricing({
   locale = "fr",
 }: PricingProps) {
   const p = dict?.pricing || {};
+  const prices = priceMap[locale] || priceMap["fr"];
+  const currencyInfo = localeCurrencies[locale] || localeCurrencies["fr"];
+
+  // Helper function to format price using Intl API
+  const formatPrice = (amount: number) => {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currencyInfo.currency,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
 
   const features = [
     p.features?.unlimitedInvoices || "Factures et devis illimités",
@@ -61,10 +83,10 @@ export function Pricing({
                 {p.launchOfferSubtitle || "Pour les 1000 premiers utilisateurs uniquement"}
               </p>
               <div className="flex items-center justify-center gap-3 md:gap-4 mb-3 md:mb-6">
-                <span className="text-4xl md:text-6xl font-black text-white">59€</span>
+                <span className="text-4xl md:text-6xl font-black text-white">{formatPrice(prices.launch)}</span>
                 <div className="text-left">
                   <p className="text-white/40 line-through text-xs md:text-sm">
-                    {p.launchOfferNormalPrice || "Prix normal"} : 149€
+                    {p.launchOfferNormalPrice || "Prix normal"} : {formatPrice(prices.normal)}
                   </p>
                   <p className="text-[#BEF221] font-bold text-xs md:text-sm">
                     {p.launchOfferLifetime || "Accès à vie • Robi Pro"}
@@ -76,7 +98,7 @@ export function Pricing({
                 variant="primary"
                 className="w-full max-w-md font-black tracking-wider !text-xs md:!text-base"
               >
-                {p.launchOfferCta || "PROFITER DE L'OFFRE (59€)"}
+                {p.launchOfferCta || `PROFITER DE L'OFFRE (${formatPrice(prices.launch)})`}
               </Button>
             </div>
           </div>
@@ -95,7 +117,7 @@ export function Pricing({
                   {p.monthly || "Mensuel"}
                 </p>
                 <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-3xl md:text-5xl font-black text-white">14€</span>
+                  <span className="text-3xl md:text-5xl font-black text-white">{formatPrice(prices.monthly)}</span>
                   <span className="text-white/50 text-xs md:text-base">{p.month || "/mois"}</span>
                 </div>
                 <p className="text-white/40 text-xs md:text-sm mt-1 md:mt-2">
@@ -135,7 +157,7 @@ export function Pricing({
                   {p.yearly || "Annuel"}
                 </p>
                 <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-3xl md:text-5xl font-black text-white">89€</span>
+                  <span className="text-3xl md:text-5xl font-black text-white">{formatPrice(prices.yearly)}</span>
                   <span className="text-white/50">{p.year || "/an"}</span>
                 </div>
                 <p className="text-white/60 text-sm mt-1">
@@ -178,7 +200,7 @@ export function Pricing({
                   {p.biYearly || "Bi-annuel"}
                 </p>
                 <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-3xl md:text-5xl font-black text-white">149€</span>
+                  <span className="text-3xl md:text-5xl font-black text-white">{formatPrice(prices.biYearly)}</span>
                 </div>
                 <p className="text-white/60 text-sm mt-1">
                   {p.perMonthBiYearly || "6,21€/mes"}
