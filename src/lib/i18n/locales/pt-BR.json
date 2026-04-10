@@ -273,12 +273,26 @@
       "professionsSuffix": "múltiplas linhas de expertise"
     },
     "blog": {
-      "title": "O Hub de Leituras | Robi",
-      "description": "Artigos altamente filtráveis com alta recompensa semântica focada no profissional.",
-      "heroTitle": "Expansão neural & Negócios ao ",
-      "heroTitleAccent": "Freelancer e Gig Worker.",
-      "heroSubtitle": "Guias, Hacks para Stripe, Contabilidade de Bolso.",
-      "heroBadge": "Newsroom / Blog HQ"
+      "title": "Blog | Robi AI",
+      "description": "Artigos altamente filtráveis com foco total nas rotinas do freelancer autônomo brasileiro.",
+      "heroTitle": "Expansão Neural & Negócios ao",
+      "heroTitleAccent": "Freelancer",
+      "heroSubtitle": "Guias, Hacks jurídicos e Tributos sem complicações para ganhar o mercado.",
+      "heroBadge": "Newsroom HQ",
+      "backToBlog": "Voltar aos artigos",
+      "relatedPosts": "Artigos similares",
+      "share": "Compartilhar",
+      "readTime": "min de leitura",
+      "putInPractice": "Coloque a casa em ordem",
+      "putInPracticeDesc": "Automatize todas as suas notas fiscais com Robi AI e salve mais de 10 horas todos os meses.",
+      "ctaTitle": "Entre agora em ação",
+      "ctaSubtitle": "Seja um dos milhares que já usam Robi",
+      "categories": {
+        "guides": "Guias e Dicas",
+        "legal": "Jurídico/Fiscal",
+        "tips": "Gestão e Dia a Dia",
+        "business": "Negócios"
+      }
     },
     "comparisons": {
       "badge": "Robi x Antigo Padrão",

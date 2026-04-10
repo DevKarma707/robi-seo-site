@@ -43,4 +43,5 @@
 - [x] [Vercel Hotfix] Modification du type `LocaleStrings` dans `seo-config.ts` pour résoudre le crash de build TypeScript lié à l'extension des pays.
 - [x] [SEO International] Architecture de "Fallback Intelligent" : `es-MX`, `es-CO` héritent de l'espagnol pur par défaut, et `pt-BR` de l'anglais au lieu du français.
 - [x] [SEO Content] Traduction complète et adaptation (fiscalité, plafonds) des 5 articles de Blog SEO pour le Brésil (`pt-BR`).
+- [x] [Vercel Hotfix] Injection des propriétés UI `blog.categories` manquantes dans le dictionnaire `pt-BR.json` causant des erreurs 500 au Pre-Render.
 
