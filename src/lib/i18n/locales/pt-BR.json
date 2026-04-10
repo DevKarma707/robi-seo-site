@@ -1,0 +1,296 @@
+{
+  "meta": {
+    "title": "Robi IA | Software de Faturamento com IA para Freelancers",
+    "description": "Crie orçamentos e faturas em 30 segundos com IA. Lembretes automáticos, pagamentos integrados Stripe."
+  },
+  "nav": {
+    "features": "Recursos",
+    "industries": "Setores",
+    "pricing": "Preços",
+    "blog": "Blog",
+    "tools": "Ferramentas",
+    "login": "Entrar",
+    "signup": "Comece Grátis",
+    "allIndustries": "Ver todos →",
+    "faq": "FAQ"
+  },
+  "hero": {
+    "badge": "Novo: Lembretes Inteligentes via IA",
+    "title": "Pare com o Excel.",
+    "titleAccent": "Comece com o Robi.",
+    "subtitle": "O assistente de IA para seus orçamentos e faturas que salva seu tempo todos os dias! Fale, fature, receba.",
+    "cta": "Comece Grátis",
+    "secondaryCta": "Ver Demonstração",
+    "socialProof": "Junte-se a",
+    "socialProofHighlight": "mais de 2.000",
+    "socialProofEnd": "freelancers"
+  },
+  "features": {
+    "title": "Todas as ferramentas para",
+    "titleAccent": "faturar com paz",
+    "titleEnd": ".",
+    "aiInvoicing": {
+      "title": "Faturamento com IA",
+      "description": "Você fala, o Robi fatura. Crie orçamentos e faturas em segundos através de uma simples conversa."
+    },
+    "automation": {
+      "title": "Automação Total",
+      "description": "Lembretes e cobranças de faturas atrasadas enviados automaticamente, sem você precisar mover um dedo."
+    },
+    "payments": {
+      "title": "Pagamentos Integrados",
+      "description": "Stripe e PayPal incluídos. Seus clientes pagam em um clique, você é pago instantaneamente."
+    },
+    "emails": {
+      "title": "E-mails Inteligentes",
+      "description": "A IA escreve e-mails de cobrança educados e eficazes, adaptados para cada situação."
+    },
+    "dashboard": {
+      "title": "Painel de Controle",
+      "description": "Visualize sua receita, faturas pendentes e metas financeiras em tempo real."
+    },
+    "compliant": {
+      "title": "100% Legal e Seguro",
+      "description": "Faturas complacentes com a legislação. Inserção automática de regras legais e fiscais."
+    }
+  },
+  "process": {
+    "label": "Processo",
+    "title": "Seu assistente de bolso,",
+    "titleAccent": "de A a Z.",
+    "subtitle": "Da criação do primeiro orçamento até o pagamento, o Robi cuida de tudo.",
+    "step1": {
+      "title": "Fale para gerar",
+      "description": "\"Gere um orçamento de R$ 500 para a Alice.\" Pronto em 3 segundos."
+    },
+    "step2": {
+      "title": "Envie em 1 clique",
+      "description": "Assim que aprovado, o Robi envia o link de pagamento por e-mail para seu cliente."
+    },
+    "step3": {
+      "title": "Notificação Imediata",
+      "description": "No momento em que o cliente paga a fatura, nós te notificamos no celular."
+    },
+    "step4": {
+      "title": "Cobrança Autônoma",
+      "description": "A fatura venceu? O Robi manda um lembrete gentil para o seu cliente."
+    }
+  },
+  "payments": {
+    "title": "Simplifique suas transações com Stripe & PayPal",
+    "subtitle": "Diga adeus aos atrasos. Ofereça uma experiência rápida, online e moderna para aumentar suas conversões de pagamento.",
+    "cta": "Conhecer pagamentos online",
+    "integrations": "Nossas integrações:",
+    "poweredBy": "Processado via"
+  },
+  "testimonials": {
+    "title": "O que eles dizem sobre o",
+    "titleAccent": "Robi",
+    "items": [
+      { "name": "Maria Fontes", "role": "Designer Freelancer", "content": "O Robi me economiza 5 horas toda semana. Eu falo, ele fatura. Simples assim!" },
+      { "name": "Tiago Bernardi", "role": "Desenvolvedor Web", "content": "Sem mais dores de cabeça com planilhas. O Robi gerencia tudo e cobra para mim automaticamente." },
+      { "name": "Sofia Mendes", "role": "Consultora de RH", "content": "A integração com o Stripe funciona perfeitamente. Meus clientes pagam em dois cliques." },
+      { "name": "Lucas Perto", "role": "Fotógrafo Automotivo", "content": "A beleza estética e profissionalismo dos meus orçamentos melhoraram em 100%." },
+      { "name": "Emma Cunha", "role": "Business Coach", "content": "Robi mudou completamente meu trabalho. Chega de correr implorando por pagamentos." },
+      { "name": "Antônio Salles", "role": "Encanador Autônomo", "content": "Faço minhas notas direto da caminhonete com um simples áudio enviado pro Robi." }
+    ]
+  },
+  "pricing": {
+    "title": "Escolha seu plano",
+    "subtitle": "Suba para o nível Profissional",
+    "monthly": "Mensal",
+    "yearly": "Anual",
+    "biYearly": "2 Anos",
+    "month": "/mês",
+    "year": "/ano",
+    "noCommitment": "Sem Fidelidade",
+    "mostPopular": "MAIS ESCOLHIDO",
+    "bestOffer": "MELHOR CUSTO-BENEFÍCIO",
+    "monthsSaved": "= 2 MESES OFF",
+    "perMonthAnnual": "R$ 37,90/mês",
+    "perMonthBiYearly": "R$ 31,90/mês",
+    "savingsBiYearly": "Poupe R$ 200",
+    "exclusiveWebOffer": "Oferta exclusiva via site",
+    "ctaMonthly": "ASSINAR MENSAL",
+    "ctaYearly": "ASSINAR ANUAL",
+    "ctaBiYearly": "ASSINAR 2 ANOS",
+    "launchOfferBadge": "OFERTA DE LANÇAMENTO",
+    "launchOfferTitle": "OFERTA EXCLUSIVA DO PRIMEIRO LOTE",
+    "launchOfferSubtitle": "Apenas para os primeiros 1.000 usuários",
+    "launchOfferNormalPrice": "Preço normal antigo",
+    "launchOfferLifetime": "Passaporte Vitalício • Robi Pro",
+    "launchOfferCta": "RESGATAR ACESSO VITALÍCIO (R$ 299)",
+    "features": {
+      "unlimitedInvoices": "Criação de faturas limitadas",
+      "autoReminders": "Ativação de lembretes autônomos",
+      "voiceCreation": "Geração AI via comandos de voz",
+      "designCustomization": "Layouts customizáveis exclusivos",
+      "oneClickPayment": "Checkout imediato global Stripe/PayPal"
+    }
+  },
+  "faq": {
+    "title": "Perguntas & Respostas",
+    "badge": "Ainda na dúvida?",
+    "q1": "Posso gerenciar tudo apenas do meu celular?",
+    "a1": "Sim! O Robi foi projetado primeiro para uso móvel. Você pode criar orçamentos, aprovar e enviar remotamente pelo seu celular sem barreiras.",
+    "q2": "Qual garantia de segurança oferecem?",
+    "a2": "Usamos criptografia AES-256 e servidores alocados conforme especificações rigorosas como o modelo GDPR.",
+    "q3": "Atente às minhas variações de marca?",
+    "a3": "Certamente. É possível anexar múltiplos logos e personalizar toda a identidade visual de cada fatura para que tenha a sua cara.",
+    "q4": "Trabalha com multi-empresas?",
+    "a4": "Exatamente, a plataforma suporta inúmeras contas ou identidades de faturamento dentro da mesma conta de usuário master.",
+    "q5": "Oferecem suporte real?",
+    "a5": "Nossa equipe responde em minutos a desafios críticos e nas primeiras 24 horas a qualquer dúvida.",
+    "q6": "Como o cancelamento funciona?",
+    "a6": "Você cancela a qualquer hora em seu painel sem pegadinhas. As notas e faturas antigas ficam retidas como backup digital via Read-Only access."
+  },
+  "madeForYou": {
+    "badge": "Feito para você?",
+    "title": "Robi IA atende perfeitamente a sua rotina se...",
+    "profile1Title": "Você for um empreendedor solo",
+    "profile1Desc": "Microempreendedor, Freelancer Digital, ou Autônomo prestando serviços: seu escritório pode caber na palma da mão e centralizar tudo num painel intuitivo.",
+    "profile2Title": "Pequena e Média Empresa",
+    "profile2Desc": "Ideal para organizar equipes até 50 pessoas centralizando todo o ciclo da fatura num único lugar. Câmeras personalizadas de acesso em breve.",
+    "profile3Title": "Trabalho em Rede ou Parceria",
+    "profile3Desc": "Colaboradores secundários, freelances intermitentes? Traga-os e conceda acesso temporário com permissões rígidas."
+  },
+  "trust": {
+    "badge": "Confiável e Seguro",
+    "title": "Seus arquivos selados, salvos e seguros",
+    "mainTitle": "Conformidade Total",
+    "mainDesc": "Nós entendemos que emissão de recibos e faturas é assunto sério, adaptamos cada nota para ter o corpo jurídico inviolável na sua região de atuação.",
+    "hostingTitle": "Servidores Locais Verificados",
+    "hostingDesc": "Dispomos de infraestrutura global hospedada sem riscos locais, com backup diário criptografado.",
+    "cloudTitle": "Ambiente em Nuvem Puro",
+    "cloudDesc": "Emita do PC, receba por Notificações Push do Macbook de casa; Acesse de forma orgânica qualquer dado necessário, independente do local.",
+    "encryptionTitle": "Forro de Banco",
+    "encryptionDesc": "Segurança e estabilidade Stripe via tokenização nativa garantem privacidade total ao dado bancário de seus clientes nos pagamentos rápidos."
+  },
+  "quoteSignature": {
+    "title": "Nunca mais demore para mandar um orçamento por causa da formatação",
+    "description": "Seu processo vira áudio: comande o IA para preparar o contrato antes mesmo do telefonema ou negócio ser fechado. É inovador, rápido e eleva sua assinatura autônoma.",
+    "cta": "Liberar Acesso Grátis",
+    "mockupQuoteTitle": "Orçamento Visual e Direto - Robi AI",
+    "stepCreated": "Nota criada com Inteligência Mapeada",
+    "stepSent": "Expedido Oficialmente",
+    "stepViewed": "Visualizado pelo seu futuro cliente",
+    "stepSigned": "Contrato selado!",
+    "signedRemotely": "Aprovação Remota",
+    "notification": "A cliente Maria validou sua proposta! Parábens!"
+  },
+  "adminSimplicity": {
+    "title": "Sua vida burocrática feita na hora do cafézinho",
+    "description": "Emissão nativa. Mudar o tipo da moeda; recalcular totais de projetos com múltiplas parcelas; converter aprovação em boletos com apenas um clique. Tudo mastigado para você.",
+    "cta": "Testar a Mágica",
+    "acceptedQuote": "Aprovou a citação para",
+    "quoteOf": "Orçamento de",
+    "ago": "atrás",
+    "documents": "Tabela Gral de Documentos",
+    "searchPlaceholder": "Localizar...",
+    "all": "Exibir Todos",
+    "quotesTab": "Orçamentos",
+    "invoicesTab": "Faturas",
+    "statusSigned": "Aprovado e Selado",
+    "statusPaid": "Confirmado/Pago",
+    "statusRefused": "Rejeitado",
+    "convertToInvoice": "Subir de Nível para Fatura",
+    "duplicate": "Clonar Ficha",
+    "markRefused": "Denunciar Rejeição",
+    "export": "Salvar Offline"
+  },
+  "dashboard": {
+    "title": "Crescimento contínuo à sua frente",
+    "description": "Uma experiência limpa informando exatamente como e onde suas receitas aumentam em tempo real. Identifique funil e quem enrola em não pagar instantaneamente.",
+    "cta": "Assinatura Gratuita",
+    "quotes": "Propostas feitas",
+    "invoices": "Faturas expedidas",
+    "awaitingSignature": "Aguardando Visto Final",
+    "awaitingPayment": "Aguardando Compensar",
+    "signed": "Recebido de cliente",
+    "paid": "Dinheiro na mão",
+    "rejected": "Declinado",
+    "overdue": "Alerta: Vencidas!",
+    "revenueChart": "Fluxo Financeiro",
+    "tooltipMonth": "Resultados de Maio 2024"
+  },
+  "cta": {
+    "title": "Cansado de perder sábados preenchendo planilhas obscuras?",
+    "subtitle": "Evolua ao longo de 20.000 independentes em ascensão com AI.",
+    "button": "Agir agora, Gratuitamente",
+    "subtext": "Selo Zero Taxa Oculta • Apenas Crescimento"
+  },
+  "footer": {
+    "description": "A melhor IA que você terá adquirido e nunca achou que seria dependente. 15 horas salvas todo mês é o padrão Robi.",
+    "product": "Ecossistema Virtual",
+    "industries": "Vertical Profissional",
+    "resources": "Biblioteca Educacional",
+    "company": "Sobre a Instituição",
+    "features": "Tour Rápido",
+    "pricing": "Investimento",
+    "comparisons": "Nós contra a velha guarda",
+    "blog": "Sala de Leitura Tecnológica",
+    "tools": "Laboratório Grátis (Calc)",
+    "calculator": "Gere seu Custo Horário",
+    "chargesSimulator": "Planejamento Tributarista",
+    "contact": "Centro Informativo C-Level",
+    "legal": "Estrutura Legal & Dados",
+    "privacy": "Código de Privacidade Intacta",
+    "terms": "Diretrizes Base de Utilização",
+    "cgv": "Transação do software",
+    "copyright": "© {year} Robi AI Technologies, Matriz Oficial. Acesso Global Integrado.",
+    "industryCategories": {
+      "btp": "Empreiteiros & Técnicos",
+      "tech": "Profissionais de T.I e Projetos",
+      "creatif": "Fotografia & Designers Globais",
+      "evenementiel": "Equipes de Lançamentos & Casamentos",
+      "conseil": "Consultorias Independentes",
+      "sante": "Profissionais Clínicos Particulares"
+    }
+  },
+  "common": {
+    "learnMore": "Descobrir segredo",
+    "getStarted": "Iniciar agora no App",
+    "freeTrial": "Teste Beta Autônomo",
+    "noCreditCard": "Zero compromisso em conta",
+    "minutes": "min / tempo",
+    "hours": "hrs / salvas",
+    "days": "ciclos úteis",
+    "perDay": "/ao dia",
+    "perWeek": "/semanais",
+    "perMonth": "/mensalidades",
+    "perYear": "/para o ano"
+  },
+  "pages": {
+    "industries": {
+      "title": "Inovando por segmento | Robi AI",
+      "description": "Nenhum teto limita seu alcance. Como nós adaptamos a geração de documento à especificidade da sua área.",
+      "heroTitle": "Sob-medida e exato",
+      "heroTitleAccent": "para seu nicho de atuação.",
+      "heroSubtitle": "Seja na van depois do reparo encanador de campo, seja em NY com T.I.",
+      "heroBadge": "Soluções Multi-Nichos",
+      "professions": "Nós atingimos",
+      "adaptedTo": "Preparado em milisegundos a sua rotina:",
+      "professionsSuffix": "múltiplas linhas de expertise"
+    },
+    "blog": {
+      "title": "O Hub de Leituras | Robi",
+      "description": "Artigos altamente filtráveis com alta recompensa semântica focada no profissional.",
+      "heroTitle": "Expansão neural & Negócios ao ",
+      "heroTitleAccent": "Freelancer e Gig Worker.",
+      "heroSubtitle": "Guias, Hacks para Stripe, Contabilidade de Bolso.",
+      "heroBadge": "Newsroom / Blog HQ"
+    },
+    "comparisons": {
+      "badge": "Robi x Antigo Padrão",
+      "whyChoose": "Por que abandonar o seu excel?",
+      "conversationalAI": "AI Conversacional Imersivo",
+      "conversationalAIDesc": "Uma linha contínua de processamento linguístico, nada é tão fluído em criar em 3 segundos orçamentos.",
+      "notIncluded": "Sem suporte"
+    },
+    "tools": {
+      "heroTitle": "Brinquedos Financeiros Pro+",
+      "heroTitleAccent": "Livres pra Uso",
+      "freeTool": "Módulo Calculadora Desbloqueado"
+    }
+  }
+}

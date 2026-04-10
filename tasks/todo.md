@@ -30,3 +30,12 @@
     - [ ] Configurer DNS pour robi-app.com -> Vercel (site SEO)
     - [ ] Configurer DNS pour www.robi-app.com -> App (Vercel/autre)
     - [ ] Tester les accès
+
+- [x] [SEO International] Ajouter le Portugais Brésilien (`pt-BR`)
+- [x] [SEO International] Ajouter le Français pour le Maroc (`fr-MA`)
+- [x] [SEO International] Configurer la contextualisation des devises (`BRL`, `MAD`, `EUR`, `USD`) dans `config.ts`
+- [x] [SEO International] Option B : Implémentation LATAM Granulaire (`es-419`, `es-MX`, `es-CO`) avec devises MXN/COP
+- [x] [SEO International] Fix : Fallback temporaire des dictionnaires dans `dictionaries.ts` pour éviter le crash des nouvelles routes (500 Server Error)
+- [x] [SEO International] Traduction des sections Hero et Pricing en `pt-BR` avec prix locaux para test utilisateur
+- [x] [SEO International] Traduction 100% complète de l'application en Portugais Brésilien (`pt-BR.json`)
+
