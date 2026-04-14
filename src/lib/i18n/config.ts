@@ -1,18 +1,18 @@
 export const locales = [
-  "fr",       // France
-  "en",       // UK
-  "es",       // Espagne
-  "pt-BR",    // Brésil
-  "fr-MA",    // Maroc
-  "es-MX",    // Mexique
-  "es-CO",    // Colombie
-  "es-CL",    // Chili
   "es-AR",    // Argentine
-  "en-US",    // États-Unis
   "en-AU",    // Australie
   "fr-BE",    // Belgique
-  "fr-CH",    // Suisse
+  "pt-BR",    // Brésil
   "fr-CA",    // Canada
+  "es-CL",    // Chili
+  "es-CO",    // Colombie
+  "es",       // Espagne
+  "fr",       // France
+  "fr-MA",    // Maroc
+  "es-MX",    // Mexique
+  "fr-CH",    // Suisse
+  "en",       // Royaume-Uni
+  "en-US",    // États-Unis
 ] as const;
 
 export type Locale = (typeof locales)[number];
@@ -20,20 +20,20 @@ export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = "fr";
 
 export const localeNames: Record<Locale, string> = {
-  fr:      "Français (France)",
-  en:      "English (UK)",
-  es:      "Español (España)",
-  "pt-BR": "Português (Brasil)",
-  "fr-MA": "Français (Maroc)",
-  "es-MX": "Español (México)",
-  "es-CO": "Español (Colombia)",
-  "es-CL": "Español (Chile)",
-  "es-AR": "Español (Argentina)",
-  "en-US": "English (United States)",
-  "en-AU": "English (Australia)",
-  "fr-BE": "Français (Belgique)",
-  "fr-CH": "Français (Suisse)",
-  "fr-CA": "Français (Canada)",
+  "es-AR": "Argentina",
+  "en-AU": "Australia",
+  "fr-BE": "Belgique",
+  "pt-BR": "Brasil",
+  "fr-CA": "Canada",
+  "es-CL": "Chile",
+  "es-CO": "Colombia",
+  es:      "España",
+  fr:      "France",
+  "fr-MA": "Maroc",
+  "es-MX": "México",
+  "fr-CH": "Suisse",
+  en:      "United Kingdom",
+  "en-US": "United States",
 };
 
 export const localeFlags: Record<Locale, string> = {
