@@ -74,17 +74,15 @@ export function Hero({
   const isCenter = variant === "centered";
 
   const ctaBlock = ctaText && (
-    <div className="flex flex-col gap-3 items-start">
-      <div className="flex flex-col sm:flex-row gap-4">
-        <Button href={ctaHref} size="sm" className="!text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-base">
-          {ctaText}
-          <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-5 md:h-5" />
-        </Button>
-      </div>
-      {/* Launch offer pill - mobile highlight */}
+    <div className="flex flex-col gap-3 items-center lg:items-start w-full">
+      <Button href={ctaHref} size="sm" className="w-full lg:w-auto !text-sm !px-5 !py-3 md:!px-8 md:!py-4 md:!text-base">
+        {ctaText}
+        <ArrowRight className="ml-1.5 w-4 h-4 md:w-5 md:h-5" />
+      </Button>
+      {/* Launch offer pill */}
       {launchOffer && (
-        <div className="flex items-center gap-2 bg-white/5 border border-[#BEF221]/20 rounded-full px-3 py-1.5">
-          <Zap className="w-3.5 h-3.5 text-[#BEF221]" />
+        <div className="flex items-center justify-center gap-2 w-full lg:w-auto bg-white/5 border border-[#BEF221]/20 rounded-full px-4 py-2">
+          <Zap className="w-3.5 h-3.5 text-[#BEF221] shrink-0" />
           <span className="text-white/70 text-xs">
             {launchOffer.text}{" "}
             <span className="text-[#BEF221] font-bold">{launchOffer.highlight}</span>
@@ -139,16 +137,16 @@ export function Hero({
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left side - Content */}
-            <div className="max-w-3x1">
+            <div className="text-center lg:text-left">
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6 md:mb-8 tracking-tighter">
                 <span className="block opacity-90">{title}</span>
-                <span className="flex items-center gap-3">
+                <span className="flex items-center justify-center lg:justify-start gap-3">
                   Robi <WordRotator words={rotatingWords} />
                 </span>
                 <span className="block text-[#BEF221]">{titleAccent}</span>
               </h1>
 
-              <p className="text-base md:text-xl text-white/90 font-medium mb-6 md:mb-10 leading-relaxed max-w-2xl whitespace-pre-line">
+              <p className="text-base md:text-xl text-white/90 font-medium mb-6 md:mb-10 leading-relaxed max-w-2xl whitespace-pre-line mx-auto lg:mx-0">
                 {subtitle}
               </p>
 
