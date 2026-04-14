@@ -170,7 +170,12 @@ export default async function Home({
         }}
         launchOffer={{
           text: dict.pricing?.launchOfferBadge || "OFFRE LIMITEE",
-          highlight: "59€ — " + (dict.pricing?.launchOfferLifetime || "Acces a vie"),
+          highlight: new Intl.NumberFormat(locale, {
+            style: "currency",
+            currency: (localeCurrencies[locale] || localeCurrencies["fr"]).currency,
+            maximumFractionDigits: 0,
+          }).format((priceMap[locale] || priceMap["fr"]).launch) +
+            " — " + (dict.pricing?.launchOfferLifetime || "Accès à vie"),
         }}
       />
 
