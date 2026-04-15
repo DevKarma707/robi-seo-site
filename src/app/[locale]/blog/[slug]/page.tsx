@@ -1302,23 +1302,27 @@ Pour facturer, vous devez posséder :
 
 Plutôt que d'utiliser le portail complexe du SAT, **Robi AI** vous permet de générer vos documents conformes rapidement et de les envoyer au format XML et PDF à vos clients mexicains.`,
   },
-  "robi-disponible-14-pays": {
-    fr: `## Robi AI s'internationalise : 14 pays, 4 langues, 1 seul outil
+  "robi-disponible-16-pays": {
+    fr: `## Robi AI s'internationalise : 16 pays, 4 langues, 1 seul outil
 
-Depuis sa création, Robi AI a une mission simple : permettre à chaque freelance de facturer en moins de 30 secondes, sans aucune connaissance comptable. Aujourd'hui, nous franchissons une étape majeure : **Robi AI est officiellement disponible dans 14 pays** avec une tarification adaptée à chaque marché local.
+Depuis sa création, Robi AI a une mission simple : permettre à chaque freelance de facturer en moins de 30 secondes, sans aucune connaissance comptable. Aujourd'hui, nous franchissons une étape majeure : **Robi AI est officiellement disponible dans 16 pays** avec une tarification adaptée à chaque marché local.
 
-## Pourquoi 14 pays ?
+## Pourquoi 16 pays ?
 
-Les freelances ne connaissent pas de frontières. Un développeur à Buenos Aires, un photographe à Casablanca, un plombier à Bruxelles — tous partagent le même besoin : **facturer vite, être payé plus vite**.
+Les freelances ne connaissent pas de frontières. Un développeur à Dublin, un photographe à Casablanca, un plombier à Bruxelles — tous partagent le même besoin : **facturer vite, être payé plus vite**.
 
 C'est pourquoi nous avons choisi de lancer Robi AI dans des marchés où la demande pour un outil de facturation simple, mobile et intelligent est la plus forte.
 
-## Les 14 pays couverts
+## Les 16 pays couverts
 
 ### Europe
 - **France** 🇫🇷 — Notre marché historique. Facturation 100% conforme (SIRET, TVA, numérotation séquentielle).
 - **Belgique** 🇧🇪 — Interface en français, prix en euros.
 - **Suisse** 🇨🇭 — Interface en français, prix en francs suisses.
+- **Luxembourg** 🇱🇺 — Interface en français, prix en euros.
+- **Irlande** 🇮🇪 — Interface en anglais, prix en euros.
+- **Pays-Bas** 🇳🇱 — Interface en anglais, prix en euros.
+- **Portugal** 🇵🇹 — Interface en portugais, prix en euros.
 - **Espagne** 🇪🇸 — Interface en espagnol, prix en euros.
 - **Royaume-Uni** 🇬🇧 — Interface en anglais, prix en livres sterling.
 
@@ -1326,32 +1330,30 @@ C'est pourquoi nous avons choisi de lancer Robi AI dans des marchés où la dema
 - **États-Unis** 🇺🇸 — Interface en anglais, prix en dollars US.
 - **Canada** 🇨🇦 — Interface en français, prix en dollars canadiens.
 
-### Amérique Latine
-- **Mexique** 🇲🇽 — Interface en espagnol, prix en pesos mexicains.
-- **Colombie** 🇨🇴 — Interface en espagnol, prix en pesos colombiens.
-- **Chili** 🇨🇱 — Interface en espagnol, prix en pesos chiliens.
-- **Argentine** 🇦🇷 — Interface en espagnol, prix en pesos argentins.
-- **Brésil** 🇧🇷 — Interface en portugais, prix en reais.
-
 ### Afrique
 - **Maroc** 🇲🇦 — Interface en français, prix en dirhams.
+- **Sénégal** 🇸🇳 — Interface en français, prix en francs CFA.
+- **Côte d'Ivoire** 🇨🇮 — Interface en français, prix en francs CFA.
+
+### Moyen-Orient
+- **Émirats Arabes Unis** 🇦🇪 — Interface en anglais, prix en dirhams (AED).
 
 ### Océanie
 - **Australie** 🇦🇺 — Interface en anglais, prix en dollars australiens.
 
 ## Des prix adaptés à chaque marché
 
-Contrairement à beaucoup de SaaS qui appliquent un prix unique en dollars, **Robi AI propose une tarification locale** dans la devise de chaque pays. Un freelance à Bogotá paie en pesos colombiens, un artisan à Zurich paie en francs suisses.
+Contrairement à beaucoup de SaaS qui appliquent un prix unique en dollars, **Robi AI propose une tarification locale** dans la devise de chaque pays. Un freelance à Dakar paie en francs CFA, un artisan à Zurich paie en francs suisses, un consultant à Dubaï paie en AED.
 
 Cette approche garantit un prix juste et accessible, quel que soit le pays.
 
 ## 4 langues supportées
 
 Robi AI est disponible en :
-- **Français** — France, Belgique, Suisse, Canada, Maroc
-- **Anglais** — Royaume-Uni, États-Unis, Australie
-- **Espagnol** — Espagne, Mexique, Colombie, Chili, Argentine
-- **Portugais** — Brésil
+- **Français** — France, Belgique, Suisse, Luxembourg, Canada, Maroc, Sénégal, Côte d'Ivoire
+- **Anglais** — Royaume-Uni, Irlande, Pays-Bas, États-Unis, Australie, Émirats
+- **Espagnol** — Espagne
+- **Portugais** — Portugal
 
 L'interface s'adapte automatiquement à votre langue et votre devise.
 
@@ -1378,26 +1380,30 @@ Pour célébrer cette expansion internationale, nous proposons un **accès à vi
 
 ## Conclusion
 
-Robi AI, c'est désormais **14 pays, 4 langues, des milliers de freelances**. Que vous soyez plombier à Paris, développeur à São Paulo ou photographe à Melbourne — Robi vous accompagne pour facturer sans effort.
+Robi AI, c'est désormais **16 pays, 4 langues, des milliers de freelances**. Que vous soyez plombier à Paris, développeur à Amsterdam ou photographe à Melbourne — Robi vous accompagne pour facturer sans effort.
 
 **Essayez Robi AI gratuitement dès aujourd'hui sur go.robi-app.com**`,
 
-    en: `## Robi AI Goes Global: 14 Countries, 4 Languages, 1 Tool
+    en: `## Robi AI Goes Global: 16 Countries, 4 Languages, 1 Tool
 
-Since day one, Robi AI has had a simple mission: let every freelancer create an invoice in under 30 seconds, with zero accounting knowledge. Today, we're taking a major step forward: **Robi AI is officially available in 14 countries** with pricing adapted to each local market.
+Since day one, Robi AI has had a simple mission: let every freelancer create an invoice in under 30 seconds, with zero accounting knowledge. Today, we're taking a major step forward: **Robi AI is officially available in 16 countries** with pricing adapted to each local market.
 
-## Why 14 Countries?
+## Why 16 Countries?
 
-Freelancers don't have borders. A developer in Buenos Aires, a photographer in Casablanca, a plumber in Brussels — they all share the same need: **invoice fast, get paid faster**.
+Freelancers don't have borders. A developer in Dublin, a photographer in Casablanca, a plumber in Brussels — they all share the same need: **invoice fast, get paid faster**.
 
 That's why we chose to launch Robi AI in markets where the demand for a simple, mobile, and intelligent invoicing tool is strongest.
 
-## The 14 Countries We Cover
+## The 16 Countries We Cover
 
 ### Europe
 - **France** 🇫🇷 — Our home market. 100% compliant invoicing (SIRET, VAT, sequential numbering).
 - **Belgium** 🇧🇪 — French interface, prices in euros.
 - **Switzerland** 🇨🇭 — French interface, prices in Swiss francs.
+- **Luxembourg** 🇱🇺 — French interface, prices in euros.
+- **Ireland** 🇮🇪 — English interface, prices in euros.
+- **Netherlands** 🇳🇱 — English interface, prices in euros.
+- **Portugal** 🇵🇹 — Portuguese interface, prices in euros.
 - **Spain** 🇪🇸 — Spanish interface, prices in euros.
 - **United Kingdom** 🇬🇧 — English interface, prices in pounds sterling.
 
@@ -1405,32 +1411,30 @@ That's why we chose to launch Robi AI in markets where the demand for a simple, 
 - **United States** 🇺🇸 — English interface, prices in US dollars.
 - **Canada** 🇨🇦 — French interface, prices in Canadian dollars.
 
-### Latin America
-- **Mexico** 🇲🇽 — Spanish interface, prices in Mexican pesos.
-- **Colombia** 🇨🇴 — Spanish interface, prices in Colombian pesos.
-- **Chile** 🇨🇱 — Spanish interface, prices in Chilean pesos.
-- **Argentina** 🇦🇷 — Spanish interface, prices in Argentine pesos.
-- **Brazil** 🇧🇷 — Portuguese interface, prices in reais.
-
 ### Africa
 - **Morocco** 🇲🇦 — French interface, prices in dirhams.
+- **Senegal** 🇸🇳 — French interface, prices in CFA francs.
+- **Ivory Coast** 🇨🇮 — French interface, prices in CFA francs.
+
+### Middle East
+- **United Arab Emirates** 🇦🇪 — English interface, prices in dirhams (AED).
 
 ### Oceania
 - **Australia** 🇦🇺 — English interface, prices in Australian dollars.
 
 ## Local Pricing for Every Market
 
-Unlike many SaaS products that charge a flat rate in US dollars, **Robi AI offers local pricing** in each country's currency. A freelancer in Bogotá pays in Colombian pesos, a contractor in Zurich pays in Swiss francs.
+Unlike many SaaS products that charge a flat rate in US dollars, **Robi AI offers local pricing** in each country's currency. A freelancer in Dakar pays in CFA francs, a contractor in Zurich pays in Swiss francs, a consultant in Dubai pays in AED.
 
 This approach ensures fair and accessible pricing, no matter where you are.
 
 ## 4 Supported Languages
 
 Robi AI is available in:
-- **French** — France, Belgium, Switzerland, Canada, Morocco
-- **English** — United Kingdom, United States, Australia
-- **Spanish** — Spain, Mexico, Colombia, Chile, Argentina
-- **Portuguese** — Brazil
+- **French** — France, Belgium, Switzerland, Luxembourg, Canada, Morocco, Senegal, Ivory Coast
+- **English** — United Kingdom, Ireland, Netherlands, United States, Australia, UAE
+- **Spanish** — Spain
+- **Portuguese** — Portugal
 
 The interface automatically adapts to your language and currency.
 
@@ -1457,26 +1461,30 @@ To celebrate this international expansion, we're offering **lifetime access to R
 
 ## Conclusion
 
-Robi AI is now in **14 countries, 4 languages, serving thousands of freelancers**. Whether you're a plumber in Paris, a developer in São Paulo, or a photographer in Melbourne — Robi helps you invoice effortlessly.
+Robi AI is now in **16 countries, 4 languages, serving thousands of freelancers**. Whether you're a plumber in Paris, a developer in Amsterdam, or a photographer in Melbourne — Robi helps you invoice effortlessly.
 
 **Try Robi AI for free today at go.robi-app.com**`,
 
-    es: `## Robi AI se Internacionaliza: 14 Países, 4 Idiomas, 1 Herramienta
+    es: `## Robi AI se Internacionaliza: 16 Países, 4 Idiomas, 1 Herramienta
 
-Desde su creación, Robi AI tiene una misión simple: permitir que cualquier freelance facture en menos de 30 segundos, sin ningún conocimiento contable. Hoy damos un paso importante: **Robi AI está oficialmente disponible en 14 países** con precios adaptados a cada mercado local.
+Desde su creación, Robi AI tiene una misión simple: permitir que cualquier freelance facture en menos de 30 segundos, sin ningún conocimiento contable. Hoy damos un paso importante: **Robi AI está oficialmente disponible en 16 países** con precios adaptados a cada mercado local.
 
-## ¿Por qué 14 países?
+## ¿Por qué 16 países?
 
-Los freelances no conocen fronteras. Un desarrollador en Buenos Aires, un fotógrafo en Casablanca, un fontanero en Bruselas — todos comparten la misma necesidad: **facturar rápido, cobrar más rápido**.
+Los freelances no conocen fronteras. Un desarrollador en Dublín, un fotógrafo en Casablanca, un fontanero en Bruselas — todos comparten la misma necesidad: **facturar rápido, cobrar más rápido**.
 
 Por eso elegimos lanzar Robi AI en los mercados donde la demanda de una herramienta de facturación simple, móvil e inteligente es más fuerte.
 
-## Los 14 países cubiertos
+## Los 16 países cubiertos
 
 ### Europa
 - **Francia** 🇫🇷 — Nuestro mercado de origen. Facturación 100% conforme (SIRET, IVA, numeración secuencial).
 - **Bélgica** 🇧🇪 — Interfaz en francés, precios en euros.
 - **Suiza** 🇨🇭 — Interfaz en francés, precios en francos suizos.
+- **Luxemburgo** 🇱🇺 — Interfaz en francés, precios en euros.
+- **Irlanda** 🇮🇪 — Interfaz en inglés, precios en euros.
+- **Países Bajos** 🇳🇱 — Interfaz en inglés, precios en euros.
+- **Portugal** 🇵🇹 — Interfaz en portugués, precios en euros.
 - **España** 🇪🇸 — Interfaz en español, precios en euros.
 - **Reino Unido** 🇬🇧 — Interfaz en inglés, precios en libras esterlinas.
 
@@ -1484,32 +1492,30 @@ Por eso elegimos lanzar Robi AI en los mercados donde la demanda de una herramie
 - **Estados Unidos** 🇺🇸 — Interfaz en inglés, precios en dólares.
 - **Canadá** 🇨🇦 — Interfaz en francés, precios en dólares canadienses.
 
-### América Latina
-- **México** 🇲🇽 — Interfaz en español, precios en pesos mexicanos.
-- **Colombia** 🇨🇴 — Interfaz en español, precios en pesos colombianos.
-- **Chile** 🇨🇱 — Interfaz en español, precios en pesos chilenos.
-- **Argentina** 🇦🇷 — Interfaz en español, precios en pesos argentinos.
-- **Brasil** 🇧🇷 — Interfaz en portugués, precios en reales.
-
 ### África
 - **Marruecos** 🇲🇦 — Interfaz en francés, precios en dirhams.
+- **Senegal** 🇸🇳 — Interfaz en francés, precios en francos CFA.
+- **Costa de Marfil** 🇨🇮 — Interfaz en francés, precios en francos CFA.
+
+### Medio Oriente
+- **Emiratos Árabes Unidos** 🇦🇪 — Interfaz en inglés, precios en dirhams (AED).
 
 ### Oceanía
 - **Australia** 🇦🇺 — Interfaz en inglés, precios en dólares australianos.
 
 ## Precios adaptados a cada mercado
 
-A diferencia de muchos SaaS que cobran un precio único en dólares, **Robi AI ofrece precios locales** en la moneda de cada país. Un freelance en Bogotá paga en pesos colombianos, un artesano en Zúrich paga en francos suizos.
+A diferencia de muchos SaaS que cobran un precio único en dólares, **Robi AI ofrece precios locales** en la moneda de cada país. Un freelance en Dakar paga en francos CFA, un artesano en Zúrich paga en francos suizos, un consultor en Dubái paga en AED.
 
 Este enfoque garantiza un precio justo y accesible, sin importar el país.
 
 ## 4 idiomas disponibles
 
 Robi AI está disponible en:
-- **Francés** — Francia, Bélgica, Suiza, Canadá, Marruecos
-- **Inglés** — Reino Unido, Estados Unidos, Australia
-- **Español** — España, México, Colombia, Chile, Argentina
-- **Portugués** — Brasil
+- **Francés** — Francia, Bélgica, Suiza, Luxemburgo, Canadá, Marruecos, Senegal, Costa de Marfil
+- **Inglés** — Reino Unido, Irlanda, Países Bajos, Estados Unidos, Australia, Emiratos
+- **Español** — España
+- **Portugués** — Portugal
 
 La interfaz se adapta automáticamente a tu idioma y tu moneda.
 
@@ -1536,26 +1542,30 @@ Para celebrar esta expansión internacional, ofrecemos **acceso de por vida a Ro
 
 ## Conclusión
 
-Robi AI ya está en **14 países, 4 idiomas, miles de freelances**. Ya seas fontanero en París, desarrollador en São Paulo o fotógrafo en Melbourne — Robi te acompaña para facturar sin esfuerzo.
+Robi AI ya está en **16 países, 4 idiomas, miles de freelances**. Ya seas fontanero en París, desarrollador en Ámsterdam o fotógrafo en Melbourne — Robi te acompaña para facturar sin esfuerzo.
 
 **Prueba Robi AI gratis hoy en go.robi-app.com**`,
 
-    "pt-BR": `## Robi AI se Internacionaliza: 14 Países, 4 Idiomas, 1 Ferramenta
+    "pt-BR": `## Robi AI se Internacionaliza: 16 Países, 4 Idiomas, 1 Ferramenta
 
-Desde a sua criação, o Robi AI tem uma missão simples: permitir que qualquer freelancer fature em menos de 30 segundos, sem nenhum conhecimento contábil. Hoje damos um passo importante: **o Robi AI está oficialmente disponível em 14 países** com preços adaptados a cada mercado local.
+Desde a sua criação, o Robi AI tem uma missão simples: permitir que qualquer freelancer fature em menos de 30 segundos, sem nenhum conhecimento contábil. Hoje damos um passo importante: **o Robi AI está oficialmente disponível em 16 países** com preços adaptados a cada mercado local.
 
-## Por que 14 países?
+## Por que 16 países?
 
-Freelancers não conhecem fronteiras. Um desenvolvedor em Buenos Aires, um fotógrafo em Casablanca, um encanador em Bruxelas — todos compartilham a mesma necessidade: **faturar rápido, receber mais rápido**.
+Freelancers não conhecem fronteiras. Um desenvolvedor em Dublin, um fotógrafo em Casablanca, um encanador em Bruxelas — todos compartilham a mesma necessidade: **faturar rápido, receber mais rápido**.
 
 Por isso escolhemos lançar o Robi AI nos mercados onde a demanda por uma ferramenta de faturamento simples, mobile e inteligente é mais forte.
 
-## Os 14 países cobertos
+## Os 16 países cobertos
 
 ### Europa
 - **França** 🇫🇷 — Nosso mercado de origem. Faturamento 100% conforme (SIRET, IVA, numeração sequencial).
 - **Bélgica** 🇧🇪 — Interface em francês, preços em euros.
 - **Suíça** 🇨🇭 — Interface em francês, preços em francos suíços.
+- **Luxemburgo** 🇱🇺 — Interface em francês, preços em euros.
+- **Irlanda** 🇮🇪 — Interface em inglês, preços em euros.
+- **Países Baixos** 🇳🇱 — Interface em inglês, preços em euros.
+- **Portugal** 🇵🇹 — Interface em português, preços em euros.
 - **Espanha** 🇪🇸 — Interface em espanhol, preços em euros.
 - **Reino Unido** 🇬🇧 — Interface em inglês, preços em libras esterlinas.
 
@@ -1563,32 +1573,30 @@ Por isso escolhemos lançar o Robi AI nos mercados onde a demanda por uma ferram
 - **Estados Unidos** 🇺🇸 — Interface em inglês, preços em dólares americanos.
 - **Canadá** 🇨🇦 — Interface em francês, preços em dólares canadenses.
 
-### América Latina
-- **México** 🇲🇽 — Interface em espanhol, preços em pesos mexicanos.
-- **Colômbia** 🇨🇴 — Interface em espanhol, preços em pesos colombianos.
-- **Chile** 🇨🇱 — Interface em espanhol, preços em pesos chilenos.
-- **Argentina** 🇦🇷 — Interface em espanhol, preços em pesos argentinos.
-- **Brasil** 🇧🇷 — Interface em português, preços em reais.
-
 ### África
 - **Marrocos** 🇲🇦 — Interface em francês, preços em dirhams.
+- **Senegal** 🇸🇳 — Interface em francês, preços em francos CFA.
+- **Costa do Marfim** 🇨🇮 — Interface em francês, preços em francos CFA.
+
+### Oriente Médio
+- **Emirados Árabes Unidos** 🇦🇪 — Interface em inglês, preços em dirhams (AED).
 
 ### Oceania
 - **Austrália** 🇦🇺 — Interface em inglês, preços em dólares australianos.
 
 ## Preços adaptados a cada mercado
 
-Diferente de muitos SaaS que cobram um preço único em dólares, **o Robi AI oferece preços locais** na moeda de cada país. Um freelancer em Bogotá paga em pesos colombianos, um profissional em Zurique paga em francos suíços.
+Diferente de muitos SaaS que cobram um preço único em dólares, **o Robi AI oferece preços locais** na moeda de cada país. Um freelancer em Dakar paga em francos CFA, um profissional em Zurique paga em francos suíços, um consultor em Dubai paga em AED.
 
 Essa abordagem garante um preço justo e acessível, independente do país.
 
 ## 4 idiomas disponíveis
 
 O Robi AI está disponível em:
-- **Francês** — França, Bélgica, Suíça, Canadá, Marrocos
-- **Inglês** — Reino Unido, Estados Unidos, Austrália
-- **Espanhol** — Espanha, México, Colômbia, Chile, Argentina
-- **Português** — Brasil
+- **Francês** — França, Bélgica, Suíça, Luxemburgo, Canadá, Marrocos, Senegal, Costa do Marfim
+- **Inglês** — Reino Unido, Irlanda, Países Baixos, Estados Unidos, Austrália, Emirados
+- **Espanhol** — Espanha
+- **Português** — Portugal
 
 A interface se adapta automaticamente ao seu idioma e à sua moeda.
 
@@ -1615,7 +1623,7 @@ Para celebrar essa expansão internacional, estamos oferecendo **acesso vitalíc
 
 ## Conclusão
 
-O Robi AI agora está em **14 países, 4 idiomas, milhares de freelancers**. Seja você encanador em Paris, desenvolvedor em São Paulo ou fotógrafo em Melbourne — o Robi te acompanha para faturar sem esforço.
+O Robi AI agora está em **16 países, 4 idiomas, milhares de freelancers**. Seja você encanador em Paris, desenvolvedor em Amsterdã ou fotógrafo em Melbourne — o Robi te acompanha para faturar sem esforço.
 
 **Experimente o Robi AI gratuitamente hoje em go.robi-app.com**`,
   },

@@ -870,22 +870,22 @@ export const blogPosts = [
     author: "Équipe Robi AI",
   },
   {
-    slug: "robi-disponible-14-pays",
+    slug: "robi-disponible-16-pays",
     title: {
-      fr: "Robi AI Disponible dans 14 Pays : Facturez Partout dans le Monde",
-      en: "Robi AI Available in 14 Countries: Invoice Anywhere in the World",
-      es: "Robi AI Disponible en 14 Países: Factura en Cualquier Parte del Mundo",
-      "pt-BR": "Robi AI Disponível em 14 Países: Fature em Qualquer Lugar do Mundo"
+      fr: "Robi AI Disponible dans 16 Pays : Facturez Partout dans le Monde",
+      en: "Robi AI Available in 16 Countries: Invoice Anywhere in the World",
+      es: "Robi AI Disponible en 16 Países: Factura en Cualquier Parte del Mundo",
+      "pt-BR": "Robi AI Disponível em 16 Países: Fature em Qualquer Lugar do Mundo"
     },
     description: {
-      fr: "Robi AI est désormais disponible dans 14 pays avec tarification locale : France, Belgique, Suisse, Canada, Maroc, Royaume-Uni, États-Unis, Australie, Espagne, Mexique, Colombie, Chili, Argentine et Brésil.",
-      en: "Robi AI is now available in 14 countries with local pricing: France, Belgium, Switzerland, Canada, Morocco, UK, USA, Australia, Spain, Mexico, Colombia, Chile, Argentina and Brazil.",
-      es: "Robi AI ya está disponible en 14 países con precios locales: Francia, Bélgica, Suiza, Canadá, Marruecos, Reino Unido, EE.UU., Australia, España, México, Colombia, Chile, Argentina y Brasil.",
-      "pt-BR": "O Robi AI já está disponível em 14 países com preços locais: França, Bélgica, Suíça, Canadá, Marrocos, Reino Unido, EUA, Austrália, Espanha, México, Colômbia, Chile, Argentina e Brasil."
+      fr: "Robi AI est désormais disponible dans 16 pays avec tarification locale : France, Belgique, Suisse, Luxembourg, Irlande, Pays-Bas, Portugal, Espagne, Royaume-Uni, États-Unis, Australie, Canada, Maroc, Émirats, Sénégal et Côte d'Ivoire.",
+      en: "Robi AI is now available in 16 countries with local pricing: France, Belgium, Switzerland, Luxembourg, Ireland, Netherlands, Portugal, Spain, UK, USA, Australia, Canada, Morocco, UAE, Senegal and Ivory Coast.",
+      es: "Robi AI ya está disponible en 16 países con precios locales: Francia, Bélgica, Suiza, Luxemburgo, Irlanda, Países Bajos, Portugal, España, Reino Unido, EE.UU., Australia, Canadá, Marruecos, EAU, Senegal y Costa de Marfil.",
+      "pt-BR": "O Robi AI já está disponível em 16 países com preços locais: França, Bélgica, Suíça, Luxemburgo, Irlanda, Países Baixos, Portugal, Espanha, Reino Unido, EUA, Austrália, Canadá, Marrocos, EAU, Senegal e Costa do Marfim."
     },
-    keywords: ["robi ai 14 pays", "facturation internationale freelance", "invoicing software worldwide", "facturación internacional", "faturamento global freelancer"],
+    keywords: ["robi ai 16 pays", "facturation internationale freelance", "invoicing software worldwide", "facturación internacional", "faturamento global freelancer"],
     category: "business",
-    date: "2026-04-14",
+    date: "2026-04-15",
     readTime: { fr: 7, en: 7, es: 7 },
     author: "Équipe Robi AI",
   },
