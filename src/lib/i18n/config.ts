@@ -1,21 +1,21 @@
 // === Locales actives sur le site (routes, sitemap, sélecteur) ===
 export const locales = [
+  "en",       // Royaume-Uni
   "en-AE",    // Émirats Arabes Unis
   "en-AU",    // Australie
+  "en-IE",    // Irlande
+  "en-NL",    // Pays-Bas
+  "en-US",    // États-Unis
+  "es",       // Espagne
+  "fr",       // France
   "fr-BE",    // Belgique
   "fr-CA",    // Canada
+  "fr-CH",    // Suisse
   "fr-CI",    // Côte d'Ivoire
-  "es",       // Espagne
-  "en-US",    // États-Unis
-  "fr",       // France
-  "en-IE",    // Irlande
   "fr-LU",    // Luxembourg
   "fr-MA",    // Maroc
-  "en-NL",    // Pays-Bas
-  "pt-PT",    // Portugal
-  "en",       // Royaume-Uni
   "fr-SN",    // Sénégal
-  "fr-CH",    // Suisse
+  "pt-PT",    // Portugal
 ] as const;
 
 // === Locales masquées (LATAM niveau 2 — e-invoicing obligatoire) ===
