@@ -69,6 +69,37 @@ export default async function IndustryPage({
 
   return (
     <>
+      {/* JSON-LD Schema - BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Robi AI",
+                item: `https://robi-app.com/${locale}`,
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: ind.title,
+                item: `https://robi-app.com/${locale}/industries`,
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: t(industry.name, locale),
+                item: `https://robi-app.com/${locale}/industries/${slug}`,
+              },
+            ],
+          }),
+        }}
+      />
+
       {/* JSON-LD Schema for Industry */}
       <script
         type="application/ld+json"

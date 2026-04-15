@@ -1,22 +1,30 @@
 import { Locale } from "./config";
 
-const dictionaries: Record<Locale, () => Promise<any>> = {
+const dictionaries: Record<string, () => Promise<any>> = {
   // Fichiers dédiés
   fr:      () => import("./locales/fr.json").then((m) => m.default),
   en:      () => import("./locales/en.json").then((m) => m.default),
   es:      () => import("./locales/es.json").then((m) => m.default),
-  "pt-BR": () => import("./locales/pt-BR.json").then((m) => m.default),
   "fr-MA": () => import("./locales/fr-MA.json").then((m) => m.default),
+  // LATAM — fichiers dédiés (masqués mais conservés)
+  "pt-BR": () => import("./locales/pt-BR.json").then((m) => m.default),
   "es-MX": () => import("./locales/es-MX.json").then((m) => m.default),
   "es-CO": () => import("./locales/es-CO.json").then((m) => m.default),
-  // Nouvelles locales — réutilisent les fichiers de base
-  "es-CL": () => import("./locales/es.json").then((m) => m.default),   // Chili → espagnol
-  "es-AR": () => import("./locales/es.json").then((m) => m.default),   // Argentine → espagnol
+  "es-CL": () => import("./locales/es.json").then((m) => m.default),
+  "es-AR": () => import("./locales/es.json").then((m) => m.default),
+  // Locales qui réutilisent les fichiers existants
   "en-US": () => import("./locales/en.json").then((m) => m.default),   // USA → anglais
   "en-AU": () => import("./locales/en.json").then((m) => m.default),   // Australie → anglais
+  "en-IE": () => import("./locales/en.json").then((m) => m.default),   // Irlande → anglais
+  "en-NL": () => import("./locales/en.json").then((m) => m.default),   // Pays-Bas → anglais
+  "en-AE": () => import("./locales/en.json").then((m) => m.default),   // Émirats → anglais
+  "pt-PT": () => import("./locales/pt-BR.json").then((m) => m.default), // Portugal → portugais (BR base)
   "fr-BE": () => import("./locales/fr.json").then((m) => m.default),   // Belgique → français
   "fr-CH": () => import("./locales/fr.json").then((m) => m.default),   // Suisse → français
   "fr-CA": () => import("./locales/fr.json").then((m) => m.default),   // Canada → français
+  "fr-LU": () => import("./locales/fr.json").then((m) => m.default),   // Luxembourg → français
+  "fr-SN": () => import("./locales/fr.json").then((m) => m.default),   // Sénégal → français
+  "fr-CI": () => import("./locales/fr.json").then((m) => m.default),   // Côte d'Ivoire → français
 };
 
 // Deep merge utility to prevent undefined UI errors
@@ -47,15 +55,14 @@ export const getDictionary = async (locale: Locale) => {
   if (locale === "fr") return dict;
 
   // Choisir la langue de fallback selon la locale
-  const frLocales = ["fr-MA", "fr-BE", "fr-CH", "fr-CA"];
-  const enLocales = ["en-US", "en-AU"];
-  const ptLocales = ["pt-BR"];
+  const frLocales = ["fr-MA", "fr-BE", "fr-CH", "fr-CA", "fr-LU", "fr-SN", "fr-CI"];
+  const enLocales = ["en-US", "en-AU", "en-IE", "en-NL", "en-AE"];
+  const ptLocales = ["pt-BR", "pt-PT"];
 
   let fallbackLocale: Locale = "fr";
   if (enLocales.includes(locale)) fallbackLocale = "en";
   else if (ptLocales.includes(locale)) fallbackLocale = "en";
   else if (frLocales.includes(locale)) fallbackLocale = "fr";
-  // es, es-MX, es-CO, es-CL, es-AR → fallback "fr" (merge complète)
 
   const fallbackDict = await dictionaries[fallbackLocale]();
   return deepMerge(fallbackDict, dict);

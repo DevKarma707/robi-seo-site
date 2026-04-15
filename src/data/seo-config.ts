@@ -2,7 +2,7 @@
 // Ce fichier contient toutes les données SEO pour les 50+ pages
 // Multilingual support: fr, en, es
 
-import { Locale } from "@/lib/i18n/config";
+import { Locale, AnyLocale } from "@/lib/i18n/config";
 
 export const siteConfig = {
   name: "Robi AI",
@@ -17,7 +17,7 @@ export const siteConfig = {
 };
 
 // ===== INDUSTRY CATEGORIES =====
-type LocaleStrings = Partial<Record<Locale, string>> & { fr: string };
+type LocaleStrings = Partial<Record<AnyLocale, string>> & { fr: string };
 
 interface IndustryCategory {
   id: string;
@@ -869,6 +869,26 @@ export const blogPosts = [
     readTime: { fr: 15, en: 15, es: 15 },
     author: "Équipe Robi AI",
   },
+  {
+    slug: "robi-disponible-14-pays",
+    title: {
+      fr: "Robi AI Disponible dans 14 Pays : Facturez Partout dans le Monde",
+      en: "Robi AI Available in 14 Countries: Invoice Anywhere in the World",
+      es: "Robi AI Disponible en 14 Países: Factura en Cualquier Parte del Mundo",
+      "pt-BR": "Robi AI Disponível em 14 Países: Fature em Qualquer Lugar do Mundo"
+    },
+    description: {
+      fr: "Robi AI est désormais disponible dans 14 pays avec tarification locale : France, Belgique, Suisse, Canada, Maroc, Royaume-Uni, États-Unis, Australie, Espagne, Mexique, Colombie, Chili, Argentine et Brésil.",
+      en: "Robi AI is now available in 14 countries with local pricing: France, Belgium, Switzerland, Canada, Morocco, UK, USA, Australia, Spain, Mexico, Colombia, Chile, Argentina and Brazil.",
+      es: "Robi AI ya está disponible en 14 países con precios locales: Francia, Bélgica, Suiza, Canadá, Marruecos, Reino Unido, EE.UU., Australia, España, México, Colombia, Chile, Argentina y Brasil.",
+      "pt-BR": "O Robi AI já está disponível em 14 países com preços locais: França, Bélgica, Suíça, Canadá, Marrocos, Reino Unido, EUA, Austrália, Espanha, México, Colômbia, Chile, Argentina e Brasil."
+    },
+    keywords: ["robi ai 14 pays", "facturation internationale freelance", "invoicing software worldwide", "facturación internacional", "faturamento global freelancer"],
+    category: "business",
+    date: "2026-04-14",
+    readTime: { fr: 7, en: 7, es: 7 },
+    author: "Équipe Robi AI",
+  },
 ];
 
 // ===== TOOLS =====
@@ -908,13 +928,14 @@ export const schemaTemplates = {
 };
 
 // ===== HELPER: Get localized string =====
-export function t(obj: LocaleStrings | string, locale: Locale): string {
+export function t(obj: LocaleStrings | string, locale: string): string {
   if (typeof obj === "string") return obj;
-  if (obj[locale]) return obj[locale] as string;
-  
+  if (obj[locale as AnyLocale]) return obj[locale as AnyLocale] as string;
+
   // Smart fallbacks
-  if (locale.startsWith("es")) return obj.es as string;
-  if (locale === "pt-BR") return (obj.en || obj.fr) as string;
-  
+  if (locale.startsWith("es")) return (obj.es || obj.fr) as string;
+  if (locale.startsWith("pt")) return (obj["pt-BR" as AnyLocale] || obj.en || obj.fr) as string;
+  if (locale.startsWith("en")) return (obj.en || obj.fr) as string;
+
   return obj.fr as string;
 }
