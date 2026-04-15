@@ -36,53 +36,41 @@ export type AnyLocale = Locale | (typeof hiddenLocales)[number];
 export const defaultLocale: Locale = "fr";
 
 export const localeNames: Record<string, string> = {
+  en:      "United Kingdom",
   "en-AE": "Emirates",
   "en-AU": "Australia",
+  "en-IE": "Ireland",
+  "en-NL": "Netherlands",
+  "en-US": "United States",
+  es:      "España",
+  fr:      "France",
   "fr-BE": "Belgique",
   "fr-CA": "Canada",
+  "fr-CH": "Suisse",
   "fr-CI": "Côte d'Ivoire",
-  es:      "España",
-  "en-US": "United States",
-  fr:      "France",
-  "en-IE": "Ireland",
   "fr-LU": "Luxembourg",
   "fr-MA": "Maroc",
-  "en-NL": "Netherlands",
-  "pt-PT": "Portugal",
-  en:      "United Kingdom",
   "fr-SN": "Sénégal",
-  "fr-CH": "Suisse",
-  // Masqués (conservés)
-  "pt-BR": "Brasil",
-  "es-MX": "México",
-  "es-CO": "Colombia",
-  "es-CL": "Chile",
-  "es-AR": "Argentina",
+  "pt-PT": "Portugal",
 };
 
 export const localeFlags: Record<string, string> = {
+  en:      "🇬🇧",
   "en-AE": "🇦🇪",
   "en-AU": "🇦🇺",
+  "en-IE": "🇮🇪",
+  "en-NL": "🇳🇱",
+  "en-US": "🇺🇸",
+  es:      "🇪🇸",
+  fr:      "🇫🇷",
   "fr-BE": "🇧🇪",
   "fr-CA": "🇨🇦",
+  "fr-CH": "🇨🇭",
   "fr-CI": "🇨🇮",
-  es:      "🇪🇸",
-  "en-US": "🇺🇸",
-  fr:      "🇫🇷",
-  "en-IE": "🇮🇪",
   "fr-LU": "🇱🇺",
   "fr-MA": "🇲🇦",
-  "en-NL": "🇳🇱",
-  "pt-PT": "🇵🇹",
-  en:      "🇬🇧",
   "fr-SN": "🇸🇳",
-  "fr-CH": "🇨🇭",
-  // Masqués
-  "pt-BR": "🇧🇷",
-  "es-MX": "🇲🇽",
-  "es-CO": "🇨🇴",
-  "es-CL": "🇨🇱",
-  "es-AR": "🇦🇷",
+  "pt-PT": "🇵🇹",
 };
 
 export const localeCurrencies: Record<string, { currency: string; symbol: string }> = {
@@ -111,12 +99,6 @@ export const localeCurrencies: Record<string, { currency: string; symbol: string
   // Franc CFA (BCEAO)
   "fr-SN": { currency: "XOF", symbol: "CFA" },
   "fr-CI": { currency: "XOF", symbol: "CFA" },
-  // --- Masqués (LATAM) ---
-  "pt-BR": { currency: "BRL", symbol: "R$" },
-  "es-MX": { currency: "MXN", symbol: "$" },
-  "es-CO": { currency: "COP", symbol: "$" },
-  "es-CL": { currency: "CLP", symbol: "$" },
-  "es-AR": { currency: "ARS", symbol: "$" },
 };
 
 export const priceMap: Record<string, { launch: number; normal: number; monthly: number; yearly: number; biYearly: number }> = {
@@ -145,10 +127,4 @@ export const priceMap: Record<string, { launch: number; normal: number; monthly:
   // Franc CFA — Sénégal & Côte d'Ivoire
   "fr-SN": { launch: 29000,   normal: 75000,  monthly: 7500,  yearly: 45000,  biYearly: 75000 },
   "fr-CI": { launch: 29000,   normal: 75000,  monthly: 7500,  yearly: 45000,  biYearly: 75000 },
-  // --- Masqués (LATAM) ---
-  "pt-BR": { launch: 299,     normal: 800,    monthly: 59,    yearly: 449,    biYearly: 750 },
-  "es-MX": { launch: 1200,    normal: 3000,   monthly: 299,   yearly: 1800,   biYearly: 3000 },
-  "es-CO": { launch: 249000,  normal: 600000, monthly: 59000, yearly: 379000, biYearly: 600000 },
-  "es-CL": { launch: 59000,   normal: 149000, monthly: 14900, yearly: 89000,  biYearly: 149000 },
-  "es-AR": { launch: 59000,   normal: 149000, monthly: 14900, yearly: 89000,  biYearly: 149000 },
 };
