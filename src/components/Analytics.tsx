@@ -2,7 +2,7 @@
 
 import Script from 'next/script';
 
-const GA_ID = 'G-XXXXXXXXXX';
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-5RMK9FPV61';
 
 export function Analytics() {
   // Only load Google Analytics in production
