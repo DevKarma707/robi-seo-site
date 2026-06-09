@@ -17,7 +17,10 @@ import {
   articleContent as dbArticleContent,
   articleReadTime,
   articleMetaDesc,
+  articleTldr,
+  articleFaq,
   type DbArticle,
+  type FaqItem,
 } from "@/lib/blog-articles";
 
 // Static slugs are prerendered; articles published from /admin (Firestore)
@@ -35,6 +38,8 @@ type ArticleView = {
   author: string;
   content: string;
   readMinutes: number;
+  tldr: string[];
+  faq: FaqItem[];
 };
 
 function viewFromDb(a: DbArticle, locale: Locale): ArticleView {
@@ -47,6 +52,8 @@ function viewFromDb(a: DbArticle, locale: Locale): ArticleView {
     author: "Équipe Robi AI",
     content: dbArticleContent(a, locale),
     readMinutes: articleReadTime(a, locale),
+    tldr: articleTldr(a, locale),
+    faq: articleFaq(a, locale),
   };
 }
 
@@ -1800,6 +1807,8 @@ export default async function BlogPostPage({
         (staticPost.readTime as Record<string, number>)[locale] ??
         (staticPost.readTime as Record<string, number>)[fallbackLocale] ??
         staticPost.readTime.fr,
+      tldr: [],
+      faq: [],
     };
   } else {
     const a = await getPublishedArticleBySlug(slug);
@@ -1926,6 +1935,24 @@ export default async function BlogPostPage({
         }}
       />
 
+      {/* JSON-LD FAQPage (GEO : format n°1 pour être cité par les IA) */}
+      {view.faq.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: view.faq.map((f) => ({
+                "@type": "Question",
+                name: f.q,
+                acceptedAnswer: { "@type": "Answer", text: f.a },
+              })),
+            }),
+          }}
+        />
+      )}
+
       <article className="pt-32 pb-24 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back Link */}
@@ -1970,11 +1997,48 @@ export default async function BlogPostPage({
             </div>
           </header>
 
+          {/* TL;DR (GEO : résumé condensé, cité par les IA) */}
+          {view.tldr.length > 0 && (
+            <div className="mb-10 rounded-2xl border border-[#BEF221]/40 bg-[#BEF221]/5 p-6">
+              <p className="text-xs font-black uppercase tracking-widest text-gray-900 mb-3">
+                {locale.startsWith("en") ? "In short" : locale.startsWith("es") ? "En resumen" : locale.startsWith("pt") ? "Em resumo" : "En bref"}
+              </p>
+              <ul className="space-y-2">
+                {view.tldr.map((point, i) => (
+                  <li key={i} className="flex gap-2 text-gray-700">
+                    <span className="text-[#BEF221] font-black">•</span>
+                    <span dangerouslySetInnerHTML={{ __html: point.replace(/\*\*(.+?)\*\*/g, '<strong class="text-gray-900">$1</strong>') }} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {/* Content */}
           <div
             className="prose prose-lg max-w-none"
             dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
+
+          {/* FAQ (GEO : FAQPage schema ci-dessus) */}
+          {view.faq.length > 0 && (
+            <section className="mt-14">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                {locale.startsWith("en") ? "Frequently asked questions" : locale.startsWith("es") ? "Preguntas frecuentes" : locale.startsWith("pt") ? "Perguntas frequentes" : "Questions fréquentes"}
+              </h2>
+              <div className="space-y-4">
+                {view.faq.map((f, i) => (
+                  <details key={i} className="group rounded-xl border border-gray-200 p-5 open:bg-gray-50">
+                    <summary className="cursor-pointer font-semibold text-gray-900 list-none flex items-center justify-between">
+                      {f.q}
+                      <span className="text-[#BEF221] transition-transform group-open:rotate-45 text-xl leading-none">+</span>
+                    </summary>
+                    <p className="mt-3 text-gray-600 leading-relaxed">{f.a}</p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* CTA Box */}
           <Card variant="accent" className="mt-12 text-center">

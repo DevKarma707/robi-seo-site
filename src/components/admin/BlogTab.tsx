@@ -475,6 +475,8 @@ const EXAMPLE_ARTICLE_JSON = `{
   "published": true,
   "featured": false,
   "coverImage": "",
+  "tldrFr": ["Point clé 1 (résumé GEO).", "Point clé 2."],
+  "faqFr": [{ "q": "Question fréquente ?", "a": "Réponse concise." }],
   "contentFr": "## Titre H2\\n\\nParagraphe en markdown.\\n\\n- Liste à puce\\n- Autre item\\n\\n### Sous-titre H3\\n\\nTexte avec **gras** et [un lien](https://robi-app.com).",
   "contentEn": "## H2 title\\n\\nParagraph…",
   "contentEs": "## Título H2\\n\\nPárrafo…"
@@ -544,6 +546,7 @@ const ArticleJsonImportModal: React.FC<{ onClose: () => void; onResult: (msg: st
             <ul className="list-disc list-inside space-y-0.5">
               <li><strong>slug</strong>, <strong>titleFr</strong>, <strong>contentFr</strong> requis</li>
               <li>Optionnels : <code>titleEn/Es</code>, <code>excerptFr/En/Es</code>, <code>contentEn/Es</code>, <code>category</code>, <code>keywords[]</code>, <code>metaDescFr/En/Es</code>, <code>coverImage</code>, <code>date</code>, <code>published</code>, <code>featured</code></li>
+              <li>GEO : <code>tldrFr/En/Es</code> (puces) + <code>faqFr/En/Es</code> (<code>[{`{q, a}`}]</code>) → bloc résumé + FAQ + FAQPage schema</li>
               <li>EN/ES manquants : copie du FR par défaut · readTime calculé automatiquement</li>
               <li>Markdown : <code>##</code> H2, <code>###</code> H3, <code>**gras**</code>, <code>- liste</code>, <code>[lien](url)</code></li>
               <li>Un <code>slug</code> déjà présent est ignoré (sauf case « écraser »)</li>

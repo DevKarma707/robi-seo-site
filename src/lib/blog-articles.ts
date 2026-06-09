@@ -22,7 +22,11 @@ export interface DbArticle {
   readTimeFr: number; readTimeEn: number; readTimeEs: number;
   coverImage?: string;
   metaDescFr?: string; metaDescEn?: string; metaDescEs?: string;
+  tldrFr: string[]; tldrEn: string[]; tldrEs: string[];
+  faqFr: FaqItem[]; faqEn: FaqItem[]; faqEs: FaqItem[];
 }
+
+export type FaqItem = { q: string; a: string };
 
 // ─── Firestore REST value decoding ─────────────────────────
 type FsValue = Record<string, unknown>;
@@ -37,6 +41,12 @@ function decode(v: FsValue | undefined): unknown {
     const arr = (v.arrayValue as { values?: FsValue[] }).values || [];
     return arr.map(decode);
   }
+  if ("mapValue" in v) {
+    const f = (v.mapValue as { fields?: Record<string, FsValue> }).fields || {};
+    const out: Record<string, unknown> = {};
+    for (const k in f) out[k] = decode(f[k]);
+    return out;
+  }
   if ("nullValue" in v) return null;
   return undefined;
 }
@@ -44,7 +54,11 @@ function decode(v: FsValue | undefined): unknown {
 function toArticle(fields: Record<string, FsValue>): DbArticle {
   const s = (k: string) => (decode(fields[k]) as string) ?? "";
   const n = (k: string) => (decode(fields[k]) as number) ?? 0;
+  const strs = (k: string) => (decode(fields[k]) as string[]) ?? [];
+  const faqs = (k: string) => ((decode(fields[k]) as FaqItem[]) ?? []).filter((f) => f && f.q && f.a);
   const contentFr = s("contentFr");
+  const tldrFr = strs("tldrFr");
+  const faqFr = faqs("faqFr");
   return {
     slug: s("slug"),
     titleFr: s("titleFr"), titleEn: s("titleEn") || s("titleFr"), titleEs: s("titleEs") || s("titleFr"),
@@ -58,6 +72,8 @@ function toArticle(fields: Record<string, FsValue>): DbArticle {
     metaDescFr: s("metaDescFr") || undefined,
     metaDescEn: s("metaDescEn") || undefined,
     metaDescEs: s("metaDescEs") || undefined,
+    tldrFr, tldrEn: strs("tldrEn").length ? strs("tldrEn") : tldrFr, tldrEs: strs("tldrEs").length ? strs("tldrEs") : tldrFr,
+    faqFr, faqEn: faqs("faqEn").length ? faqs("faqEn") : faqFr, faqEs: faqs("faqEs").length ? faqs("faqEs") : faqFr,
   };
 }
 
@@ -130,4 +146,12 @@ export function articleReadTime(a: DbArticle, locale: Locale): number {
 export function articleMetaDesc(a: DbArticle, locale: Locale): string {
   const suffix = langSuffix(locale);
   return (a[`metaDesc${suffix}`] as string | undefined) || articleExcerpt(a, locale);
+}
+export function articleTldr(a: DbArticle, locale: Locale): string[] {
+  const v = a[`tldr${langSuffix(locale)}`];
+  return v.length ? v : a.tldrFr;
+}
+export function articleFaq(a: DbArticle, locale: Locale): FaqItem[] {
+  const v = a[`faq${langSuffix(locale)}`];
+  return v.length ? v : a.faqFr;
 }

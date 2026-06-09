@@ -98,6 +98,11 @@ export interface Article {
   contentEs: string;
   category: string; // guides | legal | tips | business
   keywords: string[];
+  // GEO: résumé en tête (puces) + FAQ (→ FAQPage schema), par langue
+  tldrFr?: string[]; tldrEn?: string[]; tldrEs?: string[];
+  faqFr?: { q: string; a: string }[];
+  faqEn?: { q: string; a: string }[];
+  faqEs?: { q: string; a: string }[];
   metaDescFr?: string;
   metaDescEn?: string;
   metaDescEs?: string;
@@ -225,6 +230,29 @@ export const importArticlesFromJson = async (
     if (typeof a.metaDescEn === "string") article.metaDescEn = a.metaDescEn;
     if (typeof a.metaDescEs === "string") article.metaDescEs = a.metaDescEs;
     if (typeof a.coverImage === "string") article.coverImage = a.coverImage;
+
+    // GEO: TL;DR (puces) + FAQ ({q,a}[]) — EN/ES retombent sur FR si absents
+    const strArr = (v: unknown) =>
+      Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : undefined;
+    const faqArr = (v: unknown) =>
+      Array.isArray(v)
+        ? v
+            .filter((x): x is { q: string; a: string } =>
+              !!x && typeof (x as { q?: unknown }).q === "string" && typeof (x as { a?: unknown }).a === "string")
+            .map((x) => ({ q: x.q, a: x.a }))
+        : undefined;
+    const tldrFr = strArr(a.tldrFr);
+    if (tldrFr) {
+      article.tldrFr = tldrFr;
+      article.tldrEn = strArr(a.tldrEn) ?? tldrFr;
+      article.tldrEs = strArr(a.tldrEs) ?? tldrFr;
+    }
+    const faqFr = faqArr(a.faqFr);
+    if (faqFr) {
+      article.faqFr = faqFr;
+      article.faqEn = faqArr(a.faqEn) ?? faqFr;
+      article.faqEs = faqArr(a.faqEs) ?? faqFr;
+    }
 
     if (exists && overwrite) {
       await updateDoc(doc(db, "articles", idBySlug.get(slug)!), { ...article, updatedAt: serverTimestamp() });
