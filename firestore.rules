@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Seul l'admin Robi peut écrire articles / lire visites.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in ['ralphkaram75014@gmail.com', 'robi@robi-app.com'];
+    }
+
+    // ── Articles de blog ──
+    // Lecture publique des articles publiés (blog public).
+    // L'admin lit aussi les brouillons et peut tout écrire.
+    match /articles/{id} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ── Visites (compteur maison) ──
+    // N'importe quel visiteur peut créer une visite (write-only, champs limités).
+    // Seul l'admin peut lire les statistiques.
+    match /visits/{id} {
+      allow read: if isAdmin();
+      allow create: if request.resource.data.keys().hasOnly(['path', 'source', 'createdAt'])
+        && request.resource.data.path is string
+        && request.resource.data.source is string;
+      allow update, delete: if false;
+    }
+  }
+}

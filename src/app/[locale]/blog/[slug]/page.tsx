@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { blogPosts, t } from "@/data/seo-config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { Locale } from "@/lib/i18n/config";
+import { Locale, locales } from "@/lib/i18n/config";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -30,14 +30,49 @@ export async function generateMetadata({
     return { title: "Article non trouvé" };
   }
 
+  const path = `/blog/${slug}`;
+
   return {
     title: t(post.title, locale),
     description: t(post.description, locale),
     keywords: post.keywords,
+    alternates: {
+      canonical: `/${locale}${path}`,
+      languages: {
+        ...locales.reduce(
+          (acc, l) => ({ ...acc, [l]: `/${l}${path}` }),
+          {} as Record<string, string>
+        ),
+        "x-default": `/fr${path}`,
+      },
+    },
     openGraph: {
       title: t(post.title, locale),
       description: t(post.description, locale),
+      url: `https://robi-app.com/${locale}${path}`,
+      siteName: "Robi AI",
+      locale: locale.replace("-", "_"),
       type: "article",
+      publishedTime: post.date,
+      modifiedTime: post.date,
+      authors: [post.author],
+      section: post.category,
+      tags: post.keywords,
+      images: [
+        {
+          url: "https://robi-app.com/og.png",
+          width: 1200,
+          height: 630,
+          alt: t(post.title, locale),
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t(post.title, locale),
+      description: t(post.description, locale),
+      images: ["https://robi-app.com/og.png"],
+      creator: "@iamrobiai",
     },
   };
 }
@@ -54,54 +89,102 @@ const articleContent: Record<string, Record<string, string>> = {
   "comment-facturer-premier-client": {
     fr: `## Introduction
 
-Félicitations ! Vous venez de décrocher votre premier client en tant que freelance. Maintenant vient la question cruciale : comment facturer correctement ?
+Félicitations : vous venez de décrocher votre premier client en tant que freelance. Reste la question qui bloque presque tous les débutants — **comment facturer son premier client** correctement, sans risquer un litige ou un rejet par l'administration ?
 
-Ce guide vous accompagne étape par étape pour émettre votre première facture en toute conformité.
+Émettre une **première facture freelance** conforme n'a rien de compliqué une fois qu'on connaît les règles. Ce guide vous accompagne étape par étape : statut juridique, mentions obligatoires, TVA, délais de paiement et relance des impayés. À la fin, vous saurez exactement quoi écrire sur votre facture et comment être payé rapidement.
 
-## 1. Vérifiez votre statut juridique
+## 1. Vérifiez votre statut juridique avant de facturer
 
-Avant de facturer, assurez-vous d'avoir un statut légal :
-- **Micro-entreprise** : le plus simple pour démarrer
-- **SASU/EURL** : pour des revenus plus importants
-- **Portage salarial** : si vous préférez éviter l'administratif
+On ne peut pas émettre de facture légale sans structure déclarée. Avant tout, choisissez un statut adapté à votre activité :
 
-## 2. Les mentions obligatoires
+- **Micro-entreprise (auto-entrepreneur)** : le plus simple et le plus rapide pour démarrer. Idéal sous les seuils de chiffre d'affaires, avec une comptabilité allégée.
+- **EURL / SASU** : pertinent dès que vos revenus augmentent ou que vous voulez optimiser charges et protection sociale.
+- **Portage salarial** : vous facturez via une société de portage qui gère l'administratif — vous évitez de créer une entreprise.
 
-Votre facture doit obligatoirement contenir :
-- Votre nom/raison sociale et adresse
-- Numéro SIRET
-- Nom et adresse du client
-- Date de la facture
-- Numéro de facture unique
-- Description détaillée de la prestation
-- Montant HT et TTC
-- Taux de TVA (ou mention "TVA non applicable, art. 293 B du CGI")
-- Conditions de paiement
+> Tant que votre numéro SIRET n'est pas attribué, vous ne pouvez pas facturer légalement. Anticipez : l'immatriculation prend quelques jours.
 
-## 3. Fixez vos conditions de paiement
+## 2. Les mentions obligatoires sur une facture
 
-Les délais standards :
-- **Paiement à réception** : idéal pour les petits montants
-- **30 jours** : standard professionnel
-- **45 jours fin de mois** : pour les grandes entreprises
+C'est le cœur du sujet. Une **facture auto-entrepreneur** (ou de toute entreprise) doit obligatoirement contenir :
 
-## 4. Envoyez votre facture
+- **Vos coordonnées** : nom ou raison sociale, adresse, numéro SIRET
+- **Les coordonnées du client** : nom et adresse de facturation
+- **La date d'émission** de la facture
+- **Un numéro de facture unique** et séquentiel (jamais de trou ni de doublon)
+- **La description détaillée** de la prestation ou des produits (quantité, prix unitaire)
+- **Le montant HT, le taux et le montant de TVA, et le montant TTC**
+- **La date d'échéance** et les conditions de paiement
+- **Les pénalités de retard** et l'indemnité forfaitaire de recouvrement (40 € en France)
 
-Plusieurs options :
-- Par email avec PDF en pièce jointe
-- Via un logiciel de facturation comme Robi AI
-- Par courrier recommandé (pour les montants importants)
+### Le cas de la TVA en micro-entreprise
 
-## 5. Suivez les paiements
+Si vous bénéficiez de la franchise en base de TVA, vous ne facturez pas de TVA. Vous devez alors faire apparaître la mention : **« TVA non applicable, article 293 B du CGI »**. Omettre cette mention est l'erreur n°1 des débutants.
 
-Ne laissez pas traîner les impayés :
-- Relancez poliment après 7 jours de retard
-- Envoyez une mise en demeure après 30 jours
-- Envisagez l'injonction de payer si nécessaire
+## 3. Exemple concret de première facture
+
+Voici à quoi ressemble une facture simple et conforme :
+
+- **Émetteur** : Marie Dupont — Designer freelance — 12 rue des Lilas, 75011 Paris — SIRET 123 456 789 00012
+- **Client** : Studio Belmont — 8 avenue Victor Hugo, 69002 Lyon
+- **Facture n° 2025-001** — émise le 10/03/2025 — échéance le 09/04/2025
+- **Prestation** : Création d'une identité visuelle (logo + charte) — 1 × 1 200 €
+- **Total** : 1 200 € — *TVA non applicable, art. 293 B du CGI*
+- **Règlement** : virement bancaire sous 30 jours. Pénalités de retard : 3× le taux légal. Indemnité forfaitaire : 40 €.
+
+## 4. Fixez vos conditions et délais de paiement
+
+Le délai de paiement se négocie, mais il est encadré par la loi (60 jours maximum en B2B en France). Les usages les plus courants :
+
+- **Paiement à réception** : idéal pour un premier client ou un petit montant
+- **30 jours** : le standard professionnel
+- **45 jours fin de mois** : fréquent avec les grandes entreprises
+
+**Conseil** : pour une première mission, demandez un acompte de 30 à 50 % à la commande. Vous sécurisez votre trésorerie et filtrez les clients sérieux.
+
+## 5. Envoyez votre facture (et gardez une trace)
+
+Plusieurs options selon le contexte :
+
+- **Par email avec le PDF en pièce jointe** : la méthode standard, rapide et traçable
+- **Via un logiciel de facturation** comme Robi AI : numérotation automatique, mentions pré-remplies, suivi des paiements
+- **Par courrier recommandé** : utile pour les montants élevés ou en cas de client à risque
+
+Conservez chaque facture émise pendant **10 ans** : c'est une obligation légale en France.
+
+## 6. Suivez les paiements et relancez les impayés
+
+Une facture envoyée n'est pas une facture payée. Mettez en place un suivi simple :
+
+- **J+7 après échéance** : relance cordiale par email
+- **J+15** : relance ferme avec rappel des pénalités
+- **J+30** : mise en demeure par lettre recommandée
+- **Au-delà** : injonction de payer auprès du tribunal si nécessaire
+
+C'est l'étape que tout le monde déteste — et que Robi AI automatise : l'IA rédige et envoie les relances à votre place, au bon moment, sans abîmer la relation client.
+
+## FAQ : facturer son premier client
+
+### Peut-on facturer sans être auto-entrepreneur ?
+
+Non. Il faut un statut déclaré (et un numéro SIRET) pour émettre une facture légale. La facturation « au black » ou via une simple note manuscrite vous expose à des sanctions.
+
+### Quel logiciel pour sa première facture ?
+
+Un tableur peut suffire au début, mais il oblige à gérer manuellement numérotation, mentions et relances — sources d'erreurs. Un outil comme Robi AI génère une facture conforme en quelques secondes, par simple commande vocale ou texte.
+
+### Faut-il facturer la TVA pour un premier client ?
+
+Pas si vous êtes en franchise en base de TVA : vous facturez en HT avec la mention « TVA non applicable, art. 293 B du CGI ». Dès que vous dépassez les seuils, vous devez collecter la TVA.
+
+### Combien de temps pour être payé ?
+
+Cela dépend du délai convenu (réception, 30 ou 45 jours). Un acompte à la commande et des relances automatiques réduisent fortement le délai réel d'encaissement.
 
 ## Conclusion
 
-Facturer correctement dès le départ vous évitera bien des problèmes. Avec un outil comme Robi AI, vous pouvez automatiser tout ce processus et vous concentrer sur votre cœur de métier.`,
+Facturer correctement dès votre premier client vous évite litiges, retards de paiement et stress administratif. Retenez l'essentiel : un statut déclaré, toutes les mentions obligatoires, un délai clair et un suivi des paiements rigoureux.
+
+Avec un outil comme **Robi AI**, toutes ces étapes sont automatisées : création de la facture conforme en 30 secondes, numérotation et mentions légales gérées pour vous, relances rédigées par l'IA. Vous vous concentrez sur votre métier, Robi s'occupe de la facturation.`,
 
     en: `## Introduction
 
@@ -1653,6 +1736,26 @@ export default async function BlogPostPage({
   const content = localeContent?.[locale] || localeContent?.[fallbackLocale] || localeContent?.fr || "";
   const otherPosts = blogPosts.filter((p) => p.slug !== slug).slice(0, 3);
 
+  // Localized publication date + reading time (was hardcoded "15 février 2024" / "8 min")
+  const formattedDate = new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(post.date));
+  const readMinutes =
+    (post.readTime as Record<string, number>)[locale] ??
+    (post.readTime as Record<string, number>)[fallbackLocale] ??
+    post.readTime.fr;
+
+  // Localized "Home" label for the breadcrumb schema (was hardcoded "Accueil")
+  const homeLabel = locale.startsWith("en")
+    ? "Home"
+    : locale.startsWith("es")
+    ? "Inicio"
+    : locale.startsWith("pt")
+    ? "Início"
+    : "Accueil";
+
   // Simple markdown to HTML
   const htmlContent = content
     .split("\n")
@@ -1715,8 +1818,8 @@ export default async function BlogPostPage({
               width: 1200,
               height: 630,
             },
-            datePublished: "2024-02-15",
-            dateModified: "2024-02-15",
+            datePublished: post.date,
+            dateModified: post.date,
             articleSection: post.category,
           }),
         }}
@@ -1733,13 +1836,13 @@ export default async function BlogPostPage({
               {
                 "@type": "ListItem",
                 position: 1,
-                name: "Accueil",
+                name: homeLabel,
                 item: `https://robi-app.com/${locale}`,
               },
               {
                 "@type": "ListItem",
                 position: 2,
-                name: "Blog",
+                name: dict.nav.blog,
                 item: `https://robi-app.com/${locale}/blog`,
               },
               {
@@ -1784,11 +1887,11 @@ export default async function BlogPostPage({
             <div className="flex items-center gap-6 text-gray-400 text-sm">
               <span className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
-                15 février 2024
+                {formattedDate}
               </span>
               <span className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                8 {dict.pages.blog.readTime}
+                {readMinutes} {dict.pages.blog.readTime}
               </span>
               <button className="flex items-center gap-2 hover:text-[#BEF221] transition-colors">
                 <Share2 className="w-4 h-4" />

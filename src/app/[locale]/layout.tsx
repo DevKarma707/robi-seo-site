@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 import { Header } from "@/components/layouts/Header";
 import { Footer } from "@/components/layouts/Footer";
+import { AffiliateTracking } from "@/components/AffiliateTracking";
+import { VisitLogger } from "@/components/VisitLogger";
 import { locales, Locale, defaultLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
@@ -93,6 +95,8 @@ export default async function LocaleLayout({
         <link rel="prefetch" href="https://go.robi-app.com" />
       </head>
       <body className={`${inter.variable} antialiased`}>
+        <AffiliateTracking />
+        <VisitLogger />
         <Header locale={locale} dict={dict} />
         <main>{children}</main>
         <Footer locale={locale} dict={dict} />
