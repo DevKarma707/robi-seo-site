@@ -8,6 +8,24 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { CTA } from "@/components/sections/CTA";
 import { ArrowRight, Calendar } from "lucide-react";
+import {
+  getPublishedArticles,
+  articleTitle,
+  articleExcerpt,
+  articleReadTime,
+} from "@/lib/blog-articles";
+
+// Revalidate so articles published from /admin (Firestore) appear within ~1 min.
+export const revalidate = 60;
+
+type BlogCard = {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  date: string;
+  readMinutes: number;
+};
 
 export async function generateMetadata({
   params,
@@ -42,11 +60,38 @@ export default async function BlogPage({
   const dict = await getDictionary(locale);
   const blog = dict.pages.blog;
 
-  const getReadTime = (post: typeof blogPosts[0]) => {
+  // Static articles (seo-config) merged with those published from /admin (Firestore).
+  const staticCards: BlogCard[] = blogPosts.map((post) => {
     const rt = post.readTime;
-    if (typeof rt === "object") return (rt as Record<string, number>)[locale] ?? (rt as Record<string, number>).fr;
-    return rt;
-  };
+    const readMinutes =
+      typeof rt === "object"
+        ? (rt as Record<string, number>)[locale] ?? (rt as Record<string, number>).fr
+        : (rt as number);
+    return {
+      slug: post.slug,
+      title: t(post.title, locale),
+      description: t(post.description, locale),
+      category: post.category,
+      date: post.date,
+      readMinutes,
+    };
+  });
+
+  const dbArticles = await getPublishedArticles();
+  const dbCards: BlogCard[] = dbArticles
+    .filter((a) => !blogPosts.some((p) => p.slug === a.slug))
+    .map((a) => ({
+      slug: a.slug,
+      title: articleTitle(a, locale),
+      description: articleExcerpt(a, locale),
+      category: a.category,
+      date: a.date,
+      readMinutes: articleReadTime(a, locale),
+    }));
+
+  const items = [...staticCards, ...dbCards].sort((a, b) => (a.date < b.date ? 1 : -1));
+  const featured = items[0];
+  const rest = items.slice(1);
 
   return (
     <>
@@ -86,46 +131,48 @@ export default async function BlogPage({
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Featured Post */}
-          <Link href={`/${locale}/blog/${blogPosts[0].slug}`} className="block mb-12">
-            <Card variant="dark" className="group cursor-pointer overflow-hidden">
-              <div className="md:flex md:items-center md:gap-12">
-                <div className="md:w-1/2 mb-6 md:mb-0">
-                  <div className="aspect-video bg-gradient-to-br from-[#BEF221]/20 to-gray-100 rounded-2xl" />
-                </div>
-                <div className="md:w-1/2">
-                  <Badge className={categoryColors[blogPosts[0].category]}>
-                    {blog.categories[blogPosts[0].category as keyof typeof blog.categories]}
-                  </Badge>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mt-4 mb-4 group-hover:text-[#BEF221] transition-colors">
-                    {t(blogPosts[0].title, locale)}
-                  </h2>
-                  <p className="text-gray-600 mb-6">{t(blogPosts[0].description, locale)}</p>
-                  <div className="flex items-center gap-4 text-gray-500 text-sm">
-                    <span className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      {new Date(blogPosts[0].date).toLocaleDateString(locale === "fr" ? "fr-FR" : locale === "es" ? "es-ES" : "en-GB", { day: "2-digit", month: "long", year: "numeric" })}
-                    </span>
-                    <span>•</span>
-                    <span>{getReadTime(blogPosts[0])} {blog.readTime}</span>
+          {featured && (
+            <Link href={`/${locale}/blog/${featured.slug}`} className="block mb-12">
+              <Card variant="dark" className="group cursor-pointer overflow-hidden">
+                <div className="md:flex md:items-center md:gap-12">
+                  <div className="md:w-1/2 mb-6 md:mb-0">
+                    <div className="aspect-video bg-gradient-to-br from-[#BEF221]/20 to-gray-100 rounded-2xl" />
+                  </div>
+                  <div className="md:w-1/2">
+                    <Badge className={categoryColors[featured.category] ?? categoryColors.guides}>
+                      {blog.categories[featured.category as keyof typeof blog.categories] ?? featured.category}
+                    </Badge>
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mt-4 mb-4 group-hover:text-[#BEF221] transition-colors">
+                      {featured.title}
+                    </h2>
+                    <p className="text-gray-600 mb-6">{featured.description}</p>
+                    <div className="flex items-center gap-4 text-gray-500 text-sm">
+                      <span className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        {new Date(featured.date).toLocaleDateString(locale === "fr" ? "fr-FR" : locale === "es" ? "es-ES" : "en-GB", { day: "2-digit", month: "long", year: "numeric" })}
+                      </span>
+                      <span>•</span>
+                      <span>{featured.readMinutes} {blog.readTime}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Card>
-          </Link>
+              </Card>
+            </Link>
+          )}
 
           {/* Other Posts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.slice(1).map((post) => (
+            {rest.map((post) => (
               <Link key={post.slug} href={`/${locale}/blog/${post.slug}`}>
                 <Card className="h-full group cursor-pointer">
                   <div className="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl mb-6" />
-                  <Badge className={categoryColors[post.category]}>
-                    {blog.categories[post.category as keyof typeof blog.categories]}
+                  <Badge className={categoryColors[post.category] ?? categoryColors.guides}>
+                    {blog.categories[post.category as keyof typeof blog.categories] ?? post.category}
                   </Badge>
                   <h3 className="text-xl font-bold text-gray-900 mt-4 mb-3 group-hover:text-[#BEF221] transition-colors line-clamp-2">
-                    {t(post.title, locale)}
+                    {post.title}
                   </h3>
-                  <p className="text-gray-500 mb-4 line-clamp-2">{t(post.description, locale)}</p>
+                  <p className="text-gray-500 mb-4 line-clamp-2">{post.description}</p>
                   <div className="flex items-center justify-between text-sm text-gray-400">
                     <span className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />

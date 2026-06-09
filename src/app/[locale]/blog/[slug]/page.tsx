@@ -10,6 +10,45 @@ import { Card } from "@/components/ui/Card";
 import { CTA } from "@/components/sections/CTA";
 import { ArrowLeft, Calendar, Clock, Share2, BookOpen } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import {
+  getPublishedArticleBySlug,
+  articleTitle,
+  articleExcerpt,
+  articleContent as dbArticleContent,
+  articleReadTime,
+  articleMetaDesc,
+  type DbArticle,
+} from "@/lib/blog-articles";
+
+// Static slugs are prerendered; articles published from /admin (Firestore)
+// render on-demand (dynamicParams) and are cached/revalidated.
+export const dynamicParams = true;
+export const revalidate = 60;
+
+// Normalized view used by both static (seo-config) and Firestore articles.
+type ArticleView = {
+  title: string;
+  description: string;
+  category: string;
+  keywords: string[];
+  date: string;
+  author: string;
+  content: string;
+  readMinutes: number;
+};
+
+function viewFromDb(a: DbArticle, locale: Locale): ArticleView {
+  return {
+    title: articleTitle(a, locale),
+    description: articleMetaDesc(a, locale),
+    category: a.category,
+    keywords: a.keywords,
+    date: a.date,
+    author: "Équipe Robi AI",
+    content: dbArticleContent(a, locale),
+    readMinutes: articleReadTime(a, locale),
+  };
+}
 
 export async function generateStaticParams() {
   return blogPosts.map((post) => ({
@@ -24,18 +63,35 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug, locale: rawLocale } = await params;
   const locale = rawLocale as Locale;
-  const post = blogPosts.find((p) => p.slug === slug);
 
-  if (!post) {
-    return { title: "Article non trouvé" };
+  const staticPost = blogPosts.find((p) => p.slug === slug);
+  let title: string, description: string, keywords: string[], date: string, author: string, category: string;
+
+  if (staticPost) {
+    title = t(staticPost.title, locale);
+    description = t(staticPost.description, locale);
+    keywords = staticPost.keywords;
+    date = staticPost.date;
+    author = staticPost.author;
+    category = staticPost.category;
+  } else {
+    const a = await getPublishedArticleBySlug(slug);
+    if (!a) return { title: "Article non trouvé" };
+    const v = viewFromDb(a, locale);
+    title = v.title;
+    description = v.description;
+    keywords = v.keywords;
+    date = v.date;
+    author = v.author;
+    category = v.category;
   }
 
   const path = `/blog/${slug}`;
 
   return {
-    title: t(post.title, locale),
-    description: t(post.description, locale),
-    keywords: post.keywords,
+    title,
+    description,
+    keywords,
     alternates: {
       canonical: `/${locale}${path}`,
       languages: {
@@ -47,30 +103,30 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: t(post.title, locale),
-      description: t(post.description, locale),
+      title,
+      description,
       url: `https://robi-app.com/${locale}${path}`,
       siteName: "Robi AI",
       locale: locale.replace("-", "_"),
       type: "article",
-      publishedTime: post.date,
-      modifiedTime: post.date,
-      authors: [post.author],
-      section: post.category,
-      tags: post.keywords,
+      publishedTime: date,
+      modifiedTime: date,
+      authors: [author],
+      section: category,
+      tags: keywords,
       images: [
         {
           url: "https://robi-app.com/og.png",
           width: 1200,
           height: 630,
-          alt: t(post.title, locale),
+          alt: title,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: t(post.title, locale),
-      description: t(post.description, locale),
+      title,
+      description,
       images: ["https://robi-app.com/og.png"],
       creator: "@iamrobiai",
     },
@@ -1720,32 +1776,46 @@ export default async function BlogPostPage({
   const { slug, locale: rawLocale } = await params;
   const locale = rawLocale as Locale;
   const dict = await getDictionary(locale);
-  const post = blogPosts.find((p) => p.slug === slug);
 
-  if (!post) {
-    notFound();
-  }
+  const staticPost = blogPosts.find((p) => p.slug === slug);
 
-  const localeContent = articleContent[slug];
-  
-  // Smart fallback logic
+  // Smart fallback logic for the static articleContent map
   let fallbackLocale = "fr";
   if (locale.startsWith("es")) fallbackLocale = "es";
   if (locale.startsWith("pt")) fallbackLocale = "en"; // English is better than French for PT fallback
-  
-  const content = localeContent?.[locale] || localeContent?.[fallbackLocale] || localeContent?.fr || "";
+
+  // Build a normalized view from either the static config or Firestore (/admin).
+  let view: ArticleView;
+  if (staticPost) {
+    const localeContent = articleContent[slug];
+    view = {
+      title: t(staticPost.title, locale),
+      description: t(staticPost.description, locale),
+      category: staticPost.category,
+      keywords: staticPost.keywords,
+      date: staticPost.date,
+      author: staticPost.author,
+      content: localeContent?.[locale] || localeContent?.[fallbackLocale] || localeContent?.fr || "",
+      readMinutes:
+        (staticPost.readTime as Record<string, number>)[locale] ??
+        (staticPost.readTime as Record<string, number>)[fallbackLocale] ??
+        staticPost.readTime.fr,
+    };
+  } else {
+    const a = await getPublishedArticleBySlug(slug);
+    if (!a) notFound();
+    view = viewFromDb(a, locale);
+  }
+
+  const content = view.content;
+  const readMinutes = view.readMinutes;
   const otherPosts = blogPosts.filter((p) => p.slug !== slug).slice(0, 3);
 
-  // Localized publication date + reading time (was hardcoded "15 février 2024" / "8 min")
   const formattedDate = new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",
-  }).format(new Date(post.date));
-  const readMinutes =
-    (post.readTime as Record<string, number>)[locale] ??
-    (post.readTime as Record<string, number>)[fallbackLocale] ??
-    post.readTime.fr;
+  }).format(new Date(view.date));
 
   // Localized "Home" label for the breadcrumb schema (was hardcoded "Accueil")
   const homeLabel = locale.startsWith("en")
@@ -1791,11 +1861,11 @@ export default async function BlogPostPage({
             "@context": "https://schema.org",
             "@type": "Article",
             "@id": `https://robi-app.com/${locale}/blog/${slug}`,
-            headline: t(post.title, locale),
-            description: t(post.description, locale),
+            headline: view.title,
+            description: view.description,
             articleBody: content,
             inLanguage: locale,
-            keywords: post.keywords?.join(", ") || "",
+            keywords: view.keywords?.join(", ") || "",
             author: {
               "@type": "Organization",
               name: "Robi AI",
@@ -1818,9 +1888,9 @@ export default async function BlogPostPage({
               width: 1200,
               height: 630,
             },
-            datePublished: post.date,
-            dateModified: post.date,
-            articleSection: post.category,
+            datePublished: view.date,
+            dateModified: view.date,
+            articleSection: view.category,
           }),
         }}
       />
@@ -1848,7 +1918,7 @@ export default async function BlogPostPage({
               {
                 "@type": "ListItem",
                 position: 3,
-                name: t(post.title, locale),
+                name: view.title,
                 item: `https://robi-app.com/${locale}/blog/${slug}`,
               },
             ],
@@ -1871,19 +1941,19 @@ export default async function BlogPostPage({
             locale={locale}
             items={[
               { label: "Blog", href: `/${locale}/blog` },
-              { label: t(post.title, locale) },
+              { label: view.title },
             ]}
           />
 
           {/* Header */}
           <header className="mb-12">
-            <Badge className={categoryColors[post.category]}>
-              {dict.pages.blog.categories[post.category as keyof typeof dict.pages.blog.categories]}
+            <Badge className={categoryColors[view.category] ?? categoryColors.guides}>
+              {dict.pages.blog.categories[view.category as keyof typeof dict.pages.blog.categories] ?? view.category}
             </Badge>
             <h1 className="text-3xl md:text-5xl font-black text-gray-900 mt-4 mb-6 leading-tight">
-              {t(post.title, locale)}
+              {view.title}
             </h1>
-            <p className="text-xl text-gray-500 mb-6">{t(post.description, locale)}</p>
+            <p className="text-xl text-gray-500 mb-6">{view.description}</p>
             <div className="flex items-center gap-6 text-gray-400 text-sm">
               <span className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
