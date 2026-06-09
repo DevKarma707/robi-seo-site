@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Bot, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { Locale } from "@/lib/i18n/config";
@@ -30,7 +30,8 @@ export function Header({ locale, dict }: HeaderProps) {
           {/* Left — Logo */}
           <Link href={`/${locale}`} className="flex items-center gap-2 flex-shrink-0">
             <div className="bg-white/10 backdrop-blur-xl border border-white/20 px-4 py-1.5 rounded-full flex items-center gap-2">
-              <Bot className="w-5 h-5 text-[#BEF221]" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/robot-mark.svg" alt="" className="w-5 h-5" />
               <span className="text-base font-bold text-white">
                 Robi <span className="text-[#BEF221]">AI</span>
               </span>
