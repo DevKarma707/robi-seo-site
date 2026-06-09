@@ -1835,7 +1835,14 @@ export default async function BlogPostPage({
     ? "Início"
     : "Accueil";
 
-  // Simple markdown to HTML
+  // Simple markdown to HTML — gère [lien](url) + **gras** en inline
+  const inline = (s: string) =>
+    s
+      .replace(
+        /\[([^\]]+)\]\(([^)]+)\)/g,
+        '<a href="$2" class="text-gray-900 underline decoration-[#BEF221] decoration-2 underline-offset-2 hover:text-[#BEF221]">$1</a>'
+      )
+      .replace(/\*\*(.+?)\*\*/g, '<strong class="text-gray-900">$1</strong>');
   const htmlContent = content
     .split("\n")
     .map((line) => {
@@ -1843,20 +1850,16 @@ export default async function BlogPostPage({
       if (line.startsWith("### ")) return `<h3 class="text-xl font-semibold text-gray-900 mt-8 mb-3">${line.slice(4)}</h3>`;
       if (line.startsWith("- **")) {
         const match = line.match(/- \*\*(.+?)\*\*\s*:?\s*(.*)/);
-        if (match) return `<li class="text-gray-500 mb-2"><strong class="text-gray-900">${match[1]}</strong>${match[2] ? " : " + match[2] : ""}</li>`;
+        if (match) return `<li class="text-gray-500 mb-2"><strong class="text-gray-900">${match[1]}</strong>${match[2] ? " : " + inline(match[2]) : ""}</li>`;
       }
-      if (line.startsWith("- ")) return `<li class="text-gray-500 mb-2">${line.slice(2)}</li>`;
+      if (line.startsWith("- ")) return `<li class="text-gray-500 mb-2">${inline(line.slice(2))}</li>`;
       if (line.startsWith("1. ") || line.startsWith("2. ") || line.startsWith("3. ") || line.startsWith("4. ") || line.startsWith("5. ") || line.startsWith("6. ") || line.startsWith("7. ") || line.startsWith("8. ")) {
         const text = line.replace(/^\d+\.\s/, "");
-        const boldMatch = text.match(/\*\*(.+?)\*\*(.*)/);
-        if (boldMatch) return `<li class="text-gray-500 mb-2 list-decimal ml-4"><strong class="text-gray-900">${boldMatch[1]}</strong>${boldMatch[2]}</li>`;
-        return `<li class="text-gray-500 mb-2 list-decimal ml-4">${text}</li>`;
+        return `<li class="text-gray-500 mb-2 list-decimal ml-4">${inline(text)}</li>`;
       }
-      if (line.startsWith("> ")) return `<blockquote class="border-l-4 border-[#BEF221]/40 pl-4 my-4 text-gray-500 italic">${line.slice(2)}</blockquote>`;
+      if (line.startsWith("> ")) return `<blockquote class="border-l-4 border-[#BEF221]/40 pl-4 my-4 text-gray-500 italic">${inline(line.slice(2))}</blockquote>`;
       if (line.trim() === "") return "";
-      // Bold inline
-      const processed = line.replace(/\*\*(.+?)\*\*/g, '<strong class="text-gray-900">$1</strong>');
-      return `<p class="text-gray-500 mb-4 leading-relaxed">${processed}</p>`;
+      return `<p class="text-gray-500 mb-4 leading-relaxed">${inline(line)}</p>`;
     })
     .join("\n");
 
