@@ -37,10 +37,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Skip for static files and API routes
+  // Skip for static files, API routes, and the admin dashboard (no locale prefix)
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
+    pathname.startsWith("/admin") ||
     pathname.includes(".") // static files
   ) {
     return NextResponse.next();
