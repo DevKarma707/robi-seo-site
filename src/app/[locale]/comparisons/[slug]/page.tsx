@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { CTA } from "@/components/sections/CTA";
 import { Check, X, Minus } from "lucide-react";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { Locale } from "@/lib/i18n/config";
+import { Locale, isContentIndexable } from "@/lib/i18n/config";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export async function generateStaticParams() {
@@ -32,6 +32,7 @@ export async function generateMetadata({
     title: t(comparison.title, locale as Locale),
     description: t(comparison.description, locale as Locale),
     keywords: comparison.keywords,
+    robots: isContentIndexable(locale) ? undefined : { index: false, follow: true },
   };
 }
 

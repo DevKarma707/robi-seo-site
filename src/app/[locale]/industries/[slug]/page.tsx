@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { industries, t } from "@/data/seo-config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { Locale, localeCurrencies, priceMap } from "@/lib/i18n/config";
+import { Locale, localeCurrencies, priceMap, isContentIndexable } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -39,6 +39,7 @@ export async function generateMetadata({
     title: t(industry.title, locale),
     description: t(industry.description, locale),
     keywords: industry.keywords,
+    robots: isContentIndexable(locale) ? undefined : { index: false, follow: true },
     openGraph: {
       title: t(industry.title, locale),
       description: t(industry.description, locale),

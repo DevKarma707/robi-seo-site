@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { features, t } from "@/data/seo-config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { Locale } from "@/lib/i18n/config";
+import { Locale, isContentIndexable } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -34,6 +34,7 @@ export async function generateMetadata({
     title: t(feature.title, locale),
     description: t(feature.description, locale),
     keywords: feature.keywords,
+    robots: isContentIndexable(locale) ? undefined : { index: false, follow: true },
   };
 }
 

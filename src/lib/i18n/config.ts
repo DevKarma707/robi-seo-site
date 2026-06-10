@@ -35,6 +35,14 @@ export type AnyLocale = Locale | (typeof hiddenLocales)[number];
 
 export const defaultLocale: Locale = "fr";
 
+// Langues où le contenu éditorial existe vraiment (FR/EN/ES). Les pages de
+// niche templatisées (industries, features, comparisons) ne sont indexées que
+// dans ces langues — les variantes des 13 autres locales sont en noindex pour
+// éviter le contenu mince dupliqué ("Explorée, actuellement non indexée").
+export const indexableContentLocales: string[] = ["fr", "en", "es"];
+export const isContentIndexable = (locale: string) =>
+  indexableContentLocales.includes(locale);
+
 export const localeNames: Record<string, string> = {
   en:      "United Kingdom",
   "en-AE": "Emirates",
