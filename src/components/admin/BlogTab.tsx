@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
-  Plus, Search, Edit2, Trash2, X, Save, RefreshCw,
+  Plus, Search, Edit2, Trash2, X, Save, RefreshCw, Upload,
   Eye, EyeOff, Star, StarOff, Globe, ImageIcon, ChevronDown, FileText, FileJson,
 } from "lucide-react";
 import {
-  type Article, addArticle, updateArticle, deleteArticle, importArticlesFromJson,
+  type Article, addArticle, updateArticle, deleteArticle, importArticlesFromJson, uploadArticleImage,
 } from "@/lib/firebase";
 
 type Lang = "fr" | "en" | "es";
@@ -236,11 +236,27 @@ const emptyArticle = (): Article => ({
 const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = ({ article, onClose }) => {
   const [data, setData] = useState<Article>(article || emptyArticle());
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
   const [tab, setTab] = useState<Lang>("fr");
   const [showSeo, setShowSeo] = useState(false);
   const isCreate = !article;
 
   const set = (field: keyof Article, value: unknown) => setData((d) => ({ ...d, [field]: value }));
+
+  const handleUpload = async (files: FileList | null) => {
+    if (!files?.[0]) return;
+    setUploading(true);
+    try {
+      const url = await uploadArticleImage(files[0], data.slug || "article");
+      set("coverImage", url);
+    } catch (e) {
+      alert(`Upload impossible : ${(e as Error).message}\n(Active Firebase Storage si ce n'est pas fait.)`);
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
   const handleTitleFr = (v: string) =>
     setData((d) => ({ ...d, titleFr: v, slug: isCreate ? slugify(v) : d.slug }));
 
@@ -350,8 +366,43 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
               />
             </div>
             <div>
-              <label className={labelCls}>Image de couverture (URL)</label>
-              <input type="text" value={data.coverImage || ""} onChange={(e) => set("coverImage", e.target.value)} className={`mt-1 ${inputCls}`} placeholder="https://…/cover.png" />
+              <label className={labelCls}>Image de couverture <span className="normal-case font-normal opacity-60">(optionnelle)</span></label>
+              <div className="mt-1 flex items-start gap-3">
+                <div className="w-24 h-16 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-white/5 border border-white/10">
+                  {data.coverImage ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={data.coverImage} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <ImageIcon size={18} className="text-white/30" />
+                  )}
+                </div>
+                <div className="flex-1 space-y-2">
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => fileRef.current?.click()}
+                      disabled={uploading}
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border border-white/10 text-white/70 hover:text-[#BEF221] hover:border-[#BEF221] transition-colors disabled:opacity-50"
+                    >
+                      {uploading ? <RefreshCw size={13} className="animate-spin" /> : <Upload size={13} />}
+                      {uploading ? "Upload…" : "Choisir une image"}
+                    </button>
+                    {data.coverImage && (
+                      <button type="button" onClick={() => set("coverImage", "")} className="text-xs text-red-400 hover:underline">
+                        Retirer (sans image)
+                      </button>
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    value={data.coverImage || ""}
+                    onChange={(e) => set("coverImage", e.target.value)}
+                    className={`${inputCls} text-xs`}
+                    placeholder="…ou colle une URL d'image"
+                  />
+                  <input ref={fileRef} type="file" accept="image/*" onChange={(e) => handleUpload(e.target.files)} className="hidden" />
+                </div>
+              </div>
             </div>
           </div>
 

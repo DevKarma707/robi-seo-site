@@ -1,0 +1,19 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in ['ralphkaram75014@gmail.com', 'robi@robi-app.com'];
+    }
+
+    // Images de couverture des articles de blog :
+    // lecture publique, écriture réservée à l'admin (max 10 Mo, images uniquement).
+    match /blog/{file=**} {
+      allow read: if true;
+      allow write: if isAdmin()
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

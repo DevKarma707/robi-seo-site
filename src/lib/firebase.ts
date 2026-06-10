@@ -27,6 +27,7 @@ import {
   onAuthStateChanged,
   type User,
 } from "firebase/auth";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -44,7 +45,18 @@ const hasConfig = !!firebaseConfig.apiKey && !!firebaseConfig.projectId;
 const app = hasConfig ? (getApps().length ? getApp() : initializeApp(firebaseConfig)) : null;
 export const db = (app ? getFirestore(app) : null) as ReturnType<typeof getFirestore>;
 export const auth = (app ? getAuth(app) : null) as ReturnType<typeof getAuth>;
+export const storage = (app ? getStorage(app) : null) as ReturnType<typeof getStorage>;
 export const firebaseReady = hasConfig;
+
+/** Upload une image de couverture d'article dans Storage et renvoie son URL. */
+export const uploadArticleImage = async (file: File, slug: string): Promise<string> => {
+  if (!storage) throw new Error("Firebase Storage non configuré.");
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+  const path = `blog/${slug || "article"}-${Date.now()}.${ext}`;
+  const r = storageRef(storage, path);
+  await uploadBytes(r, file, { contentType: file.type || "image/jpeg" });
+  return getDownloadURL(r);
+};
 
 // ─── Auth ──────────────────────────────────────────────────
 const ALLOWED_EMAILS = ["ralphkaram75014@gmail.com", "robi@robi-app.com"];
