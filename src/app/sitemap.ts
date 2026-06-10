@@ -7,8 +7,12 @@ import {
   tools,
 } from "@/data/seo-config";
 import { locales } from "@/lib/i18n/config";
+import { getPublishedArticles } from "@/lib/blog-articles";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+// Revalidate so articles published from /admin appear in the sitemap.
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://robi-app.com";
 
   // Helper: generate URLs for all locales
@@ -62,10 +66,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     localizedUrls(`/features/${feature.slug}`, "monthly", 0.8)
   );
 
-  // Blog posts
+  // Blog posts (static, from seo-config)
   const blogPages = blogPosts.flatMap((post) =>
     localizedUrls(`/blog/${post.slug}`, "monthly", 0.6)
   );
+
+  // Blog posts published from /admin (Firestore), excluding any static dup
+  const dbArticles = await getPublishedArticles();
+  const staticSlugs = new Set(blogPosts.map((p) => p.slug));
+  const dbBlogPages = dbArticles
+    .filter((a) => !staticSlugs.has(a.slug))
+    .flatMap((a) => localizedUrls(`/blog/${a.slug}`, "weekly", 0.7));
 
   // Tools pages
   const toolPages = tools.flatMap((tool) =>
@@ -78,6 +89,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...comparisonPages,
     ...featurePages,
     ...blogPages,
+    ...dbBlogPages,
     ...toolPages,
   ];
 }
