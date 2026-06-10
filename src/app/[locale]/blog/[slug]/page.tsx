@@ -40,6 +40,7 @@ type ArticleView = {
   readMinutes: number;
   tldr: string[];
   faq: FaqItem[];
+  coverImage?: string;
 };
 
 function viewFromDb(a: DbArticle, locale: Locale): ArticleView {
@@ -54,6 +55,7 @@ function viewFromDb(a: DbArticle, locale: Locale): ArticleView {
     readMinutes: articleReadTime(a, locale),
     tldr: articleTldr(a, locale),
     faq: articleFaq(a, locale),
+    coverImage: a.coverImage,
   };
 }
 
@@ -1974,6 +1976,16 @@ export default async function BlogPostPage({
               { label: view.title },
             ]}
           />
+
+          {/* Cover image (optionnelle) */}
+          {view.coverImage && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={view.coverImage}
+              alt={view.title}
+              className="w-full aspect-video object-cover rounded-2xl mb-10"
+            />
+          )}
 
           {/* Header */}
           <header className="mb-12">
