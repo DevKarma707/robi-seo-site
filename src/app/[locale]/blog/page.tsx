@@ -137,15 +137,13 @@ export default async function BlogPage({
             <Link href={`/${locale}/blog/${featured.slug}`} className="block mb-12">
               <Card variant="dark" className="group cursor-pointer overflow-hidden">
                 <div className="md:flex md:items-center md:gap-12">
-                  <div className="md:w-1/2 mb-6 md:mb-0">
-                    {featured.coverImage ? (
-                      // eslint-disable-next-line @next/next/no-img-element
+                  {featured.coverImage && (
+                    <div className="md:w-1/2 mb-6 md:mb-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={featured.coverImage} alt={featured.title} className="aspect-video w-full object-cover rounded-2xl" />
-                    ) : (
-                      <div className="aspect-video bg-gradient-to-br from-[#BEF221]/20 to-gray-100 rounded-2xl" />
-                    )}
-                  </div>
-                  <div className="md:w-1/2">
+                    </div>
+                  )}
+                  <div className={featured.coverImage ? "md:w-1/2" : "w-full"}>
                     <Badge className={categoryColors[featured.category] ?? categoryColors.guides}>
                       {blog.categories[featured.category as keyof typeof blog.categories] ?? featured.category}
                     </Badge>
@@ -172,11 +170,9 @@ export default async function BlogPage({
             {rest.map((post) => (
               <Link key={post.slug} href={`/${locale}/blog/${post.slug}`}>
                 <Card className="h-full group cursor-pointer">
-                  {post.coverImage ? (
+                  {post.coverImage && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={post.coverImage} alt={post.title} className="aspect-video w-full object-cover rounded-xl mb-6" />
-                  ) : (
-                    <div className="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl mb-6" />
                   )}
                   <Badge className={categoryColors[post.category] ?? categoryColors.guides}>
                     {blog.categories[post.category as keyof typeof blog.categories] ?? post.category}
