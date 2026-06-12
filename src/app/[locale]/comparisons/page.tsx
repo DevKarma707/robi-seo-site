@@ -20,7 +20,7 @@ export async function generateMetadata({
   const comp = dict.pages.comparisons;
 
   return {
-    title: `${comp.badge} | Robi AI`,
+    title: `${comp.badge}`,
     description: dict.meta.description,
     keywords: ["robi ai vs", "comparatif facturation", "alternative facturation"],
   };

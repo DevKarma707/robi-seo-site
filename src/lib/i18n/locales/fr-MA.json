@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Robi AI | Logiciel de Facturation IA pour Freelances",
-    "description": "Créez vos devis et factures en 30 secondes avec l'IA. Relances automatiques, paiement Stripe intégré."
+    "title": "Facture AI : Devis & Factures par Intelligence Artificielle | Robi",
+    "description": "Robi, la facture AI : créez vos devis et factures en 30 secondes en parlant à l'IA. Relances automatiques, paiement intégré. Essai gratuit."
   },
   "nav": {
     "features": "Fonctionnalités",
@@ -273,7 +273,7 @@
   },
   "pages": {
     "industries": {
-      "title": "Facturation par Industrie | Robi AI",
+      "title": "Facturation par Industrie",
       "description": "Découvrez comment Robi AI s'adapte à votre métier. Solutions de facturation sur-mesure pour plombiers, électriciens, consultants, développeurs et plus.",
       "heroTitle": "Une solution adaptée",
       "heroTitleAccent": "à votre métier",
@@ -309,7 +309,7 @@
       "faq4a": "Oui, nous utilisons un chiffrement de niveau bancaire. Vos données sont hébergées en Europe et conformes au RGPD."
     },
     "blog": {
-      "title": "Blog | Robi AI",
+      "title": "Blog",
       "description": "Conseils, guides et actualités pour les freelances et indépendants. Facturation, statuts juridiques, tarifs et plus.",
       "heroTitle": "Ressources pour",
       "heroTitleAccent": "freelances",
@@ -463,7 +463,7 @@
       }
     },
     "legal": {
-      "title": "Mentions Légales | Robi AI",
+      "title": "Mentions Légales",
       "description": "Mentions légales de Robi AI Technologies.",
       "heroTitle": "Mentions",
       "heroTitleAccent": "Légales",
@@ -480,7 +480,7 @@
       "lawContent": "Les présentes mentions légales sont soumises au droit français. En cas de litige, et après tentative de résolution amiable, les tribunaux de Paris seront seuls compétents."
     },
     "privacy": {
-      "title": "Politique de Confidentialité | Robi AI",
+      "title": "Politique de Confidentialité",
       "description": "Politique de confidentialité et protection des données personnelles de Robi AI.",
       "heroTitle": "Politique de",
       "heroTitleAccent": "Confidentialité",
@@ -505,7 +505,7 @@
       "contactContent": "Pour toute question relative à cette politique :\n\nRobi AI Technologies - DPO\n42 rue de la Innovation\n75001 Paris, France\nprivacy@robi.ai\n\nVous pouvez également introduire une réclamation auprès de la CNIL : www.cnil.fr"
     },
     "terms": {
-      "title": "Conditions Générales d'Utilisation | Robi AI",
+      "title": "Conditions Générales d'Utilisation",
       "description": "Conditions générales d'utilisation du service Robi AI.",
       "heroTitle": "Conditions Générales",
       "heroTitleAccent": "d'Utilisation",
@@ -530,7 +530,7 @@
       "lawContent": "Les présentes CGU sont soumises au droit français. En cas de litige, les parties s'engagent à rechercher une solution amiable avant de saisir les tribunaux compétents de Paris."
     },
     "cgv": {
-      "title": "Conditions Générales de Vente | Robi AI",
+      "title": "Conditions Générales de Vente",
       "description": "Conditions générales de vente du service Robi AI.",
       "heroTitle": "Conditions Générales",
       "heroTitleAccent": "de Vente",
@@ -555,7 +555,7 @@
       "lawContent": "Les présentes CGV sont soumises au **droit français**. En cas de litige, les parties s'engagent à rechercher une solution amiable. À défaut, les **tribunaux de Paris** seront seuls compétents."
     },
     "pricing": {
-      "title": "Tarifs | Robi AI",
+      "title": "Tarifs",
       "description": "Découvrez nos tarifs simples et transparents. 2 documents gratuits avant la version Pro. À partir de 4,99€/semaine.",
       "badge": "Tarification transparente",
       "heroTitle": "Prix simples,",
@@ -581,7 +581,7 @@
       "faq5a": "Les paiements se font par carte bancaire via Stripe. Pour les paiements annuels, le virement est possible sur demande."
     },
     "cguWeb": {
-      "title": "CGU Application Web | Robi AI",
+      "title": "CGU Application Web",
       "description": "Conditions générales d'utilisation de l'application web Robi AI.",
       "badge": "CGU App Web",
       "heroTitle": "CGU — Application",
@@ -609,7 +609,7 @@
       "lawContent": "Les présentes CGU sont soumises au **droit français**. En cas de litige, les parties s'engagent à rechercher une solution amiable avant tout recours judiciaire. À défaut d'accord amiable, les **tribunaux de Paris** seront compétents."
     },
     "cguMobile": {
-      "title": "CGU Application Mobile | Robi AI",
+      "title": "CGU Application Mobile",
       "description": "Conditions générales d'utilisation de l'application mobile Robi AI.",
       "badge": "CGU App Mobile",
       "heroTitle": "CGU — Application",

@@ -51,6 +51,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages
   const staticPages = [
     ...localizedUrls("", "weekly", 1),
+    // Page pilier "facture AI" — éditoriale FR/EN/ES uniquement
+    ...coreUrls("/facture-ai", "weekly", 0.95),
     ...localizedUrls("/pricing", "weekly", 0.9),
     ...localizedUrls("/features", "weekly", 0.9),
     ...localizedUrls("/industries", "weekly", 0.8),

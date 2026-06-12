@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "404 - Page introuvable | Robi AI",
+  title: "404 - Page introuvable",
   description: "La page que vous recherchez n'existe pas ou a été déplacée.",
 };
 

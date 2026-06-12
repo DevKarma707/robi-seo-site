@@ -14,6 +14,7 @@ export function Footer({ locale, dict }: FooterProps) {
     product: {
       title: dict.footer.product,
       links: [
+        { name: "Facture AI", href: `/${locale}/facture-ai` },
         { name: dict.footer.features, href: `/${locale}/features` },
         { name: dict.footer.pricing, href: `/${locale}/pricing` },
         { name: dict.footer.comparisons, href: `/${locale}/comparisons` },

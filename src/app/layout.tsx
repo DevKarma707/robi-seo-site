@@ -4,12 +4,14 @@ import { Analytics } from "@/components/Analytics";
 
 export const metadata: Metadata = {
   title: {
-    default: "Robi AI | Logiciel de Facturation IA pour Freelances",
+    default: "Facture AI : Devis & Factures par Intelligence Artificielle | Robi",
     template: "%s | Robi AI",
   },
   description:
-    "Créez vos devis et factures en 30 secondes avec l'IA. Relances automatiques, paiement Stripe intégré. Rejoignez 2000+ freelances.",
+    "Robi, la facture AI : créez vos devis et factures en 30 secondes en parlant à l'IA. Relances automatiques, paiement Stripe intégré. Essai gratuit.",
   keywords: [
+    "facture ai",
+    "facture ia",
     "facturation freelance",
     "logiciel facturation",
     "facture auto-entrepreneur",
@@ -22,15 +24,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fr_FR",
     url: "https://robi-app.com",
-    title: "Robi AI | Logiciel de Facturation IA pour Freelances",
+    title: "Facture AI : Devis & Factures par Intelligence Artificielle | Robi",
     description:
-      "Créez vos devis et factures en 30 secondes avec l'IA. Relances automatiques, paiement Stripe intégré.",
+      "Robi, la facture AI : créez vos devis et factures en 30 secondes en parlant à l'IA. Relances automatiques, paiement Stripe intégré.",
     siteName: "Robi AI",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Robi AI | Logiciel de Facturation IA",
-    description: "Créez vos devis et factures en 30 secondes avec l'IA.",
+    title: "Facture AI : Factures par Intelligence Artificielle | Robi",
+    description: "Robi, la facture AI : créez vos devis et factures en 30 secondes en parlant à l'IA.",
     creator: "@robi_ai",
   },
   robots: {

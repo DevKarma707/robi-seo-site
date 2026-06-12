@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Robi AI | Software de Facturación IA para Freelancers",
-    "description": "Crea presupuestos y facturas en 30 segundos con IA. Recordatorios automáticos, pagos Stripe integrados."
+    "title": "Factura con IA: Presupuestos y Facturas por Inteligencia Artificial | Robi",
+    "description": "Robi, la factura con IA: crea presupuestos y facturas en 30 segundos hablando con la IA. Recordatorios automáticos, pagos Stripe integrados."
   },
   "nav": {
     "features": "Funciones",
@@ -272,7 +272,7 @@
   },
   "pages": {
     "industries": {
-      "title": "Facturación por Industria | Robi AI",
+      "title": "Facturación por Industria",
       "description": "Descubre cómo Robi AI se adapta a tu profesión. Soluciones de facturación personalizadas para fontaneros, electricistas, consultores, desarrolladores y más.",
       "heroTitle": "Una solución adaptada",
       "heroTitleAccent": "a tu profesión",
@@ -308,7 +308,7 @@
       "faq4a": "Sí, usamos cifrado de nivel bancario. Tus datos están alojados en Europa y cumplen con el RGPD."
     },
     "blog": {
-      "title": "Blog | Robi AI",
+      "title": "Blog",
       "description": "Consejos, guías y noticias para freelancers y autónomos. Facturación, estatus legal, tarifas y más.",
       "heroTitle": "Recursos para",
       "heroTitleAccent": "freelancers",
@@ -462,7 +462,7 @@
       }
     },
     "legal": {
-      "title": "Aviso Legal | Robi AI",
+      "title": "Aviso Legal",
       "description": "Aviso legal de Robi AI Technologies.",
       "heroTitle": "Aviso",
       "heroTitleAccent": "Legal",
@@ -479,7 +479,7 @@
       "lawContent": "El presente aviso legal se rige por la legislación francesa. En caso de litigio, y tras intento de resolución amistosa, los tribunales de París serán los únicos competentes."
     },
     "privacy": {
-      "title": "Política de Privacidad | Robi AI",
+      "title": "Política de Privacidad",
       "description": "Política de privacidad y protección de datos personales de Robi AI.",
       "heroTitle": "Política de",
       "heroTitleAccent": "Privacidad",
@@ -504,7 +504,7 @@
       "contactContent": "Para cualquier consulta sobre esta política:\n\nRobi AI Technologies - DPO\n42 rue de la Innovation\n75001 París, Francia\nprivacy@robi.ai\n\nTambién puedes presentar una reclamación ante la CNIL: www.cnil.fr"
     },
     "terms": {
-      "title": "Condiciones de Uso | Robi AI",
+      "title": "Condiciones de Uso",
       "description": "Condiciones generales de uso de Robi AI.",
       "heroTitle": "Condiciones de",
       "heroTitleAccent": "Uso",
@@ -529,7 +529,7 @@
       "lawContent": "Las presentes CGU se rigen por la legislación francesa. En caso de litigio, las partes se comprometen a buscar una solución amistosa antes de acudir a los tribunales competentes de París."
     },
     "cgv": {
-      "title": "Condiciones Generales de Venta | Robi AI",
+      "title": "Condiciones Generales de Venta",
       "description": "Condiciones generales de venta del servicio Robi AI.",
       "heroTitle": "Condiciones Generales",
       "heroTitleAccent": "de Venta",
@@ -554,7 +554,7 @@
       "lawContent": "Las presentes CGV se rigen por la **legislación francesa**. En caso de litigio, las partes se comprometen a buscar una solución amistosa. En su defecto, los **tribunales de París** serán los únicos competentes."
     },
     "pricing": {
-      "title": "Precios | Robi AI",
+      "title": "Precios",
       "description": "Descubre nuestros precios simples y transparentes. 2 documentos gratis antes de la versión Pro. Desde 4,99€/semana.",
       "badge": "Precios transparentes",
       "heroTitle": "Precios simples,",

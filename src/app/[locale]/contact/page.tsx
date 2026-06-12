@@ -16,7 +16,7 @@ export async function generateMetadata({
   const contact = dict.pages.contact;
 
   return {
-    title: `${contact.title} | Robi AI`,
+    title: `${contact.title}`,
     description: contact.subtitle,
     keywords: ["contact", "robi ai", "support", "help"],
   };

@@ -19,7 +19,7 @@ export async function generateMetadata({
   const dict = await getDictionary(locale);
 
   return {
-    title: `${dict.nav.tools} | Robi AI`,
+    title: `${dict.nav.tools}`,
     description: dict.meta.description,
     keywords: ["outils freelance", "calculateur tjm", "simulateur charges freelance"],
   };

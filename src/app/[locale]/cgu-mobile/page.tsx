@@ -16,7 +16,7 @@ export async function generateMetadata({
   const cgu = (dict.pages as any).cguMobile;
 
   return {
-    title: cgu?.title || "CGU App Mobile | Robi AI",
+    title: cgu?.title || "CGU App Mobile",
     description: cgu?.description || "",
   };
 }

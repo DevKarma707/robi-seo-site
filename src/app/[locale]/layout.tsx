@@ -32,7 +32,9 @@ export async function generateMetadata({
 
   return {
     title: {
-      default: dict.meta.title,
+      // `absolute` empêche le template "%s | Robi AI" du root layout de
+      // s'appliquer au title par défaut (sinon suffixe dupliqué).
+      absolute: dict.meta.title,
       template: `%s | Robi AI`,
     },
     description: dict.meta.description,
