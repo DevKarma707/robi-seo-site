@@ -143,6 +143,7 @@ const content: Record<Lang, {
     related: {
       title: "Aller plus loin",
       links: [
+        { label: "Générateur de facture gratuit", href: "/tools/generateur-facture" },
         { label: "La facturation par IA en détail", href: "/features/facturation-ia" },
         { label: "Devis automatiques par IA", href: "/features/devis-automatique" },
         { label: "Relances de factures automatiques", href: "/features/relance-automatique" },
@@ -285,6 +286,7 @@ const content: Record<Lang, {
     related: {
       title: "Go further",
       links: [
+        { label: "Free invoice generator", href: "/tools/generateur-facture" },
         { label: "AI invoicing in detail", href: "/features/facturation-ia" },
         { label: "Automatic AI quotes", href: "/features/devis-automatique" },
         { label: "Automatic invoice reminders", href: "/features/relance-automatique" },
@@ -422,6 +424,7 @@ const content: Record<Lang, {
     related: {
       title: "Para ir más lejos",
       links: [
+        { label: "Generador de facturas gratis", href: "/tools/generateur-facture" },
         { label: "La facturación con IA en detalle", href: "/features/facturation-ia" },
         { label: "Presupuestos automáticos con IA", href: "/features/devis-automatique" },
         { label: "Recordatorios de facturas automáticos", href: "/features/relance-automatique" },

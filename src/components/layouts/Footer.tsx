@@ -25,6 +25,7 @@ export function Footer({ locale, dict }: FooterProps) {
       title: dict.footer.resources,
       links: [
         { name: dict.footer.tools, href: `/${locale}/tools` },
+        { name: dict.footer.invoiceGenerator || "Générateur de facture", href: `/${locale}/tools/generateur-facture` },
         { name: dict.footer.calculator, href: `/${locale}/tools/calculateur-tjm` },
         { name: dict.footer.chargesSimulator, href: `/${locale}/tools/simulateur-charges` },
         { name: dict.footer.legalGenerator, href: `/${locale}/tools/generateur-mentions-legales` },

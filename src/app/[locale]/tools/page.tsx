@@ -6,7 +6,7 @@ import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { CTA } from "@/components/sections/CTA";
-import { Calculator, FileText, Scale, ArrowRight } from "lucide-react";
+import { Calculator, FileText, Scale, ArrowRight, ReceiptText } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export async function generateMetadata({
@@ -26,6 +26,7 @@ export async function generateMetadata({
 }
 
 const toolIcons: Record<string, React.ElementType> = {
+  "generateur-facture": ReceiptText,
   "calculateur-tjm": Calculator,
   "simulateur-charges": Scale,
   "generateur-mentions-legales": FileText,
