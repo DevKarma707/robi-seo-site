@@ -20,11 +20,11 @@ export function Button({
   onClick,
 }: ButtonProps) {
   const baseStyles =
-    "btn-slide inline-flex items-center justify-center font-bold rounded-full transition-all duration-300";
+    "btn-slide inline-flex items-center justify-center font-bold rounded-full transition-all duration-300 relative overflow-hidden";
 
   const variants = {
     primary:
-      "bg-[#BEF221] text-[#0D0630] hover:shadow-[0_0_30px_rgba(190,242,33,0.4)] shadow-lg shadow-[#BEF221]/20",
+      "btn-shine bg-[#BEF221] text-[#0D0630] hover:shadow-[0_0_30px_rgba(190,242,33,0.4)] shadow-lg shadow-[#BEF221]/20",
     secondary:
       "bg-white/10 border border-white/20 text-white hover:bg-white/20 hover:border-white/30",
     outline:

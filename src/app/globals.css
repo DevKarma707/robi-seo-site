@@ -501,3 +501,21 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #d4ff4a;
 }
+
+/* === BUTTON SHINE SWEEP === */
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.45) 50%, transparent 60%);
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+.btn-shine:hover::after {
+  animation: shine-sweep 0.8s var(--ease-out-expo);
+}
+
+@keyframes shine-sweep {
+  to { transform: translateX(100%); }
+}

@@ -23,7 +23,7 @@ export function Header({ locale, dict }: HeaderProps) {
   ];
 
   return (
-    <header className="fixed w-full z-50 bg-[#0D0630]/95 backdrop-blur-md border-b border-white/10">
+    <header className="fixed w-full z-50 bg-[#0D0630]/70 backdrop-blur-xl border-b border-white/[0.08] supports-[backdrop-filter]:bg-[#0D0630]/60">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-14 gap-8">
 

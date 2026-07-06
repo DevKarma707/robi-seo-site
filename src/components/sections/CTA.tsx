@@ -45,7 +45,17 @@ export function CTA({
         <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
       )}
 
+      {/* Lime halo behind the CTA */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] md:w-[560px] md:h-[560px] bg-[#BEF221]/10 rounded-full blur-[100px] pointer-events-none" />
+
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/robot-mark.svg"
+          alt=""
+          aria-hidden="true"
+          className="w-10 h-10 md:w-16 md:h-16 mx-auto mb-4 md:mb-8 drop-shadow-[0_0_25px_rgba(190,242,33,0.45)]"
+        />
         <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white mb-3 md:mb-6 tracking-tight">
           <StyledRobiTitle text={title} />
         </h2>
