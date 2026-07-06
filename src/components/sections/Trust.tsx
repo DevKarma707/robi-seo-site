@@ -15,6 +15,10 @@ export function Trust({ dict }: TrustProps) {
       {/* Background effects */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(190,242,33,0.08),transparent_60%)]" />
 
+      {/* Smooth transitions with adjacent light sections */}
+      <div className="absolute inset-x-0 top-0 h-16 md:h-24 bg-gradient-to-b from-gray-50 to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-16 md:h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal className="text-center mb-5 md:mb-16">
           <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white">

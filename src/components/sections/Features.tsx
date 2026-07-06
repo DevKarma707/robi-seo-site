@@ -71,16 +71,17 @@ export function Features({
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8 card-group">
           {features.map((feature, index) => {
             const Icon = feature.icon;
+            const isFeatured = index === features.length - 1;
             return (
               <ScrollReveal key={index} delay={index * 80}>
-                <Card variant={index === features.length - 1 ? "dark" : "default"} className="flex flex-col h-full !p-4 md:!p-6 lg:!p-8">
-                  <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 bg-[#BEF221]/10 border border-[#BEF221]/20">
-                    <Icon className="w-5 h-5 md:w-7 md:h-7 text-[#BEF221]" />
+                <Card variant={isFeatured ? "featured" : "default"} className="group flex flex-col h-full !p-4 md:!p-6 lg:!p-8">
+                  <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 bg-[#BEF221]/10 border border-[#BEF221]/20 transition-colors duration-300 group-hover:bg-[#BEF221]">
+                    <Icon className="w-5 h-5 md:w-7 md:h-7 text-[#BEF221] transition-colors duration-300 group-hover:text-[#0D0630]" />
                   </div>
-                  <h3 className="text-sm md:text-xl font-bold mb-1.5 md:mb-3 text-gray-900 leading-tight">
+                  <h3 className={`text-sm md:text-xl font-bold mb-1.5 md:mb-3 leading-tight ${isFeatured ? "text-white" : "text-gray-900"}`}>
                     {feature.title}
                   </h3>
-                  <p className="text-gray-500 text-xs md:text-base leading-snug">{feature.description}</p>
+                  <p className={`text-xs md:text-base leading-snug ${isFeatured ? "text-white/60" : "text-gray-500"}`}>{feature.description}</p>
                 </Card>
               </ScrollReveal>
             );

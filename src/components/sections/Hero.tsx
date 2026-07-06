@@ -95,11 +95,10 @@ export function Hero({
   return (
     <section className={`relative pt-24 md:pt-32 overflow-hidden bg-[#0D0630] ${ctaText ? "pb-14 md:pb-16" : "pb-10 md:pb-10"}`}>
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(190,242,33,0.1),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(190,242,33,0.12),transparent_55%)]" />
 
-      {/* Floating elements */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-[#BEF221]/10 rounded-full blur-2xl animate-float" />
-      <div className="absolute bottom-20 right-10 w-32 h-32 bg-[#BEF221]/5 rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
+      {/* Subtle dot grid, fading toward the bottom */}
+      <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.07)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:linear-gradient(to_bottom,black_20%,transparent_85%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {isCenter ? (
@@ -160,6 +159,9 @@ export function Hero({
           </div>
         )}
       </div>
+
+      {/* Smooth transition into the next (light) section */}
+      <div className="absolute bottom-0 inset-x-0 h-16 md:h-24 bg-gradient-to-b from-transparent to-white/95 pointer-events-none" />
     </section>
   );
 }

@@ -227,9 +227,10 @@ export default async function FeaturePage({
         </div>
       </section>
 
-      <Pricing locale={locale} dict={dict} />
+      <Pricing locale={locale} dict={dict} fadeBottom={false} />
 
       <CTA
+        fadeTop={false}
         title={fp.tryFeature.replace("{name}", t(feature.name, locale))}
         subtitle={fp.freeFor14Days}
         ctaText={dict.cta.button}

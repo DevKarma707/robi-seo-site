@@ -7,6 +7,7 @@ interface CTAProps {
   ctaText?: string;
   ctaHref?: string;
   secondaryText?: string;
+  fadeTop?: boolean;
 }
 
 function StyledRobiTitle({ text }: { text: string }) {
@@ -33,11 +34,16 @@ export function CTA({
   ctaText = "Start with Robi AI",
   ctaHref = "https://go.robi-app.com",
   secondaryText = "No card • Cancel anytime",
+  fadeTop = true,
 }: CTAProps) {
   return (
     <section className="py-10 md:py-32 bg-[#0D0630] relative overflow-hidden">
-      {/* Subtle background line only */}
-      <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
+      {/* Smooth transition from the previous (light) section */}
+      {fadeTop ? (
+        <div className="absolute inset-x-0 top-0 h-16 md:h-24 bg-gradient-to-b from-white to-transparent pointer-events-none" />
+      ) : (
+        <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
+      )}
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
         <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white mb-3 md:mb-6 tracking-tight">
