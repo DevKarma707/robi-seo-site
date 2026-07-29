@@ -1,15 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw } from "lucide-react";
+import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket } from "lucide-react";
 import {
   auth, onAuthStateChanged, signInWithGoogle, signOut, isAllowedEmail, firebaseReady,
   subscribeToArticles, subscribeToVisits, type Article, type VisitStats, type User,
 } from "@/lib/firebase";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
 import BlogTab from "@/components/admin/BlogTab";
+import PilotageTab from "@/components/admin/PilotageTab";
+import LancementTab from "@/components/admin/LancementTab";
 
-type Tab = "analytics" | "blog";
+type Tab = "pilotage" | "analytics" | "blog" | "lancement";
 
 const EMPTY_VISITS: VisitStats = {
   today: 0, week: 0, prevWeek: 0, month: 0, days: [], byPage: [], bySource: [],
@@ -61,7 +63,7 @@ function AuthScreen() {
 export default function AdminPage() {
   const [user, setUser] = useState<User | null>(null);
   const [authReady, setAuthReady] = useState(false);
-  const [tab, setTab] = useState<Tab>("analytics");
+  const [tab, setTab] = useState<Tab>("pilotage");
   const [articles, setArticles] = useState<Article[]>([]);
   const [visits, setVisits] = useState<VisitStats>(EMPTY_VISITS);
 
@@ -115,13 +117,17 @@ export default function AdminPage() {
   const navActive = "text-[#BEF221] bg-[#BEF221]/[0.08] border border-[#BEF221]/20";
 
   const NAV: { id: Tab; label: string; icon: React.ReactNode; badge?: number }[] = [
+    { id: "pilotage", label: "Pilotage", icon: <Gauge size={17} /> },
     { id: "analytics", label: "Analytics", icon: <BarChart2 size={17} /> },
     { id: "blog", label: "Blog", icon: <FileText size={17} />, badge: articles.filter((a) => !a.published).length || undefined },
+    { id: "lancement", label: "Lancement", icon: <Rocket size={17} /> },
   ];
 
   const subtitle: Record<Tab, string> = {
+    pilotage: "Inscriptions, activation, usage et funnel — agrégats uniquement",
     analytics: `${visits.month} visites ce mois · ${visits.bySource.length} sources détectées`,
     blog: `${articles.filter((a) => a.published).length} publiés · ${articles.filter((a) => !a.published).length} brouillons`,
+    lancement: "Compteur de places, date limite et retrait de l'offre",
   };
 
   return (
@@ -172,8 +178,10 @@ export default function AdminPage() {
             <h1 className="font-black text-2xl uppercase tracking-tight text-white">{NAV.find((t) => t.id === tab)?.label}</h1>
             <p className="text-sm mt-1 text-white/40">{subtitle[tab]}</p>
           </div>
+          {tab === "pilotage" && <PilotageTab visits={visits} />}
           {tab === "analytics" && <AnalyticsTab visits={visits} />}
           {tab === "blog" && <BlogTab articles={articles} />}
+          {tab === "lancement" && <LancementTab />}
         </div>
       </main>
     </div>
