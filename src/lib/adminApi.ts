@@ -51,6 +51,31 @@ const authedFetch = async (url: string, init?: RequestInit) => {
   return json;
 };
 
+export interface HealthSignature {
+  signature: string;
+  count: number;
+  lastSeen: string;
+  sample: string;
+}
+
+export interface HealthReport {
+  windowDays: number;
+  severity: "ok" | "warn" | "down";
+  problems: string[];
+  emails: { sent: number | null; failed: number | null; failureRate: number | null };
+  clientErrors: { total: number; affectedUsers: number; top: HealthSignature[] };
+  aiFailures: { total: number; top: HealthSignature[] };
+  emailErrors: { total: number; top: HealthSignature[] };
+  functionErrors: { total: number; bySource: Record<string, number>; top: HealthSignature[] };
+  cron: { last: { at: string; source: string; meta: Record<string, unknown> } | null; staleHours: number | null };
+  daily: { date: string; count: number }[];
+  truncated: boolean;
+  computedAt: string;
+}
+
+export const fetchHealthReport = (days = 7) =>
+  authedFetch(`/api/admin/health?days=${days}`) as Promise<HealthReport>;
+
 export const fetchAppStats = (refresh = false) =>
   authedFetch(`/api/admin/stats${refresh ? "?refresh=1" : ""}`) as Promise<AppStats>;
 

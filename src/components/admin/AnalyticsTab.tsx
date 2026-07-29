@@ -38,7 +38,9 @@ function VisitorsChart({ days }: { days: { date: string; count: number }[] }) {
         const h = Math.round((d.count / max) * 100);
         const isToday = d.date === new Date().toISOString().split("T")[0];
         return (
-          <div key={d.date} className="flex-1 flex flex-col justify-end group relative">
+          // h-full: sans hauteur de parent résolue, les hauteurs en % des
+          // barres retombent à zéro et le graphique reste vide.
+          <div key={d.date} className="flex-1 h-full flex flex-col justify-end group relative">
             <div
               className="w-full rounded-sm transition-all"
               style={{
