@@ -1,9 +1,20 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { Crown, Globe, RefreshCw, AlertTriangle, TrendingDown, Filter } from "lucide-react";
 import { fetchAppStats, type AppStats } from "@/lib/adminApi";
 import type { VisitStats } from "@/lib/firebase";
+
+// ~110 Ko de tracés SVG : chargés seulement quand l'onglet Pilotage s'ouvre.
+const WorldMapBlock = dynamic(() => import("./WorldMapBlock"), {
+  ssr: false,
+  loading: () => (
+    <div className="rounded-2xl border bg-white/[0.03] border-white/8 p-5 h-64 flex items-center justify-center text-white/30 text-xs">
+      Chargement de la carte…
+    </div>
+  ),
+});
 
 const ACCENT = "#BEF221";
 const card = "rounded-2xl border bg-white/[0.03] border-white/8";
@@ -165,6 +176,8 @@ const PilotageTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
       </div>
 
       <Funnel stats={stats} visits={visits} />
+
+      <WorldMapBlock countries={stats.topCountries} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Pays */}
