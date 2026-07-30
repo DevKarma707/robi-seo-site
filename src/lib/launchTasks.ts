@@ -6,7 +6,7 @@
 // d'un coup d'œil ce qu'il peut déléguer.
 import {
   collection, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot,
-  serverTimestamp, getDocs, writeBatch, Timestamp,
+  serverTimestamp, getDocs, writeBatch, deleteField, Timestamp,
 } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -80,6 +80,18 @@ export const updateTask = (id: string, patch: Partial<LaunchTask>) =>
 
 export const deleteTask = (id: string) => deleteDoc(doc(db, "launchTasks", id));
 
+/**
+ * Édition du titre et du détail. Passe par deleteField() quand le détail est
+ * vidé : `detail: undefined` ferait lever updateDoc(), le SDK n'étant pas
+ * initialisé avec ignoreUndefinedProperties.
+ */
+export const updateTaskText = (id: string, title: string, detail: string) =>
+  updateDoc(doc(db, "launchTasks", id), {
+    title,
+    detail: detail.trim() ? detail.trim() : deleteField(),
+    updatedAt: serverTimestamp(),
+  });
+
 /** Déplace une tâche dans une colonne, à la position voulue. */
 export const moveTask = (
   task: LaunchTask,
@@ -89,11 +101,17 @@ export const moveTask = (
 ) => {
   const lo = before?.order ?? (after ? after.order - 2 : 0);
   const hi = after?.order ?? lo + 2;
-  return updateTask(task.id!, {
+  return updateDoc(doc(db, "launchTasks", task.id!), {
     column,
     order: (lo + hi) / 2,
+    updatedAt: serverTimestamp(),
     ...(column === "done" && !task.doneAt ? { doneAt: new Date().toISOString().slice(0, 10) } : {}),
-    ...(column !== "done" ? { doneAt: undefined } : {}),
+    // deleteField() et non undefined : le SDK est initialisé sans
+    // ignoreUndefinedProperties, donc `doneAt: undefined` faisait lever
+    // updateDoc(). Sortir une tâche de « Fait » échouait à tous les coups,
+    // silencieusement depuis les boutons de déplacement (promesse non
+    // attrapée) — une tâche passée en Fait par erreur y restait coincée.
+    ...(column !== "done" ? { doneAt: deleteField() } : {}),
   });
 };
 
@@ -208,7 +226,11 @@ export const seedTasks = async (): Promise<{ created: number; skipped: boolean }
     const ref = doc(col());
     batch.set(ref, {
       ...t,
-      column: "todo" as TaskColumn,
+      // Une tâche qui déclare une dépendance est bloquée, par définition :
+      // la ranger dans « À faire » mettait 10 tâches non actionnables au
+      // milieu de celles qui le sont, et laissait la colonne « Bloqué »
+      // vide en permanence.
+      column: (t.blockedBy ? "blocked" : "todo") as TaskColumn,
       // Priorité d'abord, ordre de déclaration ensuite.
       order: t.priority * 1000 + i,
       createdAt: serverTimestamp(),

@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ListChecks, Plus, Trash2, AlertTriangle, Check, Bot, User, Download, RefreshCw,
+  Search, Pencil, X, FolderInput,
 } from "lucide-react";
 import {
-  subscribeToTasks, addTask, updateTask, deleteTask, moveTask, seedTasks,
+  subscribeToTasks, addTask, updateTask, updateTaskText, deleteTask, moveTask, seedTasks,
   COLUMNS, COLUMN_META, CATEGORIES, CATEGORY_META, EFFORT_LABEL,
   type LaunchTask, type TaskColumn, type TaskCategory, type TaskOwner, type TaskEffort,
 } from "@/lib/launchTasks";
-import { ACCENT, btnGhost, btnPill, btnPrimary, card, input, select } from "./ui";
+import { ACCENT, btnGhost, btnPill, btnPrimary, card, focusRing, input, select } from "./ui";
 
 const PRIORITY_COLOR: Record<number, string> = { 1: "#f87171", 2: "#fbbf24", 3: "#64748b" };
 
@@ -22,8 +23,11 @@ const KanbanTab: React.FC = () => {
   const [dragId, setDragId] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState<TaskColumn | null>(null);
   const [newTitle, setNewTitle] = useState("");
+  const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
+  /** Tâche en cours d'édition, avec son brouillon titre/détail. */
+  const [edit, setEdit] = useState<{ id: string; title: string; detail: string } | null>(null);
 
   useEffect(() => {
     const unsub = subscribeToTasks(
@@ -33,14 +37,41 @@ const KanbanTab: React.FC = () => {
     return () => unsub();
   }, []);
 
-  const say = (kind: "ok" | "err", text: string) => {
-    setFlash({ kind, text });
-    setTimeout(() => setFlash(null), 4000);
-  };
+  // Le timer était posé sans être nettoyé : quitter l'onglet pendant qu'un
+  // message est affiché déclenchait un setState sur composant démonté.
+  const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
 
-  const visible = useMemo(
-    () => rows.filter((t) => (category === "all" || t.category === category) && (owner === "all" || t.owner === owner)),
-    [rows, category, owner]
+  const say = useCallback((kind: "ok" | "err", text: string) => {
+    setFlash({ kind, text });
+    if (flashTimer.current) clearTimeout(flashTimer.current);
+    flashTimer.current = setTimeout(() => setFlash(null), 4000);
+  }, []);
+
+  /** Les déplacements par bouton n'étaient ni attendus ni attrapés : quand
+   *  Firestore refusait l'écriture, la carte ne bougeait pas sans un mot. */
+  const move = useCallback(async (t: LaunchTask, c: TaskColumn) => {
+    try {
+      await moveTask(t, c, null, null);
+    } catch (e) {
+      say("err", (e as Error).message);
+    }
+  }, [say]);
+
+  const visible = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return rows.filter((t) =>
+      (category === "all" || t.category === category) &&
+      (owner === "all" || t.owner === owner) &&
+      (!q || t.title.toLowerCase().includes(q) || (t.detail || "").toLowerCase().includes(q))
+    );
+  }, [rows, category, owner, search]);
+
+  /** Tâches qui déclarent une dépendance mais traînent hors de « Bloqué ».
+   *  Les tableaux créés avant le rangement automatique en ont ~10. */
+  const misplacedBlocked = useMemo(
+    () => rows.filter((t) => t.blockedBy && t.column === "todo"),
+    [rows]
   );
 
   const byColumn = (c: TaskColumn) => visible.filter((t) => t.column === c);
@@ -92,6 +123,36 @@ const KanbanTab: React.FC = () => {
         order: 2000 + rows.length,
       });
       setNewTitle("");
+    } catch (e) {
+      say("err", (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  /** Le titre et le détail n'étaient modifiables nulle part : corriger une
+   *  faute imposait de supprimer la tâche et de la ressaisir, en perdant
+   *  le détail, la priorité et l'historique. */
+  const saveEdit = async () => {
+    if (!edit) return;
+    const title = edit.title.trim();
+    if (!title) return;
+    setBusy(true);
+    try {
+      await updateTaskText(edit.id, title, edit.detail);
+      setEdit(null);
+    } catch (e) {
+      say("err", (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const tidyBlocked = async () => {
+    setBusy(true);
+    try {
+      for (const t of misplacedBlocked) await moveTask(t, "blocked", null, null);
+      say("ok", `${misplacedBlocked.length} tâche(s) rangée(s) dans Bloqué.`);
     } catch (e) {
       say("err", (e as Error).message);
     } finally {
@@ -180,6 +241,22 @@ const KanbanTab: React.FC = () => {
           <option value="ralph">Ralph</option>
           <option value="claude">Claude</option>
         </select>
+        <div className="relative min-w-[180px]">
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none" />
+          <input
+            className={`${input} pl-8`}
+            placeholder="Rechercher…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        {misplacedBlocked.length > 0 && (
+          <button onClick={tidyBlocked} disabled={busy} className={btnGhost} title="Déplacer vers la colonne Bloqué">
+            <span className="flex items-center gap-1.5">
+              <FolderInput size={12} /> Ranger {misplacedBlocked.length} bloquée{misplacedBlocked.length > 1 ? "s" : ""}
+            </span>
+          </button>
+        )}
         {rows.length === 0 && (
           <button onClick={loadBacklog} disabled={busy} className={btnPrimary}>
             <span className="flex items-center gap-1.5"><Download size={12} /> Charger le backlog de lancement</span>
@@ -216,7 +293,19 @@ const KanbanTab: React.FC = () => {
                     onDragEnd={() => { setDragId(null); setDragOver(null); }}
                     onDrop={(e) => { e.preventDefault(); e.stopPropagation(); drop(c, t.id!); }}
                     onClick={() => setOpenId(openId === t.id ? null : t.id!)}
-                    className={`rounded-xl border p-3 cursor-grab active:cursor-grabbing transition-all ${
+                    // Le glisser-déposer HTML5 ne répond ni au clavier ni au
+                    // tactile : sans ça, une carte n'était pas ouvrable
+                    // autrement qu'à la souris.
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={openId === t.id}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setOpenId(openId === t.id ? null : t.id!);
+                      }
+                    }}
+                    className={`rounded-xl border p-3 cursor-grab active:cursor-grabbing transition-all ${focusRing} ${
                       dragId === t.id ? "opacity-40" : "hover:bg-white/[0.06]"
                     } ${t.column === "done" ? "border-white/[0.06] bg-white/[0.02]" : "border-white/10 bg-white/[0.04]"}`}
                   >
@@ -248,10 +337,48 @@ const KanbanTab: React.FC = () => {
 
                     {openId === t.id && (
                       <div className="mt-3 pt-3 border-t border-white/[0.08] space-y-2.5" onClick={(e) => e.stopPropagation()}>
-                        {t.detail && <p className="text-[11px] text-white/55 leading-relaxed">{t.detail}</p>}
+                        {edit?.id === t.id ? (
+                          <div className="space-y-2">
+                            <input
+                              className={input}
+                              value={edit.title}
+                              autoFocus
+                              onChange={(e) => setEdit({ ...edit, title: e.target.value })}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") saveEdit();
+                                if (e.key === "Escape") setEdit(null);
+                              }}
+                            />
+                            <textarea
+                              className={`${input} min-h-[70px] resize-y leading-relaxed`}
+                              placeholder="Détail (optionnel)"
+                              value={edit.detail}
+                              onChange={(e) => setEdit({ ...edit, detail: e.target.value })}
+                              onKeyDown={(e) => { if (e.key === "Escape") setEdit(null); }}
+                            />
+                            <div className="flex gap-1.5">
+                              <button onClick={saveEdit} disabled={busy || !edit.title.trim()} className={btnPrimary}>
+                                <span className="flex items-center gap-1"><Check size={11} /> Enregistrer</span>
+                              </button>
+                              <button onClick={() => setEdit(null)} className={btnGhost}>
+                                <span className="flex items-center gap-1"><X size={11} /> Annuler</span>
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            {t.detail && <p className="text-[11px] text-white/55 leading-relaxed">{t.detail}</p>}
+                            <button
+                              onClick={() => setEdit({ id: t.id!, title: t.title, detail: t.detail || "" })}
+                              className={btnGhost}
+                            >
+                              <span className="flex items-center gap-1"><Pencil size={11} /> Éditer</span>
+                            </button>
+                          </>
+                        )}
                         <div className="flex flex-wrap gap-1.5">
                           {COLUMNS.filter((x) => x !== t.column).map((x) => (
-                            <button key={x} onClick={() => moveTask(t, x, null, null)} className={btnGhost}>
+                            <button key={x} onClick={() => move(t, x)} className={btnGhost}>
                               → {COLUMN_META[x].label}
                             </button>
                           ))}
@@ -295,7 +422,11 @@ const KanbanTab: React.FC = () => {
                 ))}
 
                 {items.length === 0 && (
-                  <p className="text-[11px] text-white/20 px-1 py-3">Glisse une tâche ici.</p>
+                  <p className="text-[11px] text-white/20 px-1 py-3">
+                    {search.trim() || category !== "all" || owner !== "all"
+                      ? "Rien ne correspond au filtre."
+                      : "Glisse une tâche ici."}
+                  </p>
                 )}
               </div>
             </div>
