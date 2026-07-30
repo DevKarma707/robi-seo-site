@@ -129,6 +129,49 @@ export const buildBrief = (t: LaunchTask): string => {
   return blocks.filter((b): b is string => b !== null).join("\n\n");
 };
 
+// ─── Ouverture directe dans Claude Code ───────────────────────────────
+//
+// Claude Code enregistre lui-même un handler d'URL `claude-cli://` auprès de
+// macOS (~/Applications/Claude Code URL Handler.app). Le binaire le reçoit via
+// `--handle-uri` et n'accepte qu'une seule action, `open`, avec trois
+// paramètres : `cwd` (chemin absolu), `q` (le prompt) et `repo` (owner/repo).
+// Le lien ouvre une session dans Claude Desktop.
+//
+// Chemins absolus en dur : un deep link ne peut pas les déduire, et cet admin
+// n'a qu'un seul utilisateur. À corriger ici si la machine change.
+const REPO_APP = "/Users/ralphkaram/Desktop/ROBI_V1_READY";
+const REPO_SITE = "/Users/ralphkaram/Desktop/robi-seo-site";
+
+/**
+ * Dépôt le plus probable selon la catégorie. Heuristique assumée : certaines
+ * tâches touchent les deux (Polar a un webhook côté site et un service côté
+ * app), d'où le rappel des deux chemins dans le brief lui-même.
+ */
+const REPO_BY_CATEGORY: Record<TaskCategory, string> = {
+  paiement: REPO_SITE,      // le webhook Polar vit dans /api/webhooks/polar
+  produit: REPO_APP,
+  mobile: REPO_APP,
+  conformite: REPO_APP,
+  seo: REPO_SITE,
+  acquisition: REPO_SITE,
+  influenceurs: REPO_SITE,
+  lancement: REPO_SITE,
+};
+
+/** Le parser rejette au-delà de 5000 caractères. */
+const MAX_QUERY = 5000;
+
+/**
+ * Lien qui ouvre une session Claude Code sur la tâche. Ne fonctionne que sur
+ * une machine où Claude Code est installé — ailleurs, le navigateur ne sait
+ * pas quoi faire du schéma et il ne se passe rien.
+ */
+export const buildDeepLink = (t: LaunchTask): string => {
+  const q = buildBrief(t).slice(0, MAX_QUERY);
+  const params = new URLSearchParams({ cwd: REPO_BY_CATEGORY[t.category], q });
+  return `claude-cli://open?${params.toString()}`;
+};
+
 /**
  * Édition du titre et du détail. Passe par deleteField() quand le détail est
  * vidé : `detail: undefined` ferait lever updateDoc(), le SDK n'étant pas

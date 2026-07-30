@@ -3,11 +3,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ListChecks, Plus, Trash2, AlertTriangle, Check, Bot, User, Download, RefreshCw,
-  Search, Pencil, X, FolderInput, Sparkles, ClipboardCopy,
+  Search, Pencil, X, FolderInput, Sparkles, ClipboardCopy, Terminal,
 } from "lucide-react";
 import {
   subscribeToTasks, addTask, updateTask, updateTaskText, deleteTask, moveTask, seedTasks,
-  isAutomatable, setAutomatable, buildBrief,
+  isAutomatable, setAutomatable, buildBrief, buildDeepLink,
   COLUMNS, COLUMN_META, CATEGORIES, CATEGORY_META, EFFORT_LABEL,
   type LaunchTask, type TaskColumn, type TaskCategory, type TaskOwner, type TaskEffort,
 } from "@/lib/launchTasks";
@@ -441,9 +441,18 @@ const KanbanTab: React.FC = () => {
                                 <span className="flex items-center gap-1"><Pencil size={11} /> Éditer</span>
                               </button>
                               {isAutomatable(t) && (
-                                <button onClick={() => copyBrief(t)} className={btnPrimary} title="Copier un brief autonome à coller dans Claude Code">
-                                  <span className="flex items-center gap-1"><ClipboardCopy size={11} /> Brief pour Claude</span>
-                                </button>
+                                <>
+                                  <a
+                                    href={buildDeepLink(t)}
+                                    className={btnPrimary}
+                                    title="Ouvre une session Claude Code sur cette tâche (machine avec Claude Code installé)"
+                                  >
+                                    <span className="flex items-center gap-1"><Terminal size={11} /> Lancer dans Claude Code</span>
+                                  </a>
+                                  <button onClick={() => copyBrief(t)} className={btnGhost} title="Copier le brief, si tu es sur une autre machine">
+                                    <span className="flex items-center gap-1"><ClipboardCopy size={11} /> Copier le brief</span>
+                                  </button>
+                                </>
                               )}
                             </div>
                           </>
