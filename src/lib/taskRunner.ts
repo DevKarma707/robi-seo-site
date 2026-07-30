@@ -32,14 +32,16 @@ export const runnerAvailable = async (): Promise<boolean> => {
   }
 };
 
-export const runTask = async (repo: RepoKey, prompt: string): Promise<void> => {
+export type RunMode = "vscode" | "terminal";
+
+export const runTask = async (repo: RepoKey, prompt: string, mode: RunMode = "vscode"): Promise<void> => {
   const token = getToken();
   if (!token) throw new Error("Jeton du runner absent — colle-le une fois dans l'admin.");
 
   const r = await fetch(`${BASE}/run`, {
     method: "POST",
     headers: { "content-type": "application/json", "x-runner-token": token },
-    body: JSON.stringify({ repo, prompt }),
+    body: JSON.stringify({ repo, prompt, mode }),
   });
 
   if (r.status === 401) throw new Error("Jeton refusé par le runner.");

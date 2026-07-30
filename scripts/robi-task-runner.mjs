@@ -73,7 +73,40 @@ if (!claudeBin) {
   process.exit(1);
 }
 
-// ─── Lancement d'une tâche ────────────────────────────────────────────
+// ─── Lancement dans VS Code ───────────────────────────────────────────
+//
+// L'extension Claude Code enregistre un handler d'URI à l'exécution
+// (window.registerUriHandler dans extension.js) : la déclaration dans
+// package.json est facultative, d'où son absence trompeuse. Le handler accepte
+//   vscode://anthropic.claude-code/open?prompt=…&session=…
+// et exécute claude-vscode.primaryEditor.open — le panneau Claude, pas un
+// terminal.
+//
+// Il manque un paramètre de dossier : le panneau s'ouvre dans la fenêtre VS
+// Code active. On ouvre donc d'abord le bon dépôt, puis on envoie l'URI.
+const VSCODE_BIN = "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code";
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+const run = (bin, args) =>
+  new Promise((resolve, reject) =>
+    execFile(bin, args, (err) => (err ? reject(err) : resolve()))
+  );
+
+const launchVSCode = async (repoKey, prompt) => {
+  const cwd = REPOS[repoKey];
+  // -n : une fenêtre par tâche, ce qui donne les « petites fenêtres »
+  // séparées plutôt qu'un panneau qui écrase le précédent.
+  await run(VSCODE_BIN, ["-n", cwd]);
+  // Laisse la fenêtre s'initialiser : l'extension s'active sur
+  // onStartupFinished, et une URI envoyée trop tôt part dans le vide.
+  await sleep(3000);
+  const uri = `vscode://anthropic.claude-code/open?prompt=${encodeURIComponent(prompt)}`;
+  // execFile, donc pas de shell : le prompt reste un argument, jamais du code.
+  await run("/usr/bin/open", [uri]);
+};
+
+// ─── Lancement dans un Terminal (repli) ───────────────────────────────
 const launch = (repoKey, prompt) => {
   const cwd = REPOS[repoKey];
   const dir = mkdtempSync(join(tmpdir(), "robi-task-"));
@@ -144,11 +177,13 @@ createServer((req, res) => {
     });
     req.on("end", async () => {
       try {
-        const { repo, prompt } = JSON.parse(raw);
+        const { repo, prompt, mode } = JSON.parse(raw);
         if (!REPOS[repo]) return json(res, 400, { error: "dépôt inconnu" });
         if (typeof prompt !== "string" || !prompt.trim()) return json(res, 400, { error: "prompt vide" });
-        await launch(repo, prompt);
-        console.log(`→ fenêtre ouverte sur ${repo} : ${prompt.split("\n")[0].slice(0, 70)}`);
+        if (mode && mode !== "vscode" && mode !== "terminal") return json(res, 400, { error: "mode inconnu" });
+        const target = mode === "terminal" ? "terminal" : "vscode";
+        await (target === "terminal" ? launch(repo, prompt) : launchVSCode(repo, prompt));
+        console.log(`→ ${target} ouvert sur ${repo} : ${prompt.split("\n")[0].slice(0, 70)}`);
         json(res, 200, { ok: true });
       } catch (e) {
         json(res, 500, { error: String(e.message || e) });

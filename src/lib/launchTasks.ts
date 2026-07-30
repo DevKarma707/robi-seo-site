@@ -167,6 +167,21 @@ export const repoOf = (c: TaskCategory): RepoKey =>
 const MAX_QUERY = 5000;
 
 /**
+ * Ouvre la tâche dans le panneau Claude de VS Code.
+ *
+ * L'extension enregistre son handler d'URI à l'exécution
+ * (window.registerUriHandler), sans le déclarer dans package.json — d'où
+ * l'impression trompeuse qu'il n'existe pas. Il accepte `prompt` et `session`,
+ * et déclenche claude-vscode.primaryEditor.open : le panneau, pas un terminal.
+ *
+ * Aucun paramètre de dossier n'existe : le panneau s'ouvre dans la fenêtre VS
+ * Code active. Passer par le runner local règle ce point en ouvrant d'abord le
+ * bon dépôt ; ce lien direct est le repli quand le runner ne tourne pas.
+ */
+export const buildVSCodeLink = (t: LaunchTask): string =>
+  `vscode://anthropic.claude-code/open?prompt=${encodeURIComponent(buildBrief(t))}`;
+
+/**
  * Lien qui ouvre une session Claude Code sur la tâche. Ne fonctionne que sur
  * une machine où Claude Code est installé — ailleurs, le navigateur ne sait
  * pas quoi faire du schéma et il ne se passe rien.
