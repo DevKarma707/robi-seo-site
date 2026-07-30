@@ -30,9 +30,26 @@ export interface LaunchTask {
   order: number;
   blockedBy?: string;
   doneAt?: string;
+  /**
+   * Claude peut la mener seul, sans action de Ralph (pas de compte à créer,
+   * pas de paiement, pas de clic dans un dashboard tiers).
+   * Champ optionnel exprès — voir isAutomatable().
+   */
+  automatable?: boolean;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }
+
+/**
+ * Le champ `automatable` n'existe pas sur les tâches créées avant son
+ * introduction, et le tableau était déjà semé. Plutôt qu'une migration, on
+ * retombe sur le propriétaire : le backlog a été réparti exactement sur ce
+ * critère — `claude` porte ce qui se fait sans Ralph, `ralph` ce qui exige
+ * un compte, un paiement ou un accès externe. Un marquage explicite, lui,
+ * l'emporte toujours.
+ */
+export const isAutomatable = (t: LaunchTask): boolean =>
+  t.automatable ?? t.owner === "claude";
 
 export const COLUMN_META: Record<TaskColumn, { label: string; color: string }> = {
   todo:    { label: "À faire",  color: "#94a3b8" },
@@ -79,6 +96,38 @@ export const updateTask = (id: string, patch: Partial<LaunchTask>) =>
   updateDoc(doc(db, "launchTasks", id), { ...patch, updatedAt: serverTimestamp() });
 
 export const deleteTask = (id: string) => deleteDoc(doc(db, "launchTasks", id));
+
+/** Marque explicitement une tâche comme automatisable, ou non. */
+export const setAutomatable = (id: string, value: boolean) =>
+  updateTask(id, { automatable: value });
+
+/**
+ * Brief autonome à coller dans une session Claude Code.
+ *
+ * Autonome au sens strict : la session qui le reçoit n'a pas accès à ce
+ * tableau ni à cette conversation. Tout ce qui est nécessaire pour agir doit
+ * donc tenir dans le texte — d'où le rappel des chemins de repo, l'app et le
+ * site étant deux dépôts distincts.
+ */
+export const buildBrief = (t: LaunchTask): string => {
+  // Assemblé en blocs joints par une ligne vide : une tâche sans détail ni
+  // dépendance ne laisse ainsi pas de trous dans le texte collé.
+  const blocks = [
+    `Tâche : ${t.title}`,
+    t.detail ? `Contexte :\n${t.detail}` : null,
+    t.blockedBy
+      ? `⚠️ Dépend de : ${t.blockedBy} — vérifie que c'est fait avant de commencer.`
+      : null,
+    `Catégorie : ${CATEGORY_META[t.category].label} · Effort estimé : ${EFFORT_LABEL[t.effort]} · Priorité P${t.priority}`,
+    [
+      "Projet Robi, deux dépôts distincts :",
+      "- ~/Desktop/ROBI_V1_READY — l'app (Vite + React + Firebase), repo DevKarma707/ROBI_AI",
+      "- ~/Desktop/robi-seo-site — le site public et l'admin (Next.js), repo DevKarma707/robi-seo-site",
+    ].join("\n"),
+    "Localise le code concerné avant de proposer un changement.",
+  ];
+  return blocks.filter((b): b is string => b !== null).join("\n\n");
+};
 
 /**
  * Édition du titre et du détail. Passe par deleteField() quand le détail est

@@ -3,10 +3,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ListChecks, Plus, Trash2, AlertTriangle, Check, Bot, User, Download, RefreshCw,
-  Search, Pencil, X, FolderInput,
+  Search, Pencil, X, FolderInput, Sparkles, ClipboardCopy,
 } from "lucide-react";
 import {
   subscribeToTasks, addTask, updateTask, updateTaskText, deleteTask, moveTask, seedTasks,
+  isAutomatable, setAutomatable, buildBrief,
   COLUMNS, COLUMN_META, CATEGORIES, CATEGORY_META, EFFORT_LABEL,
   type LaunchTask, type TaskColumn, type TaskCategory, type TaskOwner, type TaskEffort,
 } from "@/lib/launchTasks";
@@ -24,6 +25,7 @@ const KanbanTab: React.FC = () => {
   const [dragOver, setDragOver] = useState<TaskColumn | null>(null);
   const [newTitle, setNewTitle] = useState("");
   const [search, setSearch] = useState("");
+  const [autoOnly, setAutoOnly] = useState(false);
   const [busy, setBusy] = useState(false);
   const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   /** Tâche en cours d'édition, avec son brouillon titre/détail. */
@@ -63,9 +65,21 @@ const KanbanTab: React.FC = () => {
     return rows.filter((t) =>
       (category === "all" || t.category === category) &&
       (owner === "all" || t.owner === owner) &&
+      (!autoOnly || isAutomatable(t)) &&
       (!q || t.title.toLowerCase().includes(q) || (t.detail || "").toLowerCase().includes(q))
     );
-  }, [rows, category, owner, search]);
+  }, [rows, category, owner, autoOnly, search]);
+
+  /** Ce que Claude peut prendre tout de suite : automatisable, pas encore
+   *  fait, et pas en attente d'une action de Ralph. */
+  const claudeCandidates = useMemo(
+    () => rows
+      .filter((t) => isAutomatable(t) && t.column !== "done" && !t.blockedBy)
+      .sort((a, b) => a.priority - b.priority || a.order - b.order),
+    [rows]
+  );
+  const claudeReady = claudeCandidates.length;
+  const nextForClaude = useMemo(() => claudeCandidates.slice(0, 3), [claudeCandidates]);
 
   /** Tâches qui déclarent une dépendance mais traînent hors de « Bloqué ».
    *  Les tableaux créés avant le rangement automatique en ont ~10. */
@@ -148,6 +162,17 @@ const KanbanTab: React.FC = () => {
     }
   };
 
+  const copyBrief = async (t: LaunchTask) => {
+    try {
+      await navigator.clipboard.writeText(buildBrief(t));
+      say("ok", "Brief copié — colle-le dans une session Claude Code.");
+    } catch {
+      // Safari refuse l'écriture presse-papier hors geste utilisateur direct,
+      // et le contexte non sécurisé n'expose pas l'API du tout.
+      say("err", "Copie refusée par le navigateur.");
+    }
+  };
+
   const tidyBlocked = async () => {
     setBusy(true);
     try {
@@ -200,20 +225,40 @@ const KanbanTab: React.FC = () => {
           <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress.pct}%`, backgroundColor: ACCENT }} />
         </div>
 
-        {nextForRalph.length > 0 && (
-          <div className="mt-4">
-            <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1.5">
-              Ce qui n&apos;attend que toi
-            </p>
-            <div className="space-y-1">
-              {nextForRalph.map((t) => (
-                <p key={t.id} className="text-[12px] text-white/70 flex items-start gap-2">
-                  <span className="mt-[6px] w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: PRIORITY_COLOR[t.priority] }} />
-                  {t.title}
-                  <span className="text-white/25">· {EFFORT_LABEL[t.effort]}</span>
+        {(nextForRalph.length > 0 || nextForClaude.length > 0) && (
+          <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {nextForRalph.length > 0 && (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1.5">
+                  Ce qui n&apos;attend que toi
                 </p>
-              ))}
-            </div>
+                <div className="space-y-1">
+                  {nextForRalph.map((t) => (
+                    <p key={t.id} className="text-[12px] text-white/70 flex items-start gap-2">
+                      <span className="mt-[6px] w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: PRIORITY_COLOR[t.priority] }} />
+                      {t.title}
+                      <span className="text-white/25">· {EFFORT_LABEL[t.effort]}</span>
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+            {nextForClaude.length > 0 && (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest mb-1.5 flex items-center gap-1" style={{ color: `${ACCENT}99` }}>
+                  <Sparkles size={10} /> Ce que je peux prendre
+                </p>
+                <div className="space-y-1">
+                  {nextForClaude.map((t) => (
+                    <p key={t.id} className="text-[12px] text-white/70 flex items-start gap-2">
+                      <span className="mt-[6px] w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: PRIORITY_COLOR[t.priority] }} />
+                      {t.title}
+                      <span className="text-white/25">· {EFFORT_LABEL[t.effort]}</span>
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -250,6 +295,17 @@ const KanbanTab: React.FC = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
+        <button
+          onClick={() => setAutoOnly((v) => !v)}
+          aria-pressed={autoOnly}
+          className={`${btnPill} ${autoOnly ? "bg-[#BEF221] text-black" : "bg-white/10 text-white/60 hover:bg-white/20"}`}
+          title="N'afficher que les tâches que Claude peut mener seul"
+        >
+          <span className="flex items-center gap-1.5">
+            <Sparkles size={12} /> Automatisable
+            <span className={autoOnly ? "text-black/50" : "text-white/30"}>{claudeReady}</span>
+          </span>
+        </button>
         {misplacedBlocked.length > 0 && (
           <button onClick={tidyBlocked} disabled={busy} className={btnGhost} title="Déplacer vers la colonne Bloqué">
             <span className="flex items-center gap-1.5">
@@ -326,6 +382,15 @@ const KanbanTab: React.FC = () => {
                         {t.owner === "claude" ? "Claude" : "Ralph"}
                       </span>
                       <span className="text-[9px] text-white/25">{EFFORT_LABEL[t.effort]}</span>
+                      {isAutomatable(t) && t.column !== "done" && (
+                        <span
+                          className="text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5"
+                          style={{ backgroundColor: `${ACCENT}1f`, color: ACCENT }}
+                          title="Claude peut la mener seul"
+                        >
+                          <Sparkles size={8} /> AUTO
+                        </span>
+                      )}
                     </div>
 
                     {t.blockedBy && t.column !== "done" && (
@@ -368,12 +433,19 @@ const KanbanTab: React.FC = () => {
                         ) : (
                           <>
                             {t.detail && <p className="text-[11px] text-white/55 leading-relaxed">{t.detail}</p>}
-                            <button
-                              onClick={() => setEdit({ id: t.id!, title: t.title, detail: t.detail || "" })}
-                              className={btnGhost}
-                            >
-                              <span className="flex items-center gap-1"><Pencil size={11} /> Éditer</span>
-                            </button>
+                            <div className="flex flex-wrap gap-1.5">
+                              <button
+                                onClick={() => setEdit({ id: t.id!, title: t.title, detail: t.detail || "" })}
+                                className={btnGhost}
+                              >
+                                <span className="flex items-center gap-1"><Pencil size={11} /> Éditer</span>
+                              </button>
+                              {isAutomatable(t) && (
+                                <button onClick={() => copyBrief(t)} className={btnPrimary} title="Copier un brief autonome à coller dans Claude Code">
+                                  <span className="flex items-center gap-1"><ClipboardCopy size={11} /> Brief pour Claude</span>
+                                </button>
+                              )}
+                            </div>
                           </>
                         )}
                         <div className="flex flex-wrap gap-1.5">
@@ -408,6 +480,13 @@ const KanbanTab: React.FC = () => {
                             className={btnGhost}
                           >
                             → {t.owner === "ralph" ? "Claude" : "Ralph"}
+                          </button>
+                          <button
+                            onClick={() => setAutomatable(t.id!, !isAutomatable(t))}
+                            className={`${btnPill} ${isAutomatable(t) ? "bg-[#BEF221]/20 text-[#BEF221]" : "bg-white/10 text-white/60"}`}
+                            title="Claude peut-il la mener seul ?"
+                          >
+                            <span className="flex items-center gap-1"><Sparkles size={11} /> Auto</span>
                           </button>
                           <button
                             onClick={async () => { if (confirm("Supprimer cette tâche ?")) { await deleteTask(t.id!); setOpenId(null); } }}
