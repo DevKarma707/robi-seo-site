@@ -18,7 +18,8 @@ export type ProspectSegment =
   | "comptable"    // experts-comptables — un contact = plusieurs dizaines d'utilisateurs
   | "coworking"    // coworkings, incubateurs, pépinières
   | "federation"   // fédérations, syndicats, CCI, chambres de métiers
-  | "tpe";         // TPE de services
+  | "tpe"          // TPE de services
+  | "influenceur"; // créateurs de contenu à recruter au programme
 
 export type ProspectStatus =
   | "todo" | "contacted" | "followup" | "interested" | "signup" | "customer" | "lost";
@@ -69,6 +70,7 @@ export const SEGMENT_META: Record<ProspectSegment, { label: string; hint: string
   coworking:  { label: "Coworkings",       hint: "Accès groupé à une communauté d'indépendants",                 color: "#a78bfa" },
   federation: { label: "Fédérations / CCI", hint: "Relais institutionnel, crédibilité Factur-X",                 color: "#34d399" },
   tpe:        { label: "TPE de services",  hint: "Petites structures sans service administratif",                color: "#fb923c" },
+  influenceur:{ label: "Influenceurs",     hint: "Créateurs à recruter — convertis la fiche en partenariat",      color: "#22d3ee" },
 };
 
 export const SEGMENTS = Object.keys(SEGMENT_META) as ProspectSegment[];
@@ -236,6 +238,25 @@ Le 1er septembre 2026, la facturation électronique devient obligatoire. Une par
 Robi génère du Factur-X natif conforme à la norme EN 16931. Je peux mettre à disposition de {{societe}} de quoi accompagner vos adhérents : un accès à conditions préférentielles, et si vous le souhaitez un webinaire ou une note pédagogique sur ce que l'obligation implique réellement.
 
 Seriez-vous disponible pour en discuter ?
+
+${SIGN}`,
+  },
+
+  {
+    id: "influenceur-first", label: "Influenceur — premier email", segment: "influenceur", channel: "email", templateKey: "first",
+    subject: "Partenariat — un outil de facturation pour votre audience",
+    body: `Bonjour {{prenom}},
+
+Ralph, je développe Robi : un outil de facturation où l'on dicte une phrase et où la facture sort conforme. Cible : indépendants, artisans, TPE.
+
+Je vous écris parce qu'une partie de votre audience va se prendre l'obligation de facturation électronique du 1er septembre 2026 en pleine figure, et que la plupart ne le savent pas encore. C'est un sujet utile à traiter, et Robi est déjà conforme.
+
+Ce que je propose :
+— un code promo à votre nom, qui donne une vraie remise à votre audience
+— une commission sur chaque vente réalisée avec ce code
+— un accès complet gratuit pour vous, pour que vous en parliez en connaissance de cause
+
+Pas d'exclusivité, pas d'engagement de durée. Si le format vous va, on cadre en quinze minutes.
 
 ${SIGN}`,
   },

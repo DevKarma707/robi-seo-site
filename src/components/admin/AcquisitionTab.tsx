@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Target, Send, Copy, Mail, Check, AlertTriangle, Upload, Search,
-  ArrowRight, Ban, ExternalLink, Trash2, RefreshCw,
+  ArrowRight, Ban, ExternalLink, Trash2, RefreshCw, Megaphone,
 } from "lucide-react";
 import {
   subscribeToProspects, subscribeToUnsubscribes, updateProspect, deleteProspect,
@@ -13,6 +13,7 @@ import {
   type Prospect, type ProspectSegment, type ProspectStatus,
 } from "@/lib/prospects";
 import { fetchOutreachStatus, sendOutreachEmail, type OutreachStatus } from "@/lib/adminApi";
+import { addInfluencer, suggestPromoCode } from "@/lib/influencers";
 
 const ACCENT = "#BEF221";
 const card = "rounded-2xl border bg-white/[0.03] border-white/8";
@@ -138,6 +139,36 @@ const AcquisitionTab: React.FC = () => {
       setBusy(false);
     }
   }, [selected, message, optedOut]);
+
+  /**
+   * Bascule une fiche prospect vers le programme influenceurs. Le prospect est
+   * conservé et marqué client : son historique de relances reste consultable.
+   */
+  const toInfluencer = async () => {
+    if (!selected?.id) return;
+    setBusy(true);
+    try {
+      await addInfluencer({
+        name: selected.contactName || selected.company,
+        platform: "instagram",
+        status: "negociation",
+        email: selected.email,
+        url: selected.website || selected.linkedin,
+        discountPct: 20,
+        commissionPct: 20,
+        promoCode: suggestPromoCode(selected.contactName || selected.company, 20),
+        prospectId: selected.id,
+        notes: `Converti depuis l'acquisition${selected.notes ? ` — ${selected.notes}` : ""}`,
+        contactedAt: todayStr(),
+      });
+      await updateProspect(selected.id, { status: "interested" }, selected);
+      say("ok", "Fiche créée dans l'onglet Influenceurs — code promo à créer dans Polar.");
+    } catch (e) {
+      say("err", (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const runImport = async () => {
     setBusy(true);
@@ -406,6 +437,11 @@ const AcquisitionTab: React.FC = () => {
                   <button onClick={() => advanceProspect(selected, "Marqué manuellement")} disabled={busy} className={btnGhost}>
                     <span className="flex items-center gap-1.5"><Check size={12} /> Marquer fait</span>
                   </button>
+                  {selected.segment === "influenceur" && (
+                    <button onClick={toInfluencer} disabled={busy} className={btnGhost}>
+                      <span className="flex items-center gap-1.5"><Megaphone size={12} /> Convertir en influenceur</span>
+                    </button>
+                  )}
                 </div>
               </div>
             ) : (

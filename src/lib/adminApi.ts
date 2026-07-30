@@ -73,6 +73,11 @@ export interface HealthReport {
   computedAt: string;
 }
 
+export const fetchAttributionStats = (days?: number) =>
+  authedFetch(`/api/admin/attribution${days ? `?days=${days}` : ""}`) as Promise<
+    import("./influencers").AttributionStats
+  >;
+
 export interface OutreachStatus {
   configured: boolean;
   from: string | null;

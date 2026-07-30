@@ -22,6 +22,11 @@ service cloud.firestore {
       allow read, create, update, delete: if isAdmin();
     }
 
+    // ── Influenceurs (programme de codes promo) ──
+    match /influencers/{id} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
     // ── Désinscriptions ──
     // Le lien d'opt-out est cliqué par un destinataire non authentifié : la
     // création doit donc être ouverte, mais bornée à un jeton opaque. Sans ça,

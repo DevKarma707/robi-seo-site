@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target } from "lucide-react";
+import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone } from "lucide-react";
 import {
   auth, onAuthStateChanged, signInWithGoogle, signOut, isAllowedEmail, firebaseReady,
   subscribeToArticles, subscribeToVisits, type Article, type VisitStats, type User,
@@ -12,8 +12,9 @@ import PilotageTab from "@/components/admin/PilotageTab";
 import LancementTab from "@/components/admin/LancementTab";
 import SanteTab from "@/components/admin/SanteTab";
 import AcquisitionTab from "@/components/admin/AcquisitionTab";
+import InfluenceursTab from "@/components/admin/InfluenceursTab";
 
-type Tab = "pilotage" | "sante" | "acquisition" | "analytics" | "blog" | "lancement";
+type Tab = "pilotage" | "sante" | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
 
 const EMPTY_VISITS: VisitStats = {
   today: 0, week: 0, prevWeek: 0, month: 0, days: [], byPage: [], bySource: [],
@@ -122,6 +123,7 @@ export default function AdminPage() {
     { id: "pilotage", label: "Pilotage", icon: <Gauge size={17} /> },
     { id: "sante", label: "Santé", icon: <HeartPulse size={17} /> },
     { id: "acquisition", label: "Acquisition", icon: <Target size={17} /> },
+    { id: "influenceurs", label: "Influenceurs", icon: <Megaphone size={17} /> },
     { id: "analytics", label: "Analytics", icon: <BarChart2 size={17} /> },
     { id: "blog", label: "Blog", icon: <FileText size={17} />, badge: articles.filter((a) => !a.published).length || undefined },
     { id: "lancement", label: "Lancement", icon: <Rocket size={17} /> },
@@ -131,6 +133,7 @@ export default function AdminPage() {
     pilotage: "Inscriptions, activation, usage et funnel — agrégats uniquement",
     sante: "Ce qui casse en silence : emails, plantages, IA, crons",
     acquisition: "Prospects, séquence de relance et envoi des emails",
+    influenceurs: "Codes promo, ventes attribuées et commissions dues",
     analytics: `${visits.month} visites ce mois · ${visits.bySource.length} sources détectées`,
     blog: `${articles.filter((a) => a.published).length} publiés · ${articles.filter((a) => !a.published).length} brouillons`,
     lancement: "Compteur de places, date limite et retrait de l'offre",
@@ -187,6 +190,7 @@ export default function AdminPage() {
           {tab === "pilotage" && <PilotageTab visits={visits} />}
           {tab === "sante" && <SanteTab />}
           {tab === "acquisition" && <AcquisitionTab />}
+          {tab === "influenceurs" && <InfluenceursTab />}
           {tab === "analytics" && <AnalyticsTab visits={visits} />}
           {tab === "blog" && <BlogTab articles={articles} />}
           {tab === "lancement" && <LancementTab />}
