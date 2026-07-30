@@ -139,24 +139,29 @@ export const buildBrief = (t: LaunchTask): string => {
 //
 // Chemins absolus en dur : un deep link ne peut pas les déduire, et cet admin
 // n'a qu'un seul utilisateur. À corriger ici si la machine change.
-const REPO_APP = "/Users/ralphkaram/Desktop/ROBI_V1_READY";
-const REPO_SITE = "/Users/ralphkaram/Desktop/robi-seo-site";
+export type RepoKey = "app" | "site";
+
+const REPO_PATH: Record<RepoKey, string> = {
+  app: "/Users/ralphkaram/Desktop/ROBI_V1_READY",
+  site: "/Users/ralphkaram/Desktop/robi-seo-site",
+};
 
 /**
  * Dépôt le plus probable selon la catégorie. Heuristique assumée : certaines
  * tâches touchent les deux (Polar a un webhook côté site et un service côté
  * app), d'où le rappel des deux chemins dans le brief lui-même.
  */
-const REPO_BY_CATEGORY: Record<TaskCategory, string> = {
-  paiement: REPO_SITE,      // le webhook Polar vit dans /api/webhooks/polar
-  produit: REPO_APP,
-  mobile: REPO_APP,
-  conformite: REPO_APP,
-  seo: REPO_SITE,
-  acquisition: REPO_SITE,
-  influenceurs: REPO_SITE,
-  lancement: REPO_SITE,
-};
+export const repoOf = (c: TaskCategory): RepoKey =>
+  ({
+    paiement: "site",      // le webhook Polar vit dans /api/webhooks/polar
+    produit: "app",
+    mobile: "app",
+    conformite: "app",
+    seo: "site",
+    acquisition: "site",
+    influenceurs: "site",
+    lancement: "site",
+  } as const)[c];
 
 /** Le parser rejette au-delà de 5000 caractères. */
 const MAX_QUERY = 5000;
@@ -168,7 +173,7 @@ const MAX_QUERY = 5000;
  */
 export const buildDeepLink = (t: LaunchTask): string => {
   const q = buildBrief(t).slice(0, MAX_QUERY);
-  const params = new URLSearchParams({ cwd: REPO_BY_CATEGORY[t.category], q });
+  const params = new URLSearchParams({ cwd: REPO_PATH[repoOf(t.category)], q });
   return `claude-cli://open?${params.toString()}`;
 };
 

@@ -7,10 +7,11 @@ import {
 } from "lucide-react";
 import {
   subscribeToTasks, addTask, updateTask, updateTaskText, deleteTask, moveTask, seedTasks,
-  isAutomatable, setAutomatable, buildBrief, buildDeepLink,
+  isAutomatable, setAutomatable, buildBrief, buildDeepLink, repoOf,
   COLUMNS, COLUMN_META, CATEGORIES, CATEGORY_META, EFFORT_LABEL,
   type LaunchTask, type TaskColumn, type TaskCategory, type TaskOwner, type TaskEffort,
 } from "@/lib/launchTasks";
+import { runnerAvailable, runTask, getToken, setToken } from "@/lib/taskRunner";
 import { ACCENT, btnGhost, btnPill, btnPrimary, card, focusRing, input, select } from "./ui";
 
 const PRIORITY_COLOR: Record<number, string> = { 1: "#f87171", 2: "#fbbf24", 3: "#64748b" };
@@ -155,6 +156,30 @@ const KanbanTab: React.FC = () => {
     try {
       await updateTaskText(edit.id, title, edit.detail);
       setEdit(null);
+    } catch (e) {
+      say("err", (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  /** Le runner ne tourne que sur le Mac de Ralph : ailleurs la sonde échoue
+   *  et le bouton « Ouvrir une fenêtre » reste masqué, sans message d'erreur. */
+  const [hasRunner, setHasRunner] = useState(false);
+  useEffect(() => { runnerAvailable().then(setHasRunner); }, []);
+
+  const runInWindow = async (t: LaunchTask) => {
+    if (!getToken()) {
+      const entered = window.prompt(
+        "Jeton du runner local — affiché au démarrage de `node scripts/robi-task-runner.mjs`. Il n'est demandé qu'une fois."
+      );
+      if (!entered?.trim()) return;
+      setToken(entered);
+    }
+    setBusy(true);
+    try {
+      await runTask(repoOf(t.category), buildBrief(t));
+      say("ok", "Fenêtre ouverte — la tâche démarre.");
     } catch (e) {
       say("err", (e as Error).message);
     } finally {
@@ -442,13 +467,19 @@ const KanbanTab: React.FC = () => {
                               </button>
                               {isAutomatable(t) && (
                                 <>
-                                  <a
-                                    href={buildDeepLink(t)}
-                                    className={btnPrimary}
-                                    title="Ouvre une session Claude Code sur cette tâche (machine avec Claude Code installé)"
-                                  >
-                                    <span className="flex items-center gap-1"><Terminal size={11} /> Lancer dans Claude Code</span>
-                                  </a>
+                                  {hasRunner ? (
+                                    <button onClick={() => runInWindow(t)} disabled={busy} className={btnPrimary} title="Ouvre une fenêtre Terminal avec Claude Code lancé sur la tâche">
+                                      <span className="flex items-center gap-1"><Terminal size={11} /> Ouvrir une fenêtre</span>
+                                    </button>
+                                  ) : (
+                                    <a
+                                      href={buildDeepLink(t)}
+                                      className={btnPrimary}
+                                      title="Ouvre une session Claude Code sur cette tâche (machine avec Claude Code installé)"
+                                    >
+                                      <span className="flex items-center gap-1"><Terminal size={11} /> Lancer dans Claude Code</span>
+                                    </a>
+                                  )}
                                   <button onClick={() => copyBrief(t)} className={btnGhost} title="Copier le brief, si tu es sur une autre machine">
                                     <span className="flex items-center gap-1"><ClipboardCopy size={11} /> Copier le brief</span>
                                   </button>

@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "runner": "node scripts/robi-task-runner.mjs",
     "lint": "eslint"
   },
   "dependencies": {
