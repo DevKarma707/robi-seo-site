@@ -14,8 +14,13 @@ import { fetchAttributionStats } from "@/lib/adminApi";
 
 const ACCENT = "#BEF221";
 const card = "rounded-2xl border bg-white/[0.03] border-white/8";
-const input =
-  "w-full px-3 py-2 rounded-xl bg-white/[0.06] border border-white/10 text-white text-sm outline-none focus:border-[#BEF221]/40";
+// `w-full` et `w-auto` ont la même spécificité : mettre `w-auto` après dans
+// l'attribut class ne suffit pas, c'est l'ordre dans le CSS généré qui tranche.
+// D'où deux classes distinctes plutôt qu'une surcharge.
+const fieldBase =
+  "px-3 py-2 rounded-xl bg-white/[0.06] border border-white/10 text-white text-sm outline-none focus:border-[#BEF221]/40";
+const input = `w-full ${fieldBase}`;
+const select = `w-auto ${fieldBase}`;
 const btn = "px-3 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-wider transition-all disabled:opacity-30 disabled:cursor-not-allowed";
 const btnGhost = `${btn} bg-white/10 text-white hover:bg-white/20`;
 const btnPrimary = `${btn} bg-[#BEF221] text-black hover:opacity-90`;

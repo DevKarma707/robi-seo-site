@@ -17,8 +17,13 @@ import { addInfluencer, suggestPromoCode } from "@/lib/influencers";
 
 const ACCENT = "#BEF221";
 const card = "rounded-2xl border bg-white/[0.03] border-white/8";
-const input =
-  "w-full px-3 py-2 rounded-xl bg-white/[0.06] border border-white/10 text-white text-sm outline-none focus:border-[#BEF221]/40";
+// `w-full` et `w-auto` ont la même spécificité : mettre `w-auto` après dans
+// l'attribut class ne suffit pas, c'est l'ordre dans le CSS généré qui tranche.
+// D'où deux classes distinctes plutôt qu'une surcharge.
+const fieldBase =
+  "px-3 py-2 rounded-xl bg-white/[0.06] border border-white/10 text-white text-sm outline-none focus:border-[#BEF221]/40";
+const input = `w-full ${fieldBase}`;
+const select = `w-auto ${fieldBase}`;
 
 const btn = "px-3 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-wider transition-all disabled:opacity-30 disabled:cursor-not-allowed";
 const btnGhost = `${btn} bg-white/10 text-white hover:bg-white/20`;
@@ -269,11 +274,11 @@ const AcquisitionTab: React.FC = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <select className={`${input} w-auto`} value={segment} onChange={(e) => setSegment(e.target.value as ProspectSegment | "all")}>
+        <select className={select} value={segment} onChange={(e) => setSegment(e.target.value as ProspectSegment | "all")}>
           <option value="all">Tous les segments</option>
           {SEGMENTS.map((s) => <option key={s} value={s}>{SEGMENT_META[s].label}</option>)}
         </select>
-        <select className={`${input} w-auto`} value={status} onChange={(e) => setStatus(e.target.value as ProspectStatus | "open")}>
+        <select className={select} value={status} onChange={(e) => setStatus(e.target.value as ProspectStatus | "open")}>
           <option value="open">En cours</option>
           {(Object.keys(STATUS_META) as ProspectStatus[]).map((s) => <option key={s} value={s}>{STATUS_META[s].label}</option>)}
         </select>

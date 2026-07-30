@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone } from "lucide-react";
+import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks } from "lucide-react";
 import {
   auth, onAuthStateChanged, signInWithGoogle, signOut, isAllowedEmail, firebaseReady,
   subscribeToArticles, subscribeToVisits, type Article, type VisitStats, type User,
@@ -13,8 +13,9 @@ import LancementTab from "@/components/admin/LancementTab";
 import SanteTab from "@/components/admin/SanteTab";
 import AcquisitionTab from "@/components/admin/AcquisitionTab";
 import InfluenceursTab from "@/components/admin/InfluenceursTab";
+import KanbanTab from "@/components/admin/KanbanTab";
 
-type Tab = "pilotage" | "sante" | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
+type Tab = "pilotage" | "kanban" | "sante" | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
 
 const EMPTY_VISITS: VisitStats = {
   today: 0, week: 0, prevWeek: 0, month: 0, days: [], byPage: [], bySource: [],
@@ -121,6 +122,7 @@ export default function AdminPage() {
 
   const NAV: { id: Tab; label: string; icon: React.ReactNode; badge?: number }[] = [
     { id: "pilotage", label: "Pilotage", icon: <Gauge size={17} /> },
+    { id: "kanban", label: "Tâches", icon: <ListChecks size={17} /> },
     { id: "sante", label: "Santé", icon: <HeartPulse size={17} /> },
     { id: "acquisition", label: "Acquisition", icon: <Target size={17} /> },
     { id: "influenceurs", label: "Influenceurs", icon: <Megaphone size={17} /> },
@@ -131,6 +133,7 @@ export default function AdminPage() {
 
   const subtitle: Record<Tab, string> = {
     pilotage: "Inscriptions, activation, usage et funnel — agrégats uniquement",
+    kanban: "Le backlog du lancement, colonne par colonne",
     sante: "Ce qui casse en silence : emails, plantages, IA, crons",
     acquisition: "Prospects, séquence de relance et envoi des emails",
     influenceurs: "Codes promo, ventes attribuées et commissions dues",
@@ -188,6 +191,7 @@ export default function AdminPage() {
             <p className="text-sm mt-1 text-white/40">{subtitle[tab]}</p>
           </div>
           {tab === "pilotage" && <PilotageTab visits={visits} />}
+          {tab === "kanban" && <KanbanTab />}
           {tab === "sante" && <SanteTab />}
           {tab === "acquisition" && <AcquisitionTab />}
           {tab === "influenceurs" && <InfluenceursTab />}
