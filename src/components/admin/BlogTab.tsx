@@ -8,6 +8,7 @@ import {
 import {
   type Article, addArticle, updateArticle, deleteArticle, importArticlesFromJson, uploadArticleImage,
 } from "@/lib/firebase";
+import { card } from "./ui";
 
 type Lang = "fr" | "en" | "es";
 const CATEGORIES = ["guides", "legal", "tips", "business"] as const;
@@ -26,7 +27,6 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
 
   const text = "text-white";
   const muted = "text-white/40";
-  const card = "bg-white/[0.03] border-white/8";
   const inputBg = "bg-white/5 border-white/10 text-white";
 
   const filtered = articles.filter(
@@ -116,7 +116,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
       </div>
 
       {/* Liste */}
-      <div className={`rounded-2xl border overflow-hidden ${card}`}>
+      <div className={`${card} overflow-hidden`}>
         {filtered.length === 0 ? (
           <div className={`text-center py-16 ${muted}`}>
             <FileText size={32} className="mx-auto mb-3 opacity-40" />

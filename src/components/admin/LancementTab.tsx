@@ -5,11 +5,11 @@ import { Rocket, RefreshCw, AlertTriangle, Save, Check, ShieldAlert } from "luci
 import {
   fetchLaunchConfig, saveLaunchConfig, computeDisplayedSold, type LaunchConfig,
 } from "@/lib/adminApi";
+import { ACCENT, btn, card, input as inputBase } from "./ui";
 
-const ACCENT = "#BEF221";
-const card = "rounded-2xl border bg-white/[0.03] border-white/8";
-const input =
-  "w-full px-3 py-2 rounded-xl bg-white/[0.06] border border-white/10 text-white text-sm font-bold outline-none focus:border-[#BEF221]/40";
+// Champ partagé + graisse : ici tous les champs portent une valeur de
+// config (places, date limite), le gras les distingue du texte d'aide.
+const input = `${inputBase} font-bold`;
 
 const LancementTab: React.FC = () => {
   const [config, setConfig] = useState<LaunchConfig | null>(null);
@@ -68,7 +68,7 @@ const LancementTab: React.FC = () => {
           <p className="font-black text-sm">Configuration indisponible</p>
         </div>
         <p className="text-xs text-white/50">{error}</p>
-        <button onClick={load} className="mt-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20">
+        <button onClick={load} className={`${btn} mt-2`}>
           Réessayer
         </button>
       </div>
@@ -218,7 +218,7 @@ const LancementTab: React.FC = () => {
               <button
                 onClick={() => save({ baseOffset: 0, manualOverride: null })}
                 disabled={saving}
-                className="mt-1 text-[11px] font-bold px-3 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20 disabled:opacity-40"
+                className={`${btn} mt-1`}
               >
                 Revenir au chiffre réel
               </button>

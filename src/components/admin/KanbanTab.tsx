@@ -9,19 +9,7 @@ import {
   COLUMNS, COLUMN_META, CATEGORIES, CATEGORY_META, EFFORT_LABEL,
   type LaunchTask, type TaskColumn, type TaskCategory, type TaskOwner, type TaskEffort,
 } from "@/lib/launchTasks";
-
-const ACCENT = "#BEF221";
-const card = "rounded-2xl border bg-white/[0.03] border-white/8";
-// `w-full` et `w-auto` ont la même spécificité : mettre `w-auto` après dans
-// l'attribut class ne suffit pas, c'est l'ordre dans le CSS généré qui tranche.
-// D'où deux classes distinctes plutôt qu'une surcharge.
-const fieldBase =
-  "px-3 py-2 rounded-xl bg-white/[0.06] border border-white/10 text-white text-sm outline-none focus:border-[#BEF221]/40";
-const input = `w-full ${fieldBase}`;
-const select = `w-auto ${fieldBase}`;
-const btn = "px-3 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-wider transition-all disabled:opacity-30 disabled:cursor-not-allowed";
-const btnGhost = `${btn} bg-white/10 text-white hover:bg-white/20`;
-const btnPrimary = `${btn} bg-[#BEF221] text-black hover:opacity-90`;
+import { ACCENT, btnGhost, btnPill, btnPrimary, card, input, select } from "./ui";
 
 const PRIORITY_COLOR: Record<number, string> = { 1: "#f87171", 2: "#fbbf24", 3: "#64748b" };
 
@@ -273,7 +261,7 @@ const KanbanTab: React.FC = () => {
                             <button
                               key={p}
                               onClick={() => updateTask(t.id!, { priority: p })}
-                              className={`${btn} ${t.priority === p ? "text-black" : "bg-white/10 text-white/60"}`}
+                              className={`${btnPill} ${t.priority === p ? "text-black" : "bg-white/10 text-white/60"}`}
                               style={t.priority === p ? { backgroundColor: PRIORITY_COLOR[p] } : undefined}
                             >
                               P{p}
@@ -283,7 +271,7 @@ const KanbanTab: React.FC = () => {
                             <button
                               key={e}
                               onClick={() => updateTask(t.id!, { effort: e })}
-                              className={`${btn} ${t.effort === e ? "bg-white/25 text-white" : "bg-white/10 text-white/60"}`}
+                              className={`${btnPill} ${t.effort === e ? "bg-white/25 text-white" : "bg-white/10 text-white/60"}`}
                             >
                               {e}
                             </button>
@@ -296,7 +284,7 @@ const KanbanTab: React.FC = () => {
                           </button>
                           <button
                             onClick={async () => { if (confirm("Supprimer cette tâche ?")) { await deleteTask(t.id!); setOpenId(null); } }}
-                            className={`${btn} bg-red-500/15 text-red-400 hover:bg-red-500/25`}
+                            className={`${btnPill} bg-red-500/15 text-red-400 hover:bg-red-500/25`}
                           >
                             <Trash2 size={11} />
                           </button>

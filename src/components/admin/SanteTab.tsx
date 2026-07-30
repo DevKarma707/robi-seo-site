@@ -6,11 +6,10 @@ import {
   RefreshCw, Sparkles, ServerCrash, XCircle,
 } from "lucide-react";
 import { fetchHealthReport, type HealthReport, type HealthSignature } from "@/lib/adminApi";
+import { ACCENT, btn, card } from "./ui";
 
-const ACCENT = "#BEF221";
 const RED = "#f87171";
 const AMBER = "#fbbf24";
-const card = "rounded-2xl border bg-white/[0.03] border-white/8";
 
 const SEVERITY: Record<HealthReport["severity"], { label: string; color: string; icon: React.ReactNode; blurb: string }> = {
   ok: {
@@ -167,7 +166,7 @@ const SanteTab: React.FC = () => {
           <p className="font-black text-sm">Diagnostic indisponible</p>
         </div>
         <p className="text-xs text-white/50">{error}</p>
-        <button onClick={() => load(days)} className="mt-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20">
+        <button onClick={() => load(days)} className={`${btn} mt-2`}>
           Réessayer
         </button>
       </div>
@@ -337,7 +336,7 @@ const SanteTab: React.FC = () => {
         <button
           onClick={() => load(days)}
           disabled={loading}
-          className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20 disabled:opacity-40"
+          className={btn}
         >
           <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualiser
         </button>

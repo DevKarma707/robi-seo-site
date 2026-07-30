@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks } from "lucide-react";
 import {
   auth, onAuthStateChanged, signInWithGoogle, signOut, isAllowedEmail, firebaseReady,
@@ -14,6 +15,7 @@ import SanteTab from "@/components/admin/SanteTab";
 import AcquisitionTab from "@/components/admin/AcquisitionTab";
 import InfluenceursTab from "@/components/admin/InfluenceursTab";
 import KanbanTab from "@/components/admin/KanbanTab";
+import { focusRing } from "@/components/admin/ui";
 
 type Tab = "pilotage" | "kanban" | "sante" | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
 
@@ -160,7 +162,7 @@ export default function AdminPage() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold transition-all ${tab === t.id ? navActive : navItem}`}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold transition-all ${focusRing} ${tab === t.id ? navActive : navItem}`}
             >
               {t.icon}
               <span className="flex-1 text-left font-bold tracking-wide">{t.label}</span>
@@ -172,11 +174,13 @@ export default function AdminPage() {
         </nav>
 
         <div className="p-3 border-t border-white/[0.06] space-y-0.5">
-          <a href="/" className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold transition-all ${navItem}`}>
+          {/* Link plutôt que <a> : un href brut rechargeait toute l'app
+              (flash blanc + re-auth Firebase) pour revenir sur le site. */}
+          <Link href="/" className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold transition-all ${focusRing} ${navItem}`}>
             <ArrowUpRight size={17} />
             <span className="font-bold tracking-wide">Voir le site</span>
-          </a>
-          <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-red-400 hover:bg-red-400/10 transition-all">
+          </Link>
+          <button onClick={() => signOut()} className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-red-400 hover:bg-red-400/10 transition-all ${focusRing}`}>
             <LogOut size={17} />
             <span className="font-bold tracking-wide">Déconnexion</span>
           </button>
@@ -185,10 +189,15 @@ export default function AdminPage() {
 
       {/* Main */}
       <main className="flex-1 overflow-auto">
-        <div className="max-w-5xl mx-auto px-6 py-8">
-          <div className="mb-6">
-            <h1 className="font-black text-2xl uppercase tracking-tight text-white">{NAV.find((t) => t.id === tab)?.label}</h1>
-            <p className="text-sm mt-1 text-white/40">{subtitle[tab]}</p>
+        {/* 1600px : au-delà, une ligne de tableau s'étire trop pour que l'œil
+            garde sa ligne en la balayant. En dessous (l'ancien max-w-5xl, soit
+            1024px), le kanban et la carte monde étouffaient. */}
+        <div className="mx-auto w-full max-w-[1600px] px-6 py-8 md:px-10">
+          {/* Le filet bas ancre le titre : sur 1600px de large, un titre sans
+              séparateur flotte au-dessus du contenu au lieu de le coiffer. */}
+          <div className="mb-8 border-b border-white/[0.06] pb-5">
+            <h1 className="font-black text-[26px] leading-none uppercase tracking-tight text-white">{NAV.find((t) => t.id === tab)?.label}</h1>
+            <p className="text-sm mt-2 text-white/40">{subtitle[tab]}</p>
           </div>
           {tab === "pilotage" && <PilotageTab visits={visits} />}
           {tab === "kanban" && <KanbanTab />}

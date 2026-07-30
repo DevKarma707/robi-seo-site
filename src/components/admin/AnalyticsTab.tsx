@@ -3,8 +3,7 @@
 import React from "react";
 import { TrendingUp, TrendingDown, Globe, BarChart2 } from "lucide-react";
 import type { VisitStats } from "@/lib/firebase";
-
-const ACCENT = "#BEF221";
+import { ACCENT, card } from "./ui";
 
 const SOURCE_COLORS: Record<string, string> = {
   Direct: "#BEF221",
@@ -65,8 +64,6 @@ const AnalyticsTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
   const maxPage = visits.byPage[0]?.count || 1;
   const maxSource = visits.bySource[0]?.count || 1;
   const totalSource = visits.bySource.reduce((s, r) => s + r.count, 0) || 1;
-
-  const card = "rounded-2xl border bg-white/[0.03] border-white/8";
 
   return (
     <div className="space-y-6">

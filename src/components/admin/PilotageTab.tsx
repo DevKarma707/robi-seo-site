@@ -5,19 +5,17 @@ import dynamic from "next/dynamic";
 import { Crown, Globe, RefreshCw, AlertTriangle, TrendingDown, Filter } from "lucide-react";
 import { fetchAppStats, type AppStats } from "@/lib/adminApi";
 import type { VisitStats } from "@/lib/firebase";
+import { ACCENT, btn, card, kpiLabel, kpiValue, sectionTitle } from "./ui";
 
 // ~110 Ko de tracés SVG : chargés seulement quand l'onglet Pilotage s'ouvre.
 const WorldMapBlock = dynamic(() => import("./WorldMapBlock"), {
   ssr: false,
   loading: () => (
-    <div className="rounded-2xl border bg-white/[0.03] border-white/8 p-5 h-64 flex items-center justify-center text-white/30 text-xs">
+    <div className={`${card} p-5 h-64 flex items-center justify-center text-white/30 text-xs`}>
       Chargement de la carte…
     </div>
   ),
 });
-
-const ACCENT = "#BEF221";
-const card = "rounded-2xl border bg-white/[0.03] border-white/8";
 
 const COUNTRY_NAMES: Record<string, string> = {
   fr: "France", ma: "Maroc", be: "Belgique", ch: "Suisse", ca: "Canada",
@@ -29,8 +27,8 @@ const COUNTRY_NAMES: Record<string, string> = {
 function Kpi({ label, value, sub, accent }: { label: string; value: React.ReactNode; sub?: string; accent?: boolean }) {
   return (
     <div className={`${card} p-4`}>
-      <p className="text-[10px] font-bold uppercase tracking-widest mb-1 text-white/40">{label}</p>
-      <span className="font-black text-3xl" style={{ color: accent ? ACCENT : "#fff" }}>{value}</span>
+      <p className={`${kpiLabel} mb-1`}>{label}</p>
+      <span className={kpiValue} style={{ color: accent ? ACCENT : "#fff" }}>{value}</span>
       {sub && <p className="text-[11px] mt-1 text-white/40">{sub}</p>}
     </div>
   );
@@ -63,7 +61,7 @@ function Funnel({ stats, visits }: { stats: AppStats; visits: VisitStats }) {
     <div className={`${card} p-5`}>
       <div className="flex items-center gap-2 mb-4">
         <Filter size={15} style={{ color: ACCENT }} />
-        <p className="text-xs font-black uppercase tracking-widest text-white">Funnel</p>
+        <p className={sectionTitle}>Funnel</p>
       </div>
       <div className="space-y-3">
         {steps.map((s, i) => {
@@ -133,7 +131,7 @@ const PilotageTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
           Vérifie que <code className="text-[#BEF221]">ADMIN_STATS_SECRET</code> est bien
           défini côté Vercel (Production) pour ce projet.
         </p>
-        <button onClick={() => load()} className="mt-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20">
+        <button onClick={() => load()} className={`${btn} mt-2`}>
           Réessayer
         </button>
       </div>
@@ -184,7 +182,7 @@ const PilotageTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
         <div className={`${card} p-5`}>
           <div className="flex items-center gap-2 mb-4">
             <Globe size={15} style={{ color: ACCENT }} />
-            <p className="text-xs font-black uppercase tracking-widest text-white">Répartition par pays</p>
+            <p className={sectionTitle}>Répartition par pays</p>
           </div>
           <div className="space-y-2.5">
             {stats.topCountries.map(({ code, count }) => (
@@ -203,7 +201,7 @@ const PilotageTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
         <div className={`${card} p-5`}>
           <div className="flex items-center gap-2 mb-4">
             <Crown size={15} style={{ color: ACCENT }} />
-            <p className="text-xs font-black uppercase tracking-widest text-white">Comptes Pro par origine</p>
+            <p className={sectionTitle}>Comptes Pro par origine</p>
           </div>
           {plans.length === 0 ? (
             <p className="text-xs text-white/40">Aucun compte Pro.</p>
@@ -238,7 +236,7 @@ const PilotageTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
         <button
           onClick={() => load(true)}
           disabled={loading}
-          className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20 disabled:opacity-40"
+          className={btn}
         >
           <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Recalculer
         </button>
