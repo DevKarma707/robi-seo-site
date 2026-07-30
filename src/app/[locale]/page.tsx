@@ -59,7 +59,7 @@ export default async function Home({
             "@type": "SoftwareApplication",
             name: "Robi AI",
             applicationCategory: "BusinessApplication",
-            operatingSystem: "Web, iOS, Android",
+            operatingSystem: "Web",
             description: dict.meta.description,
             offers: {
               "@type": "Offer",

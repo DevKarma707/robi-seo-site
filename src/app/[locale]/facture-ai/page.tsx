@@ -136,7 +136,7 @@ const content: Record<Lang, {
         { title: "Conformité automatique", description: "Numérotation séquentielle, mentions TVA, identifiants fiscaux : conforme en France et dans 15 pays." },
         { title: "Relances par IA", description: "Des emails de relance polis et contextuels, envoyés au bon moment, sans y penser." },
         { title: "Paiement intégré", description: "Lien de paiement Stripe ou PayPal sur chaque facture : soyez payé 2x plus vite." },
-        { title: "100% mobile", description: "Application iOS et Android : votre facturation AI tient dans votre poche." },
+        { title: "100% mobile", description: "Depuis le navigateur de votre téléphone, sans rien installer : votre facturation AI tient dans votre poche." },
         { title: "Sécurité bancaire", description: "Chiffrement AES-256, hébergement européen, conforme RGPD." },
       ],
     },
@@ -171,7 +171,7 @@ const content: Record<Lang, {
       {
         question: "Puis-je créer une facture AI à la voix depuis mon téléphone ?",
         answer:
-          "Oui, c'est l'usage principal de Robi : les applications iOS et Android permettent de dicter une facture ou un devis depuis un chantier, une voiture ou entre deux rendez-vous. Le document est généré, envoyé et suivi depuis le téléphone.",
+          "Oui, c'est l'usage principal de Robi : depuis le navigateur de votre téléphone, sans rien installer, vous dictez une facture ou un devis depuis un chantier, une voiture ou entre deux rendez-vous. Le document est généré, envoyé et suivi depuis le téléphone.",
       },
       {
         question: "Combien coûte un logiciel de facture AI ?",
@@ -279,7 +279,7 @@ const content: Record<Lang, {
         { title: "Automatic compliance", description: "Sequential numbering, VAT mentions, fiscal IDs: compliant in 16 countries." },
         { title: "AI reminders", description: "Polite, contextual follow-up emails sent at the right time, without thinking about it." },
         { title: "Built-in payments", description: "Stripe or PayPal payment link on every invoice: get paid 2x faster." },
-        { title: "100% mobile", description: "iOS and Android apps: your AI invoicing fits in your pocket." },
+        { title: "100% mobile", description: "Right in your phone's browser, nothing to install: your AI invoicing fits in your pocket." },
         { title: "Bank-grade security", description: "AES-256 encryption, European hosting, GDPR compliant." },
       ],
     },
@@ -314,7 +314,7 @@ const content: Record<Lang, {
       {
         question: "Can I create an AI invoice by voice from my phone?",
         answer:
-          "Yes, that's Robi's primary use case: the iOS and Android apps let you dictate an invoice or quote from a job site, a van or between two meetings. The document is generated, sent and tracked from your phone.",
+          "Yes, that's Robi's primary use case: right in your phone's browser, with nothing to install, you dictate an invoice or quote from a job site, a van or between two meetings. The document is generated, sent and tracked from your phone.",
       },
       {
         question: "How much does AI invoicing software cost?",
@@ -417,7 +417,7 @@ const content: Record<Lang, {
         { title: "Conformidad automática", description: "Numeración secuencial, menciones de IVA, identificadores fiscales: conforme en 16 países." },
         { title: "Recordatorios por IA", description: "Emails de reclamación educados y contextuales, enviados en el momento justo." },
         { title: "Pago integrado", description: "Link de pago Stripe o PayPal en cada factura: cobra 2 veces más rápido." },
-        { title: "100% móvil", description: "Apps iOS y Android: tu facturación IA cabe en tu bolsillo." },
+        { title: "100% móvil", description: "Desde el navegador de tu teléfono, sin instalar nada: tu facturación IA cabe en tu bolsillo." },
         { title: "Seguridad bancaria", description: "Cifrado AES-256, alojamiento europeo, conforme con el RGPD." },
       ],
     },
@@ -452,7 +452,7 @@ const content: Record<Lang, {
       {
         question: "¿Puedo crear una factura IA por voz desde mi móvil?",
         answer:
-          "Sí, es el uso principal de Robi: las apps iOS y Android permiten dictar una factura o un presupuesto desde la obra, el coche o entre dos citas. El documento se genera, se envía y se sigue desde el teléfono.",
+          "Sí, es el uso principal de Robi: desde el navegador de tu teléfono, sin instalar nada, dictas una factura o un presupuesto desde la obra, el coche o entre dos citas. El documento se genera, se envía y se sigue desde el teléfono.",
       },
       {
         question: "¿Cuánto cuesta un programa de facturas con IA?",

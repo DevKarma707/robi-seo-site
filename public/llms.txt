@@ -2,12 +2,12 @@
 
 ## What is Robi AI?
 
-Robi AI is an AI-powered invoicing and quoting web and mobile app designed for freelancers, independent contractors, and small businesses (1–50 employees). It allows users to create quotes and invoices in under 30 seconds by simply speaking or typing a natural-language prompt — no accounting knowledge required.
+Robi AI is an AI-powered invoicing and quoting web app designed for freelancers, independent contractors, and small businesses (1–50 employees). It runs in any browser on desktop and mobile — no download required. It allows users to create quotes and invoices in under 30 seconds by simply speaking or typing a natural-language prompt — no accounting knowledge required.
 
 **Website**: https://robi-app.com
 **App (sign up / login)**: https://go.robi-app.com
 **Languages**: French, English, Spanish, Portuguese
-**Mobile apps**: iOS (App Store) + Android (Play Store)
+**Platform**: Web app — runs in any desktop or mobile browser, no download required
 
 ---
 
@@ -132,7 +132,7 @@ Robi AI is ideal for:
 ## Frequently Asked Questions
 
 **Can I use Robi entirely from my phone?**
-Yes. iOS and Android apps. Create quotes, get them signed on-site, convert to invoice — all from your smartphone.
+Yes. Robi runs right in your phone's browser — no app to download. Create quotes, get them signed on-site, convert to invoice — all from your smartphone.
 
 **Does Robi send payment reminders automatically?**
 Yes. Robi AI drafts polite, context-aware reminder emails and sends them automatically for overdue invoices.

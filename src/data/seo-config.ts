@@ -919,7 +919,7 @@ export const schemaTemplates = {
     "@type": "SoftwareApplication",
     name: "Robi AI",
     applicationCategory: "BusinessApplication",
-    operatingSystem: "Web, iOS, Android",
+    operatingSystem: "Web",
     offers: {
       "@type": "Offer",
       price: "14.99",
