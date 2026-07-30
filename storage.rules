@@ -15,5 +15,15 @@ service firebase.storage {
         && request.resource.size < 10 * 1024 * 1024
         && request.resource.contentType.matches('image/.*');
     }
+
+    // Dossier de travail partagé avec Claude (onglet Fichiers).
+    // Contrairement à blog/, la LECTURE est réservée à l'admin : on y dépose
+    // des exports et des documents internes, pas des visuels publics.
+    // Aucune restriction de type — c'est un dossier de travail — mais 50 Mo
+    // par fichier pour ne pas transformer le bucket en disque dur.
+    match /partage/{file=**} {
+      allow read: if isAdmin();
+      allow write: if isAdmin() && request.resource.size < 50 * 1024 * 1024;
+    }
   }
 }

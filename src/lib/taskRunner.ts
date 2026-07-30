@@ -47,3 +47,26 @@ export const runTask = async (repo: RepoKey, prompt: string, mode: RunMode = "vs
   if (r.status === 401) throw new Error("Jeton refusé par le runner.");
   if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || `Erreur ${r.status}`);
 };
+
+/**
+ * Descend le dossier partagé sur le disque, là où Claude Code peut le lire.
+ * On n'envoie que des URL : le runner télécharge lui-même, ce qui évite de
+ * faire transiter des mégaoctets en base64 dans une requête JSON.
+ */
+export const syncSharedFiles = async (
+  files: { name: string; url: string }[]
+): Promise<{ written: string[]; dir: string }> => {
+  const token = getToken();
+  if (!token) throw new Error("Jeton du runner absent — colle-le une fois dans l'admin.");
+
+  const r = await fetch(`${BASE}/sync`, {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-runner-token": token },
+    body: JSON.stringify({ files }),
+  });
+
+  if (r.status === 401) throw new Error("Jeton refusé par le runner.");
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.error || `Erreur ${r.status}`);
+  return { written: body.written ?? [], dir: body.dir ?? "" };
+};
