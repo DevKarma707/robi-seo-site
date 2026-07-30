@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse } from "lucide-react";
+import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target } from "lucide-react";
 import {
   auth, onAuthStateChanged, signInWithGoogle, signOut, isAllowedEmail, firebaseReady,
   subscribeToArticles, subscribeToVisits, type Article, type VisitStats, type User,
@@ -11,8 +11,9 @@ import BlogTab from "@/components/admin/BlogTab";
 import PilotageTab from "@/components/admin/PilotageTab";
 import LancementTab from "@/components/admin/LancementTab";
 import SanteTab from "@/components/admin/SanteTab";
+import AcquisitionTab from "@/components/admin/AcquisitionTab";
 
-type Tab = "pilotage" | "sante" | "analytics" | "blog" | "lancement";
+type Tab = "pilotage" | "sante" | "acquisition" | "analytics" | "blog" | "lancement";
 
 const EMPTY_VISITS: VisitStats = {
   today: 0, week: 0, prevWeek: 0, month: 0, days: [], byPage: [], bySource: [],
@@ -120,6 +121,7 @@ export default function AdminPage() {
   const NAV: { id: Tab; label: string; icon: React.ReactNode; badge?: number }[] = [
     { id: "pilotage", label: "Pilotage", icon: <Gauge size={17} /> },
     { id: "sante", label: "Santé", icon: <HeartPulse size={17} /> },
+    { id: "acquisition", label: "Acquisition", icon: <Target size={17} /> },
     { id: "analytics", label: "Analytics", icon: <BarChart2 size={17} /> },
     { id: "blog", label: "Blog", icon: <FileText size={17} />, badge: articles.filter((a) => !a.published).length || undefined },
     { id: "lancement", label: "Lancement", icon: <Rocket size={17} /> },
@@ -128,6 +130,7 @@ export default function AdminPage() {
   const subtitle: Record<Tab, string> = {
     pilotage: "Inscriptions, activation, usage et funnel — agrégats uniquement",
     sante: "Ce qui casse en silence : emails, plantages, IA, crons",
+    acquisition: "Prospects, séquence de relance et envoi des emails",
     analytics: `${visits.month} visites ce mois · ${visits.bySource.length} sources détectées`,
     blog: `${articles.filter((a) => a.published).length} publiés · ${articles.filter((a) => !a.published).length} brouillons`,
     lancement: "Compteur de places, date limite et retrait de l'offre",
@@ -183,6 +186,7 @@ export default function AdminPage() {
           </div>
           {tab === "pilotage" && <PilotageTab visits={visits} />}
           {tab === "sante" && <SanteTab />}
+          {tab === "acquisition" && <AcquisitionTab />}
           {tab === "analytics" && <AnalyticsTab visits={visits} />}
           {tab === "blog" && <BlogTab articles={articles} />}
           {tab === "lancement" && <LancementTab />}

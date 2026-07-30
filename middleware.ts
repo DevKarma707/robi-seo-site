@@ -37,11 +37,14 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Skip for static files, API routes, and the admin dashboard (no locale prefix)
+  // Skip for static files, API routes, the admin dashboard and the opt-out page
+  // (no locale prefix). /desinscription must stay stable: its URL is printed in
+  // emails already sent, so it can never move or gain a locale segment.
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/admin") ||
+    pathname.startsWith("/desinscription") ||
     pathname.includes(".") // static files
   ) {
     return NextResponse.next();

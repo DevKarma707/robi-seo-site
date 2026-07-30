@@ -73,6 +73,26 @@ export interface HealthReport {
   computedAt: string;
 }
 
+export interface OutreachStatus {
+  configured: boolean;
+  from: string | null;
+  host: string | null;
+}
+
+export const fetchOutreachStatus = () =>
+  authedFetch("/api/admin/outreach") as Promise<OutreachStatus>;
+
+export const sendOutreachEmail = (payload: {
+  to: string;
+  subject: string;
+  text: string;
+  unsubToken: string;
+}) =>
+  authedFetch("/api/admin/outreach", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  }) as Promise<{ ok: true; messageId: string }>;
+
 export const fetchHealthReport = (days = 7) =>
   authedFetch(`/api/admin/health?days=${days}`) as Promise<HealthReport>;
 

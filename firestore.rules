@@ -16,6 +16,25 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
+    // ── Prospects (acquisition) ──
+    // Données de prospection : strictement réservées à l'admin, jamais publiques.
+    match /prospects/{id} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
+    // ── Désinscriptions ──
+    // Le lien d'opt-out est cliqué par un destinataire non authentifié : la
+    // création doit donc être ouverte, mais bornée à un jeton opaque. Sans ça,
+    // l'opt-out ne peut pas fonctionner — et il est obligatoire.
+    match /unsubscribes/{id} {
+      allow read: if isAdmin();
+      allow create: if request.resource.data.keys().hasOnly(['token', 'at'])
+        && request.resource.data.token is string
+        && request.resource.data.token.size() > 8
+        && request.resource.data.token.size() < 200;
+      allow update, delete: if false;
+    }
+
     // ── Visites (compteur maison) ──
     // N'importe quel visiteur peut créer une visite (write-only, champs limités).
     // Seul l'admin peut lire les statistiques.
