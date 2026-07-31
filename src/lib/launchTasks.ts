@@ -256,14 +256,12 @@ export const SEED_TASKS: Seed[] = [
   // ── Produit ──
   { title: "Rendre le champ pays obligatoire à l'inscription", category: "produit", owner: "claude", effort: "M", priority: 1,
     detail: "16 comptes sur 19 n'ont aucun pays renseigné. Or le pays conditionne la TVA et le Factur-X : la conformité repose sur du vide pour 84 % des comptes. Plus petit changement à fort impact de toute la liste." },
-  { title: "Créer le compte PostHog (région EU)", category: "produit", owner: "ralph", effort: "S", priority: 1,
-    detail: "posthog.com, région EU, puis me donner la clé. Le code est déjà câblé : une variable d'env et tu récupères erreurs, replays de session et funnel produit." },
-  { title: "Ajouter VITE_POSTHOG_KEY dans Vercel", category: "produit", owner: "ralph", effort: "S", priority: 1,
-    blockedBy: "Compte PostHog" },
+  { title: "Ouvrir un compte PostHog et poser la clé dans Vercel", category: "produit", owner: "ralph", effort: "S", priority: 1,
+    detail: "PostHog est un outil d'analytics PRODUIT : il enregistre ce que font les gens à l'intérieur de l'app — quelles étapes ils franchissent, où ils abandonnent — plus les erreurs JavaScript et le replay de session. Google Analytics dit qui vient sur le site ; PostHog dit ce qui se passe une fois connecté. C'est lui qui répondra à « pourquoi 16 inscrits sur 19 n'ont jamais créé de document ». Compte sur posthog.com en région EU (RGPD), puis coller VITE_POSTHOG_KEY dans Vercel. Le code de l'app est déjà câblé : il ne manque que la variable." },
   { title: "Persister les métriques IA", category: "produit", owner: "claude", effort: "M", priority: 2,
     detail: "aiPerformanceLogger garde 100 métriques en mémoire et les perd au rechargement. Latence Gemini et taux d'échec de génération : c'est le cœur du produit et on est aveugle dessus." },
   { title: "Instrumenter le funnel produit dans PostHog", category: "produit", owner: "claude", effort: "M", priority: 2,
-    detail: "signup, first_document_created, checkout_started, checkout_completed, pdf_downloaded.", blockedBy: "Clé PostHog" },
+    detail: "signup, first_document_created, checkout_started, checkout_completed, pdf_downloaded.", blockedBy: "Compte PostHog" },
   { title: "Supprimer le dossier landing-page/ du repo de l'app", category: "produit", owner: "claude", effort: "S", priority: 3,
     detail: "Ancien site mort, repo séparé, liens en href=\"#\". Il ne sert plus à rien et prête à confusion avec robi-seo-site." },
 
@@ -313,6 +311,11 @@ export const SEED_TASKS: Seed[] = [
     detail: "LinkedIn, YouTube et TikTok « freelance / auto-entrepreneur / gestion ». À importer dans le segment Influenceurs." },
   { title: "Négocier les 3 premiers partenariats", category: "influenceurs", owner: "ralph", effort: "M", priority: 3 },
 
+  { title: "Écran d'accueil qui montre quoi faire en premier", category: "produit", owner: "claude", effort: "M", priority: 2,
+    detail: "84 % des inscrits ne créent jamais de document. Avant d'instrumenter la mesure, traiter la cause la plus probable : rien n'indique par où commencer à l'ouverture." },
+  { title: "Relancer par email les comptes inscrits sans document", category: "produit", owner: "claude", effort: "M", priority: 2,
+    detail: "16 comptes concernés aujourd'hui. Une relance à J+2 avec un exemple concret coûte un email et récupère des activations déjà payées en acquisition." },
+
   // ── Conformité ──
   { title: "Double-contrôle Factur-X sur le validateur FNFE-MPE", category: "conformite", owner: "ralph", effort: "S", priority: 1,
     detail: "Upload manuel sur services.fnfe-mpe.org. veraPDF et le schematron CEN passent déjà ; c'est le dernier contrôle avant la beta." },
@@ -320,6 +323,18 @@ export const SEED_TASKS: Seed[] = [
     detail: "Les pages existent et répondent en 200, mais leur contenu n'a jamais été audité." },
   { title: "Vérifier la conformité du bandeau cookies", category: "conformite", owner: "claude", effort: "S", priority: 3,
     detail: "GA4 est chargé sur le site : il faut un consentement préalable pour les cookies analytiques." },
+
+  { title: "Vérifier que les mentions légales nomment la bonne entité", category: "conformite", owner: "ralph", effort: "S", priority: 2,
+    detail: "Raison sociale, SIREN, adresse, directeur de publication, hébergeur. C'est le premier point que regarde un client pro avant de payer, et le premier reproche en cas de litige." },
+  { title: "Lister les sous-traitants qui touchent des données clients", category: "conformite", owner: "claude", effort: "M", priority: 2,
+    detail: "Firebase, Vercel, Polar, Gemini, l'envoi d'emails. Le RGPD impose de les nommer dans la politique de confidentialité et d'avoir leurs conditions de traitement. Aujourd'hui la page existe mais la liste n'a jamais été établie." },
+  { title: "Tester une restauration de sauvegarde Firestore", category: "conformite", owner: "ralph", effort: "M", priority: 2,
+    detail: "Une sauvegarde qu'on n'a jamais restaurée n'est pas une sauvegarde. À faire une fois, sur un projet de test, avant d'avoir des clients payants à perdre." },
+
+  { title: "Préparer un kit prêt à publier pour les partenaires", category: "influenceurs", owner: "claude", effort: "M", priority: 2,
+    detail: "Visuels, accroches, lien avec code promo, ce qu'on peut dire et ne pas dire. Un partenaire qui doit tout écrire lui-même ne publie pas." },
+  { title: "Page d'atterrissage dédiée aux codes promo", category: "influenceurs", owner: "claude", effort: "M", priority: 3,
+    detail: "Le code arrive déjà appliqué et la page reprend le discours du créateur. Sans ça, le trafic d'un partenariat atterrit sur la home et se dilue." },
 
   // ── Lancement ──
   { title: "Fixer la date limite de l'offre de lancement", category: "lancement", owner: "ralph", effort: "S", priority: 1,
@@ -333,6 +348,60 @@ export const SEED_TASKS: Seed[] = [
   { title: "Mettre en place une page de statut publique", category: "lancement", owner: "claude", effort: "M", priority: 3,
     detail: "Les données de l'onglet Santé existent déjà, il suffit de les exposer en lecture." },
 ];
+
+/**
+ * Ajoute les tâches du backlog absentes du tableau, sans toucher aux autres.
+ *
+ * `seedTasks` refuse de tourner dès qu'une tâche existe, ce qui est correct
+ * pour un premier chargement mais rend tout enrichissement du backlog
+ * invisible sur un tableau déjà semé. La comparaison se fait sur le titre
+ * normalisé : une tâche que Ralph a renommée ou supprimée volontairement
+ * n'est pas réintroduite à l'identique, mais une nouvelle l'est.
+ */
+export const mergeSeedTasks = async (): Promise<{ added: number; already: number }> => {
+  const snap = await getDocs(col());
+  const norm = (t: string) => t.toLowerCase().replace(/\s+/g, " ").trim();
+  const seen = new Set(snap.docs.map((d) => norm((d.data() as LaunchTask).title || "")));
+
+  const missing = SEED_TASKS.filter((t) => !seen.has(norm(t.title)));
+  if (missing.length === 0) return { added: 0, already: snap.size };
+
+  const batch = writeBatch(db);
+  missing.forEach((t, i) => {
+    batch.set(doc(col()), {
+      ...t,
+      column: (t.blockedBy ? "blocked" : "todo") as TaskColumn,
+      order: t.priority * 1000 + 500 + i,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+  });
+  await batch.commit();
+  return { added: missing.length, already: snap.size };
+};
+
+/** Suppression en lot, pour faire le ménage sans cliquer trente fois. */
+export const deleteTasks = async (ids: string[]): Promise<void> => {
+  if (!ids.length) return;
+  // Firestore plafonne un batch à 500 écritures.
+  for (let i = 0; i < ids.length; i += 400) {
+    const batch = writeBatch(db);
+    ids.slice(i, i + 400).forEach((id) => batch.delete(doc(db, "launchTasks", id)));
+    await batch.commit();
+  }
+};
+
+/** Modification en lot (colonne, catégorie, propriétaire, priorité…). */
+export const patchTasks = async (ids: string[], patch: Partial<LaunchTask>): Promise<void> => {
+  if (!ids.length) return;
+  for (let i = 0; i < ids.length; i += 400) {
+    const batch = writeBatch(db);
+    ids.slice(i, i + 400).forEach((id) =>
+      batch.update(doc(db, "launchTasks", id), { ...patch, updatedAt: serverTimestamp() })
+    );
+    await batch.commit();
+  }
+};
 
 /** Charge le backlog. Ne fait rien si des tâches existent déjà. */
 export const seedTasks = async (): Promise<{ created: number; skipped: boolean }> => {

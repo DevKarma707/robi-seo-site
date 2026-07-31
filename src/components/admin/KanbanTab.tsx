@@ -4,10 +4,12 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   ListChecks, Plus, Trash2, AlertTriangle, Check, Bot, User, Download, RefreshCw,
   Search, Pencil, X, FolderInput, Sparkles, ClipboardCopy, Terminal, Code2,
+  CheckSquare, Square, PackagePlus,
 } from "lucide-react";
 import {
   subscribeToTasks, addTask, updateTask, updateTaskText, deleteTask, moveTask, seedTasks,
   isAutomatable, setAutomatable, buildBrief, buildDeepLink, buildVSCodeLink, repoOf,
+  mergeSeedTasks, deleteTasks, patchTasks,
   COLUMNS, COLUMN_META, CATEGORIES, CATEGORY_META, EFFORT_LABEL,
   type LaunchTask, type TaskColumn, type TaskCategory, type TaskOwner, type TaskEffort,
 } from "@/lib/launchTasks";
@@ -31,6 +33,15 @@ const KanbanTab: React.FC = () => {
   const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   /** Tâche en cours d'édition, avec son brouillon titre/détail. */
   const [edit, setEdit] = useState<{ id: string; title: string; detail: string } | null>(null);
+  /** Sélection multiple, pour faire le ménage sans cliquer trente fois. */
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  const toggleSel = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
 
   useEffect(() => {
     const unsub = subscribeToTasks(
@@ -210,6 +221,50 @@ const KanbanTab: React.FC = () => {
     }
   };
 
+  const bulkDelete = async () => {
+    const ids = [...selected];
+    if (!confirm(`Supprimer ${ids.length} tâche(s) ? C'est définitif.`)) return;
+    setBusy(true);
+    try {
+      await deleteTasks(ids);
+      setSelected(new Set());
+      say("ok", `${ids.length} tâche(s) supprimée(s).`);
+    } catch (e) {
+      say("err", (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const bulkPatch = async (patch: Partial<LaunchTask>, label: string) => {
+    const ids = [...selected];
+    setBusy(true);
+    try {
+      await patchTasks(ids, patch);
+      setSelected(new Set());
+      say("ok", `${ids.length} tâche(s) ${label}.`);
+    } catch (e) {
+      say("err", (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  /** Ajoute les tâches du backlog absentes, sans toucher aux existantes. */
+  const completeBacklog = async () => {
+    setBusy(true);
+    try {
+      const { added } = await mergeSeedTasks();
+      say(added ? "ok" : "err", added
+        ? `${added} tâche(s) ajoutée(s) au tableau.`
+        : "Le tableau contient déjà tout le backlog.");
+    } catch (e) {
+      say("err", (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const loadBacklog = async () => {
     setBusy(true);
     try {
@@ -338,12 +393,51 @@ const KanbanTab: React.FC = () => {
             </span>
           </button>
         )}
+        {rows.length > 0 && (
+          <button onClick={completeBacklog} disabled={busy} className={btnGhost} title="Ajouter les tâches du backlog qui manquent, sans toucher aux tiennes">
+            <span className="flex items-center gap-1.5"><PackagePlus size={12} /> Compléter le backlog</span>
+          </button>
+        )}
         {rows.length === 0 && (
           <button onClick={loadBacklog} disabled={busy} className={btnPrimary}>
             <span className="flex items-center gap-1.5"><Download size={12} /> Charger le backlog de lancement</span>
           </button>
         )}
       </div>
+
+      {/* Barre de sélection — n'apparaît que quand il y a de quoi agir */}
+      {selected.size > 0 && (
+        <div className={`${card} p-3 flex flex-wrap items-center gap-2 sticky top-3 z-30`}>
+          <span className="text-[12px] font-bold text-slate-900 px-1">
+            {selected.size} sélectionnée{selected.size > 1 ? "s" : ""}
+          </span>
+          <select
+            className={select}
+            value=""
+            onChange={(e) => e.target.value && bulkPatch({ column: e.target.value as TaskColumn }, "déplacée(s)")}
+          >
+            <option value="">Déplacer vers…</option>
+            {COLUMNS.map((c) => <option key={c} value={c}>{COLUMN_META[c].label}</option>)}
+          </select>
+          <select
+            className={select}
+            value=""
+            onChange={(e) => e.target.value && bulkPatch({ category: e.target.value as TaskCategory }, "reclassée(s)")}
+          >
+            <option value="">Changer de catégorie…</option>
+            {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_META[c].label}</option>)}
+          </select>
+          <button onClick={() => bulkPatch({ owner: "claude" }, "confiée(s) à Claude")} disabled={busy} className={btnGhost}>
+            → Claude
+          </button>
+          <button onClick={bulkDelete} disabled={busy} className={`${btnPill} bg-red-500/15 text-red-600 hover:bg-red-500/25`}>
+            <span className="flex items-center gap-1"><Trash2 size={11} /> Supprimer</span>
+          </button>
+          <button onClick={() => setSelected(new Set())} className={`${btnGhost} ml-auto`}>
+            <span className="flex items-center gap-1"><X size={11} /> Annuler</span>
+          </button>
+        </div>
+      )}
 
       {/* Colonnes */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -390,9 +484,19 @@ const KanbanTab: React.FC = () => {
                     }}
                     className={`rounded-xl border p-3 cursor-grab active:cursor-grabbing transition-all ${focusRing} ${
                       dragId === t.id ? "opacity-40" : "hover:bg-slate-50"
-                    } ${t.column === "done" ? "border-slate-200 bg-slate-50 opacity-70" : "border-slate-200 bg-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"}`}
+                    } ${selected.has(t.id!) ? "ring-2 ring-[var(--admin-ink)]/40" : ""} ${t.column === "done" ? "border-slate-200 bg-slate-50 opacity-70" : "border-slate-200 bg-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"}`}
                   >
                     <div className="flex items-start gap-2">
+                      {/* stopPropagation : sans lui, cocher ouvrirait aussi la carte. */}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); toggleSel(t.id!); }}
+                        className={`mt-[1px] flex-shrink-0 transition-colors ${focusRing} ${
+                          selected.has(t.id!) ? "text-[var(--admin-ink)]" : "text-slate-300 hover:text-slate-500"
+                        }`}
+                        aria-label={selected.has(t.id!) ? "Désélectionner" : "Sélectionner"}
+                      >
+                        {selected.has(t.id!) ? <CheckSquare size={13} /> : <Square size={13} />}
+                      </button>
                       <span className="mt-[5px] w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: PRIORITY_COLOR[t.priority] }} />
                       <p className={`text-[12px] font-semibold leading-snug flex-1 ${t.column === "done" ? "text-slate-500 line-through" : "text-slate-900"}`}>
                         {t.title}
