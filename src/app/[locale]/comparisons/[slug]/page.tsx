@@ -7,7 +7,12 @@ import { Badge } from "@/components/ui/Badge";
 import { CTA } from "@/components/sections/CTA";
 import { Check, X, Minus } from "lucide-react";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { Locale, isContentIndexable } from "@/lib/i18n/config";
+import {
+  Locale,
+  isContentIndexable,
+  priceMap,
+  localeCurrencies,
+} from "@/lib/i18n/config";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export async function generateStaticParams() {
@@ -32,6 +37,9 @@ export async function generateMetadata({
     title: t(comparison.title, locale as Locale),
     description: t(comparison.description, locale as Locale),
     keywords: comparison.keywords,
+    alternates: {
+      canonical: `https://robi-app.com/${locale}/comparisons/${slug}`,
+    },
     robots: isContentIndexable(locale) ? undefined : { index: false, follow: true },
   };
 }
@@ -51,22 +59,156 @@ export default async function ComparisonPage({
   const dict = await getDictionary(locale as Locale);
   const comp = dict.pages.comparisons;
 
-  // Comparison features matrix using dict keys
-  const comparisonFeatures = [
-    { name: comp.comparisonFeatures.invoiceCreation, robi: true, competitor: true },
-    { name: comp.comparisonFeatures.quoteCreation, robi: true, competitor: true },
-    { name: comp.comparisonFeatures.aiInvoicing, robi: true, competitor: false },
-    { name: comp.comparisonFeatures.autoReminders, robi: true, competitor: "partial" as const },
-    { name: comp.comparisonFeatures.stripePaypal, robi: true, competitor: "partial" as const },
-    { name: comp.comparisonFeatures.mobileApp, robi: true, competitor: "partial" as const },
-    { name: comp.comparisonFeatures.localSupport, robi: true, competitor: true },
-    { name: comp.comparisonFeatures.customTemplates, robi: true, competitor: true },
-    { name: comp.comparisonFeatures.accountingExport, robi: true, competitor: true },
-    { name: comp.comparisonFeatures.aiDashboards, robi: true, competitor: false },
+  const prices = priceMap[locale] || priceMap["fr"];
+  const currencyInfo = localeCurrencies[locale] || localeCurrencies["fr"];
+  const robiPrice = `${prices.monthly}${currencyInfo.symbol}`;
+
+  // Default competitor column, overridden per-competitor by `comparison.matrix`
+  // in seo-config.ts (a competitor with no override keeps these defaults).
+  const defaultMatrix: Record<string, boolean | "partial"> = {
+    invoiceCreation: true,
+    quoteCreation: true,
+    aiInvoicing: false,
+    autoReminders: "partial",
+    stripePaypal: "partial",
+    mobileApp: "partial",
+    localSupport: true,
+    customTemplates: true,
+    accountingExport: true,
+    aiDashboards: false,
+  };
+  const matrix = { ...defaultMatrix, ...(comparison.matrix ?? {}) };
+
+  const featureLabels = comp.comparisonFeatures as Record<string, string>;
+  const comparisonFeatures = Object.keys(defaultMatrix).map((key) => ({
+    name: featureLabels[key],
+    robi: true,
+    competitor: matrix[key],
+  }));
+
+  const pricing = comparison.pricing;
+  const competitorPriceLabel = pricing
+    ? t(pricing.label, locale as Locale)
+    : null;
+  const competitorPriceNote = pricing ? t(pricing.note, locale as Locale) : null;
+
+  const fill = (s: string) =>
+    s
+      .replace("{competitor}", comparison.competitor)
+      .replace("{robiPrice}", robiPrice)
+      .replace("{competitorPricing}", competitorPriceNote ?? "")
+      .replace("{date}", pricing?.checkedAt ?? "")
+      .trim();
+
+  const faqItems = [
+    { q: fill(comp.faq.q1), a: fill(comp.faq.a1) },
+    { q: fill(comp.faq.q2), a: fill(comp.faq.a2) },
+    { q: fill(comp.faq.q3), a: fill(comp.faq.a3) },
+    { q: fill(comp.faq.q4), a: fill(comp.faq.a4) },
   ];
+
+  const pageUrl = `https://robi-app.com/${locale}/comparisons/${slug}`;
 
   return (
     <>
+      {/* JSON-LD — Robi AI as SoftwareApplication, with its price */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: "Robi AI",
+            applicationCategory: "BusinessApplication",
+            applicationSubCategory: "Invoicing Software",
+            operatingSystem: "Web, iOS, Android",
+            url: "https://robi-app.com",
+            description: t(comparison.description, locale as Locale),
+            offers: {
+              "@type": "Offer",
+              price: prices.monthly,
+              priceCurrency: currencyInfo.currency,
+              priceValidUntil: "2026-12-31",
+              availability: "https://schema.org/InStock",
+              url: `https://robi-app.com/${locale}/pricing`,
+            },
+            // Pas d'aggregateRating : Google exige des avis réellement
+            // collectés et affichés sur la page. À rétablir quand un vrai
+            // système d'avis alimentera ces chiffres.
+          }),
+        }}
+      />
+
+      {/* JSON-LD — the competitor as SoftwareApplication, with its price */}
+      {pricing && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              name: comparison.competitor,
+              applicationCategory: "BusinessApplication",
+              applicationSubCategory: "Invoicing Software",
+              operatingSystem: "Web",
+              ...(comparison.url ? { url: comparison.url } : {}),
+              offers: {
+                "@type": "Offer",
+                price: pricing.price,
+                priceCurrency: pricing.currency,
+                availability: "https://schema.org/InStock",
+              },
+            }),
+          }}
+        />
+      )}
+
+      {/* JSON-LD — FAQPage */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqItems.map((item) => ({
+              "@type": "Question",
+              name: item.q,
+              acceptedAnswer: { "@type": "Answer", text: item.a },
+            })),
+          }),
+        }}
+      />
+
+      {/* JSON-LD — BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Robi AI",
+                item: `https://robi-app.com/${locale}`,
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: comp.badge,
+                item: `https://robi-app.com/${locale}/comparisons`,
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: `Robi AI vs ${comparison.competitor}`,
+                item: pageUrl,
+              },
+            ],
+          }),
+        }}
+      />
       <Hero
         badge={comp.badge}
         title={`Robi AI vs ${comparison.competitor}`}
@@ -161,8 +303,68 @@ export default async function ComparisonPage({
         </div>
       </section>
 
+      {/* Pricing comparison */}
+      {pricing && (
+        <section className="py-24 bg-gray-50 relative">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ScrollReveal className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-gray-900">
+                {fill(comp.pricingTitle)}
+              </h2>
+              <p className="text-gray-500 mt-4">{fill(comp.pricingSubtitle)}</p>
+            </ScrollReveal>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <ScrollReveal delay={0}>
+                <Card className="h-full text-center">
+                  <div className="text-lg font-bold text-gray-900 mb-2">
+                    Robi AI
+                  </div>
+                  <div className="text-4xl font-black text-gray-900">
+                    {robiPrice}
+                    <span className="text-lg font-medium text-gray-500">
+                      {comp.perMonth}
+                    </span>
+                  </div>
+                  <p className="text-gray-500 mt-4">{comp.robiPriceNote}</p>
+                </Card>
+              </ScrollReveal>
+
+              <ScrollReveal delay={100}>
+                <Card className="h-full text-center">
+                  <div className="text-lg font-bold text-gray-900 mb-2">
+                    {comparison.competitor}
+                  </div>
+                  <div className="text-4xl font-black text-gray-900">
+                    {pricing.price === 0 ? comp.freeLabel : `${pricing.price}€`}
+                    {pricing.price !== 0 && (
+                      <span className="text-lg font-medium text-gray-500">
+                        {comp.perMonth}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-gray-500 mt-4">{competitorPriceLabel}</p>
+                  <p className="text-gray-400 text-sm mt-2">
+                    {competitorPriceNote}
+                  </p>
+                </Card>
+              </ScrollReveal>
+            </div>
+
+            <ScrollReveal>
+              <div className="mt-12 rounded-3xl border border-gray-200 bg-white p-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  {comp.verdictTitle}
+                </h3>
+                <p className="text-gray-500">{fill(comp.verdictBody)}</p>
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+      )}
+
       {/* Why Choose Robi */}
-      <section className="py-24 bg-gray-50 relative">
+      <section className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <Badge variant="accent" className="mb-4">
@@ -204,6 +406,30 @@ export default async function ComparisonPage({
                 </p>
               </Card>
             </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ — mirrors the FAQPage JSON-LD above */}
+      <section className="py-24 bg-gray-50 relative">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900">
+              {comp.faqTitle}
+            </h2>
+          </ScrollReveal>
+
+          <div className="space-y-4">
+            {faqItems.map((item, index) => (
+              <ScrollReveal key={index} delay={index * 50}>
+                <details className="group rounded-2xl border border-gray-200 bg-white p-6">
+                  <summary className="cursor-pointer list-none font-bold text-gray-900">
+                    {item.q}
+                  </summary>
+                  <p className="text-gray-500 mt-4">{item.a}</p>
+                </details>
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>

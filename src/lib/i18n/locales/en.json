@@ -331,6 +331,24 @@
       }
     },
     "comparisons": {
+      "pricingTitle": "Pricing: Robi AI vs {competitor}",
+      "pricingSubtitle": "Public list prices as checked on {date}. Always confirm on the vendor's website before deciding.",
+      "perMonth": "/month",
+      "freeLabel": "Free",
+      "robiPriceNote": "Free trial, no credit card. AI invoicing included from day one.",
+      "verdictTitle": "The verdict in one sentence",
+      "verdictBody": "{competitor} covers classic invoicing; Robi AI adds conversational AI, smart reminders and automatic dashboards on top.",
+      "faqTitle": "Frequently asked questions",
+      "faq": {
+        "q1": "Is Robi AI a good alternative to {competitor}?",
+        "a1": "Yes. Robi AI covers the fundamentals of {competitor} — quotes, compliant invoices, accounting exports — and adds conversational AI invoice creation, smart automatic reminders and auto-generated dashboards.",
+        "q2": "How much does Robi AI cost compared to {competitor}?",
+        "a2": "Robi AI is {robiPrice} per month, with a free trial and no credit card required. {competitorPricing}",
+        "q3": "Can I migrate my data from {competitor}?",
+        "a3": "Yes, migration is free and assisted. You keep your clients, products and invoice history without re-entering anything.",
+        "q4": "Are Robi AI invoices legally compliant?",
+        "a4": "Yes. Robi AI generates invoices with all mandatory legal mentions and supports electronic invoicing in the Factur-X format."
+      },
       "badge": "Comparison 2024",
       "detailedComparison": "Detailed comparison",
       "discoverDifferences": "Discover the differences between Robi AI and {competitor}",

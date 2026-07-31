@@ -66,11 +66,9 @@ export default async function Home({
               price: prices.monthly,
               priceCurrency: currencyInfo.currency,
             },
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: "4.9",
-              ratingCount: "2000",
-            },
+            // Pas d'aggregateRating : Google exige des avis réellement
+            // collectés et affichés sur la page. À rétablir quand un vrai
+            // système d'avis alimentera ces chiffres.
           }),
         }}
       />

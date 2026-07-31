@@ -780,12 +780,115 @@ export const industries: Industry[] = [
 ];
 
 // ===== COMPARISONS =====
-export const comparisons = [
-  { slug: "vs-excel", competitor: "Excel", title: { fr: "Robi AI vs Excel : Pourquoi passer à l'IA ?", en: "Robi AI vs Excel: Why switch to AI?", es: "Robi AI vs Excel: ¿Por qué cambiar a la IA?" }, description: { fr: "Comparez Excel et Robi AI pour votre facturation.", en: "Compare Excel and Robi AI for your invoicing.", es: "Compara Excel y Robi AI para tu facturación." }, keywords: ["alternative excel facturation"] },
-  { slug: "vs-henrri", competitor: "Henrri", title: { fr: "Robi AI vs Henrri : Comparatif Complet 2026", en: "Robi AI vs Henrri: Complete Comparison 2026", es: "Robi AI vs Henrri: Comparativa Completa 2026" }, description: { fr: "Henrri ou Robi AI ? Comparez les fonctionnalités.", en: "Henrri or Robi AI? Compare the features.", es: "¿Henrri o Robi AI? Compara las funciones." }, keywords: ["alternative henrri"] },
-  { slug: "vs-freebe", competitor: "Freebe", title: { fr: "Robi AI vs Freebe : Le Match des Logiciels Freelance", en: "Robi AI vs Freebe: The Freelance Software Match", es: "Robi AI vs Freebe: El Match de Software Freelance" }, description: { fr: "Freebe ou Robi AI ? Découvrez les différences.", en: "Freebe or Robi AI? Discover the differences.", es: "¿Freebe o Robi AI? Descubre las diferencias." }, keywords: ["alternative freebe"] },
-  { slug: "vs-facture-net", competitor: "Facture.net", title: { fr: "Robi AI vs Facture.net : Comparatif Détaillé", en: "Robi AI vs Facture.net: Detailed Comparison", es: "Robi AI vs Facture.net: Comparativa Detallada" }, description: { fr: "Facture.net ou Robi AI ? Comparez ces deux solutions.", en: "Facture.net or Robi AI? Compare these two solutions.", es: "¿Facture.net o Robi AI? Compara estas dos soluciones." }, keywords: ["alternative facture.net"] },
-  { slug: "vs-pennylane", competitor: "Pennylane", title: { fr: "Robi AI vs Pennylane : Quel Outil Choisir ?", en: "Robi AI vs Pennylane: Which Tool to Choose?", es: "Robi AI vs Pennylane: ¿Qué Herramienta Elegir?" }, description: { fr: "Pennylane ou Robi AI ? Découvrez les forces de chaque solution.", en: "Pennylane or Robi AI? Discover each solution's strengths.", es: "¿Pennylane o Robi AI? Descubre las fortalezas de cada solución." }, keywords: ["alternative pennylane"] },
+// `matrix` overrides the default feature matrix, key by key (see fr.json →
+// pages.comparisons.comparisonFeatures). Only the competitor column is stored:
+// true = inclus, "partial" = partiel, false = non inclus.
+// `pricing` feeds the price block + the SoftwareApplication JSON-LD offer of the
+// competitor. Prices are public list prices in EUR HT — check `checkedAt`
+// before quoting them anywhere else.
+type ComparisonText = { fr: string; en: string; es: string; [locale: string]: string };
+
+export type Comparison = {
+  slug: string;
+  competitor: string;
+  url?: string;
+  title: ComparisonText;
+  description: ComparisonText;
+  keywords: string[];
+  matrix?: Record<string, boolean | "partial">;
+  pricing?: {
+    price: number;
+    currency: string;
+    checkedAt: string;
+    label: ComparisonText;
+    note: ComparisonText;
+  };
+};
+
+export const comparisons: Comparison[] = [
+  {
+    slug: "vs-excel",
+    competitor: "Excel",
+    title: { fr: "Robi AI vs Excel : Pourquoi passer à l'IA ?", en: "Robi AI vs Excel: Why switch to AI?", es: "Robi AI vs Excel: ¿Por qué cambiar a la IA?" },
+    description: { fr: "Comparez Excel et Robi AI pour votre facturation.", en: "Compare Excel and Robi AI for your invoicing.", es: "Compara Excel y Robi AI para tu facturación." },
+    keywords: ["alternative excel facturation"],
+  },
+  {
+    slug: "vs-henrri",
+    competitor: "Henrri",
+    url: "https://www.henrri.com",
+    title: { fr: "Robi AI vs Henrri : Comparatif Complet 2026", en: "Robi AI vs Henrri: Complete Comparison 2026", es: "Robi AI vs Henrri: Comparativa Completa 2026" },
+    description: { fr: "Henrri ou Robi AI ? Prix, fonctionnalités et IA comparés en détail.", en: "Henrri or Robi AI? Pricing, features and AI compared in detail.", es: "¿Henrri o Robi AI? Precios, funciones e IA comparados en detalle." },
+    keywords: ["alternative henrri", "henrri avis", "henrri ou robi", "logiciel facturation gratuit"],
+    pricing: {
+      price: 0,
+      currency: "EUR",
+      checkedAt: "2026-07-31",
+      label: { fr: "Gratuit — offres payantes dès 12 €/mois HT", en: "Free — paid plans from €12/month excl. VAT", es: "Gratis — planes de pago desde 12 €/mes sin IVA" },
+      note: {
+        fr: "L'offre Pro de Henrri est gratuite (devis et factures illimités). Les formules Expert (12 €/mois HT), Smart (17 €/mois HT) et VIP (20 €/mois HT, engagement annuel) débloquent la personnalisation avancée, la synchronisation bancaire et les relances automatiques — ces dernières étant réservées au plan VIP. Commission de 1,2 % + 0,15 € par transaction sur les paiements.",
+        en: "Henrri's Pro plan is free (unlimited quotes and invoices). The Expert (€12/mo excl. VAT), Smart (€17/mo) and VIP (€20/mo, annual commitment) plans unlock advanced branding, bank sync and automatic reminders — the latter reserved for VIP. Payments carry a 1.2% + €0.15 per-transaction fee.",
+        es: "El plan Pro de Henrri es gratuito (presupuestos y facturas ilimitados). Los planes Expert (12 €/mes sin IVA), Smart (17 €/mes) y VIP (20 €/mes, compromiso anual) desbloquean la personalización avanzada, la sincronización bancaria y los recordatorios automáticos, reservados al plan VIP. Comisión del 1,2 % + 0,15 € por transacción.",
+      },
+    },
+    matrix: { aiInvoicing: false, autoReminders: "partial", stripePaypal: "partial", mobileApp: "partial", aiDashboards: false },
+  },
+  {
+    slug: "vs-freebe",
+    competitor: "Freebe",
+    url: "https://www.freebe.me",
+    title: { fr: "Robi AI vs Freebe : Le Match des Logiciels Freelance", en: "Robi AI vs Freebe: The Freelance Software Match", es: "Robi AI vs Freebe: El Match de Software Freelance" },
+    description: { fr: "Freebe ou Robi AI ? Découvrez les différences.", en: "Freebe or Robi AI? Discover the differences.", es: "¿Freebe o Robi AI? Descubre las diferencias." },
+    keywords: ["alternative freebe"],
+  },
+  {
+    slug: "vs-facture-net",
+    competitor: "Facture.net",
+    url: "https://www.facture.net",
+    title: { fr: "Robi AI vs Facture.net : Comparatif Détaillé 2026", en: "Robi AI vs Facture.net: Detailed Comparison 2026", es: "Robi AI vs Facture.net: Comparativa Detallada 2026" },
+    description: { fr: "Facture.net ou Robi AI ? Prix, fonctionnalités et IA comparés en détail.", en: "Facture.net or Robi AI? Pricing, features and AI compared in detail.", es: "¿Facture.net o Robi AI? Precios, funciones e IA comparados en detalle." },
+    keywords: ["alternative facture.net", "facture.net avis", "facture net gratuit", "logiciel facturation gratuit"],
+    pricing: {
+      price: 0,
+      currency: "EUR",
+      checkedAt: "2026-07-31",
+      label: { fr: "Gratuit, sans formule payante", en: "Free, no paid plan", es: "Gratis, sin plan de pago" },
+      note: {
+        fr: "Facture.net annonce un outil gratuit et sans abonnement (devis et factures illimités, CRM, liens de paiement, archivage, conformité Factur-X). Il ne propose pas de facturation par IA ni de tableaux de bord générés automatiquement.",
+        en: "Facture.net advertises a free, subscription-less tool (unlimited quotes and invoices, CRM, payment links, archiving, Factur-X compliance). It offers no AI invoicing and no auto-generated dashboards.",
+        es: "Facture.net ofrece una herramienta gratuita y sin suscripción (presupuestos y facturas ilimitados, CRM, enlaces de pago, archivado, conformidad Factur-X). No incluye facturación con IA ni paneles generados automáticamente.",
+      },
+    },
+    matrix: { aiInvoicing: false, autoReminders: "partial", mobileApp: "partial", aiDashboards: false },
+  },
+  {
+    slug: "vs-abby",
+    competitor: "Abby",
+    url: "https://www.abby.fr",
+    title: { fr: "Robi AI vs Abby : Comparatif Complet 2026", en: "Robi AI vs Abby: Complete Comparison 2026", es: "Robi AI vs Abby: Comparativa Completa 2026" },
+    description: { fr: "Abby ou Robi AI ? Prix, facturation IA et gestion auto-entrepreneur comparés.", en: "Abby or Robi AI? Pricing, AI invoicing and sole-trader management compared.", es: "¿Abby o Robi AI? Precios, facturación con IA y gestión de autónomos comparados." },
+    keywords: ["alternative abby", "abby avis", "abby ou robi", "logiciel auto-entrepreneur"],
+    pricing: {
+      price: 0,
+      currency: "EUR",
+      checkedAt: "2026-07-31",
+      label: { fr: "Gratuit — offres payantes dès 9 €/mois HT", en: "Free — paid plans from €9/month excl. VAT", es: "Gratis — planes de pago desde 9 €/mes sin IVA" },
+      note: {
+        fr: "L'offre Basique d'Abby est gratuite (devis et factures illimités, estimation URSSAF). Les formules Start (9 €/mois HT), Pro (15 €/mois HT) et Business (33 €/mois HT) ajoutent le paiement par carte, la déclaration URSSAF, les relances d'impayés, la signature électronique et le multi-utilisateur.",
+        en: "Abby's Basique plan is free (unlimited quotes and invoices, URSSAF estimate). The Start (€9/mo excl. VAT), Pro (€15/mo) and Business (€33/mo) plans add card payments, URSSAF filing, overdue reminders, e-signature and multi-user access.",
+        es: "El plan Basique de Abby es gratuito (presupuestos y facturas ilimitados, estimación URSSAF). Los planes Start (9 €/mes sin IVA), Pro (15 €/mes) y Business (33 €/mes) añaden pago con tarjeta, declaración URSSAF, recordatorios de impagos, firma electrónica y multiusuario.",
+      },
+    },
+    matrix: { aiInvoicing: false, autoReminders: "partial", aiDashboards: false, accountingExport: "partial" },
+  },
+  {
+    slug: "vs-pennylane",
+    competitor: "Pennylane",
+    url: "https://www.pennylane.com",
+    title: { fr: "Robi AI vs Pennylane : Quel Outil Choisir ?", en: "Robi AI vs Pennylane: Which Tool to Choose?", es: "Robi AI vs Pennylane: ¿Qué Herramienta Elegir?" },
+    description: { fr: "Pennylane ou Robi AI ? Découvrez les forces de chaque solution.", en: "Pennylane or Robi AI? Discover each solution's strengths.", es: "¿Pennylane o Robi AI? Descubre las fortalezas de cada solución." },
+    keywords: ["alternative pennylane"],
+  },
 ];
 
 // ===== FEATURES =====

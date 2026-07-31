@@ -296,6 +296,24 @@
       }
     },
     "comparisons": {
+      "pricingTitle": "Preços: Robi AI vs {competitor}",
+      "pricingSubtitle": "Preços públicos verificados em {date}. Confirme sempre no site do fornecedor antes de decidir.",
+      "perMonth": "/mês",
+      "freeLabel": "Grátis",
+      "robiPriceNote": "Teste gratuito, sem cartão de crédito. Faturamento com IA incluído desde o início.",
+      "verdictTitle": "O veredito em uma frase",
+      "verdictBody": "{competitor} cobre o faturamento clássico; a Robi AI acrescenta IA conversacional, cobranças inteligentes e painéis automáticos.",
+      "faqTitle": "Perguntas frequentes",
+      "faq": {
+        "q1": "A Robi AI é uma boa alternativa ao {competitor}?",
+        "a1": "Sim. A Robi AI cobre os fundamentos do {competitor} — orçamentos, faturas conformes, exportação contábil — e acrescenta criação de faturas por IA conversacional, cobranças automáticas inteligentes e painéis gerados automaticamente.",
+        "q2": "Quanto custa a Robi AI em comparação com {competitor}?",
+        "a2": "A Robi AI custa {robiPrice} por mês, com teste gratuito e sem cartão de crédito. {competitorPricing}",
+        "q3": "Posso migrar meus dados do {competitor}?",
+        "a3": "Sim, a migração é gratuita e acompanhada. Você mantém seus clientes, produtos e histórico de faturas sem redigitar nada.",
+        "q4": "As faturas da Robi AI são compatíveis com a legislação?",
+        "a4": "Sim. A Robi AI gera faturas com todas as menções obrigatórias e suporta faturamento eletrônico no formato Factur-X."
+      },
       "badge": "Robi x Antigo Padrão",
       "whyChoose": "Por que abandonar o seu excel?",
       "conversationalAI": "AI Conversacional Imersivo",
