@@ -56,19 +56,23 @@ const WorldMapBlock: React.FC<Props> = ({ countries }) => {
     };
   }, [countries]);
 
+  // Palette pensée pour la carte CLAIRE. L'ancienne visait un fond sombre :
+  // les pays hors cible y étaient remplis de blanc à 4,5 %, ce qui les rend
+  // purement invisibles depuis le passage des cartes en blanc.
   const styleFor = (code: string) => {
     const n = counts[code] || 0;
     if (n > 0) {
-      // Active: solid lime, intensity by volume.
-      const t = 0.4 + 0.6 * (n / max);
-      return { fill: ACCENT, fillOpacity: t, stroke: ACCENT, strokeOpacity: 1, width: 0.5 };
+      // Actif : lime dense, intensité selon le volume.
+      const t = 0.55 + 0.45 * (n / max);
+      return { fill: ACCENT_INK, fillOpacity: t, stroke: ACCENT_INK, strokeOpacity: 1, width: 0.5 };
     }
     if (TARGET_SET.has(code)) {
-      // Targeted but silent: hollow with a clearly readable lime outline. This
-      // is the state that has to stand out — it's the map's whole point.
-      return { fill: ACCENT, fillOpacity: 0.13, stroke: ACCENT, strokeOpacity: 0.85, width: 0.9 };
+      // Ciblé mais muet : contour net, remplissage léger. C'est l'état que la
+      // carte existe pour montrer, il doit se distinguer au premier regard.
+      return { fill: ACCENT_INK, fillOpacity: 0.14, stroke: ACCENT_INK, strokeOpacity: 0.8, width: 1 };
     }
-    return { fill: "#ffffff", fillOpacity: 0.045, stroke: "#ffffff", strokeOpacity: 0.07, width: 0.4 };
+    // Hors cible : gris ardoise visible mais discret, jamais du blanc.
+    return { fill: "#CBD5E1", fillOpacity: 0.55, stroke: "#94A3B8", strokeOpacity: 0.5, width: 0.4 };
   };
 
   const hovered = hover
@@ -118,7 +122,9 @@ const WorldMapBlock: React.FC<Props> = ({ countries }) => {
         </svg>
 
         {hovered && (
-          <div className="absolute top-0 left-0 pointer-events-none rounded-xl px-3 py-2 bg-[#0A0425]/95 border border-slate-200 shadow-xl">
+          // Fond blanc comme les cartes : le fond sombre en dur avait survécu
+          // à la conversion en clair, alors que son texte était devenu foncé.
+          <div className="absolute top-0 left-0 pointer-events-none rounded-xl px-3 py-2 bg-white/95 border border-slate-200 shadow-xl">
             <p className="text-xs font-black text-slate-900">{label(hovered.code)}</p>
             <p className="text-[11px] text-slate-600">
               {hovered.count > 0
@@ -132,13 +138,13 @@ const WorldMapBlock: React.FC<Props> = ({ countries }) => {
       {/* Légende */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-4 text-[11px]">
         <span className="flex items-center gap-1.5 text-slate-600">
-          <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: ACCENT }} /> Actif (inscrits)
+          <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: ACCENT_INK }} /> Actif (inscrits)
         </span>
         <span className="flex items-center gap-1.5 text-slate-600">
-          <span className="w-3 h-3 rounded-sm border" style={{ borderColor: ACCENT, backgroundColor: `${ACCENT}12` }} /> Ciblé, aucun inscrit
+          <span className="w-3 h-3 rounded-sm border" style={{ borderColor: ACCENT_INK, backgroundColor: `${ACCENT_INK}24` }} /> Ciblé, aucun inscrit
         </span>
         <span className="flex items-center gap-1.5 text-slate-600">
-          <span className="w-3 h-3 rounded-sm bg-slate-50 border border-slate-200" /> Hors cible
+          <span className="w-3 h-3 rounded-sm bg-slate-300 border border-slate-400" /> Hors cible
         </span>
       </div>
 

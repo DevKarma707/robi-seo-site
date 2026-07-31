@@ -21,6 +21,7 @@ import {
   Megaphone, BarChart2, FileText, Rocket, ArrowUpRight, LogOut, Filter, Globe,
 } from "lucide-react";
 import { Lancement, Revenu, Alertes } from "@/components/admin/PilotageTab";
+import WorldMapBlock from "@/components/admin/WorldMapBlock";
 import ThemePicker from "@/components/admin/ThemePicker";
 import { ACCENT, ACCENT_INK, btn, btnGhost, btnPill, btnPrimary, card, focusRingDark, kpiLabel, kpiValue, sectionTitle } from "@/components/admin/ui";
 
@@ -129,6 +130,9 @@ export default function ApercuAdmin() {
                 error={null}
               />
             </div>
+
+            {/* Vrai composant : la carte a été redessinée pour le fond clair. */}
+            <WorldMapBlock countries={[{ code: "fr", count: 11 }, { code: "ma", count: 4 }, { code: "be", count: 2 }, { code: "us", count: 1 }, { code: "—", count: 3 }]} />
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {KPIS.map((k) => (

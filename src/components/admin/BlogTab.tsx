@@ -295,11 +295,11 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="w-full max-w-4xl max-h-[93vh] overflow-y-auto rounded-2xl border bg-[#0F0A2E] border-slate-200"
+        className="w-full max-w-4xl max-h-[93vh] overflow-y-auto rounded-2xl border bg-white border-slate-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b bg-[#0F0A2E] border-slate-200">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b bg-white border-slate-200">
           <h2 className={`font-black text-lg ${text}`}>{isCreate ? "Nouvel article" : `Éditer : ${article?.titleFr}`}</h2>
           <button onClick={onClose} className={`p-2 rounded-lg hover:bg-slate-200 transition-colors ${muted}`}>
             <X size={18} />
@@ -332,7 +332,7 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
               <label className={labelCls}>Catégorie</label>
               <select value={data.category} onChange={(e) => set("category", e.target.value)} className={`mt-1 ${inputCls}`}>
                 {CATEGORIES.map((c) => (
-                  <option key={c} value={c} className="bg-[#0F0A2E]">
+                  <option key={c} value={c} className="bg-white">
                     {c}
                   </option>
                 ))}
@@ -491,7 +491,7 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 px-6 py-4 border-t bg-[#0F0A2E] border-slate-200">
+        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 px-6 py-4 border-t bg-white border-slate-200">
           <p className={`text-xs ${muted}`}>{data.published ? "🟢 Sera visible sur le site" : "🟡 Brouillon — non visible"}</p>
           <div className="flex gap-3">
             <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
@@ -563,8 +563,8 @@ const ArticleJsonImportModal: React.FC<{ onClose: () => void; onResult: (msg: st
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border bg-[#0F0A2E] border-slate-200" onClick={(e) => e.stopPropagation()}>
-        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b bg-[#0F0A2E] border-slate-200">
+      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border bg-white border-slate-200" onClick={(e) => e.stopPropagation()}>
+        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b bg-white border-slate-200">
           <div>
             <h2 className="font-black text-lg text-slate-900">Importer un article depuis JSON</h2>
             <p className={`text-xs mt-0.5 ${muted}`}>Colle un objet JSON (ou un tableau) préparé par Claude.</p>
@@ -608,7 +608,7 @@ const ArticleJsonImportModal: React.FC<{ onClose: () => void; onResult: (msg: st
           {error && <div className="text-sm px-4 py-3 rounded-xl border bg-red-500/10 border-red-500/30 text-red-600">❌ {error}</div>}
         </div>
 
-        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 px-6 py-4 border-t bg-[#0F0A2E] border-slate-200">
+        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 px-6 py-4 border-t bg-white border-slate-200">
           <label className={`flex items-center gap-2 text-xs font-bold cursor-pointer ${muted}`} title="Si coché, un slug existant est MIS À JOUR au lieu d'être ignoré">
             <input type="checkbox" checked={overwrite} onChange={(e) => setOverwrite(e.target.checked)} />
             Écraser si le slug existe déjà
