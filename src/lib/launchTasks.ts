@@ -123,6 +123,12 @@ export const buildBrief = (t: LaunchTask): string => {
       "Projet Robi, deux dépôts distincts :",
       "- ~/Desktop/ROBI_V1_READY — l'app (Vite + React + Firebase), repo DevKarma707/ROBI_AI",
       "- ~/Desktop/robi-seo-site — le site public et l'admin (Next.js), repo DevKarma707/robi-seo-site",
+      "",
+      // Le CLAUDE.md du dépôt ouvert est chargé automatiquement : inutile de
+      // recopier ici le prix, l'échéance Factur-X ou les pièges connus, ce
+      // serait deux sources de vérité qui divergeraient. On y renvoie.
+      "Le CLAUDE.md du dépôt ouvert porte le contexte produit et les pièges connus — le lire avant d'agir.",
+      "Documents de travail éventuels : ~/Desktop/ROBI_PARTAGE (synchronisé depuis l'onglet Fichiers).",
     ].join("\n"),
     "Localise le code concerné avant de proposer un changement.",
   ];
