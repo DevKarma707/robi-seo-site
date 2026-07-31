@@ -26,10 +26,10 @@ const COUNTRY_NAMES: Record<string, string> = {
 
 function Kpi({ label, value, sub, accent }: { label: string; value: React.ReactNode; sub?: string; accent?: boolean }) {
   return (
-    <div className={`${card} p-4`}>
-      <p className={`${kpiLabel} mb-1`}>{label}</p>
-      <span className={kpiValue} style={{ color: accent ? ACCENT : "#fff" }}>{value}</span>
-      {sub && <p className="text-[11px] mt-1 text-white/40">{sub}</p>}
+    <div className={`${card} a-card-hover a-kpi p-4`}>
+      <p className={`${kpiLabel} mb-2`}>{label}</p>
+      <span className={`${kpiValue} ${accent ? "a-figure-accent" : ""}`}>{value}</span>
+      {sub && <p className="text-[11px] mt-2 text-white/35">{sub}</p>}
     </div>
   );
 }
@@ -38,7 +38,7 @@ function Bar({ value, max, color }: { value: number; max: number; color?: string
   const pct = max > 0 ? Math.round((value / max) * 100) : 0;
   return (
     <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
-      <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, backgroundColor: color ?? ACCENT }} />
+      <div className="a-bar h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, ...(color ? { background: color, boxShadow: "none" } : {}) }} />
     </div>
   );
 }
@@ -55,7 +55,6 @@ function Funnel({ stats, visits }: { stats: AppStats; visits: VisitStats }) {
     { label: "Comptes activés (≥ 1 doc)", value: stats.activated, note: "tous comptes" },
     { label: "Ventes réelles", value: stats.soldSeats, note: "hors comptes offerts" },
   ];
-  const max = Math.max(1, ...steps.map((s) => s.value));
 
   return (
     <div className={`${card} p-5`}>
@@ -73,8 +72,13 @@ function Funnel({ stats, visits }: { stats: AppStats; visits: VisitStats }) {
                 {s.label}
                 {s.note && <span className="text-white/25"> · {s.note}</span>}
               </span>
-              <Bar value={s.value} max={max} />
-              <span className="text-sm font-black w-12 text-right text-white">{s.value}</span>
+              {/* La barre porte le TAUX de passage, pas la valeur absolue.
+                  À l'échelle des valeurs, 1240 visites face à 12 inscriptions
+                  écrasait tout : trois étapes sur quatre étaient des traits
+                  invisibles, et un entonnoir illisible ne sert à rien. La
+                  valeur reste lue en chiffres, juste à droite. */}
+              <Bar value={rate === null ? 100 : rate} max={100} />
+              <span className="text-sm font-black w-12 text-right text-white tabular-nums">{s.value}</span>
               <span className="text-[11px] w-16 text-right font-bold" style={{ color: rate === null ? "transparent" : rate < 10 ? "#f87171" : ACCENT }}>
                 {rate === null ? "—" : `${rate}%`}
               </span>

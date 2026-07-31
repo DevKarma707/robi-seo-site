@@ -122,7 +122,7 @@ export default function AdminPage() {
   if (!loggedIn) return <AuthScreen />;
 
   const navItem = "text-white/50 hover:text-white hover:bg-white/[0.06]";
-  const navActive = "text-[#BEF221] bg-[#BEF221]/[0.08] border border-[#BEF221]/20";
+  const navActive = "a-nav-active text-[#BEF221]";
 
   const NAV: { id: Tab; label: string; icon: React.ReactNode; badge?: number }[] = [
     { id: "pilotage", label: "Pilotage", icon: <Gauge size={17} /> },
@@ -151,9 +151,9 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#0A0425]">
+    <div className="a-shell min-h-screen flex">
       {/* Sidebar */}
-      <aside className="w-[232px] flex-shrink-0 border-r flex flex-col h-screen sticky top-0 bg-white/[0.02] border-white/[0.06]">
+      <aside className="a-sidebar w-[232px] flex-shrink-0 flex flex-col h-screen sticky top-0">
         <div className="px-4 py-4 border-b border-white/[0.06] flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="Robi AI" className="w-8 h-8" />
@@ -201,9 +201,9 @@ export default function AdminPage() {
         <div className="mx-auto w-full max-w-[1600px] px-6 py-8 md:px-10">
           {/* Le filet bas ancre le titre : sur 1600px de large, un titre sans
               séparateur flotte au-dessus du contenu au lieu de le coiffer. */}
-          <div className="mb-8 border-b border-white/[0.06] pb-5">
-            <h1 className="font-black text-[26px] leading-none uppercase tracking-tight text-white">{NAV.find((t) => t.id === tab)?.label}</h1>
-            <p className="text-sm mt-2 text-white/40">{subtitle[tab]}</p>
+          <div className="mb-8">
+            <h1 className="font-black text-[32px] leading-none tracking-[-0.02em] text-white">{NAV.find((t) => t.id === tab)?.label}</h1>
+            <p className="text-[13px] mt-2.5 text-white/40">{subtitle[tab]}</p>
           </div>
           {tab === "pilotage" && <PilotageTab visits={visits} />}
           {tab === "kanban" && <KanbanTab />}

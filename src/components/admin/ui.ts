@@ -13,11 +13,18 @@
  *   marqueurs (badges, pastilles)→ rounded-full
  */
 
-/** Surface standard : toute carte de l'admin part de là. */
-export const card = "rounded-2xl border bg-white/[0.03] border-white/8";
+/**
+ * Surface standard : toute carte de l'admin part de là.
+ *
+ * Le rendu vient de `.a-card` (globals.css) plutôt que de classes Tailwind :
+ * un dégradé, un liseré interne et une ombre portée ne s'expriment pas
+ * proprement en utilitaires, et c'est ce trio qui donne le relief qui
+ * manquait — auparavant tout partageait un unique blanc à 3 %.
+ */
+export const card = "a-card";
 
 /** Surface cliquable : même base + réaction au survol. */
-export const cardInteractive = `${card} transition-colors hover:bg-white/[0.05] hover:border-white/[0.14]`;
+export const cardInteractive = `${card} a-card-hover`;
 
 /**
  * Anneau de focus clavier. L'admin n'en avait aucun : naviguer à la
@@ -59,16 +66,16 @@ export const input = `w-full ${fieldBase}`;
 export const select = `w-auto ${fieldBase}`;
 
 /** Titre de section à l'intérieur d'une carte. */
-export const sectionTitle = "text-xs font-black uppercase tracking-widest text-white";
+export const sectionTitle = "text-[13px] font-bold tracking-tight text-white/90";
 
 /** Libellé de KPI, au-dessus du chiffre. */
-export const kpiLabel = "text-[10px] font-bold uppercase tracking-widest text-white/40";
+export const kpiLabel = "text-[10px] font-bold uppercase tracking-[0.14em] text-white/35";
 
 /**
  * Chiffre de KPI. `tabular-nums` fixe la largeur des chiffres : sans ça,
  * un compteur qui passe de 111 à 999 change de largeur et la carte
  * tremble à chaque rafraîchissement.
  */
-export const kpiValue = "font-black text-3xl tabular-nums";
+export const kpiValue = "font-black text-[34px] leading-none tracking-tight tabular-nums a-figure";
 
 export const ACCENT = "#BEF221";

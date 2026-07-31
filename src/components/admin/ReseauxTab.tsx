@@ -230,14 +230,16 @@ const ReseauxTab: React.FC = () => {
         </div>
         <div className="grid grid-cols-7 gap-1.5">
           {cells.map((date, i) => {
-            if (!date) return <div key={`x${i}`} className="min-h-[92px] rounded-xl bg-white/[0.01]" />;
+            if (!date) return <div key={`x${i}`} className="min-h-[92px] rounded-xl bg-black/10" />;
             const posts = byDate.get(date) || [];
             const isToday = date === new Date().toISOString().slice(0, 10);
             return (
               <div
                 key={date}
                 className={`min-h-[92px] rounded-xl border p-1.5 transition-colors ${
-                  isToday ? "border-[#BEF221]/40 bg-[#BEF221]/[0.04]" : "border-white/[0.06] bg-white/[0.02]"
+                  isToday
+                    ? "border-[#BEF221]/40 bg-[#BEF221]/[0.06] shadow-[inset_0_1px_0_rgba(190,242,33,0.18)]"
+                    : "border-white/[0.05] bg-black/20 hover:border-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
                 }`}
               >
                 <p className={`text-[10px] font-bold mb-1 px-0.5 ${isToday ? "text-[#BEF221]" : "text-white/30"}`}>

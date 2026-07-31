@@ -21,9 +21,12 @@ function Bar({ value, max, color }: { value: number; max: number; color?: string
   const pct = max > 0 ? Math.round((value / max) * 100) : 0;
   return (
     <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
+      {/* `a-bar` porte le dégradé et la lueur. Une source par couleur (les
+          barres par réseau ont la leur) écrase les deux, sinon le dégradé
+          lime s'appliquerait par-dessus la couleur du réseau. */}
       <div
-        className="h-full rounded-full transition-all duration-500"
-        style={{ width: `${pct}%`, backgroundColor: color ?? ACCENT }}
+        className="a-bar h-full rounded-full transition-all duration-500"
+        style={{ width: `${pct}%`, ...(color ? { background: color, boxShadow: "none" } : {}) }}
       />
     </div>
   );

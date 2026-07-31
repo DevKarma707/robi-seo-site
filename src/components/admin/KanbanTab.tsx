@@ -356,7 +356,9 @@ const KanbanTab: React.FC = () => {
               onDragLeave={() => setDragOver((d) => (d === c ? null : d))}
               onDrop={(e) => { e.preventDefault(); drop(c); }}
               className={`rounded-2xl border p-3 transition-colors min-h-[200px] ${
-                dragOver === c ? "border-[#BEF221]/40 bg-[#BEF221]/[0.04]" : "border-white/8 bg-white/[0.02]"
+                dragOver === c
+                  ? "border-[#BEF221]/40 bg-[#BEF221]/[0.05] shadow-[inset_0_1px_0_rgba(190,242,33,0.15)]"
+                  : "border-white/[0.055] bg-black/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
               }`}
             >
               <div className="flex items-center gap-2 mb-3 px-1">
@@ -388,7 +390,7 @@ const KanbanTab: React.FC = () => {
                     }}
                     className={`rounded-xl border p-3 cursor-grab active:cursor-grabbing transition-all ${focusRing} ${
                       dragId === t.id ? "opacity-40" : "hover:bg-white/[0.06]"
-                    } ${t.column === "done" ? "border-white/[0.06] bg-white/[0.02]" : "border-white/10 bg-white/[0.04]"}`}
+                    } ${t.column === "done" ? "border-white/[0.05] bg-white/[0.02] opacity-70" : "border-white/[0.09] bg-white/[0.045] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"}`}
                   >
                     <div className="flex items-start gap-2">
                       <span className="mt-[5px] w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: PRIORITY_COLOR[t.priority] }} />

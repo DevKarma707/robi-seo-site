@@ -519,3 +519,110 @@ body {
 @keyframes shine-sweep {
   to { transform: translateX(100%); }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   ADMIN — système de profondeur
+   ═══════════════════════════════════════════════════════════════
+   L'admin manquait de relief : cartes, sidebar et fond partageaient une
+   surface unique (blanc à 3 %), donc rien ne se détachait. On introduit
+   une source de lumière implicite, en haut à gauche : les surfaces sont
+   plus claires en haut qu'en bas, portent un liseré clair sur l'arête
+   supérieure, et projettent une ombre vers le bas.
+   ─────────────────────────────────────────────────────────────── */
+
+/* Fond de page : deux halos très diffus au lieu d'un aplat mort. */
+.a-shell {
+  background:
+    radial-gradient(1100px 620px at 12% -12%, rgba(190, 242, 33, 0.055), transparent 62%),
+    radial-gradient(900px 520px at 92% -4%, rgba(99, 91, 255, 0.13), transparent 58%),
+    #0A0425;
+}
+
+/* Surface standard. Le dégradé est subtil (5,5 % → 2,5 %) : au-delà,
+   la carte se met à ressembler à un bouton. */
+.a-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.022));
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 10px 30px -18px rgba(0, 0, 0, 0.9);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.a-card-hover:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 18px 40px -20px rgba(0, 0, 0, 0.95);
+}
+
+/* Carte KPI : un liseré lime discret en haut, allumé au survol. Il donne
+   le point d'accroche qui manquait à des cartes aux trois quarts vides. */
+.a-kpi { position: relative; overflow: hidden; }
+.a-kpi::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(190, 242, 33, 0.5), transparent);
+  opacity: 0.35;
+  transition: opacity 0.25s ease;
+}
+.a-kpi:hover::before { opacity: 1; }
+
+/* Sidebar : légèrement plus sombre que le contenu, pour qu'elle recule. */
+.a-sidebar {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012));
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.35);
+}
+
+/* Onglet actif : barre lime à gauche plutôt qu'un simple fond teinté —
+   l'œil trouve sa position sans lire. */
+.a-nav-active {
+  position: relative;
+  background: linear-gradient(90deg, rgba(190, 242, 33, 0.14), rgba(190, 242, 33, 0.03));
+  border: 1px solid rgba(190, 242, 33, 0.18);
+}
+.a-nav-active::before {
+  content: "";
+  position: absolute;
+  left: -1px; top: 50%;
+  transform: translateY(-50%);
+  width: 2px; height: 60%;
+  border-radius: 0 2px 2px 0;
+  background: #BEF221;
+  box-shadow: 0 0 10px rgba(190, 242, 33, 0.8);
+}
+
+/* Barres de progression : dégradé + lueur. Un aplat lime pleine largeur
+   lisait comme une dalle publicitaire. */
+.a-bar {
+  background: linear-gradient(90deg, rgba(190, 242, 33, 0.55), #BEF221);
+  box-shadow: 0 0 12px rgba(190, 242, 33, 0.35);
+}
+
+/* Chiffre de KPI : léger dégradé vertical, comme un chiffre gravé. */
+.a-figure {
+  background: linear-gradient(180deg, #ffffff, rgba(255, 255, 255, 0.72));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.a-figure-accent {
+  background: linear-gradient(180deg, #DFFF6B, #BEF221);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Un enfant d'un chiffre dégradé garde sa propre couleur : sans ça, le
+   `-webkit-text-fill-color: transparent` s'hérite et un libellé atténué
+   ("index en cours") se retrouve peint comme le chiffre, donc lu comme une
+   valeur au lieu d'un état d'attente. */
+.a-figure > *,
+.a-figure-accent > * {
+  -webkit-text-fill-color: currentColor;
+  background: none;
+}
