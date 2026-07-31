@@ -20,7 +20,7 @@ const SOURCE_COLORS: Record<string, string> = {
 function Bar({ value, max, color }: { value: number; max: number; color?: string }) {
   const pct = max > 0 ? Math.round((value / max) * 100) : 0;
   return (
-    <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
+    <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
       {/* `a-bar` porte le dégradé et la lueur. Une source par couleur (les
           barres par réseau ont la leur) écrase les deux, sinon le dégradé
           lime s'appliquerait par-dessus la couleur du réseau. */}
@@ -50,7 +50,7 @@ function VisitorsChart({ days }: { days: { date: string; count: number }[] }) {
                 backgroundColor: isToday ? ACCENT : "rgba(190,242,33,0.25)",
               }}
             />
-            <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-white opacity-0 group-hover:opacity-100 whitespace-nowrap">
+            <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-slate-900 opacity-0 group-hover:opacity-100 whitespace-nowrap">
               {d.count}
             </span>
           </div>
@@ -79,13 +79,13 @@ const AnalyticsTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
           { label: "Semaine précédente", value: visits.prevWeek },
         ].map(({ label, value, delta }) => (
           <div key={label} className={`${card} p-4`}>
-            <p className="text-[10px] font-bold uppercase tracking-widest mb-1 text-white/40">{label}</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest mb-1 text-slate-500">{label}</p>
             <div className="flex items-end gap-2">
-              <span className="font-black text-3xl text-white">{value}</span>
+              <span className="font-black text-3xl text-slate-900">{value}</span>
               {delta !== null && delta !== undefined && (
                 <span
                   className={`flex items-center gap-0.5 text-xs font-bold mb-1 ${
-                    delta >= 0 ? "text-[#BEF221]" : "text-red-400"
+                    delta >= 0 ? "text-[#6FA300]" : "text-red-600"
                   }`}
                 >
                   {delta >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
@@ -101,11 +101,11 @@ const AnalyticsTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
       {/* Visiteurs 30 jours */}
       <div className={`${card} p-5`}>
         <div className="flex items-center gap-2 mb-4">
-          <BarChart2 size={15} className="text-[#BEF221]" />
-          <p className="text-xs font-black uppercase tracking-widest text-white">Visiteurs · 30 derniers jours</p>
+          <BarChart2 size={15} className="text-[#6FA300]" />
+          <p className="text-xs font-black uppercase tracking-widest text-slate-900">Visiteurs · 30 derniers jours</p>
         </div>
         {visits.month === 0 ? (
-          <p className="text-xs text-white/40">Pas encore de données — les visites apparaîtront ici.</p>
+          <p className="text-xs text-slate-500">Pas encore de données — les visites apparaîtront ici.</p>
         ) : (
           <VisitorsChart days={visits.days} />
         )}
@@ -115,16 +115,16 @@ const AnalyticsTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
         {/* Pages les plus visitées */}
         <div className={`${card} p-5`}>
           <div className="flex items-center gap-2 mb-4">
-            <Globe size={15} className="text-[#BEF221]" />
-            <p className="text-xs font-black uppercase tracking-widest text-white">Pages les plus visitées</p>
+            <Globe size={15} className="text-[#6FA300]" />
+            <p className="text-xs font-black uppercase tracking-widest text-slate-900">Pages les plus visitées</p>
           </div>
           <div className="space-y-2.5">
-            {visits.byPage.length === 0 && <p className="text-xs text-white/40">Pas encore de données.</p>}
+            {visits.byPage.length === 0 && <p className="text-xs text-slate-500">Pas encore de données.</p>}
             {visits.byPage.map(({ path, count }) => (
               <div key={path} className="flex items-center gap-3">
-                <span className="text-[11px] font-mono w-40 truncate text-white/50">{path}</span>
+                <span className="text-[11px] font-mono w-40 truncate text-slate-600">{path}</span>
                 <Bar value={count} max={maxPage} />
-                <span className="text-xs font-black w-6 text-right text-white">{count}</span>
+                <span className="text-xs font-black w-6 text-right text-slate-900">{count}</span>
               </div>
             ))}
           </div>
@@ -133,11 +133,11 @@ const AnalyticsTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
         {/* Sources de trafic */}
         <div className={`${card} p-5`}>
           <div className="flex items-center gap-2 mb-4">
-            <BarChart2 size={15} className="text-[#BEF221]" />
-            <p className="text-xs font-black uppercase tracking-widest text-white">Sources de trafic</p>
+            <BarChart2 size={15} className="text-[#6FA300]" />
+            <p className="text-xs font-black uppercase tracking-widest text-slate-900">Sources de trafic</p>
           </div>
           <div className="space-y-2.5">
-            {visits.bySource.length === 0 && <p className="text-xs text-white/40">Pas encore de données.</p>}
+            {visits.bySource.length === 0 && <p className="text-xs text-slate-500">Pas encore de données.</p>}
             {visits.bySource.map(({ source, count }) => {
               const color = SOURCE_COLORS[source] ?? "#888";
               const pct = Math.round((count / totalSource) * 100);
@@ -145,10 +145,10 @@ const AnalyticsTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
                 <div key={source} className="flex items-center gap-3">
                   <div className="flex items-center gap-1.5 w-28">
                     <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
-                    <span className="text-[11px] font-semibold truncate text-white">{source}</span>
+                    <span className="text-[11px] font-semibold truncate text-slate-900">{source}</span>
                   </div>
                   <Bar value={count} max={maxSource} color={color} />
-                  <span className="text-xs font-black w-10 text-right text-white/40">{pct}%</span>
+                  <span className="text-xs font-black w-10 text-right text-slate-500">{pct}%</span>
                 </div>
               );
             })}

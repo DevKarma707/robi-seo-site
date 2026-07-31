@@ -6,7 +6,7 @@ import {
   RefreshCw, Sparkles, ServerCrash, XCircle,
 } from "lucide-react";
 import { fetchHealthReport, type HealthReport, type HealthSignature } from "@/lib/adminApi";
-import { ACCENT, btn, card } from "./ui";
+import { ACCENT, ACCENT_INK, btn, card } from "./ui";
 
 const RED = "#f87171";
 const AMBER = "#fbbf24";
@@ -51,12 +51,12 @@ function Kpi({
   const color = tone === "bad" ? RED : tone === "good" ? ACCENT : "#fff";
   return (
     <div className={`${card} p-4`}>
-      <div className="flex items-center gap-1.5 mb-1.5 text-white/40">
+      <div className="flex items-center gap-1.5 mb-1.5 text-slate-500">
         {icon}
         <p className="text-[10px] font-bold uppercase tracking-widest">{label}</p>
       </div>
       <span className="font-black text-3xl" style={{ color }}>{value}</span>
-      {sub && <p className="text-[11px] mt-1 text-white/40">{sub}</p>}
+      {sub && <p className="text-[11px] mt-1 text-slate-500">{sub}</p>}
     </div>
   );
 }
@@ -71,7 +71,7 @@ function Incidents({
     <div className={`${card} p-5`}>
       <div className="flex items-center gap-2 mb-4">
         <span style={{ color: items.length ? (tone === "bad" ? RED : AMBER) : ACCENT }}>{icon}</span>
-        <p className="text-xs font-black uppercase tracking-widest text-white">{title}</p>
+        <p className="text-xs font-black uppercase tracking-widest text-slate-900">{title}</p>
         {items.length > 0 && (
           <span className="ml-auto text-[10px] font-black px-2 py-0.5 rounded-full" style={{ backgroundColor: `${RED}22`, color: RED }}>
             {items.reduce((s, i) => s + i.count, 0)}
@@ -79,7 +79,7 @@ function Incidents({
         )}
       </div>
       {items.length === 0 ? (
-        <p className="text-xs text-white/40">{empty}</p>
+        <p className="text-xs text-slate-500">{empty}</p>
       ) : (
         <div className="space-y-3">
           {items.map((it) => (
@@ -91,8 +91,8 @@ function Incidents({
                 {it.count}
               </span>
               <div className="min-w-0">
-                <p className="text-[12px] text-white/80 font-mono break-words leading-snug">{it.sample}</p>
-                <p className="text-[10px] text-white/30 mt-0.5">dernière fois {relative(it.lastSeen)}</p>
+                <p className="text-[12px] text-slate-700 font-mono break-words leading-snug">{it.sample}</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">dernière fois {relative(it.lastSeen)}</p>
               </div>
             </div>
           ))}
@@ -108,8 +108,8 @@ function DailyBars({ days }: { days: { date: string; count: number }[] }) {
   return (
     <div className={`${card} p-5`}>
       <div className="flex items-center gap-2 mb-4">
-        <Activity size={15} style={{ color: ACCENT }} />
-        <p className="text-xs font-black uppercase tracking-widest text-white">Incidents par jour</p>
+        <Activity size={15} style={{ color: ACCENT_INK }} />
+        <p className="text-xs font-black uppercase tracking-widest text-slate-900">Incidents par jour</p>
       </div>
       <div className="flex items-end gap-1 h-20">
         {days.map((d) => (
@@ -120,7 +120,7 @@ function DailyBars({ days }: { days: { date: string; count: number }[] }) {
               className="w-full rounded-sm"
               style={{ height: `${Math.max((d.count / max) * 100, 4)}%`, backgroundColor: d.count > 0 ? RED : "rgba(255,255,255,0.08)" }}
             />
-            <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-white opacity-0 group-hover:opacity-100 whitespace-nowrap">
+            <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-slate-900 opacity-0 group-hover:opacity-100 whitespace-nowrap">
               {d.count} · {d.date.slice(5)}
             </span>
           </div>
@@ -152,7 +152,7 @@ const SanteTab: React.FC = () => {
 
   if (loading && !report) {
     return (
-      <div className="flex items-center gap-2 text-white/40 text-sm py-10">
+      <div className="flex items-center gap-2 text-white/50 text-sm py-10">
         <RefreshCw size={16} className="animate-spin" /> Diagnostic en cours…
       </div>
     );
@@ -161,11 +161,11 @@ const SanteTab: React.FC = () => {
   if (error && !report) {
     return (
       <div className={`${card} p-5 space-y-2`}>
-        <div className="flex items-center gap-2 text-red-400">
+        <div className="flex items-center gap-2 text-red-600">
           <AlertTriangle size={16} />
           <p className="font-black text-sm">Diagnostic indisponible</p>
         </div>
-        <p className="text-xs text-white/50">{error}</p>
+        <p className="text-xs text-slate-600">{error}</p>
         <button onClick={() => load(days)} className={`${btn} mt-2`}>
           Réessayer
         </button>
@@ -188,11 +188,11 @@ const SanteTab: React.FC = () => {
             <span style={{ color: sev.color }} className="mt-0.5">{sev.icon}</span>
             <div>
               <p className="font-black text-base" style={{ color: sev.color }}>{sev.label}</p>
-              <p className="text-[12px] text-white/60 mt-0.5">{sev.blurb}</p>
+              <p className="text-[12px] text-slate-600 mt-0.5">{sev.blurb}</p>
               {report.problems.length > 0 && (
                 <ul className="mt-3 space-y-1">
                   {report.problems.map((p) => (
-                    <li key={p} className="text-[12px] text-white/75 flex items-start gap-2">
+                    <li key={p} className="text-[12px] text-slate-700 flex items-start gap-2">
                       <span className="mt-[7px] w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: sev.color }} />
                       {p}
                     </li>
@@ -208,7 +208,7 @@ const SanteTab: React.FC = () => {
                 key={d}
                 onClick={() => setDays(d)}
                 className={`px-2.5 py-1 rounded-lg text-[11px] font-black transition-all ${
-                  days === d ? "bg-white/15 text-white" : "text-white/40 hover:text-white/70"
+                  days === d ? "bg-slate-200 text-slate-900" : "text-slate-500 hover:text-slate-700"
                 }`}
               >
                 {d} j
@@ -225,7 +225,7 @@ const SanteTab: React.FC = () => {
           icon={<Mail size={13} />}
           value={
             report.emails.failureRate === null
-              ? <span className="text-white/30 text-xl">index en cours</span>
+              ? <span className="text-slate-400 text-xl">index en cours</span>
               : `${report.emails.failureRate}%`
           }
           sub={
@@ -261,7 +261,7 @@ const SanteTab: React.FC = () => {
       <div className={`${card} p-5`}>
         <div className="flex items-center gap-2 mb-3">
           <Clock size={15} style={{ color: cronLate ? RED : ACCENT }} />
-          <p className="text-xs font-black uppercase tracking-widest text-white">Relances automatiques</p>
+          <p className="text-xs font-black uppercase tracking-widest text-slate-900">Relances automatiques</p>
           <span
             className="ml-auto text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider"
             style={{ backgroundColor: cronLate ? `${RED}22` : `${ACCENT}22`, color: cronLate ? RED : ACCENT }}
@@ -272,25 +272,25 @@ const SanteTab: React.FC = () => {
         {report.cron.last ? (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/40 mb-0.5">Dernier passage</p>
-              <p className="text-sm font-bold text-white">{fmtDate(report.cron.last.at)}</p>
-              <p className="text-[10px] text-white/30">{relative(report.cron.last.at)}</p>
+              <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Dernier passage</p>
+              <p className="text-sm font-bold text-slate-900">{fmtDate(report.cron.last.at)}</p>
+              <p className="text-[10px] text-slate-400">{relative(report.cron.last.at)}</p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/40 mb-0.5">Issue</p>
-              <p className="text-sm font-bold text-white">{String(cronMeta.outcome ?? "—")}</p>
+              <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Issue</p>
+              <p className="text-sm font-bold text-slate-900">{String(cronMeta.outcome ?? "—")}</p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/40 mb-0.5">Relances envoyées</p>
-              <p className="text-sm font-bold text-white">{String(cronMeta.sent ?? 0)}</p>
+              <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Relances envoyées</p>
+              <p className="text-sm font-bold text-slate-900">{String(cronMeta.sent ?? 0)}</p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/40 mb-0.5">Échecs / ignorés</p>
-              <p className="text-sm font-bold text-white">{String(cronMeta.failed ?? 0)} / {String(cronMeta.skipped ?? 0)}</p>
+              <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Échecs / ignorés</p>
+              <p className="text-sm font-bold text-slate-900">{String(cronMeta.failed ?? 0)} / {String(cronMeta.skipped ?? 0)}</p>
             </div>
           </div>
         ) : (
-          <p className="text-xs text-white/50">
+          <p className="text-xs text-slate-600">
             Aucune trace d&apos;exécution. Le job tourne tous les jours à 8 h (Europe/Paris) —
             la première trace apparaîtra au prochain passage. Si rien n&apos;arrive demain,
             c&apos;est qu&apos;il ne tourne pas.
@@ -329,7 +329,7 @@ const SanteTab: React.FC = () => {
       </div>
 
       <div className="flex items-center justify-between">
-        <p className="text-[10px] text-white/25">
+        <p className="text-[10px] text-slate-400">
           Fenêtre {report.windowDays} j · calculé {fmtDate(report.computedAt)} · rétention 30 j
           {report.truncated ? " · liste tronquée à 5 000 événements" : ""}
         </p>

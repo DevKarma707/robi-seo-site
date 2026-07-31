@@ -538,23 +538,27 @@ body {
     #0A0425;
 }
 
-/* Surface standard. Le dégradé est subtil (5,5 % → 2,5 %) : au-delà,
-   la carte se met à ressembler à un bouton. */
+/* Surface standard — CLAIRE.
+   Les cartes reprennent le fond de l'app (blanc, bordure #E2E8F0) posé sur la
+   coquille Amethyst : c'est le contraste qui manquait quand tout partageait un
+   blanc à 3 % sur fond sombre. Le texte des cartes bascule donc en foncé —
+   voir la règle `.a-card` ci-dessous, qui donne la couleur par défaut. */
 .a-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.022));
-  border: 1px solid rgba(255, 255, 255, 0.075);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
   border-radius: 16px;
+  color: #0F172A;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.07),
-    0 10px 30px -18px rgba(0, 0, 0, 0.9);
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    0 1px 2px rgba(13, 6, 48, 0.06),
+    0 12px 28px -16px rgba(13, 6, 48, 0.45);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .a-card-hover:hover {
-  border-color: rgba(255, 255, 255, 0.16);
+  border-color: #CBD5E1;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 18px 40px -20px rgba(0, 0, 0, 0.95);
+    0 1px 2px rgba(13, 6, 48, 0.08),
+    0 18px 38px -18px rgba(13, 6, 48, 0.55);
 }
 
 /* Carte KPI : un liseré lime discret en haut, allumé au survol. Il donne
@@ -565,8 +569,8 @@ body {
   position: absolute;
   inset: 0 0 auto 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(190, 242, 33, 0.5), transparent);
-  opacity: 0.35;
+  background: linear-gradient(90deg, transparent, #BEF221, transparent);
+  opacity: 0.55;
   transition: opacity 0.25s ease;
 }
 .a-kpi:hover::before { opacity: 1; }
@@ -599,19 +603,18 @@ body {
 /* Barres de progression : dégradé + lueur. Un aplat lime pleine largeur
    lisait comme une dalle publicitaire. */
 .a-bar {
-  background: linear-gradient(90deg, rgba(190, 242, 33, 0.55), #BEF221);
-  box-shadow: 0 0 12px rgba(190, 242, 33, 0.35);
+  background: linear-gradient(90deg, #A6D619, #7FA800);
 }
 
 /* Chiffre de KPI : léger dégradé vertical, comme un chiffre gravé. */
 .a-figure {
-  background: linear-gradient(180deg, #ffffff, rgba(255, 255, 255, 0.72));
+  background: linear-gradient(180deg, #0D0630, #3B3486);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .a-figure-accent {
-  background: linear-gradient(180deg, #DFFF6B, #BEF221);
+  background: linear-gradient(180deg, #4E7A00, #6FA300);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -626,3 +629,11 @@ body {
   -webkit-text-fill-color: currentColor;
   background: none;
 }
+
+/* Titres : Outfit, la police display de la charte (§3). Inter reste pour
+   l'UI et le corps. Sans ça, titres et texte ne se distinguaient que par
+   la graisse — d'où l'impression de bloc uniforme. */
+.a-display { font-family: var(--font-outfit), "Outfit", sans-serif; }
+
+/* Piste des barres, sur carte claire. */
+.a-track { background: #E8EDF3; }

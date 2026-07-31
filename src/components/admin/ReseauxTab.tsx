@@ -146,7 +146,7 @@ const ReseauxTab: React.FC = () => {
 
   if (!ready) {
     return (
-      <div className="flex items-center gap-2 text-white/40 text-sm py-10">
+      <div className="flex items-center gap-2 text-white/50 text-sm py-10">
         <RefreshCw size={16} className="animate-spin" /> Chargement du calendrier…
       </div>
     );
@@ -166,7 +166,7 @@ const ReseauxTab: React.FC = () => {
           <button onClick={() => shift(-1)} className={`${btnGhost} !px-2`} aria-label="Mois précédent">
             <ChevronLeft size={14} />
           </button>
-          <p className="font-black text-white text-sm min-w-[150px] text-center capitalize">
+          <p className="font-black text-slate-900 text-sm min-w-[150px] text-center capitalize">
             {MONTH_NAMES[month]} {year}
           </p>
           <button onClick={() => shift(1)} className={`${btnGhost} !px-2`} aria-label="Mois suivant">
@@ -174,7 +174,7 @@ const ReseauxTab: React.FC = () => {
           </button>
         </div>
 
-        <span className="text-[11px] text-white/40">
+        <span className="text-[11px] text-slate-500">
           {counts.total} post{counts.total > 1 ? "s" : ""}
           {counts.ready > 0 && ` · ${counts.ready} prêt${counts.ready > 1 ? "s" : ""}`}
           {counts.published > 0 && ` · ${counts.published} publié${counts.published > 1 ? "s" : ""}`}
@@ -199,8 +199,8 @@ const ReseauxTab: React.FC = () => {
       {importOpen && (
         <div className={`${card} p-5 space-y-3`}>
           <p className={sectionTitle}>Import JSON</p>
-          <p className="text-[11px] text-white/40 leading-relaxed">
-            Colle la sortie du skill <code className="text-[#BEF221]">robi-social-media</code>. Les posts déjà
+          <p className="text-[11px] text-slate-500 leading-relaxed">
+            Colle la sortie du skill <code className="text-[#6FA300]">robi-social-media</code>. Les posts déjà
             présents (même date, même réseau, même début de texte) sont ignorés — relancer le skill
             sur un mois déjà importé ne duplique rien.
           </p>
@@ -225,12 +225,12 @@ const ReseauxTab: React.FC = () => {
       <div className={`${card} p-3`}>
         <div className="grid grid-cols-7 gap-1.5 mb-1.5">
           {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => (
-            <p key={d} className="text-[10px] font-black uppercase tracking-widest text-white/25 text-center py-1">{d}</p>
+            <p key={d} className="text-[10px] font-black uppercase tracking-widest text-slate-400 text-center py-1">{d}</p>
           ))}
         </div>
         <div className="grid grid-cols-7 gap-1.5">
           {cells.map((date, i) => {
-            if (!date) return <div key={`x${i}`} className="min-h-[92px] rounded-xl bg-black/10" />;
+            if (!date) return <div key={`x${i}`} className="min-h-[92px] rounded-xl bg-slate-50" />;
             const posts = byDate.get(date) || [];
             const isToday = date === new Date().toISOString().slice(0, 10);
             return (
@@ -239,10 +239,10 @@ const ReseauxTab: React.FC = () => {
                 className={`min-h-[92px] rounded-xl border p-1.5 transition-colors ${
                   isToday
                     ? "border-[#BEF221]/40 bg-[#BEF221]/[0.06] shadow-[inset_0_1px_0_rgba(190,242,33,0.18)]"
-                    : "border-white/[0.05] bg-black/20 hover:border-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+                    : "border-slate-200 bg-slate-50 hover:border-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
                 }`}
               >
-                <p className={`text-[10px] font-bold mb-1 px-0.5 ${isToday ? "text-[#BEF221]" : "text-white/30"}`}>
+                <p className={`text-[10px] font-bold mb-1 px-0.5 ${isToday ? "text-[#6FA300]" : "text-slate-400"}`}>
                   {date.slice(8)}
                 </p>
                 <div className="space-y-1">
@@ -250,13 +250,13 @@ const ReseauxTab: React.FC = () => {
                     <button
                       key={p.id}
                       onClick={() => setOpenId(openId === p.id ? null : p.id!)}
-                      className={`w-full text-left rounded-lg px-1.5 py-1 transition-colors hover:bg-white/[0.08] ${focusRing}`}
+                      className={`w-full text-left rounded-lg px-1.5 py-1 transition-colors hover:bg-slate-50 ${focusRing}`}
                       style={{ backgroundColor: `${TYPE_META[p.type].color}1a` }}
                       title={p.caption}
                     >
                       <span className="flex items-center gap-1">
                         <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: CHANNEL_META[p.channel].color }} />
-                        <span className="text-[9px] font-bold truncate text-white/80">{p.caption}</span>
+                        <span className="text-[9px] font-bold truncate text-slate-700">{p.caption}</span>
                       </span>
                     </button>
                   ))}
@@ -286,7 +286,7 @@ const ReseauxTab: React.FC = () => {
                   style={{ backgroundColor: `${TYPE_META[p.type].color}2a`, color: TYPE_META[p.type].color }}>
                   {TYPE_META[p.type].label}
                 </span>
-                <span className="text-[11px] text-white/40">{p.date}</span>
+                <span className="text-[11px] text-slate-500">{p.date}</span>
               </div>
               <button onClick={() => setOpenId(null)} className={`${btnGhost} !px-2`} aria-label="Fermer">
                 <X size={12} />
@@ -325,16 +325,16 @@ const ReseauxTab: React.FC = () => {
               </div>
             ) : (
               <>
-                <p className="text-[13px] text-white/80 whitespace-pre-wrap leading-relaxed">{p.caption}</p>
-                {p.hashtags && <p className="text-[12px] text-[#BEF221]/70">{p.hashtags}</p>}
+                <p className="text-[13px] text-slate-700 whitespace-pre-wrap leading-relaxed">{p.caption}</p>
+                {p.hashtags && <p className="text-[12px] text-[#6FA300]/70">{p.hashtags}</p>}
                 {p.visual && (
-                  <p className="text-[11px] text-white/40 leading-relaxed">
-                    <span className="uppercase tracking-widest text-white/25">Visuel · </span>{p.visual}
+                  <p className="text-[11px] text-slate-500 leading-relaxed">
+                    <span className="uppercase tracking-widest text-slate-400">Visuel · </span>{p.visual}
                   </p>
                 )}
                 {p.imageUrl && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border border-white/10" />
+                  <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border border-slate-200" />
                 )}
               </>
             )}
@@ -344,7 +344,7 @@ const ReseauxTab: React.FC = () => {
                 <button
                   key={s}
                   onClick={() => updatePost(p.id!, { status: s })}
-                  className={`${btnPill} ${p.status === s ? "text-black" : "bg-white/10 text-white/60"}`}
+                  className={`${btnPill} ${p.status === s ? "text-black" : "bg-slate-100 text-slate-600"}`}
                   style={p.status === s ? { backgroundColor: STATUS_META[s].color } : undefined}
                 >
                   {STATUS_META[s].label}
@@ -370,7 +370,7 @@ const ReseauxTab: React.FC = () => {
                   await deletePost(p.id!);
                   setOpenId(null);
                 }}
-                className={`${btnPill} bg-red-500/15 text-red-400 hover:bg-red-500/25`}
+                className={`${btnPill} bg-red-500/15 text-red-600 hover:bg-red-500/25`}
               >
                 <Trash2 size={11} />
               </button>
@@ -382,7 +382,7 @@ const ReseauxTab: React.FC = () => {
       {/* Légende des types */}
       <div className="flex flex-wrap items-center gap-3 px-1">
         {TYPES.map((t) => (
-          <span key={t} className="flex items-center gap-1.5 text-[10px] text-white/35">
+          <span key={t} className="flex items-center gap-1.5 text-[10px] text-slate-500">
             <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: TYPE_META[t].color }} />
             {TYPE_META[t].label}
           </span>

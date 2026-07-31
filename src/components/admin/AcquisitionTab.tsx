@@ -14,7 +14,7 @@ import {
 } from "@/lib/prospects";
 import { fetchOutreachStatus, sendOutreachEmail, type OutreachStatus } from "@/lib/adminApi";
 import { addInfluencer, suggestPromoCode } from "@/lib/influencers";
-import { ACCENT, btnGhost, btnPill, btnPrimary, card, input, select } from "./ui";
+import { ACCENT, ACCENT_INK, btnGhost, btnPill, btnPrimary, card, input, select } from "./ui";
 
 const EXAMPLE_JSON = `[
   {
@@ -181,18 +181,18 @@ const AcquisitionTab: React.FC = () => {
     <div className="space-y-6">
       {/* Avertissement SMTP */}
       {smtp && !smtp.configured && (
-        <div className="rounded-2xl border border-amber-400/25 bg-amber-400/[0.06] p-5">
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-5">
           <div className="flex items-start gap-2.5">
             <AlertTriangle size={16} className="text-amber-400 mt-0.5 flex-shrink-0" />
             <div className="space-y-1.5">
-              <p className="font-black text-sm text-amber-300">Envoi direct désactivé</p>
-              <p className="text-[11px] text-white/60 leading-relaxed">
+              <p className="font-black text-sm text-amber-600">Envoi direct désactivé</p>
+              <p className="text-[11px] text-slate-600 leading-relaxed">
                 Aucun SMTP de prospection n&apos;est configuré. C&apos;est volontaire : envoyer
                 du démarchage par le SMTP qui délivre les factures de tes clients met leur
                 délivrabilité en jeu — si ce serveur est marqué comme spam,{" "}
-                <span className="text-white/80">les factures de tes clients cessent d&apos;arriver</span>.
+                <span className="text-slate-700">les factures de tes clients cessent d&apos;arriver</span>.
                 <br /><br />
-                Configure <code className="text-[#BEF221]">SMTP_OUTREACH_HOST / _PORT / _USER / _PASS / _FROM</code>{" "}
+                Configure <code className="text-[#6FA300]">SMTP_OUTREACH_HOST / _PORT / _USER / _PASS / _FROM</code>{" "}
                 sur un sous-domaine dédié (par ex. <code>mail.robi-app.com</code>) avec ses propres
                 SPF, DKIM et DMARC. En attendant, « Copier » et « Ouvrir dans le mail » fonctionnent.
               </p>
@@ -207,12 +207,12 @@ const AcquisitionTab: React.FC = () => {
           <button
             key={s}
             onClick={() => setStatus(s)}
-            className={`${card} p-3 text-left transition-all hover:bg-white/[0.06] ${status === s ? "ring-1 ring-[#BEF221]/40" : ""}`}
+            className={`${card} p-3 text-left transition-all hover:bg-slate-50 ${status === s ? "ring-1 ring-[#BEF221]/40" : ""}`}
           >
             <p className="text-[9px] font-bold uppercase tracking-widest mb-1" style={{ color: STATUS_META[s].color }}>
               {STATUS_META[s].label}
             </p>
-            <span className="font-black text-2xl text-white">{counts[s] || 0}</span>
+            <span className="font-black text-2xl text-slate-900">{counts[s] || 0}</span>
           </button>
         ))}
       </div>
@@ -220,14 +220,14 @@ const AcquisitionTab: React.FC = () => {
       {/* Aujourd'hui */}
       <div className={`${card} p-5`}>
         <div className="flex items-center gap-2 mb-4">
-          <Target size={15} style={{ color: ACCENT }} />
-          <p className="text-xs font-black uppercase tracking-widest text-white">À faire aujourd&apos;hui</p>
+          <Target size={15} style={{ color: ACCENT_INK }} />
+          <p className="text-xs font-black uppercase tracking-widest text-slate-900">À faire aujourd&apos;hui</p>
           {today.length > 0 && (
             <span className="ml-auto text-[10px] font-black px-2 py-0.5 rounded-full bg-[#BEF221] text-black">{today.length}</span>
           )}
         </div>
         {today.length === 0 ? (
-          <p className="text-xs text-white/40">Rien à relancer aujourd&apos;hui.</p>
+          <p className="text-xs text-slate-500">Rien à relancer aujourd&apos;hui.</p>
         ) : (
           <div className="space-y-2">
             {today.slice(0, 12).map((p) => {
@@ -236,13 +236,13 @@ const AcquisitionTab: React.FC = () => {
                 <button
                   key={p.id}
                   onClick={() => setSelectedId(p.id!)}
-                  className="w-full flex items-center gap-3 text-left px-3 py-2 rounded-xl hover:bg-white/[0.06] transition-all"
+                  className="w-full flex items-center gap-3 text-left px-3 py-2 rounded-xl hover:bg-slate-50 transition-all"
                 >
                   <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: SEGMENT_META[p.segment].color }} />
-                  <span className="text-[13px] font-bold text-white truncate flex-1">{p.company}</span>
-                  <span className="text-[11px] text-white/40 truncate hidden sm:block">{stepOf(p).label}</span>
-                  <span className={`text-[11px] font-bold ${rel.late ? "text-amber-300" : "text-white/40"}`}>{rel.label}</span>
-                  <ArrowRight size={13} className="text-white/30 flex-shrink-0" />
+                  <span className="text-[13px] font-bold text-slate-900 truncate flex-1">{p.company}</span>
+                  <span className="text-[11px] text-slate-500 truncate hidden sm:block">{stepOf(p).label}</span>
+                  <span className={`text-[11px] font-bold ${rel.late ? "text-amber-600" : "text-slate-500"}`}>{rel.label}</span>
+                  <ArrowRight size={13} className="text-slate-400 flex-shrink-0" />
                 </button>
               );
             })}
@@ -253,7 +253,7 @@ const AcquisitionTab: React.FC = () => {
       {/* Filtres */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative flex-1 min-w-[220px] max-w-sm">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             className={`${input} pl-9`}
             placeholder="Chercher une société, un contact, une ville…"
@@ -277,10 +277,10 @@ const AcquisitionTab: React.FC = () => {
       {/* Import */}
       {showImport && (
         <div className={`${card} p-5 space-y-3`}>
-          <p className="text-xs font-black uppercase tracking-widest text-white">Import JSON</p>
-          <p className="text-[11px] text-white/40">
+          <p className="text-xs font-black uppercase tracking-widest text-slate-900">Import JSON</p>
+          <p className="text-[11px] text-slate-500">
             Même schéma que la skill d&apos;acquisition. Les doublons d&apos;email sont ignorés.
-            Champ obligatoire : <code className="text-[#BEF221]">company</code>.
+            Champ obligatoire : <code className="text-[#6FA300]">company</code>.
           </p>
           <textarea
             className={`${input} font-mono text-[11px] h-40`}
@@ -300,23 +300,23 @@ const AcquisitionTab: React.FC = () => {
         {/* Liste */}
         <div className={`${card} p-2 max-h-[560px] overflow-y-auto`}>
           {filtered.length === 0 ? (
-            <p className="text-xs text-white/40 p-4">Aucun prospect ne correspond.</p>
+            <p className="text-xs text-slate-500 p-4">Aucun prospect ne correspond.</p>
           ) : (
             filtered.map((p) => (
               <button
                 key={p.id}
                 onClick={() => setSelectedId(p.id!)}
-                className={`w-full text-left px-3 py-2.5 rounded-xl transition-all ${selectedId === p.id ? "bg-white/[0.08]" : "hover:bg-white/[0.04]"}`}
+                className={`w-full text-left px-3 py-2.5 rounded-xl transition-all ${selectedId === p.id ? "bg-slate-50" : "hover:bg-slate-50"}`}
               >
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: SEGMENT_META[p.segment].color }} />
-                  <span className="text-[13px] font-bold text-white truncate flex-1">{p.company}</span>
-                  {isOptedOut(p) && <Ban size={12} className="text-red-400 flex-shrink-0" />}
+                  <span className="text-[13px] font-bold text-slate-900 truncate flex-1">{p.company}</span>
+                  {isOptedOut(p) && <Ban size={12} className="text-red-600 flex-shrink-0" />}
                   <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: `${STATUS_META[p.status].color}1f`, color: STATUS_META[p.status].color }}>
                     {STATUS_META[p.status].label}
                   </span>
                 </div>
-                <p className="text-[11px] text-white/40 truncate mt-0.5 pl-3.5">
+                <p className="text-[11px] text-slate-500 truncate mt-0.5 pl-3.5">
                   {[p.contactName, p.city, p.email].filter(Boolean).join(" · ") || "—"}
                 </p>
               </button>
@@ -329,11 +329,11 @@ const AcquisitionTab: React.FC = () => {
           <div className={`${card} p-5 space-y-4`}>
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="font-black text-lg text-white truncate">{selected.company}</p>
-                <p className="text-[11px] text-white/40">
+                <p className="font-black text-lg text-slate-900 truncate">{selected.company}</p>
+                <p className="text-[11px] text-slate-500">
                   {[selected.contactName, selected.role, selected.city].filter(Boolean).join(" · ") || "—"}
                 </p>
-                <p className="text-[11px] text-white/30 mt-0.5">{SEGMENT_META[selected.segment].label} · {SEGMENT_META[selected.segment].hint}</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">{SEGMENT_META[selected.segment].label} · {SEGMENT_META[selected.segment].hint}</p>
               </div>
               <div className="flex items-center gap-1.5 flex-shrink-0">
                 {selected.website && (
@@ -343,7 +343,7 @@ const AcquisitionTab: React.FC = () => {
                 )}
                 <button
                   onClick={async () => { if (confirm(`Supprimer ${selected.company} ?`)) { await deleteProspect(selected.id!); setSelectedId(null); } }}
-                  className={`${btnPill} bg-red-500/15 text-red-400 hover:bg-red-500/25`}
+                  className={`${btnPill} bg-red-500/15 text-red-600 hover:bg-red-500/25`}
                 >
                   <Trash2 size={12} />
                 </button>
@@ -352,7 +352,7 @@ const AcquisitionTab: React.FC = () => {
 
             {isOptedOut(selected) && (
               <div className="rounded-xl border border-red-400/25 bg-red-400/[0.07] px-3 py-2 flex items-center gap-2">
-                <Ban size={13} className="text-red-400 flex-shrink-0" />
+                <Ban size={13} className="text-red-600 flex-shrink-0" />
                 <p className="text-[11px] text-red-300">
                   Ce contact s&apos;est désinscrit. Tout envoi est bloqué — et doit le rester.
                 </p>
@@ -365,7 +365,7 @@ const AcquisitionTab: React.FC = () => {
                 <button
                   key={s}
                   onClick={() => updateProspect(selected.id!, { status: s }, selected)}
-                  className={`${btnPill} ${selected.status === s ? "text-black" : "bg-white/10 text-white/60 hover:bg-white/20"}`}
+                  className={`${btnPill} ${selected.status === s ? "text-black" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
                   style={selected.status === s ? { backgroundColor: STATUS_META[s].color } : undefined}
                 >
                   {STATUS_META[s].label}
@@ -375,7 +375,7 @@ const AcquisitionTab: React.FC = () => {
 
             {/* Séquence */}
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1.5">
+              <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">
                 Étape {(selected.seqStep ?? 0) + 1} / {SEQUENCE.length} · {stepOf(selected).label}
               </p>
               <div className="flex gap-1">
@@ -390,17 +390,17 @@ const AcquisitionTab: React.FC = () => {
               <div className="space-y-2">
                 {message.subject && (
                   <div>
-                    <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1">Objet</p>
-                    <p className="text-[13px] font-bold text-white">{message.subject}</p>
+                    <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Objet</p>
+                    <p className="text-[13px] font-bold text-slate-900">{message.subject}</p>
                   </div>
                 )}
                 <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1">Message</p>
-                  <pre className="text-[12px] text-white/75 whitespace-pre-wrap font-sans leading-relaxed max-h-64 overflow-y-auto bg-white/[0.03] rounded-xl p-3">
+                  <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Message</p>
+                  <pre className="text-[12px] text-slate-700 whitespace-pre-wrap font-sans leading-relaxed max-h-64 overflow-y-auto bg-slate-50 rounded-xl p-3">
                     {message.body}
                   </pre>
                 </div>
-                <p className="text-[10px] text-white/30">
+                <p className="text-[10px] text-slate-400">
                   Un lien de désinscription est ajouté automatiquement à l&apos;envoi.
                 </p>
 
@@ -437,17 +437,17 @@ const AcquisitionTab: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <p className="text-xs text-white/40">Aucun modèle pour cette étape.</p>
+              <p className="text-xs text-slate-500">Aucun modèle pour cette étape.</p>
             )}
 
             {/* Historique */}
             {(selected.touches?.length ?? 0) > 0 && (
               <div>
-                <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1.5">Historique</p>
+                <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Historique</p>
                 <div className="space-y-1">
                   {[...selected.touches!].reverse().slice(0, 6).map((t, i) => (
-                    <p key={i} className="text-[11px] text-white/50">
-                      <span className="text-white/70">{t.date}</span> · {t.channel}{t.note ? ` — ${t.note}` : ""}
+                    <p key={i} className="text-[11px] text-slate-600">
+                      <span className="text-slate-700">{t.date}</span> · {t.channel}{t.note ? ` — ${t.note}` : ""}
                     </p>
                   ))}
                 </div>
@@ -456,14 +456,14 @@ const AcquisitionTab: React.FC = () => {
 
             {selected.notes && (
               <div>
-                <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1">Notes</p>
-                <p className="text-[11px] text-white/60 whitespace-pre-wrap">{selected.notes}</p>
+                <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Notes</p>
+                <p className="text-[11px] text-slate-600 whitespace-pre-wrap">{selected.notes}</p>
               </div>
             )}
           </div>
         ) : (
           <div className={`${card} p-5 flex items-center justify-center min-h-[200px]`}>
-            <p className="text-xs text-white/30">Sélectionne un prospect pour voir son message.</p>
+            <p className="text-xs text-slate-400">Sélectionne un prospect pour voir son message.</p>
           </div>
         )}
       </div>

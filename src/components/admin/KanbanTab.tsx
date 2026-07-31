@@ -12,7 +12,7 @@ import {
   type LaunchTask, type TaskColumn, type TaskCategory, type TaskOwner, type TaskEffort,
 } from "@/lib/launchTasks";
 import { runnerAvailable, runTask, getToken, setToken } from "@/lib/taskRunner";
-import { ACCENT, btnGhost, btnPill, btnPrimary, card, focusRing, input, select } from "./ui";
+import { ACCENT, ACCENT_INK, btnGhost, btnPill, btnPrimary, card, focusRing, input, select } from "./ui";
 
 const PRIORITY_COLOR: Record<number, string> = { 1: "#f87171", 2: "#fbbf24", 3: "#64748b" };
 
@@ -226,7 +226,7 @@ const KanbanTab: React.FC = () => {
 
   if (!ready) {
     return (
-      <div className="flex items-center gap-2 text-white/40 text-sm py-10">
+      <div className="flex items-center gap-2 text-white/50 text-sm py-10">
         <RefreshCw size={16} className="animate-spin" /> Chargement du tableau…
       </div>
     );
@@ -238,15 +238,15 @@ const KanbanTab: React.FC = () => {
       <div className={`${card} p-5`}>
         <div className="flex items-center justify-between gap-4 mb-3">
           <div className="flex items-center gap-2">
-            <ListChecks size={15} style={{ color: ACCENT }} />
-            <p className="text-xs font-black uppercase tracking-widest text-white">Avancement du lancement</p>
+            <ListChecks size={15} style={{ color: ACCENT_INK }} />
+            <p className="text-xs font-black uppercase tracking-widest text-slate-900">Avancement du lancement</p>
           </div>
-          <p className="text-sm font-black text-white">
-            {progress.done}<span className="text-white/30">/{progress.total}</span>
-            <span className="ml-2 text-[11px] font-bold" style={{ color: ACCENT }}>{progress.pct}%</span>
+          <p className="text-sm font-black text-slate-900">
+            {progress.done}<span className="text-slate-400">/{progress.total}</span>
+            <span className="ml-2 text-[11px] font-bold" style={{ color: ACCENT_INK }}>{progress.pct}%</span>
           </p>
         </div>
-        <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+        <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
           <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress.pct}%`, backgroundColor: ACCENT }} />
         </div>
 
@@ -254,15 +254,15 @@ const KanbanTab: React.FC = () => {
           <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
             {nextForRalph.length > 0 && (
               <div>
-                <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1.5">
+                <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">
                   Ce qui n&apos;attend que toi
                 </p>
                 <div className="space-y-1">
                   {nextForRalph.map((t) => (
-                    <p key={t.id} className="text-[12px] text-white/70 flex items-start gap-2">
+                    <p key={t.id} className="text-[12px] text-slate-700 flex items-start gap-2">
                       <span className="mt-[6px] w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: PRIORITY_COLOR[t.priority] }} />
                       {t.title}
-                      <span className="text-white/25">· {EFFORT_LABEL[t.effort]}</span>
+                      <span className="text-slate-400">· {EFFORT_LABEL[t.effort]}</span>
                     </p>
                   ))}
                 </div>
@@ -275,10 +275,10 @@ const KanbanTab: React.FC = () => {
                 </p>
                 <div className="space-y-1">
                   {nextForClaude.map((t) => (
-                    <p key={t.id} className="text-[12px] text-white/70 flex items-start gap-2">
+                    <p key={t.id} className="text-[12px] text-slate-700 flex items-start gap-2">
                       <span className="mt-[6px] w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: PRIORITY_COLOR[t.priority] }} />
                       {t.title}
-                      <span className="text-white/25">· {EFFORT_LABEL[t.effort]}</span>
+                      <span className="text-slate-400">· {EFFORT_LABEL[t.effort]}</span>
                     </p>
                   ))}
                 </div>
@@ -312,7 +312,7 @@ const KanbanTab: React.FC = () => {
           <option value="claude">Claude</option>
         </select>
         <div className="relative min-w-[180px]">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none" />
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
             className={`${input} pl-8`}
             placeholder="Rechercher…"
@@ -323,12 +323,12 @@ const KanbanTab: React.FC = () => {
         <button
           onClick={() => setAutoOnly((v) => !v)}
           aria-pressed={autoOnly}
-          className={`${btnPill} ${autoOnly ? "bg-[#BEF221] text-black" : "bg-white/10 text-white/60 hover:bg-white/20"}`}
+          className={`${btnPill} ${autoOnly ? "bg-[#BEF221] text-black" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
           title="N'afficher que les tâches que Claude peut mener seul"
         >
           <span className="flex items-center gap-1.5">
             <Sparkles size={12} /> Automatisable
-            <span className={autoOnly ? "text-black/50" : "text-white/30"}>{claudeReady}</span>
+            <span className={autoOnly ? "text-black/50" : "text-slate-400"}>{claudeReady}</span>
           </span>
         </button>
         {misplacedBlocked.length > 0 && (
@@ -358,13 +358,13 @@ const KanbanTab: React.FC = () => {
               className={`rounded-2xl border p-3 transition-colors min-h-[200px] ${
                 dragOver === c
                   ? "border-[#BEF221]/40 bg-[#BEF221]/[0.05] shadow-[inset_0_1px_0_rgba(190,242,33,0.15)]"
-                  : "border-white/[0.055] bg-black/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+                  : "border-slate-200 bg-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
               }`}
             >
               <div className="flex items-center gap-2 mb-3 px-1">
                 <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: COLUMN_META[c].color }} />
-                <p className="text-[11px] font-black uppercase tracking-widest text-white">{COLUMN_META[c].label}</p>
-                <span className="ml-auto text-[11px] font-black text-white/30">{items.length}</span>
+                <p className="text-[11px] font-black uppercase tracking-widest text-slate-900">{COLUMN_META[c].label}</p>
+                <span className="ml-auto text-[11px] font-black text-slate-400">{items.length}</span>
               </div>
 
               <div className="space-y-2">
@@ -389,12 +389,12 @@ const KanbanTab: React.FC = () => {
                       }
                     }}
                     className={`rounded-xl border p-3 cursor-grab active:cursor-grabbing transition-all ${focusRing} ${
-                      dragId === t.id ? "opacity-40" : "hover:bg-white/[0.06]"
-                    } ${t.column === "done" ? "border-white/[0.05] bg-white/[0.02] opacity-70" : "border-white/[0.09] bg-white/[0.045] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"}`}
+                      dragId === t.id ? "opacity-40" : "hover:bg-slate-50"
+                    } ${t.column === "done" ? "border-slate-200 bg-slate-50 opacity-70" : "border-slate-200 bg-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"}`}
                   >
                     <div className="flex items-start gap-2">
                       <span className="mt-[5px] w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: PRIORITY_COLOR[t.priority] }} />
-                      <p className={`text-[12px] font-semibold leading-snug flex-1 ${t.column === "done" ? "text-white/40 line-through" : "text-white"}`}>
+                      <p className={`text-[12px] font-semibold leading-snug flex-1 ${t.column === "done" ? "text-slate-500 line-through" : "text-slate-900"}`}>
                         {t.title}
                       </p>
                     </div>
@@ -404,11 +404,11 @@ const KanbanTab: React.FC = () => {
                         style={{ backgroundColor: `${CATEGORY_META[t.category].color}1f`, color: CATEGORY_META[t.category].color }}>
                         {CATEGORY_META[t.category].label}
                       </span>
-                      <span className="text-[9px] text-white/35 flex items-center gap-0.5">
+                      <span className="text-[9px] text-slate-500 flex items-center gap-0.5">
                         {t.owner === "claude" ? <Bot size={9} /> : <User size={9} />}
                         {t.owner === "claude" ? "Claude" : "Ralph"}
                       </span>
-                      <span className="text-[9px] text-white/25">{EFFORT_LABEL[t.effort]}</span>
+                      <span className="text-[9px] text-slate-400">{EFFORT_LABEL[t.effort]}</span>
                       {isAutomatable(t) && t.column !== "done" && (
                         <span
                           className="text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5"
@@ -421,14 +421,14 @@ const KanbanTab: React.FC = () => {
                     </div>
 
                     {t.blockedBy && t.column !== "done" && (
-                      <p className="text-[10px] text-amber-300/80 mt-1.5 pl-3.5 flex items-start gap-1">
+                      <p className="text-[10px] text-amber-600 mt-1.5 pl-3.5 flex items-start gap-1">
                         <AlertTriangle size={9} className="mt-[3px] flex-shrink-0" />
                         Dépend de : {t.blockedBy}
                       </p>
                     )}
 
                     {openId === t.id && (
-                      <div className="mt-3 pt-3 border-t border-white/[0.08] space-y-2.5" onClick={(e) => e.stopPropagation()}>
+                      <div className="mt-3 pt-3 border-t border-slate-200 space-y-2.5" onClick={(e) => e.stopPropagation()}>
                         {edit?.id === t.id ? (
                           <div className="space-y-2">
                             <input
@@ -459,7 +459,7 @@ const KanbanTab: React.FC = () => {
                           </div>
                         ) : (
                           <>
-                            {t.detail && <p className="text-[11px] text-white/55 leading-relaxed">{t.detail}</p>}
+                            {t.detail && <p className="text-[11px] text-slate-600 leading-relaxed">{t.detail}</p>}
                             <div className="flex flex-wrap gap-1.5">
                               <button
                                 onClick={() => setEdit({ id: t.id!, title: t.title, detail: t.detail || "" })}
@@ -509,7 +509,7 @@ const KanbanTab: React.FC = () => {
                             <button
                               key={p}
                               onClick={() => updateTask(t.id!, { priority: p })}
-                              className={`${btnPill} ${t.priority === p ? "text-black" : "bg-white/10 text-white/60"}`}
+                              className={`${btnPill} ${t.priority === p ? "text-black" : "bg-slate-100 text-slate-600"}`}
                               style={t.priority === p ? { backgroundColor: PRIORITY_COLOR[p] } : undefined}
                             >
                               P{p}
@@ -519,7 +519,7 @@ const KanbanTab: React.FC = () => {
                             <button
                               key={e}
                               onClick={() => updateTask(t.id!, { effort: e })}
-                              className={`${btnPill} ${t.effort === e ? "bg-white/25 text-white" : "bg-white/10 text-white/60"}`}
+                              className={`${btnPill} ${t.effort === e ? "bg-slate-200 text-slate-900" : "bg-slate-100 text-slate-600"}`}
                             >
                               {e}
                             </button>
@@ -532,14 +532,14 @@ const KanbanTab: React.FC = () => {
                           </button>
                           <button
                             onClick={() => setAutomatable(t.id!, !isAutomatable(t))}
-                            className={`${btnPill} ${isAutomatable(t) ? "bg-[#BEF221]/20 text-[#BEF221]" : "bg-white/10 text-white/60"}`}
+                            className={`${btnPill} ${isAutomatable(t) ? "bg-[#BEF221]/20 text-[#6FA300]" : "bg-slate-100 text-slate-600"}`}
                             title="Claude peut-il la mener seul ?"
                           >
                             <span className="flex items-center gap-1"><Sparkles size={11} /> Auto</span>
                           </button>
                           <button
                             onClick={async () => { if (confirm("Supprimer cette tâche ?")) { await deleteTask(t.id!); setOpenId(null); } }}
-                            className={`${btnPill} bg-red-500/15 text-red-400 hover:bg-red-500/25`}
+                            className={`${btnPill} bg-red-500/15 text-red-600 hover:bg-red-500/25`}
                           >
                             <Trash2 size={11} />
                           </button>
@@ -550,7 +550,7 @@ const KanbanTab: React.FC = () => {
                 ))}
 
                 {items.length === 0 && (
-                  <p className="text-[11px] text-white/20 px-1 py-3">
+                  <p className="text-[11px] text-slate-400 px-1 py-3">
                     {search.trim() || category !== "all" || owner !== "all"
                       ? "Rien ne correspond au filtre."
                       : "Glisse une tâche ici."}

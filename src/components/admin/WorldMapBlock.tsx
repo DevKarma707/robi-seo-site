@@ -5,6 +5,8 @@ import { Map as MapIcon } from "lucide-react";
 import { COUNTRY_PATH, COUNTRY_LABEL, MAP_WIDTH, MAP_HEIGHT } from "@/lib/worldPaths";
 
 const ACCENT = "#BEF221";
+/** Lime lisible sur carte blanche — voir ui.ts. */
+const ACCENT_INK = "#6FA300";
 
 /**
  * The 16 countries Robi actually supports — mirrors COUNTRIES_CONFIG in the
@@ -74,17 +76,17 @@ const WorldMapBlock: React.FC<Props> = ({ countries }) => {
     : null;
 
   return (
-    <div className="rounded-2xl border bg-white/[0.03] border-white/8 p-5">
+    <div className="rounded-2xl border bg-slate-50 border-slate-200 p-5">
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex items-center gap-2">
-          <MapIcon size={15} style={{ color: ACCENT }} />
-          <p className="text-xs font-black uppercase tracking-widest text-white">Couverture monde</p>
+          <MapIcon size={15} style={{ color: ACCENT_INK }} />
+          <p className="text-xs font-black uppercase tracking-widest text-slate-900">Couverture monde</p>
         </div>
         <div className="text-right">
-          <p className="font-black text-2xl" style={{ color: ACCENT }}>
-            {activeTargets.length}<span className="text-white/30 text-base">/{TARGET_COUNTRIES.length}</span>
+          <p className="font-black text-2xl" style={{ color: ACCENT_INK }}>
+            {activeTargets.length}<span className="text-slate-400 text-base">/{TARGET_COUNTRIES.length}</span>
           </p>
-          <p className="text-[10px] uppercase tracking-widest text-white/40">pays cibles actifs</p>
+          <p className="text-[10px] uppercase tracking-widest text-slate-500">pays cibles actifs</p>
         </div>
       </div>
 
@@ -116,9 +118,9 @@ const WorldMapBlock: React.FC<Props> = ({ countries }) => {
         </svg>
 
         {hovered && (
-          <div className="absolute top-0 left-0 pointer-events-none rounded-xl px-3 py-2 bg-[#0A0425]/95 border border-white/10 shadow-xl">
-            <p className="text-xs font-black text-white">{label(hovered.code)}</p>
-            <p className="text-[11px] text-white/50">
+          <div className="absolute top-0 left-0 pointer-events-none rounded-xl px-3 py-2 bg-[#0A0425]/95 border border-slate-200 shadow-xl">
+            <p className="text-xs font-black text-slate-900">{label(hovered.code)}</p>
+            <p className="text-[11px] text-slate-600">
               {hovered.count > 0
                 ? `${hovered.count} inscrit${hovered.count > 1 ? "s" : ""}`
                 : hovered.target ? "pays cible · aucun inscrit" : "hors cible"}
@@ -129,34 +131,34 @@ const WorldMapBlock: React.FC<Props> = ({ countries }) => {
 
       {/* Légende */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-4 text-[11px]">
-        <span className="flex items-center gap-1.5 text-white/60">
+        <span className="flex items-center gap-1.5 text-slate-600">
           <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: ACCENT }} /> Actif (inscrits)
         </span>
-        <span className="flex items-center gap-1.5 text-white/60">
+        <span className="flex items-center gap-1.5 text-slate-600">
           <span className="w-3 h-3 rounded-sm border" style={{ borderColor: ACCENT, backgroundColor: `${ACCENT}12` }} /> Ciblé, aucun inscrit
         </span>
-        <span className="flex items-center gap-1.5 text-white/60">
-          <span className="w-3 h-3 rounded-sm bg-white/[0.06] border border-white/10" /> Hors cible
+        <span className="flex items-center gap-1.5 text-slate-600">
+          <span className="w-3 h-3 rounded-sm bg-slate-50 border border-slate-200" /> Hors cible
         </span>
       </div>
 
       {/* Lecture */}
       <div className="mt-4 space-y-1.5 text-[11px] leading-relaxed">
         {silentTargets.length > 0 && (
-          <p className="text-white/50">
-            <span className="text-white/70 font-bold">Cibles encore muettes ({silentTargets.length})</span> ·{" "}
+          <p className="text-slate-600">
+            <span className="text-slate-700 font-bold">Cibles encore muettes ({silentTargets.length})</span> ·{" "}
             {silentTargets.map(label).join(", ")}.
           </p>
         )}
         {offTarget.length > 0 && (
-          <p className="text-amber-300/80">
+          <p className="text-amber-600">
             <span className="font-bold">Inscrits hors pays supportés</span> ·{" "}
             {offTarget.map(label).join(", ")} — la TVA et les mentions légales ne sont pas
             gérées pour ces pays.
           </p>
         )}
         {unknown > 0 && (
-          <p className="text-white/40">
+          <p className="text-slate-500">
             {unknown} compte{unknown > 1 ? "s" : ""} sans pays renseigné, donc absent
             {unknown > 1 ? "s" : ""} de la carte. Le pays conditionne la TVA et le
             Factur-X : c&apos;est le champ à rendre obligatoire à l&apos;inscription.

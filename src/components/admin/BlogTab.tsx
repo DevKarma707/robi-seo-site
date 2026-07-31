@@ -25,9 +25,9 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
   const [showJsonImport, setShowJsonImport] = useState(false);
   const [importMsg, setImportMsg] = useState<string | null>(null);
 
-  const text = "text-white";
-  const muted = "text-white/40";
-  const inputBg = "bg-white/5 border-white/10 text-white";
+  const text = "text-slate-900";
+  const muted = "text-slate-500";
+  const inputBg = "bg-slate-100 border-slate-200 text-slate-900";
 
   const filtered = articles.filter(
     (a) =>
@@ -68,7 +68,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
             setImportMsg(null);
           }}
           title="Colle un JSON d'article (préparé par Claude) pour l'importer en 1 clic"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[#BEF221]/40 text-[#BEF221] text-sm font-bold hover:bg-[#BEF221]/10 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[#BEF221]/40 text-[#6FA300] text-sm font-bold hover:bg-[#BEF221]/10 transition-colors"
         >
           <FileJson size={16} />
           Importer JSON
@@ -90,7 +90,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
               ? "bg-green-500/10 border-green-500/30 text-green-400"
               : importMsg.startsWith("ℹ️")
               ? "bg-blue-500/10 border-blue-500/30 text-blue-400"
-              : "bg-red-500/10 border-red-500/30 text-red-400"
+              : "bg-red-500/10 border-red-500/30 text-red-600"
           }`}
         >
           {importMsg}
@@ -112,7 +112,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
         <span className={muted}>{articles.length} articles</span>
         <span className="text-green-400">• {articles.filter((a) => a.published).length} publiés</span>
         <span className="text-yellow-400">• {articles.filter((a) => !a.published).length} brouillons</span>
-        <span className="text-[#BEF221]">• {articles.filter((a) => a.featured).length} en vedette</span>
+        <span className="text-[#6FA300]">• {articles.filter((a) => a.featured).length} en vedette</span>
       </div>
 
       {/* Liste */}
@@ -129,8 +129,8 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
         ) : (
           <div className="divide-y divide-white/5">
             {filtered.map((a) => (
-              <div key={a.id} className="px-5 py-3.5 flex items-center gap-4 hover:bg-white/[0.04] transition-colors">
-                <div className="w-12 h-12 rounded-lg flex-shrink-0 overflow-hidden flex items-center justify-center bg-white/5">
+              <div key={a.id} className="px-5 py-3.5 flex items-center gap-4 hover:bg-slate-50 transition-colors">
+                <div className="w-12 h-12 rounded-lg flex-shrink-0 overflow-hidden flex items-center justify-center bg-slate-100">
                   {a.coverImage ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={a.coverImage} alt="" className="w-full h-full object-cover" />
@@ -141,7 +141,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className={`font-semibold text-sm truncate ${text}`}>{a.titleFr}</p>
-                    {a.featured && <Star size={11} className="text-[#BEF221] flex-shrink-0" />}
+                    {a.featured && <Star size={11} className="text-[#6FA300] flex-shrink-0" />}
                   </div>
                   <p className={`text-xs truncate ${muted}`}>
                     /{a.slug} · {a.category} · {a.date}
@@ -161,7 +161,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
                     onClick={() => handleToggleFeatured(a)}
                     title={a.featured ? "Retirer de la une" : "Mettre en vedette"}
                     className={`p-1.5 rounded-lg transition-colors ${
-                      a.featured ? "text-[#BEF221] hover:bg-[#BEF221]/10" : `${muted} hover:text-[#BEF221] hover:bg-[#BEF221]/10`
+                      a.featured ? "text-[#6FA300] hover:bg-[#BEF221]/10" : `${muted} hover:text-[#6FA300] hover:bg-[#BEF221]/10`
                     }`}
                   >
                     {a.featured ? <Star size={14} /> : <StarOff size={14} />}
@@ -186,14 +186,14 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
                   </a>
                   <button
                     onClick={() => setEditing(a)}
-                    className={`p-1.5 rounded-lg hover:bg-[#BEF221]/10 hover:text-[#BEF221] transition-colors ${muted}`}
+                    className={`p-1.5 rounded-lg hover:bg-[#BEF221]/10 hover:text-[#6FA300] transition-colors ${muted}`}
                     title="Éditer"
                   >
                     <Edit2 size={14} />
                   </button>
                   <button
                     onClick={() => handleDelete(a)}
-                    className="p-1.5 rounded-lg hover:bg-red-400/10 hover:text-red-400 text-red-400/60 transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-red-400/10 hover:text-red-600 text-red-600/60 transition-colors"
                     title="Supprimer"
                   >
                     <Trash2 size={14} />
@@ -281,9 +281,9 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
     }
   };
 
-  const text = "text-white";
-  const muted = "text-white/50";
-  const inputBg = "bg-white/5 border-white/10 text-white placeholder:text-white/30";
+  const text = "text-slate-900";
+  const muted = "text-slate-600";
+  const inputBg = "bg-slate-100 border-slate-200 text-slate-900 placeholder:text-slate-400";
   const inputCls = `w-full px-3 py-2 rounded-lg border text-sm ${inputBg} focus:border-[#BEF221]/40 focus:outline-none transition-colors`;
   const labelCls = `text-[11px] font-bold uppercase tracking-wider ${muted}`;
 
@@ -295,13 +295,13 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="w-full max-w-4xl max-h-[93vh] overflow-y-auto rounded-2xl border bg-[#0F0A2E] border-white/10"
+        className="w-full max-w-4xl max-h-[93vh] overflow-y-auto rounded-2xl border bg-[#0F0A2E] border-slate-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b bg-[#0F0A2E] border-white/8">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b bg-[#0F0A2E] border-slate-200">
           <h2 className={`font-black text-lg ${text}`}>{isCreate ? "Nouvel article" : `Éditer : ${article?.titleFr}`}</h2>
-          <button onClick={onClose} className={`p-2 rounded-lg hover:bg-white/10 transition-colors ${muted}`}>
+          <button onClick={onClose} className={`p-2 rounded-lg hover:bg-slate-200 transition-colors ${muted}`}>
             <X size={18} />
           </button>
         </div>
@@ -368,12 +368,12 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
             <div>
               <label className={labelCls}>Image de couverture <span className="normal-case font-normal opacity-60">(optionnelle)</span></label>
               <div className="mt-1 flex items-start gap-3">
-                <div className="w-24 h-16 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-white/5 border border-white/10">
+                <div className="w-24 h-16 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-slate-100 border border-slate-200">
                   {data.coverImage ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={data.coverImage} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <ImageIcon size={18} className="text-white/30" />
+                    <ImageIcon size={18} className="text-slate-400" />
                   )}
                 </div>
                 <div className="flex-1 space-y-2">
@@ -382,13 +382,13 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
                       type="button"
                       onClick={() => fileRef.current?.click()}
                       disabled={uploading}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border border-white/10 text-white/70 hover:text-[#BEF221] hover:border-[#BEF221] transition-colors disabled:opacity-50"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 text-slate-700 hover:text-[#6FA300] hover:border-[#BEF221] transition-colors disabled:opacity-50"
                     >
                       {uploading ? <RefreshCw size={13} className="animate-spin" /> : <Upload size={13} />}
                       {uploading ? "Upload…" : "Choisir une image"}
                     </button>
                     {data.coverImage && (
-                      <button type="button" onClick={() => set("coverImage", "")} className="text-xs text-red-400 hover:underline">
+                      <button type="button" onClick={() => set("coverImage", "")} className="text-xs text-red-600 hover:underline">
                         Retirer (sans image)
                       </button>
                     )}
@@ -414,7 +414,7 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
                   key={l}
                   onClick={() => setTab(l)}
                   className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-                    tab === l ? "bg-[#BEF221] text-black" : "bg-white/8 text-white/50 hover:bg-white/15"
+                    tab === l ? "bg-[#BEF221] text-black" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
                   {langLabel[l]}
@@ -462,7 +462,7 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
           {/* SEO méta */}
           <button
             onClick={() => setShowSeo((v) => !v)}
-            className={`flex items-center gap-2 text-xs font-bold uppercase tracking-wider ${muted} hover:text-[#BEF221] transition-colors`}
+            className={`flex items-center gap-2 text-xs font-bold uppercase tracking-wider ${muted} hover:text-[#6FA300] transition-colors`}
           >
             <ChevronDown size={14} className={`transition-transform ${showSeo ? "rotate-180" : ""}`} />
             Méta SEO (optionnel)
@@ -491,10 +491,10 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 px-6 py-4 border-t bg-[#0F0A2E] border-white/8">
+        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 px-6 py-4 border-t bg-[#0F0A2E] border-slate-200">
           <p className={`text-xs ${muted}`}>{data.published ? "🟢 Sera visible sur le site" : "🟡 Brouillon — non visible"}</p>
           <div className="flex gap-3">
-            <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm font-bold text-white/60 hover:text-white hover:bg-white/8 transition-colors">
+            <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
               Annuler
             </button>
             <button
@@ -539,8 +539,8 @@ const ArticleJsonImportModal: React.FC<{ onClose: () => void; onResult: (msg: st
   const [error, setError] = useState<string | null>(null);
   const [overwrite, setOverwrite] = useState(false);
 
-  const muted = "text-white/50";
-  const inputBg = "bg-white/5 border-white/10 text-white placeholder:text-white/30";
+  const muted = "text-slate-600";
+  const inputBg = "bg-slate-100 border-slate-200 text-slate-900 placeholder:text-slate-400";
   const labelCls = `text-[11px] font-bold uppercase tracking-wider ${muted}`;
 
   const handleImport = async () => {
@@ -563,13 +563,13 @@ const ArticleJsonImportModal: React.FC<{ onClose: () => void; onResult: (msg: st
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border bg-[#0F0A2E] border-white/10" onClick={(e) => e.stopPropagation()}>
-        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b bg-[#0F0A2E] border-white/8">
+      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border bg-[#0F0A2E] border-slate-200" onClick={(e) => e.stopPropagation()}>
+        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b bg-[#0F0A2E] border-slate-200">
           <div>
-            <h2 className="font-black text-lg text-white">Importer un article depuis JSON</h2>
+            <h2 className="font-black text-lg text-slate-900">Importer un article depuis JSON</h2>
             <p className={`text-xs mt-0.5 ${muted}`}>Colle un objet JSON (ou un tableau) préparé par Claude.</p>
           </div>
-          <button onClick={onClose} className={`p-2 rounded-lg hover:bg-white/10 transition-colors ${muted}`}>
+          <button onClick={onClose} className={`p-2 rounded-lg hover:bg-slate-200 transition-colors ${muted}`}>
             <X size={18} />
           </button>
         </div>
@@ -578,7 +578,7 @@ const ArticleJsonImportModal: React.FC<{ onClose: () => void; onResult: (msg: st
           <div>
             <div className="flex items-center justify-between mb-1">
               <label className={labelCls}>JSON du / des article(s)</label>
-              <button onClick={() => setJsonStr(EXAMPLE_ARTICLE_JSON)} className={`text-[10px] font-bold uppercase tracking-wider ${muted} hover:text-[#BEF221] transition-colors`}>
+              <button onClick={() => setJsonStr(EXAMPLE_ARTICLE_JSON)} className={`text-[10px] font-bold uppercase tracking-wider ${muted} hover:text-[#6FA300] transition-colors`}>
                 Charger un exemple
               </button>
             </div>
@@ -592,7 +592,7 @@ const ArticleJsonImportModal: React.FC<{ onClose: () => void; onResult: (msg: st
             />
           </div>
 
-          <div className="text-xs p-3 rounded-lg border bg-white/5 border-white/10 text-white/60">
+          <div className="text-xs p-3 rounded-lg border bg-slate-100 border-slate-200 text-slate-600">
             <p className="font-bold mb-1">Format attendu :</p>
             <ul className="list-disc list-inside space-y-0.5">
               <li><strong>slug</strong>, <strong>titleFr</strong>, <strong>contentFr</strong> requis</li>
@@ -605,16 +605,16 @@ const ArticleJsonImportModal: React.FC<{ onClose: () => void; onResult: (msg: st
             </ul>
           </div>
 
-          {error && <div className="text-sm px-4 py-3 rounded-xl border bg-red-500/10 border-red-500/30 text-red-400">❌ {error}</div>}
+          {error && <div className="text-sm px-4 py-3 rounded-xl border bg-red-500/10 border-red-500/30 text-red-600">❌ {error}</div>}
         </div>
 
-        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 px-6 py-4 border-t bg-[#0F0A2E] border-white/8">
+        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 px-6 py-4 border-t bg-[#0F0A2E] border-slate-200">
           <label className={`flex items-center gap-2 text-xs font-bold cursor-pointer ${muted}`} title="Si coché, un slug existant est MIS À JOUR au lieu d'être ignoré">
             <input type="checkbox" checked={overwrite} onChange={(e) => setOverwrite(e.target.checked)} />
             Écraser si le slug existe déjà
           </label>
           <div className="flex items-center gap-3">
-            <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm font-bold text-white/60 hover:text-white hover:bg-white/8 transition-colors">
+            <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
               Annuler
             </button>
             <button

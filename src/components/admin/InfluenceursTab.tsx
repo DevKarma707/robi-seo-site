@@ -11,7 +11,7 @@ import {
   type Influencer, type InfluencerPlatform, type InfluencerStatus, type AttributionStats,
 } from "@/lib/influencers";
 import { fetchAttributionStats } from "@/lib/adminApi";
-import { ACCENT, btnGhost, btnPill, btnPrimary, card, input } from "./ui";
+import { ACCENT, ACCENT_INK, btnGhost, btnPill, btnPrimary, card, input } from "./ui";
 
 const EMPTY: Omit<Influencer, "id"> = {
   name: "", platform: "instagram", status: "prospect", discountPct: 20, commissionPct: 20,
@@ -102,10 +102,10 @@ const InfluenceursTab: React.FC = () => {
       {/* Bandeau explicatif */}
       <div className={`${card} p-5`}>
         <div className="flex items-start gap-2.5">
-          <Ticket size={16} style={{ color: ACCENT }} className="mt-0.5 flex-shrink-0" />
+          <Ticket size={16} style={{ color: ACCENT_INK }} className="mt-0.5 flex-shrink-0" />
           <div className="space-y-1.5">
-            <p className="font-black text-sm text-white">Comment l&apos;attribution fonctionne</p>
-            <p className="text-[11px] text-white/55 leading-relaxed">
+            <p className="font-black text-sm text-slate-900">Comment l&apos;attribution fonctionne</p>
+            <p className="text-[11px] text-slate-600 leading-relaxed">
               Tu crées un code promo dans Polar (Products → Discounts), tu le colles ici, et
               chaque achat effectué avec ce code est automatiquement rattaché à l&apos;influenceur
               par le webhook. Aucune plateforme d&apos;affiliation, aucun abonnement à payer.
@@ -118,9 +118,9 @@ const InfluenceursTab: React.FC = () => {
       </div>
 
       {statsError && (
-        <div className="rounded-2xl border border-amber-400/25 bg-amber-400/[0.06] p-4 flex items-start gap-2.5">
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-4 flex items-start gap-2.5">
           <AlertTriangle size={15} className="text-amber-400 mt-0.5 flex-shrink-0" />
-          <p className="text-[11px] text-white/60">
+          <p className="text-[11px] text-slate-600">
             Ventes attribuées indisponibles : {statsError}. Les fiches restent modifiables.
           </p>
         </div>
@@ -129,51 +129,51 @@ const InfluenceursTab: React.FC = () => {
       {/* KPIs */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className={`${card} p-4`}>
-          <p className="text-[10px] font-bold uppercase tracking-widest mb-1 text-white/40">Ventes attribuées</p>
-          <span className="font-black text-3xl text-white">{totals.sales}</span>
+          <p className="text-[10px] font-bold uppercase tracking-widest mb-1 text-slate-500">Ventes attribuées</p>
+          <span className="font-black text-3xl text-slate-900">{totals.sales}</span>
         </div>
         <div className={`${card} p-4`}>
-          <p className="text-[10px] font-bold uppercase tracking-widest mb-1 text-white/40">CA net généré</p>
-          <span className="font-black text-3xl" style={{ color: ACCENT }}>{euros(totals.net)}</span>
+          <p className="text-[10px] font-bold uppercase tracking-widest mb-1 text-slate-500">CA net généré</p>
+          <span className="font-black text-3xl" style={{ color: ACCENT_INK }}>{euros(totals.net)}</span>
         </div>
         <div className={`${card} p-4`}>
-          <p className="text-[10px] font-bold uppercase tracking-widest mb-1 text-white/40">Commissions dues</p>
-          <span className="font-black text-3xl text-white">{euros(totals.commission)}</span>
+          <p className="text-[10px] font-bold uppercase tracking-widest mb-1 text-slate-500">Commissions dues</p>
+          <span className="font-black text-3xl text-slate-900">{euros(totals.commission)}</span>
         </div>
         <div className={`${card} p-4`}>
-          <p className="text-[10px] font-bold uppercase tracking-widest mb-1 text-white/40">Partenaires actifs</p>
-          <span className="font-black text-3xl text-white">{counts.actif || 0}</span>
-          <p className="text-[11px] mt-1 text-white/40">{rows.length} fiche(s) au total</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest mb-1 text-slate-500">Partenaires actifs</p>
+          <span className="font-black text-3xl text-slate-900">{counts.actif || 0}</span>
+          <p className="text-[11px] mt-1 text-slate-500">{rows.length} fiche(s) au total</p>
         </div>
       </div>
 
       {/* Alertes de cohérence */}
       {totals.unmatched > 0 && (
-        <div className="rounded-2xl border border-amber-400/25 bg-amber-400/[0.06] p-4 flex items-start gap-2.5">
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-4 flex items-start gap-2.5">
           <AlertTriangle size={15} className="text-amber-400 mt-0.5 flex-shrink-0" />
-          <p className="text-[11px] text-white/60">
-            <span className="text-amber-300 font-bold">{totals.unmatched} partenaire(s) actif(s) sans aucune vente rattachée.</span>{" "}
+          <p className="text-[11px] text-slate-600">
+            <span className="text-amber-600 font-bold">{totals.unmatched} partenaire(s) actif(s) sans aucune vente rattachée.</span>{" "}
             Soit le code n&apos;a pas encore servi, soit il ne correspond pas à celui de Polar —
             vérifie l&apos;orthographe exacte ou colle l&apos;id du discount.
           </p>
         </div>
       )}
       {orphans.length > 0 && (
-        <div className="rounded-2xl border border-amber-400/25 bg-amber-400/[0.06] p-4">
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-4">
           <div className="flex items-start gap-2.5">
             <AlertTriangle size={15} className="text-amber-400 mt-0.5 flex-shrink-0" />
             <div>
-              <p className="text-[11px] text-amber-300 font-bold mb-1">
+              <p className="text-[11px] text-amber-600 font-bold mb-1">
                 Des ventes utilisent un code qu&apos;aucune fiche ne revendique
               </p>
               <div className="space-y-0.5">
                 {orphans.map((o) => (
-                  <p key={o.discountId} className="text-[11px] text-white/60 font-mono">
+                  <p key={o.discountId} className="text-[11px] text-slate-600 font-mono">
                     {o.code || o.discountId} · {o.sales} vente(s) · {euros(o.netAmount)}
                   </p>
                 ))}
               </div>
-              <p className="text-[10px] text-white/35 mt-1.5">
+              <p className="text-[10px] text-slate-500 mt-1.5">
                 Crée la fiche correspondante pour que la commission soit calculée.
               </p>
             </div>
@@ -186,8 +186,8 @@ const InfluenceursTab: React.FC = () => {
         {INFLUENCER_PIPELINE.map((s) => (
           <div key={s} className={`${card} px-3 py-2 flex items-center gap-2`}>
             <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: STATUS_META[s].color }} />
-            <span className="text-[11px] text-white/60">{STATUS_META[s].label}</span>
-            <span className="text-[13px] font-black text-white">{counts[s] || 0}</span>
+            <span className="text-[11px] text-slate-600">{STATUS_META[s].label}</span>
+            <span className="text-[13px] font-black text-slate-900">{counts[s] || 0}</span>
           </div>
         ))}
         <button onClick={() => setDraft({ ...EMPTY })} className={`${btnPrimary} ml-auto`}>
@@ -198,10 +198,10 @@ const InfluenceursTab: React.FC = () => {
       {/* Formulaire de création */}
       {draft && (
         <div className={`${card} p-5 space-y-4`}>
-          <p className="text-xs font-black uppercase tracking-widest text-white">Nouvel influenceur</p>
+          <p className="text-xs font-black uppercase tracking-widest text-slate-900">Nouvel influenceur</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Nom *</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Nom *</label>
               <input
                 className={input} value={draft.name}
                 onChange={(e) => setDraft({ ...draft, name: e.target.value })}
@@ -209,37 +209,37 @@ const InfluenceursTab: React.FC = () => {
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Pseudo</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Pseudo</label>
               <input className={input} value={draft.handle || ""} onChange={(e) => setDraft({ ...draft, handle: e.target.value })} placeholder="@mariedupont" />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Plateforme</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Plateforme</label>
               <select className={input} value={draft.platform} onChange={(e) => setDraft({ ...draft, platform: e.target.value as InfluencerPlatform })}>
                 {PLATFORMS.map((p) => <option key={p} value={p}>{PLATFORM_META[p].label}</option>)}
               </select>
             </div>
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Abonnés</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Abonnés</label>
               <input type="number" className={input} value={draft.audience ?? ""} onChange={(e) => setDraft({ ...draft, audience: e.target.value ? Number(e.target.value) : undefined })} />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Email</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Email</label>
               <input className={input} value={draft.email || ""} onChange={(e) => setDraft({ ...draft, email: e.target.value })} />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Lien</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Lien</label>
               <input className={input} value={draft.url || ""} onChange={(e) => setDraft({ ...draft, url: e.target.value })} placeholder="instagram.com/…" />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Remise client (%)</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Remise client (%)</label>
               <input type="number" className={input} value={draft.discountPct ?? ""} onChange={(e) => setDraft({ ...draft, discountPct: Number(e.target.value) })} />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Commission (%)</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Commission (%)</label>
               <input type="number" className={input} value={draft.commissionPct ?? ""} onChange={(e) => setDraft({ ...draft, commissionPct: Number(e.target.value) })} />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Code promo</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Code promo</label>
               <div className="flex gap-1.5">
                 <input className={input} value={draft.promoCode || ""} onChange={(e) => setDraft({ ...draft, promoCode: e.target.value.toUpperCase() })} placeholder="MARIE20" />
                 <button
@@ -252,7 +252,7 @@ const InfluenceursTab: React.FC = () => {
               </div>
             </div>
           </div>
-          <p className="text-[10px] text-white/30">
+          <p className="text-[10px] text-slate-400">
             Le code doit exister à l&apos;identique dans Polar (Products → Discounts) pour que
             l&apos;attribution fonctionne.
           </p>
@@ -266,9 +266,9 @@ const InfluenceursTab: React.FC = () => {
       {/* Liste */}
       {rows.length === 0 ? (
         <div className={`${card} p-8 text-center`}>
-          <Megaphone size={24} className="mx-auto mb-3 text-white/20" />
-          <p className="text-sm text-white/50">Aucun influenceur pour l&apos;instant.</p>
-          <p className="text-[11px] text-white/30 mt-1">
+          <Megaphone size={24} className="mx-auto mb-3 text-slate-400" />
+          <p className="text-sm text-slate-600">Aucun influenceur pour l&apos;instant.</p>
+          <p className="text-[11px] text-slate-400 mt-1">
             Tu peux aussi les prospecter depuis l&apos;onglet Acquisition (segment « Influenceurs »)
             puis convertir la fiche ici.
           </p>
@@ -278,9 +278,9 @@ const InfluenceursTab: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-white/[0.06]">
+                <tr className="border-b border-slate-200">
                   {["Influenceur", "Code", "Ventes", "CA net", "Commission", "Statut"].map((h) => (
-                    <th key={h} className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-4 py-3 whitespace-nowrap">{h}</th>
+                    <th key={h} className="text-[10px] font-bold uppercase tracking-widest text-slate-500 px-4 py-3 whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -291,14 +291,14 @@ const InfluenceursTab: React.FC = () => {
                     <tr
                       key={inf.id}
                       onClick={() => setSelectedId(selectedId === inf.id ? null : inf.id!)}
-                      className="border-b border-white/[0.04] hover:bg-white/[0.03] cursor-pointer"
+                      className="border-b border-slate-200 hover:bg-slate-50 cursor-pointer"
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: PLATFORM_META[inf.platform].color }} />
                           <div className="min-w-0">
-                            <p className="text-[13px] font-bold text-white truncate">{inf.name}</p>
-                            <p className="text-[10px] text-white/35 truncate">
+                            <p className="text-[13px] font-bold text-slate-900 truncate">{inf.name}</p>
+                            <p className="text-[10px] text-slate-500 truncate">
                               {[inf.handle, PLATFORM_META[inf.platform].label, inf.audience ? `${inf.audience.toLocaleString("fr-FR")} abonnés` : null].filter(Boolean).join(" · ")}
                             </p>
                           </div>
@@ -307,13 +307,13 @@ const InfluenceursTab: React.FC = () => {
                       <td className="px-4 py-3">
                         {inf.promoCode ? (
                           <code className="text-[11px] font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: `${ACCENT}1a`, color: ACCENT }}>{inf.promoCode}</code>
-                        ) : <span className="text-[11px] text-white/25">—</span>}
+                        ) : <span className="text-[11px] text-slate-400">—</span>}
                       </td>
-                      <td className="px-4 py-3 text-[13px] font-black text-white">
+                      <td className="px-4 py-3 text-[13px] font-black text-slate-900">
                         {p.sales}
-                        {p.refunded > 0 && <span className="text-[10px] text-red-400 font-bold ml-1">−{p.refunded}</span>}
+                        {p.refunded > 0 && <span className="text-[10px] text-red-600 font-bold ml-1">−{p.refunded}</span>}
                       </td>
-                      <td className="px-4 py-3 text-[13px] font-bold text-white/80">{euros(p.netAmount)}</td>
+                      <td className="px-4 py-3 text-[13px] font-bold text-slate-700">{euros(p.netAmount)}</td>
                       <td className="px-4 py-3 text-[13px] font-black" style={{ color: p.commissionDue > 0 ? ACCENT : "rgba(255,255,255,0.25)" }}>
                         {euros(p.commissionDue)}
                       </td>
@@ -336,8 +336,8 @@ const InfluenceursTab: React.FC = () => {
         <div className={`${card} p-5 space-y-4`}>
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="font-black text-lg text-white truncate">{selected.name}</p>
-              <p className="text-[11px] text-white/40">
+              <p className="font-black text-lg text-slate-900 truncate">{selected.name}</p>
+              <p className="text-[11px] text-slate-500">
                 {[selected.handle, PLATFORM_META[selected.platform].label, selected.email].filter(Boolean).join(" · ") || "—"}
               </p>
             </div>
@@ -349,7 +349,7 @@ const InfluenceursTab: React.FC = () => {
               )}
               <button
                 onClick={async () => { if (confirm(`Supprimer ${selected.name} ?`)) { await deleteInfluencer(selected.id!); setSelectedId(null); } }}
-                className={`${btnPill} bg-red-500/15 text-red-400 hover:bg-red-500/25`}
+                className={`${btnPill} bg-red-500/15 text-red-600 hover:bg-red-500/25`}
               >
                 <Trash2 size={12} />
               </button>
@@ -362,7 +362,7 @@ const InfluenceursTab: React.FC = () => {
               <button
                 key={s}
                 onClick={() => patch(selected.id!, { status: s, ...(s === "actif" && !selected.signedAt ? { signedAt: new Date().toISOString().slice(0, 10) } : {}) })}
-                className={`${btnPill} ${selected.status === s ? "text-black" : "bg-white/10 text-white/60 hover:bg-white/20"}`}
+                className={`${btnPill} ${selected.status === s ? "text-black" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
                 style={selected.status === s ? { backgroundColor: STATUS_META[s].color } : undefined}
               >
                 {STATUS_META[s].label}
@@ -373,7 +373,7 @@ const InfluenceursTab: React.FC = () => {
           {/* Réglages du partenariat */}
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Code promo</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Code promo</label>
               <input
                 className={input}
                 defaultValue={selected.promoCode || ""}
@@ -382,7 +382,7 @@ const InfluenceursTab: React.FC = () => {
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Id discount Polar</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Id discount Polar</label>
               <input
                 className={input}
                 defaultValue={selected.polarDiscountId || ""}
@@ -391,11 +391,11 @@ const InfluenceursTab: React.FC = () => {
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Remise client (%)</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Remise client (%)</label>
               <input type="number" className={input} defaultValue={selected.discountPct ?? ""} onBlur={(e) => patch(selected.id!, { discountPct: Number(e.target.value) || undefined })} />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-white/50 block mb-1.5">Commission (%)</label>
+              <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Commission (%)</label>
               <input type="number" className={input} defaultValue={selected.commissionPct ?? ""} onBlur={(e) => patch(selected.id!, { commissionPct: Number(e.target.value) || undefined })} />
             </div>
           </div>
@@ -405,28 +405,28 @@ const InfluenceursTab: React.FC = () => {
             const p = perfOf(selected, stats);
             return (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="rounded-xl bg-white/[0.04] p-3">
-                  <p className="text-[10px] uppercase tracking-widest text-white/40 mb-0.5">Ventes</p>
-                  <p className="text-xl font-black text-white">{p.sales}</p>
+                <div className="rounded-xl bg-slate-50 p-3">
+                  <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Ventes</p>
+                  <p className="text-xl font-black text-slate-900">{p.sales}</p>
                 </div>
-                <div className="rounded-xl bg-white/[0.04] p-3">
-                  <p className="text-[10px] uppercase tracking-widest text-white/40 mb-0.5">Remboursées</p>
-                  <p className="text-xl font-black text-white">{p.refunded}</p>
+                <div className="rounded-xl bg-slate-50 p-3">
+                  <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Remboursées</p>
+                  <p className="text-xl font-black text-slate-900">{p.refunded}</p>
                 </div>
-                <div className="rounded-xl bg-white/[0.04] p-3">
-                  <p className="text-[10px] uppercase tracking-widest text-white/40 mb-0.5">CA net</p>
-                  <p className="text-xl font-black text-white">{euros(p.netAmount)}</p>
+                <div className="rounded-xl bg-slate-50 p-3">
+                  <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">CA net</p>
+                  <p className="text-xl font-black text-slate-900">{euros(p.netAmount)}</p>
                 </div>
                 <div className="rounded-xl p-3" style={{ backgroundColor: `${ACCENT}12` }}>
-                  <p className="text-[10px] uppercase tracking-widest text-white/40 mb-0.5">À verser</p>
-                  <p className="text-xl font-black" style={{ color: ACCENT }}>{euros(p.commissionDue)}</p>
+                  <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">À verser</p>
+                  <p className="text-xl font-black" style={{ color: ACCENT_INK }}>{euros(p.commissionDue)}</p>
                 </div>
               </div>
             );
           })()}
 
           <div>
-            <label className="text-[11px] font-bold text-white/50 block mb-1.5">Notes</label>
+            <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Notes</label>
             <textarea
               className={`${input} h-20`}
               defaultValue={selected.notes || ""}
@@ -438,7 +438,7 @@ const InfluenceursTab: React.FC = () => {
       )}
 
       <div className="flex items-center justify-between">
-        <p className="text-[10px] text-white/25">
+        <p className="text-[10px] text-slate-400">
           {stats ? `Attribution calculée ${new Date(stats.computedAt).toLocaleString("fr-FR")}` : "Attribution non chargée"}
         </p>
         <button

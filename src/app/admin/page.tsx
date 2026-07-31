@@ -17,7 +17,7 @@ import InfluenceursTab from "@/components/admin/InfluenceursTab";
 import KanbanTab from "@/components/admin/KanbanTab";
 import FichiersTab from "@/components/admin/FichiersTab";
 import ReseauxTab from "@/components/admin/ReseauxTab";
-import { focusRing } from "@/components/admin/ui";
+import { focusRing, focusRingDark } from "@/components/admin/ui";
 
 type Tab = "pilotage" | "kanban" | "reseaux" | "fichiers" | "sante" | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
 
@@ -168,10 +168,10 @@ export default function AdminPage() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold transition-all ${focusRing} ${tab === t.id ? navActive : navItem}`}
+              className={`a-display w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[15px] font-semibold transition-all ${focusRingDark} ${tab === t.id ? navActive : navItem}`}
             >
               {t.icon}
-              <span className="flex-1 text-left font-bold tracking-wide">{t.label}</span>
+              <span className="flex-1 text-left font-semibold tracking-[-0.01em]">{t.label}</span>
               {t.badge ? (
                 <span className="min-w-[20px] h-5 px-1 rounded-full bg-[#BEF221] text-black text-[10px] flex items-center justify-center font-black">{t.badge}</span>
               ) : null}
@@ -182,11 +182,11 @@ export default function AdminPage() {
         <div className="p-3 border-t border-white/[0.06] space-y-0.5">
           {/* Link plutôt que <a> : un href brut rechargeait toute l'app
               (flash blanc + re-auth Firebase) pour revenir sur le site. */}
-          <Link href="/" className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold transition-all ${focusRing} ${navItem}`}>
+          <Link href="/" className={`a-display w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[15px] font-semibold transition-all ${focusRingDark} ${navItem}`}>
             <ArrowUpRight size={17} />
             <span className="font-bold tracking-wide">Voir le site</span>
           </Link>
-          <button onClick={() => signOut()} className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-red-400 hover:bg-red-400/10 transition-all ${focusRing}`}>
+          <button onClick={() => signOut()} className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl a-display text-[15px] font-semibold text-red-400 hover:bg-red-400/10 transition-all ${focusRingDark}`}>
             <LogOut size={17} />
             <span className="font-bold tracking-wide">Déconnexion</span>
           </button>
@@ -202,7 +202,7 @@ export default function AdminPage() {
           {/* Le filet bas ancre le titre : sur 1600px de large, un titre sans
               séparateur flotte au-dessus du contenu au lieu de le coiffer. */}
           <div className="mb-8">
-            <h1 className="font-black text-[32px] leading-none tracking-[-0.02em] text-white">{NAV.find((t) => t.id === tab)?.label}</h1>
+            <h1 className="a-display font-extrabold text-[34px] leading-none tracking-[-0.025em] text-white">{NAV.find((t) => t.id === tab)?.label}</h1>
             <p className="text-[13px] mt-2.5 text-white/40">{subtitle[tab]}</p>
           </div>
           {tab === "pilotage" && <PilotageTab visits={visits} />}

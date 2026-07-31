@@ -8,7 +8,7 @@ import {
   listSharedFiles, uploadSharedFile, deleteSharedFile, humanSize, type SharedFile,
 } from "@/lib/sharedFiles";
 import { runnerAvailable, syncSharedFiles, getToken, setToken } from "@/lib/taskRunner";
-import { ACCENT, btn, btnGhost, btnPrimary, card, focusRing, sectionTitle } from "./ui";
+import { ACCENT, ACCENT_INK, btn, btnGhost, btnPrimary, card, focusRing, sectionTitle } from "./ui";
 
 const FichiersTab: React.FC = () => {
   const [files, setFiles] = useState<SharedFile[]>([]);
@@ -92,7 +92,7 @@ const FichiersTab: React.FC = () => {
 
   if (loading && !files.length && !error) {
     return (
-      <div className="flex items-center gap-2 text-white/40 text-sm py-10">
+      <div className="flex items-center gap-2 text-white/50 text-sm py-10">
         <RefreshCw size={16} className="animate-spin" /> Chargement du dossier…
       </div>
     );
@@ -106,17 +106,17 @@ const FichiersTab: React.FC = () => {
         onDragLeave={() => setDragging(false)}
         onDrop={(e) => { e.preventDefault(); setDragging(false); upload(e.dataTransfer.files); }}
         className={`rounded-2xl border border-dashed p-8 text-center transition-colors ${
-          dragging ? "border-[#BEF221]/50 bg-[#BEF221]/[0.04]" : "border-white/[0.12] bg-white/[0.02]"
+          dragging ? "border-[#BEF221]/50 bg-[#BEF221]/[0.04]" : "border-white/[0.12] bg-slate-50"
         }`}
       >
-        <Upload size={22} className="mx-auto mb-2 text-white/30" />
-        <p className="text-sm text-white/60">
+        <Upload size={22} className="mx-auto mb-2 text-slate-400" />
+        <p className="text-sm text-slate-600">
           Dépose tes fichiers ici, ou{" "}
-          <button onClick={() => fileInput.current?.click()} className={`underline text-[#BEF221] ${focusRing}`}>
+          <button onClick={() => fileInput.current?.click()} className={`underline text-[#6FA300] ${focusRing}`}>
             choisis-les
           </button>
         </p>
-        <p className="text-[11px] text-white/25 mt-1.5">
+        <p className="text-[11px] text-slate-400 mt-1.5">
           Exports, captures, documents de marque… 50 Mo par fichier. Lecture réservée à ton compte admin.
         </p>
         <input
@@ -131,12 +131,12 @@ const FichiersTab: React.FC = () => {
       {/* Synchro */}
       <div className={`${card} p-5`}>
         <div className="flex items-center gap-2 mb-2">
-          <FolderSync size={15} style={{ color: ACCENT }} />
+          <FolderSync size={15} style={{ color: ACCENT_INK }} />
           <p className={sectionTitle}>Accès de Claude</p>
         </div>
-        <p className="text-[12px] text-white/50 leading-relaxed">
+        <p className="text-[12px] text-slate-600 leading-relaxed">
           Claude Code tourne sur ton Mac, pas dans le navigateur : il ne voit pas ce bucket.
-          La synchro descend le dossier dans <code className="text-[#BEF221]">~/Desktop/ROBI_PARTAGE</code>,
+          La synchro descend le dossier dans <code className="text-[#6FA300]">~/Desktop/ROBI_PARTAGE</code>,
           où il le lit comme n&apos;importe quel fichier de projet.
         </p>
         <div className="flex items-center gap-2 mt-3">
@@ -146,7 +146,7 @@ const FichiersTab: React.FC = () => {
             </span>
           </button>
           {!hasRunner && (
-            <span className="text-[11px] text-amber-300/70 flex items-center gap-1">
+            <span className="text-[11px] text-amber-600/70 flex items-center gap-1">
               <AlertTriangle size={11} /> Runner éteint — lance `npm run runner`
             </span>
           )}
@@ -156,15 +156,15 @@ const FichiersTab: React.FC = () => {
       {/* Liste */}
       {error ? (
         <div className={`${card} p-5 space-y-2`}>
-          <div className="flex items-center gap-2 text-red-400">
+          <div className="flex items-center gap-2 text-red-600">
             <AlertTriangle size={16} />
             <p className="font-black text-sm">Dossier illisible</p>
           </div>
-          <p className="text-xs text-white/50">{error}</p>
+          <p className="text-xs text-slate-600">{error}</p>
           <button onClick={load} className={`${btn} mt-2`}>Réessayer</button>
         </div>
       ) : files.length === 0 ? (
-        <p className="text-[12px] text-white/25 px-1 py-6 text-center">
+        <p className="text-[12px] text-slate-400 px-1 py-6 text-center">
           Aucun fichier pour l&apos;instant.
         </p>
       ) : (
@@ -172,12 +172,12 @@ const FichiersTab: React.FC = () => {
           {files.map((f) => (
             <div
               key={f.path}
-              className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.05] last:border-0 hover:bg-white/[0.03] transition-colors"
+              className="flex items-center gap-3 px-4 py-3 border-b border-slate-200 last:border-0 hover:bg-slate-50 transition-colors"
             >
-              <FileText size={15} className="text-white/25 flex-shrink-0" />
+              <FileText size={15} className="text-slate-400 flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] font-semibold text-white truncate">{f.name}</p>
-                <p className="text-[10px] text-white/30">
+                <p className="text-[13px] font-semibold text-slate-900 truncate">{f.name}</p>
+                <p className="text-[10px] text-slate-400">
                   {humanSize(f.size)}
                   {f.updated && ` · ${new Date(f.updated).toLocaleDateString("fr-FR")}`}
                 </p>
@@ -188,7 +188,7 @@ const FichiersTab: React.FC = () => {
               <button
                 onClick={() => remove(f)}
                 disabled={busy}
-                className={`${btnGhost} !bg-red-500/15 !text-red-400 hover:!bg-red-500/25`}
+                className={`${btnGhost} !bg-red-500/15 !text-red-600 hover:!bg-red-500/25`}
                 title="Supprimer"
               >
                 <Trash2 size={11} />
