@@ -17,6 +17,7 @@ import InfluenceursTab from "@/components/admin/InfluenceursTab";
 import KanbanTab from "@/components/admin/KanbanTab";
 import FichiersTab from "@/components/admin/FichiersTab";
 import ReseauxTab from "@/components/admin/ReseauxTab";
+import ThemePicker from "@/components/admin/ThemePicker";
 import { focusRing, focusRingDark } from "@/components/admin/ui";
 
 type Tab = "pilotage" | "kanban" | "reseaux" | "fichiers" | "sante" | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
@@ -180,6 +181,7 @@ export default function AdminPage() {
         </nav>
 
         <div className="p-3 border-t border-white/[0.06] space-y-0.5">
+          <ThemePicker />
           {/* Link plutôt que <a> : un href brut rechargeait toute l'app
               (flash blanc + re-auth Firebase) pour revenir sur le site. */}
           <Link href="/" className={`a-display w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[15px] font-semibold transition-all ${focusRingDark} ${navItem}`}>

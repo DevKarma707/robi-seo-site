@@ -200,7 +200,7 @@ const ReseauxTab: React.FC = () => {
         <div className={`${card} p-5 space-y-3`}>
           <p className={sectionTitle}>Import JSON</p>
           <p className="text-[11px] text-slate-500 leading-relaxed">
-            Colle la sortie du skill <code className="text-[#6FA300]">robi-social-media</code>. Les posts déjà
+            Colle la sortie du skill <code className="text-[var(--admin-ink)]">robi-social-media</code>. Les posts déjà
             présents (même date, même réseau, même début de texte) sont ignorés — relancer le skill
             sur un mois déjà importé ne duplique rien.
           </p>
@@ -238,11 +238,11 @@ const ReseauxTab: React.FC = () => {
                 key={date}
                 className={`min-h-[92px] rounded-xl border p-1.5 transition-colors ${
                   isToday
-                    ? "border-[#BEF221]/40 bg-[#BEF221]/[0.06] shadow-[inset_0_1px_0_rgba(190,242,33,0.18)]"
+                    ? "border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.06] shadow-[inset_0_1px_0_rgba(190,242,33,0.18)]"
                     : "border-slate-200 bg-slate-50 hover:border-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
                 }`}
               >
-                <p className={`text-[10px] font-bold mb-1 px-0.5 ${isToday ? "text-[#6FA300]" : "text-slate-400"}`}>
+                <p className={`text-[10px] font-bold mb-1 px-0.5 ${isToday ? "text-[var(--admin-ink)]" : "text-slate-400"}`}>
                   {date.slice(8)}
                 </p>
                 <div className="space-y-1">
@@ -326,7 +326,7 @@ const ReseauxTab: React.FC = () => {
             ) : (
               <>
                 <p className="text-[13px] text-slate-700 whitespace-pre-wrap leading-relaxed">{p.caption}</p>
-                {p.hashtags && <p className="text-[12px] text-[#6FA300]/70">{p.hashtags}</p>}
+                {p.hashtags && <p className="text-[12px] text-[var(--admin-ink)]/70">{p.hashtags}</p>}
                 {p.visual && (
                   <p className="text-[11px] text-slate-500 leading-relaxed">
                     <span className="uppercase tracking-widest text-slate-400">Visuel · </span>{p.visual}

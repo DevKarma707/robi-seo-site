@@ -32,17 +32,17 @@ export const cardInteractive = `${card} a-card-hover`;
  * l'anneau bave sur la bordure de la carte.
  */
 export const focusRing =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6FA300] focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--admin-ink)] focus-visible:ring-offset-2 focus-visible:ring-offset-white";
 
 /** Anneau de focus sur fond sombre (sidebar, coquille). */
 export const focusRingDark =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#BEF221]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0425]";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--admin-shell)]";
 
 /** Bouton secondaire (Recalculer, Réessayer, filtres…). */
 export const btn = `inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 transition-colors hover:bg-slate-200 disabled:opacity-40 ${focusRing}`;
 
 /** Bouton principal lime. */
-export const btnAccent = `inline-flex items-center gap-1.5 text-xs font-black px-3.5 py-2 rounded-xl bg-[#0D0630] text-[#BEF221] transition-opacity hover:opacity-90 disabled:opacity-40 ${focusRing}`;
+export const btnAccent = `inline-flex items-center gap-1.5 text-xs font-black px-3.5 py-2 rounded-xl bg-[var(--color-primary)] text-[var(--color-accent)] transition-opacity hover:opacity-90 disabled:opacity-40 ${focusRing}`;
 
 /**
  * Petits boutons-pastilles des barres d'action (Kanban, Acquisition,
@@ -53,7 +53,7 @@ export const btnAccent = `inline-flex items-center gap-1.5 text-xs font-black px
 export const btnPill = `px-3 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all disabled:opacity-30 disabled:cursor-not-allowed ${focusRing}`;
 
 export const btnGhost = `${btnPill} bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200`;
-export const btnPrimary = `${btnPill} bg-[#0D0630] text-[#BEF221] hover:bg-[#18314F]`;
+export const btnPrimary = `${btnPill} bg-[var(--color-primary)] text-[var(--color-accent)] hover:bg-[var(--color-secondary)]`;
 
 /**
  * Champs de formulaire. `fieldBase` était copié à l'identique dans
@@ -64,7 +64,7 @@ export const btnPrimary = `${btnPill} bg-[#0D0630] text-[#BEF221] hover:bg-[#183
  * qui tranche. D'où deux classes distinctes plutôt qu'une surcharge.
  */
 const fieldBase =
-  `px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 text-sm outline-none transition-colors focus:border-[#6FA300] focus:bg-white`;
+  `px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 text-sm outline-none transition-colors focus:border-[var(--admin-ink)] focus:bg-white`;
 
 export const input = `w-full ${fieldBase}`;
 export const select = `w-auto ${fieldBase}`;
@@ -82,7 +82,7 @@ export const kpiLabel = "text-[10px] font-bold uppercase tracking-[0.14em] text-
  */
 export const kpiValue = "a-display font-extrabold text-[34px] leading-none tracking-tight tabular-nums a-figure";
 
-export const ACCENT = "#BEF221";
+export const ACCENT = "var(--color-accent)";
 
 /**
  * Lime lisible sur fond clair. `#BEF221` sur blanc tombe à ~1,3:1 de
@@ -90,4 +90,4 @@ export const ACCENT = "#BEF221";
  * ACCENT pour les aplats (barres, badges sur fond sombre) et cette encre
  * plus dense dès que la couleur porte du sens sur une carte blanche.
  */
-export const ACCENT_INK = "#6FA300";
+export const ACCENT_INK = "var(--admin-ink)";

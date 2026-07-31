@@ -106,13 +106,13 @@ const FichiersTab: React.FC = () => {
         onDragLeave={() => setDragging(false)}
         onDrop={(e) => { e.preventDefault(); setDragging(false); upload(e.dataTransfer.files); }}
         className={`rounded-2xl border border-dashed p-8 text-center transition-colors ${
-          dragging ? "border-[#BEF221]/50 bg-[#BEF221]/[0.04]" : "border-white/[0.12] bg-slate-50"
+          dragging ? "border-[var(--color-accent)]/50 bg-[var(--color-accent)]/[0.04]" : "border-white/[0.12] bg-slate-50"
         }`}
       >
         <Upload size={22} className="mx-auto mb-2 text-slate-400" />
         <p className="text-sm text-slate-600">
           Dépose tes fichiers ici, ou{" "}
-          <button onClick={() => fileInput.current?.click()} className={`underline text-[#6FA300] ${focusRing}`}>
+          <button onClick={() => fileInput.current?.click()} className={`underline text-[var(--admin-ink)] ${focusRing}`}>
             choisis-les
           </button>
         </p>
@@ -136,7 +136,7 @@ const FichiersTab: React.FC = () => {
         </div>
         <p className="text-[12px] text-slate-600 leading-relaxed">
           Claude Code tourne sur ton Mac, pas dans le navigateur : il ne voit pas ce bucket.
-          La synchro descend le dossier dans <code className="text-[#6FA300]">~/Desktop/ROBI_PARTAGE</code>,
+          La synchro descend le dossier dans <code className="text-[var(--admin-ink)]">~/Desktop/ROBI_PARTAGE</code>,
           où il le lit comme n&apos;importe quel fichier de projet.
         </p>
         <div className="flex items-center gap-2 mt-3">

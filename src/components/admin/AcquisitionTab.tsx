@@ -192,7 +192,7 @@ const AcquisitionTab: React.FC = () => {
                 délivrabilité en jeu — si ce serveur est marqué comme spam,{" "}
                 <span className="text-slate-700">les factures de tes clients cessent d&apos;arriver</span>.
                 <br /><br />
-                Configure <code className="text-[#6FA300]">SMTP_OUTREACH_HOST / _PORT / _USER / _PASS / _FROM</code>{" "}
+                Configure <code className="text-[var(--admin-ink)]">SMTP_OUTREACH_HOST / _PORT / _USER / _PASS / _FROM</code>{" "}
                 sur un sous-domaine dédié (par ex. <code>mail.robi-app.com</code>) avec ses propres
                 SPF, DKIM et DMARC. En attendant, « Copier » et « Ouvrir dans le mail » fonctionnent.
               </p>
@@ -223,7 +223,7 @@ const AcquisitionTab: React.FC = () => {
           <Target size={15} style={{ color: ACCENT_INK }} />
           <p className="text-xs font-black uppercase tracking-widest text-slate-900">À faire aujourd&apos;hui</p>
           {today.length > 0 && (
-            <span className="ml-auto text-[10px] font-black px-2 py-0.5 rounded-full bg-[#BEF221] text-black">{today.length}</span>
+            <span className="ml-auto text-[10px] font-black px-2 py-0.5 rounded-full bg-[var(--color-accent)] text-[var(--color-text-on-accent)]">{today.length}</span>
           )}
         </div>
         {today.length === 0 ? (
@@ -280,7 +280,7 @@ const AcquisitionTab: React.FC = () => {
           <p className="text-xs font-black uppercase tracking-widest text-slate-900">Import JSON</p>
           <p className="text-[11px] text-slate-500">
             Même schéma que la skill d&apos;acquisition. Les doublons d&apos;email sont ignorés.
-            Champ obligatoire : <code className="text-[#6FA300]">company</code>.
+            Champ obligatoire : <code className="text-[var(--admin-ink)]">company</code>.
           </p>
           <textarea
             className={`${input} font-mono text-[11px] h-40`}

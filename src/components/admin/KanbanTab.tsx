@@ -323,7 +323,7 @@ const KanbanTab: React.FC = () => {
         <button
           onClick={() => setAutoOnly((v) => !v)}
           aria-pressed={autoOnly}
-          className={`${btnPill} ${autoOnly ? "bg-[#BEF221] text-black" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
+          className={`${btnPill} ${autoOnly ? "bg-[var(--color-accent)] text-[var(--color-text-on-accent)]" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
           title="N'afficher que les tâches que Claude peut mener seul"
         >
           <span className="flex items-center gap-1.5">
@@ -357,7 +357,7 @@ const KanbanTab: React.FC = () => {
               onDrop={(e) => { e.preventDefault(); drop(c); }}
               className={`rounded-2xl border p-3 transition-colors min-h-[200px] ${
                 dragOver === c
-                  ? "border-[#BEF221]/40 bg-[#BEF221]/[0.05] shadow-[inset_0_1px_0_rgba(190,242,33,0.15)]"
+                  ? "border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.05] shadow-[inset_0_1px_0_rgba(190,242,33,0.15)]"
                   : "border-slate-200 bg-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
               }`}
             >
@@ -532,7 +532,7 @@ const KanbanTab: React.FC = () => {
                           </button>
                           <button
                             onClick={() => setAutomatable(t.id!, !isAutomatable(t))}
-                            className={`${btnPill} ${isAutomatable(t) ? "bg-[#BEF221]/20 text-[#6FA300]" : "bg-slate-100 text-slate-600"}`}
+                            className={`${btnPill} ${isAutomatable(t) ? "bg-[var(--color-accent)]/20 text-[var(--admin-ink)]" : "bg-slate-100 text-slate-600"}`}
                             title="Claude peut-il la mener seul ?"
                           >
                             <span className="flex items-center gap-1"><Sparkles size={11} /> Auto</span>

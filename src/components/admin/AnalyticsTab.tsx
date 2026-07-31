@@ -85,7 +85,7 @@ const AnalyticsTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
               {delta !== null && delta !== undefined && (
                 <span
                   className={`flex items-center gap-0.5 text-xs font-bold mb-1 ${
-                    delta >= 0 ? "text-[#6FA300]" : "text-red-600"
+                    delta >= 0 ? "text-[var(--admin-ink)]" : "text-red-600"
                   }`}
                 >
                   {delta >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
@@ -101,7 +101,7 @@ const AnalyticsTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
       {/* Visiteurs 30 jours */}
       <div className={`${card} p-5`}>
         <div className="flex items-center gap-2 mb-4">
-          <BarChart2 size={15} className="text-[#6FA300]" />
+          <BarChart2 size={15} className="text-[var(--admin-ink)]" />
           <p className="text-xs font-black uppercase tracking-widest text-slate-900">Visiteurs · 30 derniers jours</p>
         </div>
         {visits.month === 0 ? (
@@ -115,7 +115,7 @@ const AnalyticsTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
         {/* Pages les plus visitées */}
         <div className={`${card} p-5`}>
           <div className="flex items-center gap-2 mb-4">
-            <Globe size={15} className="text-[#6FA300]" />
+            <Globe size={15} className="text-[var(--admin-ink)]" />
             <p className="text-xs font-black uppercase tracking-widest text-slate-900">Pages les plus visitées</p>
           </div>
           <div className="space-y-2.5">
@@ -133,7 +133,7 @@ const AnalyticsTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
         {/* Sources de trafic */}
         <div className={`${card} p-5`}>
           <div className="flex items-center gap-2 mb-4">
-            <BarChart2 size={15} className="text-[#6FA300]" />
+            <BarChart2 size={15} className="text-[var(--admin-ink)]" />
             <p className="text-xs font-black uppercase tracking-widest text-slate-900">Sources de trafic</p>
           </div>
           <div className="space-y-2.5">

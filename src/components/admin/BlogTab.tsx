@@ -59,7 +59,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Rechercher un article…"
-            className={`w-full pl-9 pr-3 py-2 rounded-xl border text-sm ${inputBg} placeholder:opacity-50 focus:border-[#BEF221]/40 focus:outline-none`}
+            className={`w-full pl-9 pr-3 py-2 rounded-xl border text-sm ${inputBg} placeholder:opacity-50 focus:border-[var(--color-accent)]/40 focus:outline-none`}
           />
         </div>
         <button
@@ -68,14 +68,14 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
             setImportMsg(null);
           }}
           title="Colle un JSON d'article (préparé par Claude) pour l'importer en 1 clic"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[#BEF221]/40 text-[#6FA300] text-sm font-bold hover:bg-[#BEF221]/10 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[var(--color-accent)]/40 text-[var(--admin-ink)] text-sm font-bold hover:bg-[var(--color-accent)]/10 transition-colors"
         >
           <FileJson size={16} />
           Importer JSON
         </button>
         <button
           onClick={() => setCreating(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#BEF221] text-black text-sm font-bold hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--color-accent)] text-[var(--color-text-on-accent)] text-sm font-bold hover:opacity-90 transition-opacity"
         >
           <Plus size={16} />
           Nouvel article
@@ -112,7 +112,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
         <span className={muted}>{articles.length} articles</span>
         <span className="text-green-400">• {articles.filter((a) => a.published).length} publiés</span>
         <span className="text-yellow-400">• {articles.filter((a) => !a.published).length} brouillons</span>
-        <span className="text-[#6FA300]">• {articles.filter((a) => a.featured).length} en vedette</span>
+        <span className="text-[var(--admin-ink)]">• {articles.filter((a) => a.featured).length} en vedette</span>
       </div>
 
       {/* Liste */}
@@ -141,7 +141,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className={`font-semibold text-sm truncate ${text}`}>{a.titleFr}</p>
-                    {a.featured && <Star size={11} className="text-[#6FA300] flex-shrink-0" />}
+                    {a.featured && <Star size={11} className="text-[var(--admin-ink)] flex-shrink-0" />}
                   </div>
                   <p className={`text-xs truncate ${muted}`}>
                     /{a.slug} · {a.category} · {a.date}
@@ -161,7 +161,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
                     onClick={() => handleToggleFeatured(a)}
                     title={a.featured ? "Retirer de la une" : "Mettre en vedette"}
                     className={`p-1.5 rounded-lg transition-colors ${
-                      a.featured ? "text-[#6FA300] hover:bg-[#BEF221]/10" : `${muted} hover:text-[#6FA300] hover:bg-[#BEF221]/10`
+                      a.featured ? "text-[var(--admin-ink)] hover:bg-[var(--color-accent)]/10" : `${muted} hover:text-[var(--admin-ink)] hover:bg-[var(--color-accent)]/10`
                     }`}
                   >
                     {a.featured ? <Star size={14} /> : <StarOff size={14} />}
@@ -186,7 +186,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
                   </a>
                   <button
                     onClick={() => setEditing(a)}
-                    className={`p-1.5 rounded-lg hover:bg-[#BEF221]/10 hover:text-[#6FA300] transition-colors ${muted}`}
+                    className={`p-1.5 rounded-lg hover:bg-[var(--color-accent)]/10 hover:text-[var(--admin-ink)] transition-colors ${muted}`}
                     title="Éditer"
                   >
                     <Edit2 size={14} />
@@ -284,7 +284,7 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
   const text = "text-slate-900";
   const muted = "text-slate-600";
   const inputBg = "bg-slate-100 border-slate-200 text-slate-900 placeholder:text-slate-400";
-  const inputCls = `w-full px-3 py-2 rounded-lg border text-sm ${inputBg} focus:border-[#BEF221]/40 focus:outline-none transition-colors`;
+  const inputCls = `w-full px-3 py-2 rounded-lg border text-sm ${inputBg} focus:border-[var(--color-accent)]/40 focus:outline-none transition-colors`;
   const labelCls = `text-[11px] font-bold uppercase tracking-wider ${muted}`;
 
   const titleKey = `title${tab[0].toUpperCase()}${tab[1]}` as keyof Article;
@@ -382,7 +382,7 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
                       type="button"
                       onClick={() => fileRef.current?.click()}
                       disabled={uploading}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 text-slate-700 hover:text-[#6FA300] hover:border-[#BEF221] transition-colors disabled:opacity-50"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 text-slate-700 hover:text-[var(--admin-ink)] hover:border-[#BEF221] transition-colors disabled:opacity-50"
                     >
                       {uploading ? <RefreshCw size={13} className="animate-spin" /> : <Upload size={13} />}
                       {uploading ? "Upload…" : "Choisir une image"}
@@ -414,7 +414,7 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
                   key={l}
                   onClick={() => setTab(l)}
                   className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-                    tab === l ? "bg-[#BEF221] text-black" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    tab === l ? "bg-[var(--color-accent)] text-[var(--color-text-on-accent)]" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
                   {langLabel[l]}
@@ -462,7 +462,7 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
           {/* SEO méta */}
           <button
             onClick={() => setShowSeo((v) => !v)}
-            className={`flex items-center gap-2 text-xs font-bold uppercase tracking-wider ${muted} hover:text-[#6FA300] transition-colors`}
+            className={`flex items-center gap-2 text-xs font-bold uppercase tracking-wider ${muted} hover:text-[var(--admin-ink)] transition-colors`}
           >
             <ChevronDown size={14} className={`transition-transform ${showSeo ? "rotate-180" : ""}`} />
             Méta SEO (optionnel)
@@ -500,7 +500,7 @@ const ArticleForm: React.FC<{ article: Article | null; onClose: () => void }> = 
             <button
               onClick={handleSave}
               disabled={saving}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-[#BEF221] text-black text-sm font-black hover:opacity-90 transition-opacity disabled:opacity-40"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-[var(--color-accent)] text-[var(--color-text-on-accent)] text-sm font-black hover:opacity-90 transition-opacity disabled:opacity-40"
             >
               {saving ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
               {isCreate ? "Créer l'article" : "Sauvegarder"}
@@ -578,7 +578,7 @@ const ArticleJsonImportModal: React.FC<{ onClose: () => void; onResult: (msg: st
           <div>
             <div className="flex items-center justify-between mb-1">
               <label className={labelCls}>JSON du / des article(s)</label>
-              <button onClick={() => setJsonStr(EXAMPLE_ARTICLE_JSON)} className={`text-[10px] font-bold uppercase tracking-wider ${muted} hover:text-[#6FA300] transition-colors`}>
+              <button onClick={() => setJsonStr(EXAMPLE_ARTICLE_JSON)} className={`text-[10px] font-bold uppercase tracking-wider ${muted} hover:text-[var(--admin-ink)] transition-colors`}>
                 Charger un exemple
               </button>
             </div>
@@ -586,7 +586,7 @@ const ArticleJsonImportModal: React.FC<{ onClose: () => void; onResult: (msg: st
               value={jsonStr}
               onChange={(e) => setJsonStr(e.target.value)}
               rows={18}
-              className={`w-full px-3 py-2 rounded-lg border text-xs font-mono ${inputBg} focus:border-[#BEF221]/40 focus:outline-none transition-colors resize-y`}
+              className={`w-full px-3 py-2 rounded-lg border text-xs font-mono ${inputBg} focus:border-[var(--color-accent)]/40 focus:outline-none transition-colors resize-y`}
               placeholder='Colle ton JSON ici… ex: { "slug": "mon-article", "titleFr": "...", "contentFr": "..." }'
               spellCheck={false}
             />
@@ -620,7 +620,7 @@ const ArticleJsonImportModal: React.FC<{ onClose: () => void; onResult: (msg: st
             <button
               onClick={handleImport}
               disabled={importing || !jsonStr.trim()}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-[#BEF221] text-black text-sm font-black hover:opacity-90 transition-opacity disabled:opacity-40"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-[var(--color-accent)] text-[var(--color-text-on-accent)] text-sm font-black hover:opacity-90 transition-opacity disabled:opacity-40"
             >
               {importing ? <RefreshCw size={14} className="animate-spin" /> : <FileJson size={14} />}
               {importing ? "Import…" : overwrite ? "Importer / Écraser" : "Importer"}

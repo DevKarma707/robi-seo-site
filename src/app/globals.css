@@ -1,6 +1,12 @@
 @import "tailwindcss";
 
 :root {
+  /* Repli de l'admin avant que le thème soit posé par adminTheme.ts. */
+  --admin-shell: #0A0425;
+  --admin-ink: #6FA300;
+  --color-accent-rgb: 190 242 33;
+  --color-primary-rgb: 13 6 48;
+
   /* === ROBI AI BRAND === */
   --primary: #0D0630;
   --primary-hover: #18314F;
@@ -533,9 +539,9 @@ body {
 /* Fond de page : deux halos très diffus au lieu d'un aplat mort. */
 .a-shell {
   background:
-    radial-gradient(1100px 620px at 12% -12%, rgba(190, 242, 33, 0.055), transparent 62%),
-    radial-gradient(900px 520px at 92% -4%, rgba(99, 91, 255, 0.13), transparent 58%),
-    #0A0425;
+    radial-gradient(1100px 620px at 12% -12%, rgb(var(--color-accent-rgb) / 0.06), transparent 62%),
+    radial-gradient(900px 520px at 92% -4%, rgb(var(--color-primary-rgb) / 0.30), transparent 58%),
+    var(--admin-shell);
 }
 
 /* Surface standard — CLAIRE.
@@ -549,16 +555,16 @@ body {
   border-radius: 16px;
   color: #0F172A;
   box-shadow:
-    0 1px 2px rgba(13, 6, 48, 0.06),
-    0 12px 28px -16px rgba(13, 6, 48, 0.45);
+    0 1px 2px rgb(var(--color-primary-rgb) / 0.06),
+    0 12px 28px -16px rgb(var(--color-primary-rgb) / 0.45);
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .a-card-hover:hover {
   border-color: #CBD5E1;
   box-shadow:
-    0 1px 2px rgba(13, 6, 48, 0.08),
-    0 18px 38px -18px rgba(13, 6, 48, 0.55);
+    0 1px 2px rgb(var(--color-primary-rgb) / 0.08),
+    0 18px 38px -18px rgb(var(--color-primary-rgb) / 0.55);
 }
 
 /* Carte KPI : un liseré lime discret en haut, allumé au survol. Il donne
@@ -569,7 +575,7 @@ body {
   position: absolute;
   inset: 0 0 auto 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #BEF221, transparent);
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
   opacity: 0.55;
   transition: opacity 0.25s ease;
 }
@@ -586,8 +592,8 @@ body {
    l'œil trouve sa position sans lire. */
 .a-nav-active {
   position: relative;
-  background: linear-gradient(90deg, rgba(190, 242, 33, 0.14), rgba(190, 242, 33, 0.03));
-  border: 1px solid rgba(190, 242, 33, 0.18);
+  background: linear-gradient(90deg, rgb(var(--color-accent-rgb) / 0.14), rgb(var(--color-accent-rgb) / 0.03));
+  border: 1px solid rgb(var(--color-accent-rgb) / 0.18);
 }
 .a-nav-active::before {
   content: "";
@@ -596,25 +602,25 @@ body {
   transform: translateY(-50%);
   width: 2px; height: 60%;
   border-radius: 0 2px 2px 0;
-  background: #BEF221;
-  box-shadow: 0 0 10px rgba(190, 242, 33, 0.8);
+  background: var(--color-accent);
+  box-shadow: 0 0 10px rgb(var(--color-accent-rgb) / 0.8);
 }
 
 /* Barres de progression : dégradé + lueur. Un aplat lime pleine largeur
    lisait comme une dalle publicitaire. */
 .a-bar {
-  background: linear-gradient(90deg, #A6D619, #7FA800);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 80%, #fff), var(--admin-ink));
 }
 
 /* Chiffre de KPI : léger dégradé vertical, comme un chiffre gravé. */
 .a-figure {
-  background: linear-gradient(180deg, #0D0630, #3B3486);
+  background: linear-gradient(180deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 55%, #7C74C9));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .a-figure-accent {
-  background: linear-gradient(180deg, #4E7A00, #6FA300);
+  background: linear-gradient(180deg, var(--admin-ink), color-mix(in srgb, var(--admin-ink) 75%, #fff));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

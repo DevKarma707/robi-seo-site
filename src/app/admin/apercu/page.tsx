@@ -21,6 +21,7 @@ import {
   Megaphone, BarChart2, FileText, Rocket, ArrowUpRight, LogOut, Filter, Globe,
 } from "lucide-react";
 import { Lancement, Revenu, Alertes } from "@/components/admin/PilotageTab";
+import ThemePicker from "@/components/admin/ThemePicker";
 import { ACCENT, ACCENT_INK, btn, btnGhost, btnPill, btnPrimary, card, focusRingDark, kpiLabel, kpiValue, sectionTitle } from "@/components/admin/ui";
 
 const NAV = [
@@ -90,6 +91,7 @@ export default function ApercuAdmin() {
           ))}
         </nav>
         <div className="p-3 border-t border-white/[0.06] space-y-0.5">
+          <ThemePicker />
           <span className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold ${navItem}`}>
             <ArrowUpRight size={17} /><span className="font-bold tracking-wide">Voir le site</span>
           </span>

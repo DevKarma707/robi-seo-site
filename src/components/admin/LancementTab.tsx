@@ -94,7 +94,7 @@ const LancementTab: React.FC = () => {
             onClick={() => save({ enabled: !config.enabled })}
             disabled={saving}
             className={`px-3 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all disabled:opacity-40 ${
-              config.enabled ? "bg-[#BEF221] text-black" : "bg-slate-100 text-slate-600"
+              config.enabled ? "bg-[var(--color-accent)] text-[var(--color-text-on-accent)]" : "bg-slate-100 text-slate-600"
             }`}
           >
             {config.enabled ? "Active" : "Désactivée"}
@@ -171,7 +171,7 @@ const LancementTab: React.FC = () => {
         </div>
 
         <p className="text-[11px] text-slate-500 leading-relaxed">
-          Formule appliquée : <code className="text-[#6FA300]">forçage ?? (départ + ventes réelles)</code>,
+          Formule appliquée : <code className="text-[var(--admin-ink)]">forçage ?? (départ + ventes réelles)</code>,
           plafonné au nombre total de places. Le compteur avance donc tout seul à
           chaque vente.
         </p>
@@ -185,7 +185,7 @@ const LancementTab: React.FC = () => {
               deadline: draft.deadline,
             })}
             disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#BEF221] text-black text-xs font-black uppercase tracking-wider hover:opacity-90 disabled:opacity-40"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--color-accent)] text-[var(--color-text-on-accent)] text-xs font-black uppercase tracking-wider hover:opacity-90 disabled:opacity-40"
           >
             {saving ? <RefreshCw size={13} className="animate-spin" /> : <Save size={13} />}
             Enregistrer

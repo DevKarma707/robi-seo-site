@@ -173,7 +173,7 @@ export function Revenu({ config }: { config: LaunchConfig | null }) {
       <p className="text-[11px] text-slate-500 mt-3 leading-relaxed">
         Estimation à partir des ventes réelles × 59 €. Le montant encaissé exact,
         les remboursements et le net après commissions demandent un token Polar
-        avec le scope <code className="text-[#6FA300]">orders:read</code> — c&apos;est
+        avec le scope <code className="text-[var(--admin-ink)]">orders:read</code> — c&apos;est
         une tâche de ton kanban.
       </p>
     </div>
@@ -264,7 +264,7 @@ const PilotageTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
         </div>
         <p className="text-xs text-slate-600">{error}</p>
         <p className="text-[11px] text-slate-400">
-          Vérifie que <code className="text-[#6FA300]">ADMIN_STATS_SECRET</code> est bien
+          Vérifie que <code className="text-[var(--admin-ink)]">ADMIN_STATS_SECRET</code> est bien
           défini côté Vercel (Production) pour ce projet.
         </p>
         <button onClick={() => load()} className={`${btn} mt-2`}>
