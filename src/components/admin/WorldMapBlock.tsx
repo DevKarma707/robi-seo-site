@@ -95,9 +95,13 @@ const WorldMapBlock: React.FC<Props> = ({ countries }) => {
       </div>
 
       <div className="relative">
+        {/* Bornée en largeur : à 1520 px de contenu, un viewBox 900×460 en
+            pleine largeur donne 777 px de carte, donc une carte de plus de
+            1200 px de haut — plus grande que l'écran, et majoritairement de
+            l'océan. 860 px ramène la carte à ~440 px, centrée. */}
         <svg
           viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
-          className="w-full h-auto"
+          className="w-full max-w-[860px] mx-auto h-auto block"
           role="img"
           aria-label="Carte du monde des pays couverts par Robi"
         >
