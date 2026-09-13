@@ -241,6 +241,25 @@ type Seed = Omit<LaunchTask, "id" | "column" | "order" | "createdAt" | "updatedA
  * webhook Polar, la santé de l'app, le SEO, les stores et la conformité.
  */
 export const SEED_TASKS: Seed[] = [
+  // ── Issu de l'audit du 13/09/2026 : sécurité, IA et paiement ──────
+  { title: "Déployer les correctifs de sécurité sur les Cloud Functions", category: "produit", owner: "ralph", effort: "S", priority: 1,
+    detail: "Trois failles fermées dans le code mais pas encore en production : accès Pro auto-accordé via les règles Firestore, prise de contrôle de compte via un jeton Google d'une autre application, et lecture des documents d'un tiers par sendDocumentEmailV2. Vercel ne déploie pas les functions ni les règles.\n\ncd ~/Desktop/ROBI_V1_READY && git pull\ncd functions && npm run build && cd ..\nfirebase deploy --only functions,firestore:rules,storage" },
+  { title: "Débloquer l'accès à Gemini refusé par Google", category: "produit", owner: "ralph", effort: "S", priority: 1,
+    detail: "L'IA renvoie « 403 — Your project has been denied access » depuis generativelanguage.googleapis.com. Console Google Cloud → projet robi-ai-system → Facturation, puis vérifier que Generative Language API est activée et que la clé n'a pas de restriction. Si tout est vert, c'est le support Google. Aucune ligne de code ne corrige ça." },
+  { title: "Traiter les paiements encaissés sans compte rattaché", category: "paiement", owner: "claude", effort: "S", priority: 1,
+    detail: "Le webhook consigne désormais dans _unlinked_payments les paiements dont le compte Robi reste introuvable — quelqu'un qui paie sans compte, ou avec une autre adresse. À relever régulièrement : chaque ligne est un client qui a payé et n'a rien reçu." },
+  { title: "Créer le secret FIREBASE_SERVICE_ACCOUNT sur GitHub", category: "produit", owner: "ralph", effort: "S", priority: 2,
+    detail: "Le jeton stocké a expiré — prouvé par un 401 sur cloudresourcemanager dans les logs du workflow. Firebase → Paramètres du projet → Comptes de service → Générer une clé, puis GitHub → Settings → Secrets → FIREBASE_SERVICE_ACCOUNT. Le workflow l'attend déjà et les déploiements redeviennent automatiques." },
+  { title: "Décider si le quota gratuit s'applique côté serveur", category: "paiement", owner: "ralph", effort: "S", priority: 2,
+    detail: "La limite de 2 documents n'est vérifiée que dans le navigateur : une règle Firestore récursive court-circuitait le contrôle serveur. L'activer bloquerait net les comptes gratuits déjà au-dessus du seuil — c'est une décision produit, pas technique." },
+  { title: "Poser les liens tracés sur chaque canal de diffusion", category: "acquisition", owner: "ralph", effort: "S", priority: 2,
+    detail: "La provenance des inscrits est désormais enregistrée, mais seulement si le lien la porte. Bio Instagram, stories, TikTok : ajouter ?utm_source=instagram&utm_medium=bio. Sans tag le référent est quand même capté, avec tag on distingue la bio des stories." },
+  { title: "Tester la connexion Apple native sur un appareil", category: "mobile", owner: "ralph", effort: "M", priority: 2,
+    blockedBy: "Créer les comptes développeur Apple et Google Play",
+    detail: "Le flux a été réécrit : l'ancien passait par le support OAuth Cordova, arrêté avec Firebase Dynamic Links le 25 août 2025. La logique du nonce est couverte par des tests, mais l'aller-retour avec Apple demande Xcode et un appareil. À vérifier avant toute soumission." },
+  { title: "Déclarer un Service ID Apple pour la connexion Android", category: "mobile", owner: "ralph", effort: "S", priority: 3,
+    detail: "Sur iOS l'identifiant du bundle suffit. Sur Android, Apple exige un Service ID et une URL de retour déclarés dans le compte développeur, à poser dans VITE_APPLE_SERVICE_ID et VITE_APPLE_REDIRECT_URI. Sans eux la connexion Apple lève une erreur explicite sur Android." },
+
   // ── Paiement — rien d'autre ne compte tant que l'argent n'entre pas ──
   { title: "Cocher `subscription.active` dans le webhook Polar", category: "paiement", owner: "ralph", effort: "S", priority: 1,
     detail: "Polar → Settings → Webhooks → ROBI SUB → Details. C'est le seul event manquant sur les 8 nécessaires." },
