@@ -2,13 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks, FolderOpen, CalendarDays } from "lucide-react";
+import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks, FolderOpen, CalendarDays, Compass } from "lucide-react";
 import {
   auth, onAuthStateChanged, signInWithGoogle, signOut, isAllowedEmail, firebaseReady,
   subscribeToArticles, subscribeToVisits, type Article, type VisitStats, type User,
 } from "@/lib/firebase";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
 import BlogTab from "@/components/admin/BlogTab";
+import CockpitTab from "@/components/admin/CockpitTab";
 import PilotageTab from "@/components/admin/PilotageTab";
 import LancementTab from "@/components/admin/LancementTab";
 import SanteTab from "@/components/admin/SanteTab";
@@ -20,7 +21,7 @@ import ReseauxTab from "@/components/admin/ReseauxTab";
 import ThemePicker from "@/components/admin/ThemePicker";
 import { focusRing, focusRingDark } from "@/components/admin/ui";
 
-type Tab = "pilotage" | "kanban" | "reseaux" | "fichiers" | "sante" | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
+type Tab = "cockpit" | "pilotage" | "kanban" | "reseaux" | "fichiers" | "sante" | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
 
 const EMPTY_VISITS: VisitStats = {
   today: 0, week: 0, prevWeek: 0, month: 0, days: [], byPage: [], bySource: [],
@@ -126,6 +127,7 @@ export default function AdminPage() {
   const navActive = "a-nav-active text-[#BEF221]";
 
   const NAV: { id: Tab; label: string; icon: React.ReactNode; badge?: number }[] = [
+    { id: "cockpit", label: "Cockpit", icon: <Compass size={17} /> },
     { id: "pilotage", label: "Pilotage", icon: <Gauge size={17} /> },
     { id: "kanban", label: "Tâches", icon: <ListChecks size={17} /> },
     { id: "reseaux", label: "Réseaux", icon: <CalendarDays size={17} /> },
@@ -139,6 +141,7 @@ export default function AdminPage() {
   ];
 
   const subtitle: Record<Tab, string> = {
+    cockpit: "Ce qui brûle et ce qui arrive, toutes sections confondues",
     pilotage: "Inscriptions, activation, usage et funnel — agrégats uniquement",
     kanban: "Le backlog du lancement, colonne par colonne",
     reseaux: "Calendrier éditorial : posts, visuels et statuts",
@@ -207,6 +210,7 @@ export default function AdminPage() {
             <h1 className="a-display font-extrabold text-[34px] leading-none tracking-[-0.025em] text-white">{NAV.find((t) => t.id === tab)?.label}</h1>
             <p className="text-[13px] mt-2.5 text-white/40">{subtitle[tab]}</p>
           </div>
+          {tab === "cockpit" && <CockpitTab onNavigate={setTab} />}
           {tab === "pilotage" && <PilotageTab visits={visits} />}
           {tab === "kanban" && <KanbanTab />}
           {tab === "reseaux" && <ReseauxTab />}
