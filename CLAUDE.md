@@ -56,8 +56,11 @@ contrôles `rounded-xl`, marqueurs `rounded-full`.
 
 ## Contexte produit (à connaître avant d'écrire)
 
-- **Prix** : freemium 2 docs/mois → **Lifetime 59 €** en une fois. Les
-  mentions à 49 € sont périmées. Pas d'abonnement mensuel, par choix.
+- **Prix** (France, cf. page pricing live) : **gratuit** = 2 factures/devis ·
+  **14 €/mois** (sans engagement) · **89 €/an** (2 mois offerts) · **149 €/2 ans**
+  (meilleure offre, paiement unique) · **offre de lancement Lifetime 59 €** (au
+  lieu de 149 €, réservée aux 1 000 premiers). Les mentions à 49 € sont périmées.
+  ⚠️ Il y a bien des abonnements — ne jamais dire « pas d'abonnement ».
 - **Priorité n°1 : Factur-X.** Facture électronique obligatoire en France
   au **1er septembre 2026** (EN 16931). Robi la génère nativement — c'est
   l'angle SEO principal du site.
