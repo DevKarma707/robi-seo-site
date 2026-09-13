@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
+import { verifyPolarSignature, toMajorUnits } from "@/lib/polarWebhook";
 
 /**
  * Endpoint: /api/webhooks/polar
@@ -12,57 +12,23 @@ const POLAR_WEBHOOK_SECRET = process.env.POLAR_WEBHOOK_SECRET || "";
 const TOLT_API_KEY = process.env.TOLT_API_KEY || "";
 const REDITUS_API_KEY = process.env.REDITUS_API_KEY || "";
 
-/**
- * Verify signatures from Standard Webhooks (used by Polar.sh)
- */
-function verifyPolarSignature(
-  payload: string,
-  headers: Headers,
-  secret: string
-): boolean {
-  const webhookId = headers.get("webhook-id");
-  const webhookTimestamp = headers.get("webhook-timestamp");
-  const webhookSignature = headers.get("webhook-signature");
-
-  if (!webhookId || !webhookTimestamp || !webhookSignature || !secret) {
-    return false;
-  }
-
-  // Standard webhooks format: id.timestamp.payload
-  const signedPayload = `${webhookId}.${webhookTimestamp}.${payload}`;
-  
-  // Signatures are comma separated: v1,base64hash v1,base64hash
-  const signatures = webhookSignature.split(" ");
-  
-  for (const sig of signatures) {
-    const parts = sig.split(",");
-    if (parts.length !== 2) continue;
-    
-    const [version, hash] = parts;
-    if (version !== "v1") continue;
-
-    const hmac = crypto.createHmac("sha256", secret);
-    hmac.update(signedPayload);
-    const expectedHash = hmac.digest("base64");
-
-    try {
-      if (crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(expectedHash))) {
-        return true;
-      }
-    } catch (e) {
-      continue;
-    }
-  }
-
-  return false;
-}
-
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
 
   // 1. Verify Signature
-  if (!verifyPolarSignature(rawBody, req.headers, POLAR_WEBHOOK_SECRET)) {
-    console.error("[POLAR WEBHOOK] Invalid signature");
+  const verdict = verifyPolarSignature(
+    rawBody,
+    {
+      id: req.headers.get("webhook-id"),
+      timestamp: req.headers.get("webhook-timestamp"),
+      signature: req.headers.get("webhook-signature"),
+    },
+    POLAR_WEBHOOK_SECRET,
+  );
+  if (!verdict.ok) {
+    // Le motif part dans les logs, pas dans la réponse : inutile d'indiquer à
+    // qui frappe laquelle des vérifications a échoué.
+    console.error("[POLAR WEBHOOK] Signature refusée —", verdict.reason);
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
   }
 
@@ -94,7 +60,7 @@ export async function POST(req: NextRequest) {
           },
           body: JSON.stringify({
             customer_id: customerEmail, // Using email as ID for tracking
-            amount: amount / 100, // Polar amounts are usually in cents
+            amount: toMajorUnits(amount),
             currency: currency.toUpperCase(),
             external_id: transactionId,
           }),
@@ -116,7 +82,7 @@ export async function POST(req: NextRequest) {
           },
           body: JSON.stringify({
             email: customerEmail,
-            amount: amount / 100,
+            amount: toMajorUnits(amount),
             currency: currency.toUpperCase(),
             external_id: transactionId,
             idempotency_key: `polar_${transactionId}`,
