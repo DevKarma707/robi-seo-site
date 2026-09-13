@@ -265,13 +265,27 @@ const KanbanTab: React.FC = () => {
     }
   };
 
+  /**
+   * Charge le backlog, puis absorbe ce qui s'y est ajouté depuis.
+   *
+   * `seedTasks` refuse de tourner dès qu'une tâche existe — correct pour un
+   * premier chargement, mais tout enrichissement du backlog restait alors
+   * invisible sur un tableau déjà semé. `mergeSeedTasks` existait pour ça et
+   * n'était appelé nulle part ; il compare les titres normalisés, donc une
+   * tâche renommée ou supprimée volontairement n'est pas réintroduite.
+   */
   const loadBacklog = async () => {
     setBusy(true);
     try {
       const r = await seedTasks();
-      say(r.skipped ? "err" : "ok", r.skipped
-        ? "Des tâches existent déjà — le backlog n'a pas été rechargé."
-        : `${r.created} tâches chargées.`);
+      if (!r.skipped) {
+        say("ok", `${r.created} tâches chargées.`);
+        return;
+      }
+      const m = await mergeSeedTasks();
+      say("ok", m.added === 0
+        ? `Backlog déjà à jour (${m.already} tâches).`
+        : `${m.added} nouvelle${m.added > 1 ? "s" : ""} tâche${m.added > 1 ? "s" : ""} ajoutée${m.added > 1 ? "s" : ""}.`);
     } catch (e) {
       say("err", (e as Error).message);
     } finally {

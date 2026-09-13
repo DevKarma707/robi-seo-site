@@ -102,9 +102,34 @@ function Incidents({
   );
 }
 
-function DailyBars({ days }: { days: { date: string; count: number }[] }) {
-  if (days.length === 0) return null;
-  const max = Math.max(1, ...days.map((d) => d.count));
+/**
+ * Complète la série avec les jours sans incident.
+ *
+ * Le rapport ne renvoie que les jours qui PORTENT des événements : trois
+ * échecs le même jour donnaient une série d'un seul point, et `flex-1`
+ * l'étirait sur toute la largeur — un gros bloc rouge au lieu d'un graphe.
+ * Un jour calme est une information, il doit occuper sa place.
+ */
+function fillDays(
+  days: { date: string; count: number }[],
+  windowDays: number,
+  today = new Date(),
+): { date: string; count: number }[] {
+  const byDate = new Map(days.map((d) => [d.date, d.count]));
+  const out: { date: string; count: number }[] = [];
+  for (let i = windowDays - 1; i >= 0; i--) {
+    const d = new Date(today);
+    d.setUTCDate(d.getUTCDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    out.push({ date: key, count: byDate.get(key) ?? 0 });
+  }
+  return out;
+}
+
+function DailyBars({ days, windowDays }: { days: { date: string; count: number }[]; windowDays: number }) {
+  const series = fillDays(days, windowDays);
+  if (series.length === 0) return null;
+  const max = Math.max(1, ...series.map((d) => d.count));
   return (
     <div className={`${card} p-5`}>
       <div className="flex items-center gap-2 mb-4">
@@ -112,7 +137,7 @@ function DailyBars({ days }: { days: { date: string; count: number }[] }) {
         <p className="text-xs font-black uppercase tracking-widest text-slate-900">Incidents par jour</p>
       </div>
       <div className="flex items-end gap-1 h-20">
-        {days.map((d) => (
+        {series.map((d) => (
           // h-full matters: without a resolved parent height the bars' own
           // percentage heights collapse to zero and the chart renders empty.
           <div key={d.date} className="flex-1 h-full flex flex-col justify-end group relative">
@@ -182,7 +207,11 @@ const SanteTab: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Verdict */}
-      <div className="rounded-2xl border p-5" style={{ borderColor: `${sev.color}33`, backgroundColor: `${sev.color}0d` }}>
+      {/* Surface standard plutôt qu'un fond translucide maison : à 5 %
+          d'opacité la teinte disparaissait sur la coquille sombre, et le texte
+          — écrit dans les gris d'une carte claire — devenait illisible. La
+          couleur de sévérité reste sur l'icône, le titre et le liseré. */}
+      <div className={`${card} p-5 border-l-4`} style={{ borderLeftColor: sev.color }}>
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
             <span style={{ color: sev.color }} className="mt-0.5">{sev.icon}</span>
@@ -298,7 +327,7 @@ const SanteTab: React.FC = () => {
         )}
       </div>
 
-      <DailyBars days={report.daily} />
+      <DailyBars days={report.daily} windowDays={report.windowDays} />
 
       {/* Incidents détaillés */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
