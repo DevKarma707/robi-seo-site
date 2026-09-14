@@ -75,7 +75,7 @@ export async function GET(req: Request) {
   const eventList = FUNNEL_EVENTS.map((e) => `'${e}'`).join(", ");
 
   try {
-    const [funnelRows, errorRows, ctaRows] = await Promise.all([
+    const [funnelRows, errorRows, ctaRows, hostRows] = await Promise.all([
       hogql(
         `SELECT event, count() AS total, count(DISTINCT person_id) AS personnes
          FROM events WHERE ${since} AND event IN (${eventList})
@@ -97,6 +97,15 @@ export async function GET(req: Request) {
         `SELECT properties.page AS page, count() AS total
          FROM events WHERE ${since} AND event = 'cta_app_clicked'
          GROUP BY page ORDER BY total DESC LIMIT 10`
+      ),
+      // Quels domaines envoient réellement. Le site et l'app alimentent le
+      // même projet : si l'un des deux disparaît de cette liste, la moitié du
+      // tunnel est morte sans que les chiffres ne le disent — ils affichent
+      // seulement des zéros, indistinguables d'une absence de trafic.
+      hogql(
+        `SELECT properties.$host AS domaine, count() AS total, max(timestamp) AS dernier
+         FROM events WHERE ${since} AND isNotNull(properties.$host)
+         GROUP BY domaine ORDER BY total DESC LIMIT 10`
       ),
     ]);
 
@@ -123,6 +132,17 @@ export async function GET(req: Request) {
         dernier: r[4] ? String(r[4]) : null,
       })),
       cta: ctaRows.map((r) => ({ page: r[0] ? String(r[0]) : "—", total: Number(r[1]) || 0 })),
+      mesure: {
+        // Lue côté serveur : `NEXT_PUBLIC_` est inlinée dans le bundle du
+        // navigateur au build, mais reste lisible ici. C'est le seul moyen de
+        // distinguer « clé absente » de « personne n'est venu ».
+        cleSiteConfiguree: !!process.env.NEXT_PUBLIC_POSTHOG_KEY,
+        domaines: hostRows.map((r) => ({
+          domaine: r[0] ? String(r[0]) : "—",
+          total: Number(r[1]) || 0,
+          dernier: r[2] ? String(r[2]) : null,
+        })),
+      },
     });
   } catch (e) {
     return NextResponse.json(

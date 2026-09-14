@@ -126,6 +126,10 @@ export interface ProduitReport {
   funnel?: { event: string; total: number; personnes: number }[];
   erreurs?: { type: string; message: string; total: number; personnes: number; dernier: string | null }[];
   cta?: { page: string; total: number }[];
+  mesure?: {
+    cleSiteConfiguree: boolean;
+    domaines: { domaine: string; total: number; dernier: string | null }[];
+  };
 }
 
 export const fetchProduitReport = (days = 7) =>
