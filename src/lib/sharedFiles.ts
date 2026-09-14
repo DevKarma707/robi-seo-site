@@ -133,6 +133,21 @@ const pool = async <T>(
   return done;
 };
 
+/**
+ * Les dossiers de premier niveau, en UNE requête.
+ *
+ * Permet d'afficher la barre de dossiers sans avoir lu un seul fichier :
+ * l'onglet s'ouvre immédiatement, et ne charge que le dossier qu'on ouvre.
+ */
+export const listSharedFolders = async (): Promise<string[]> => {
+  if (!storage) throw new Error("Firebase Storage non configuré.");
+  const root = await listAll(storageRef(storage, ROOT));
+  const noms = root.prefixes.map((p) => p.name).sort();
+  // La racine n'apparaît que si elle porte réellement des fichiers.
+  if (root.items.length) noms.push(ROOT_FOLDER);
+  return noms;
+};
+
 const trierRecent = (l: SharedFile[]) => [...l].sort((a, b) => b.updated.localeCompare(a.updated));
 
 /**
@@ -149,15 +164,26 @@ const trierRecent = (l: SharedFile[]) => [...l].sort((a, b) => b.updated.localeC
  * façon, et la rafale ne fait qu'ajouter de l'attente.
  */
 export const listSharedFiles = async (
-  onProgress?: (partiel: SharedFile[]) => void
+  onProgress?: (partiel: SharedFile[]) => void,
+  dossier?: string
 ): Promise<SharedFile[]> => {
   if (!storage) throw new Error("Firebase Storage non configuré.");
 
   const root = await listAll(storageRef(storage, ROOT));
-  const cibles: Located[] = [
-    ...root.items.map((item) => ({ item, folder: ROOT_FOLDER, sub: "" })),
-    ...(await Promise.all(root.prefixes.map((p) => locate(p, p.name, "", 1)))).flat(),
-  ];
+
+  // Un dossier demandé : on ne descend que celui-là. La médiathèque contient
+  // aussi des dossiers de travail volumineux et sans intérêt visuel (skills,
+  // exports) — les parcourir pour afficher trois visuels coûte une attente
+  // que rien ne justifie.
+  const cibles: Located[] =
+    dossier && dossier !== ROOT_FOLDER
+      ? await locate(storageRef(storage, `${ROOT}/${safeFolder(dossier)}`), dossier, "", 1)
+      : dossier === ROOT_FOLDER
+        ? root.items.map((item) => ({ item, folder: ROOT_FOLDER, sub: "" }))
+        : [
+            ...root.items.map((item) => ({ item, folder: ROOT_FOLDER, sub: "" })),
+            ...(await Promise.all(root.prefixes.map((p) => locate(p, p.name, "", 1)))).flat(),
+          ];
 
   const fichiers = await pool(
     cibles.map(({ item, folder, sub }) => () => describe(item, folder, sub)),
