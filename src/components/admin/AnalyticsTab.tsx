@@ -4,6 +4,7 @@ import React from "react";
 import { TrendingUp, TrendingDown, Globe, BarChart2 } from "lucide-react";
 import type { VisitStats } from "@/lib/firebase";
 import { ACCENT, card } from "./ui";
+import SearchConsoleBlock from "./SearchConsoleBlock";
 
 const SOURCE_COLORS: Record<string, string> = {
   Direct: "#BEF221",
@@ -154,6 +155,11 @@ const AnalyticsTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
             })}
           </div>
         </div>
+      </div>
+
+      {/* Search Console — photos des exports, comparées d'un import à l'autre */}
+      <div className="pt-4">
+        <SearchConsoleBlock />
       </div>
     </div>
   );

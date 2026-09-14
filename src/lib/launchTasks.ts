@@ -310,6 +310,19 @@ export const SEED_TASKS: Seed[] = [
     detail: "Le plan existe déjà dans RALPH X SPACE/Robi/Plan Backlinks SEO Facture AI.md." },
   { title: "Vérifier l'indexation des 22 pages du sitemap", category: "seo", owner: "claude", effort: "S", priority: 3 },
 
+  // Issus de l'analyse Search Console du 14/09/2026 (content/seo/gsc-analyse-2026-09.md).
+  { title: "Demander l'indexation des 3 pages retravaillées", category: "seo", owner: "ralph", effort: "S", priority: 1,
+    detail: "Search Console → Inspection de l'URL → Demander l'indexation : robi-app.com/fr/facture-ai, robi-app.com/en/facture-ai, robi-app.com/fr/industries/sophrologue." },
+  { title: "Publier l'article « Logiciel de gestion des factures avec IA »", category: "seo", owner: "ralph", effort: "S", priority: 1,
+    detail: "Blog → Importer JSON → content/blog/article-gestion-factures-ia-2026.json, puis passer en ligne. Levier 3 de l'analyse (≈140 impressions sans page qui réponde)." },
+  { title: "Obtenir des liens vers /en/facture-ai depuis les annuaires IA anglophones", category: "seo", owner: "ralph", effort: "M", priority: 2,
+    detail: "Levier 1 : la page anglaise est en page 2 (« invoice ai » position 16, 240 impressions, 0 clic). There's An AI For That, Futurepedia et G2 sont déjà dans le segment Backlinks de l'onglet Acquisition." },
+  { title: "Importer l'export Search Console chaque mois dans Analytics", category: "seo", owner: "ralph", effort: "S", priority: 2,
+    detail: "Search Console → Performances → 3 derniers mois → Exporter → ZIP, puis déposer dans le bloc Search Console de l'onglet Analytics. Prochain : mi-octobre." },
+  { title: "Mesurer l'effet des leviers de septembre", category: "seo", owner: "claude", effort: "S", priority: 2,
+    detail: "Comparer l'export d'octobre à celui du 14/09 dans l'onglet Analytics : positions de « facture ia », « invoice ai », « ai invoice », « logiciel de gestion des factures avec ia », « logiciel facturation sophrologue ». Proposer la suite.",
+    blockedBy: "Export Search Console d'octobre" },
+
   // ── Acquisition ──
   { title: "Créer le sous-domaine d'envoi mail.robi-app.com", category: "acquisition", owner: "ralph", effort: "M", priority: 1,
     detail: "Avec ses propres SPF, DKIM et DMARC, isolé du SMTP transactionnel. Sans ça, du démarchage marqué comme spam ferait cesser l'arrivée des factures de tes clients." },

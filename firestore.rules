@@ -27,6 +27,11 @@ service cloud.firestore {
       allow read, create, update, delete: if isAdmin();
     }
 
+    // ── Exports Search Console (onglet Analytics) ──
+    match /seoReports/{id} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
     // ── Influenceurs (programme de codes promo) ──
     match /influencers/{id} {
       allow read, create, update, delete: if isAdmin();
