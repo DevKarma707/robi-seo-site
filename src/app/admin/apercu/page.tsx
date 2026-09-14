@@ -116,7 +116,7 @@ export default function ApercuAdmin() {
               days={61}
             />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Revenu config={{ enabled: true, totalSeats: 1000, realSold: 3, baseOffset: 40, manualOverride: null, deadline: null }} />
+              <Revenu stats={{ revenue: { oneShot: 177, mrr: 14, total: 191 }, byPlan: { lifetime: 3, monthly: 1 } }} />
               <Alertes
                 health={{
                   windowDays: 7, severity: "warn",

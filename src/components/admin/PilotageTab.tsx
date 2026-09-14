@@ -158,9 +158,19 @@ export function Lancement({ config, days }: { config: LaunchConfig | null; days:
   );
 }
 
-/** Le CA total viendra de Polar. Tant que le token manque, on le dit. */
-export function Revenu({ config }: { config: LaunchConfig | null }) {
-  const ca = config ? config.realSold * 59 : null;
+const PLAN_LABELS: Record<string, string> = {
+  lifetime: "À vie · 59 €",
+  "2years": "2 ans · 149 €",
+  annual: "Annuel · 89 €",
+  monthly: "Mensuel · 14 €/mois",
+};
+
+/** Le CA total viendra de Polar. Tant que le token manque, on l'estime plan par plan. */
+export function Revenu({ stats }: { stats: Pick<AppStats, "revenue" | "byPlan"> | null }) {
+  const rev = stats?.revenue ?? null;
+  const plans = Object.entries(stats?.byPlan ?? {})
+    .filter(([plan]) => plan in PLAN_LABELS)
+    .sort((a, b) => b[1] - a[1]);
   return (
     <div className={`${card} p-6`}>
       <div className="flex items-center gap-2 mb-4">
@@ -168,12 +178,27 @@ export function Revenu({ config }: { config: LaunchConfig | null }) {
         <p className={sectionTitle}>Chiffre d&apos;affaires</p>
       </div>
       <p className="a-display font-extrabold text-[40px] leading-none tabular-nums a-figure">
-        {ca === null ? "—" : `${ca.toLocaleString("fr-FR")} €`}
+        {rev === null ? "—" : `${rev.total.toLocaleString("fr-FR")} €`}
       </p>
+      {rev !== null && rev.mrr > 0 && (
+        <p className="text-[11px] text-slate-500 mt-2">
+          dont <span className="font-semibold text-slate-700">{rev.mrr.toLocaleString("fr-FR")} €</span> de MRR (abonnements mensuels)
+        </p>
+      )}
+      {plans.length > 0 && (
+        <ul className="mt-4 space-y-1.5">
+          {plans.map(([plan, count]) => (
+            <li key={plan} className="flex items-center justify-between text-[12px]">
+              <span className="text-slate-600">{PLAN_LABELS[plan]}</span>
+              <span className="font-semibold tabular-nums text-slate-900">{count}</span>
+            </li>
+          ))}
+        </ul>
+      )}
       <p className="text-[11px] text-slate-500 mt-3 leading-relaxed">
-        Estimation à partir des ventes réelles × 59 €. Le montant encaissé exact,
-        les remboursements et le net après commissions demandent un token Polar
-        avec le scope <code className="text-[var(--admin-ink)]">orders:read</code> — c&apos;est
+        Estimation à partir du plan détenu par chaque compte payant. Le montant
+        encaissé exact, les remboursements et le net après commissions demandent
+        un token Polar avec le scope <code className="text-[var(--admin-ink)]">orders:read</code> — c&apos;est
         une tâche de ton kanban.
       </p>
     </div>
@@ -284,7 +309,7 @@ const PilotageTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
       <Lancement config={config} days={daysLeft} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Revenu config={config} />
+        <Revenu stats={stats} />
         <Alertes health={health} error={healthError} />
       </div>
 
@@ -294,9 +319,9 @@ const PilotageTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
         <Kpi label="Inscrits · 30 j" value={stats.signups.j30} />
         <Kpi label="Actifs · 7 j" value={stats.active.j7} sub={`${stats.active.j30} sur 30 j`} />
         <Kpi
-          label="Ventes réelles"
+          label="Places à vie vendues"
           value={stats.soldSeats}
-          sub={`${stats.proAccounts} comptes Pro au total`}
+          sub={`${stats.paidSeats ?? stats.soldSeats} payants · ${stats.proAccounts} Pro au total`}
           accent
         />
       </div>

@@ -9,8 +9,12 @@ export interface AppStats {
   activated: number;
   activationRate: number;
   proAccounts: number;
-  /** Seats actually paid for — excludes admin-granted Pro accounts. */
+  /** Lifetime (59 €) seats sold — excludes subscriptions and admin-granted Pro. */
   soldSeats: number;
+  /** Every account on a paid Polar plan (lifetime, 2 years, annual, monthly). */
+  paidSeats?: number;
+  /** Estimate from the plan each paying account holds; exact cash needs Polar orders:read. */
+  revenue?: { oneShot: number; mrr: number; total: number };
   conversionRate: number;
   documents: { total: number; invoices: number | null; estimates: number | null };
   avgDocsPerUser: number;
