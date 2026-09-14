@@ -310,6 +310,9 @@ export const SEED_TASKS: Seed[] = [
     detail: "Le plan existe déjà dans RALPH X SPACE/Robi/Plan Backlinks SEO Facture AI.md." },
   { title: "Vérifier l'indexation des 22 pages du sitemap", category: "seo", owner: "claude", effort: "S", priority: 3 },
 
+  { title: "Basculer la mention TVA de franchise vers l'art. L. 233-3 du CIBS au 1er janvier 2027", category: "conformite", owner: "claude", effort: "S", priority: 2,
+    detail: "Ordonnance n° 2026-671 du 27/07/2026 : la recodification de la TVA dans le CIBS est reportée au 1er janvier 2027. Jusqu'au 31/12/2026, la bonne mention reste « TVA non applicable, art. 293 B du CGI » (ce que l'app écrit aujourd'hui, correct). À partir du 01/01/2027 : « TVA non applicable, art. L. 233-3 du CIBS » (et non L. 223-3) ; l'ancienne référence reste acceptée jusqu'au 30/06/2028. À changer dans ~/Desktop/ROBI_V1_READY : utils/facturx/xmlGenerator.ts (exemptionReason, BT-121), la mention imprimée sur le PDF et locales/fr.json (vat_not_subject_desc) — idéalement selon la date d'émission de la facture." },
+
   // Issus de l'analyse Search Console du 14/09/2026 (content/seo/gsc-analyse-2026-09.md).
   { title: "Demander l'indexation des 3 pages retravaillées", category: "seo", owner: "ralph", effort: "S", priority: 1,
     detail: "Search Console → Inspection de l'URL → Demander l'indexation : robi-app.com/fr/facture-ai, robi-app.com/en/facture-ai, robi-app.com/fr/industries/sophrologue." },

@@ -164,7 +164,7 @@ const content: Record<Lang, {
       {
         question: "Une facture créée par l'IA est-elle légale et conforme ?",
         answer:
-          "Oui. Robi applique automatiquement les règles de facturation françaises : numérotation séquentielle inaltérable, mentions obligatoires (SIREN/SIRET, TVA, pénalités de retard), et s'adapte à votre régime fiscal (micro-entreprise, mention « TVA non applicable » avec la référence au CIBS en vigueur depuis le 1er septembre 2026, etc.). La réglementation impose des mentions sur le document, pas la façon dont il est rédigé — une facture AI est aussi légale qu'une facture saisie à la main.",
+          "Oui. Robi applique automatiquement les règles de facturation françaises : numérotation séquentielle inaltérable, mentions obligatoires (SIREN/SIRET, TVA, pénalités de retard), et s'adapte à votre régime fiscal (micro-entreprise avec la mention « TVA non applicable, art. 293 B du CGI », qui deviendra « art. L. 233-3 du CIBS » au 1er janvier 2027, etc.). La réglementation impose des mentions sur le document, pas la façon dont il est rédigé — une facture AI est aussi légale qu'une facture saisie à la main.",
       },
       {
         question: "Quelle différence entre Robi et ChatGPT pour faire une facture ?",
