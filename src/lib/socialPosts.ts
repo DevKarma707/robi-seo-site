@@ -85,12 +85,17 @@ export const deletePost = (id: string) => deleteDoc(doc(db, "socialPosts", id));
  */
 export const updatePostText = (
   id: string,
-  patch: { caption: string; hashtags: string; visual: string }
+  patch: { caption: string; hashtags: string; visual: string; imageUrl?: string }
 ) =>
   updateDoc(doc(db, "socialPosts", id), {
     caption: patch.caption,
     hashtags: patch.hashtags.trim() ? patch.hashtags.trim() : deleteField(),
     visual: patch.visual.trim() ? patch.visual.trim() : deleteField(),
+    // `visual` est la consigne écrite, `imageUrl` le visuel réellement
+    // attaché : deux champs distincts parce qu'on décrit souvent l'image
+    // avant de l'avoir. Une chaîne vide efface le champ plutôt que d'y
+    // laisser un lien mort.
+    imageUrl: patch.imageUrl?.trim() ? patch.imageUrl.trim() : deleteField(),
     updatedAt: serverTimestamp(),
   });
 
