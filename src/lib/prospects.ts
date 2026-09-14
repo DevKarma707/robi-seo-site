@@ -19,7 +19,8 @@ export type ProspectSegment =
   | "coworking"    // coworkings, incubateurs, pépinières
   | "federation"   // fédérations, syndicats, CCI, chambres de métiers
   | "tpe"          // TPE de services
-  | "influenceur"; // créateurs de contenu à recruter au programme
+  | "influenceur"  // créateurs de contenu à recruter au programme
+  | "backlink";    // comparatifs, annuaires, médias — objectif : un lien, pas une vente
 
 export type ProspectStatus =
   | "todo" | "contacted" | "followup" | "interested" | "signup" | "customer" | "lost";
@@ -71,6 +72,7 @@ export const SEGMENT_META: Record<ProspectSegment, { label: string; hint: string
   federation: { label: "Fédérations / CCI", hint: "Relais institutionnel, crédibilité Factur-X",                 color: "#34d399" },
   tpe:        { label: "TPE de services",  hint: "Petites structures sans service administratif",                color: "#fb923c" },
   influenceur:{ label: "Influenceurs",     hint: "Créateurs à recruter — convertis la fiche en partenariat",      color: "#22d3ee" },
+  backlink:   { label: "Backlinks / SEO",  hint: "Comparatifs et annuaires — objectif : un lien vers robi-app.com", color: "#e879f9" },
 };
 
 export const SEGMENTS = Object.keys(SEGMENT_META) as ProspectSegment[];
@@ -88,6 +90,18 @@ export const STATUS_META: Record<ProspectStatus, { label: string; color: string;
 export const PIPELINE: ProspectStatus[] = [
   "todo", "contacted", "followup", "interested", "signup", "customer",
 ];
+
+// Un site qui publie un lien n'« achète » rien : mêmes statuts en base (le
+// pipeline et maxStage restent valables), libellés adaptés à l'écran.
+const BACKLINK_STATUS_LABEL: Partial<Record<ProspectStatus, string>> = {
+  interested: "En discussion",
+  signup:     "Lien promis",
+  customer:   "Lien obtenu",
+  lost:       "Refus",
+};
+
+export const statusLabel = (s: ProspectStatus, segment?: ProspectSegment | "all") =>
+  (segment === "backlink" && BACKLINK_STATUS_LABEL[s]) || STATUS_META[s].label;
 
 export const CHANNEL_LABEL: Record<ProspectChannel, string> = {
   email: "Email", linkedin: "LinkedIn", phone: "Téléphone", other: "Autre",
@@ -110,8 +124,22 @@ export const SEQUENCE: SeqStep[] = [
   { label: "Dernière relance (clôture)",    channel: "email",    delay: 0,  status: "followup",  templateKey: "breakup" },
 ];
 
-export const stepOf = (p: Prospect): SeqStep => SEQUENCE[Math.min(p.seqStep ?? 0, SEQUENCE.length - 1)];
-export const hasNextStep = (p: Prospect) => (p.seqStep ?? 0) + 1 < SEQUENCE.length;
+// Pas de LinkedIn ni d'angle Factur-X « commercial » pour un rédacteur de
+// comparatif : un pitch, une relance une semaine après, puis on clôt.
+export const BACKLINK_SEQUENCE: SeqStep[] = [
+  { label: "Pitch (email ou formulaire)",   channel: "email", delay: 7, status: "contacted", templateKey: "first" },
+  { label: "Relance courte",                channel: "email", delay: 10, status: "followup", templateKey: "relance1" },
+  { label: "Dernière relance (clôture)",    channel: "email", delay: 0, status: "followup",  templateKey: "breakup" },
+];
+
+export const sequenceFor = (segment: ProspectSegment): SeqStep[] =>
+  segment === "backlink" ? BACKLINK_SEQUENCE : SEQUENCE;
+
+export const stepOf = (p: Prospect): SeqStep => {
+  const seq = sequenceFor(p.segment);
+  return seq[Math.min(p.seqStep ?? 0, seq.length - 1)];
+};
+export const hasNextStep = (p: Prospect) => (p.seqStep ?? 0) + 1 < sequenceFor(p.segment).length;
 
 // ─── Templates ────────────────────────────────────────────────────────
 const SIGN = `Ralph Karam — Robi AI
@@ -261,6 +289,49 @@ Pas d'exclusivité, pas d'engagement de durée. Si le format vous va, on cadre e
 ${SIGN}`,
   },
 
+  // ── Backlinks : rédacteurs de comparatifs, annuaires, médias ──────────
+  // On ne vend rien : on propose un outil qui manque à leur sélection.
+  // Prix repris de la page pricing live — ne pas en inventer d'autres.
+  {
+    id: "backlink-first", label: "Backlink — pitch comparatif", segment: "backlink", channel: "email", templateKey: "first",
+    subject: "Un outil de facturation vocale / IA pour votre comparatif ?",
+    body: `Bonjour {{prenom}},
+
+Je viens de lire votre comparatif des logiciels de facturation sur {{societe}} — sélection très complète. Un créneau n'y figure pas encore : la facturation par IA, à la voix.
+
+C'est ce que fait Robi AI (robi-app.com) : on dicte « Prépare une facture de 500 € pour Alice » et le document conforme sort en 30 secondes — numérotation, mentions TVA, format Factur-X prêt pour l'obligation du 1er septembre 2026. Relances d'impayés rédigées par l'IA, paiement en ligne intégré.
+
+Côté prix : gratuit pour 2 documents, puis 14 €/mois ou 89 €/an — et une offre de lancement à vie à 59 €, que je n'ai vue nulle part ailleurs.
+
+Je vous ouvre volontiers un accès complet pour le tester. Et si vous travaillez en affiliation, nous avons un programme.
+
+${SIGN}`,
+  },
+  {
+    id: "backlink-relance1", label: "Backlink — relance courte", segment: "backlink", channel: "email", templateKey: "relance1",
+    subject: "Re: Robi AI pour votre comparatif",
+    body: `Bonjour {{prenom}},
+
+Je me permets de remonter mon message de la semaine dernière.
+
+Si ça peut faciliter votre évaluation, je vous crée un accès complet en deux minutes — vous pourrez tester la création d'une facture à la voix directement.
+
+Et si l'outil ne correspond pas à votre ligne éditoriale, un simple « non merci » me va très bien.
+
+${SIGN}`,
+  },
+  {
+    id: "backlink-breakup", label: "Backlink — clôture", segment: "backlink", channel: "email", templateKey: "breakup",
+    subject: "Je referme le sujet",
+    body: `Bonjour {{prenom}},
+
+Je n'insiste pas davantage. Si vous mettez à jour votre comparatif plus tard — notamment avec l'obligation de facturation électronique — je reste disponible pour un accès de test ou des informations sur Robi AI.
+
+Bonne continuation,
+
+${SIGN}`,
+  },
+
   // ── Relances ─────────────────────────────────────────────────────────
   {
     id: "all-relance1", label: "Relance 1 — courte", segment: "all", channel: "email", templateKey: "relance1",
@@ -400,8 +471,9 @@ export const deleteProspect = (id: string) => deleteDoc(doc(db, "prospects", id)
 /** Enregistre un contact et programme l'étape suivante de la séquence. */
 export const advanceProspect = async (p: Prospect, note?: string) => {
   if (!p.id) return;
+  const seq = sequenceFor(p.segment);
   const cur = stepOf(p);
-  const nextIndex = Math.min((p.seqStep ?? 0) + 1, SEQUENCE.length - 1);
+  const nextIndex = Math.min((p.seqStep ?? 0) + 1, seq.length - 1);
   const touch: ProspectTouch = { date: todayStr(), channel: cur.channel, note };
 
   await updateProspect(p.id, {
@@ -409,7 +481,7 @@ export const advanceProspect = async (p: Prospect, note?: string) => {
     seqStep: nextIndex,
     touches: [...(p.touches || []), touch],
     nextActionDate: cur.delay > 0 ? addDays(todayStr(), cur.delay) : undefined,
-    nextActionLabel: cur.delay > 0 ? SEQUENCE[nextIndex].label : undefined,
+    nextActionLabel: cur.delay > 0 ? seq[nextIndex].label : undefined,
   }, p);
 };
 
@@ -430,15 +502,30 @@ export const importProspectsFromJson = async (
   const items = (Array.isArray(parsed) ? parsed : [parsed]) as Record<string, unknown>[];
   const errors: string[] = [];
 
+  // Les sites contactés via un formulaire n'ont pas d'email : on dédoublonne
+  // aussi sur le domaine, sinon chaque réimport crée des copies.
+  const hostOf = (url?: string) => {
+    if (!url) return "";
+    try {
+      return new URL(url.startsWith("http") ? url : `https://${url}`).hostname.replace(/^www\./, "").toLowerCase();
+    } catch {
+      return "";
+    }
+  };
+
   const existing = await getDocs(col());
   const seen = new Set<string>();
+  const seenHosts = new Set<string>();
   existing.docs.forEach((d) => {
-    const e = (d.data() as Prospect).email;
-    if (e) seen.add(e.toLowerCase());
+    const data = d.data() as Prospect;
+    if (data.email) seen.add(data.email.toLowerCase());
+    const h = hostOf(data.website);
+    if (h) seenHosts.add(h);
   });
 
   let imported = 0;
   let skipped = 0;
+  const isDate = (v: unknown): v is string => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
 
   for (const [i, raw] of items.entries()) {
     const company = typeof raw.company === "string" ? raw.company.trim() : "";
@@ -447,13 +534,29 @@ export const importProspectsFromJson = async (
       continue;
     }
     const email = typeof raw.email === "string" ? raw.email.trim().toLowerCase() : "";
-    if (email && seen.has(email)) {
+    const host = hostOf(typeof raw.website === "string" ? raw.website : undefined);
+    if ((email && seen.has(email)) || (host && seenHosts.has(host))) {
       skipped++;
       continue;
     }
 
     const seg = String(raw.segment || "") as ProspectSegment;
+    const segment: ProspectSegment = SEGMENTS.includes(seg) ? seg : "freelance";
+    const seq = sequenceFor(segment);
     const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : undefined);
+
+    // Optionnel : reprendre une fiche déjà entamée (ex. un pitch déjà envoyé à la main).
+    const status = typeof raw.status === "string" && raw.status in STATUS_META ? (raw.status as ProspectStatus) : "todo";
+    const seqStep = typeof raw.seqStep === "number" ? Math.max(0, Math.min(raw.seqStep, seq.length - 1)) : 0;
+    const touches = Array.isArray(raw.touches)
+      ? (raw.touches as Record<string, unknown>[])
+          .filter((t) => isDate(t.date))
+          .map((t) => ({
+            date: t.date as string,
+            channel: (typeof t.channel === "string" && t.channel in CHANNEL_LABEL ? t.channel : "other") as ProspectChannel,
+            ...(typeof t.note === "string" && t.note ? { note: t.note } : {}),
+          }))
+      : undefined;
 
     const p: Omit<Prospect, "id"> = {
       company,
@@ -464,20 +567,23 @@ export const importProspectsFromJson = async (
       website: str(raw.website),
       linkedin: str(raw.linkedin),
       city: str(raw.city),
-      segment: SEGMENTS.includes(seg) ? seg : "freelance",
-      status: "todo",
+      segment,
+      status,
+      maxStage: status === "lost" ? undefined : status,
       priority: raw.priority === 1 || raw.priority === 2 || raw.priority === 3 ? raw.priority : 2,
       source: str(raw.source),
       notes: str(raw.notes),
-      seqStep: 0,
-      nextActionDate: todayStr(),
-      nextActionLabel: SEQUENCE[0].label,
+      touches: touches?.length ? touches : undefined,
+      seqStep,
+      nextActionDate: isDate(raw.nextActionDate) ? raw.nextActionDate : todayStr(),
+      nextActionLabel: seq[seqStep].label,
     };
     // Firestore refuse `undefined`.
     const clean = Object.fromEntries(Object.entries(p).filter(([, v]) => v !== undefined)) as Omit<Prospect, "id">;
 
     await addProspect(clean);
     if (email) seen.add(email);
+    if (host) seenHosts.add(host);
     imported++;
   }
 

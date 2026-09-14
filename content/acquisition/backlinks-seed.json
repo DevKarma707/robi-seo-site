@@ -1,0 +1,114 @@
+[
+  {
+    "company": "independant.io",
+    "contactName": "Guillaume Robez",
+    "role": "Co-fondateur, responsable éditorial",
+    "website": "https://independant.io/logiciel-facturation-freelance/",
+    "segment": "backlink",
+    "priority": 1,
+    "status": "contacted",
+    "seqStep": 1,
+    "nextActionDate": "2026-09-20",
+    "touches": [
+      { "date": "2026-09-13", "channel": "other", "note": "Pitch envoyé via le formulaire /contactez-nous/" }
+    ],
+    "source": "BACKLINKS.md — roundups",
+    "notes": "Article : « Top 11 des Logiciels de Facturation pour Freelance en 2026 » (Shine, Qonto, Tiime, Evoliz, Axonaut, Indy, Abby, macompta.fr, Freebe, Sage 50, NeedMe). Aucun outil IA/vocal. Contact : https://independant.io/contactez-nous/ (pas d'email public)."
+  },
+  {
+    "company": "Tool Advisor",
+    "website": "https://tool-advisor.fr/",
+    "segment": "backlink",
+    "priority": 1,
+    "source": "BACKLINKS.md — roundups",
+    "notes": "Comparatif « logiciel facturation freelance » (/logiciel-facturation/comparatif/freelance/). Angle : seul outil 100 % vocal/IA, créneau absent. Page contact à récupérer sur le site."
+  },
+  {
+    "company": "Selki",
+    "website": "https://selki.fr/",
+    "segment": "backlink",
+    "priority": 1,
+    "source": "BACKLINKS.md — roundups",
+    "notes": "Article /blog/9-meilleurs-logiciel-facturation/. Blog freelance : proposer un accès de test. Contact à récupérer sur le site."
+  },
+  {
+    "company": "Impli",
+    "website": "https://impli.fr/",
+    "segment": "backlink",
+    "priority": 2,
+    "source": "BACKLINKS.md — roundups",
+    "notes": "Comparatif /comparatif/logiciel-facturation. Ils testent les outils : proposer un accès complet. Contact à récupérer sur le site."
+  },
+  {
+    "company": "MoneyVox",
+    "website": "https://www.moneyvox.fr/",
+    "segment": "backlink",
+    "priority": 2,
+    "source": "BACKLINKS.md — roundups",
+    "notes": "Page /banque-pro/logiciel-de-facturation.php. Média finance : angle « l'IA arrive dans la facturation ». Contact rédaction à récupérer."
+  },
+  {
+    "company": "Dougs (blog)",
+    "website": "https://www.dougs.fr/",
+    "segment": "backlink",
+    "priority": 2,
+    "source": "BACKLINKS.md — roundups",
+    "notes": "Article /blog/meilleur-logiciel-de-facturation/. Cabinet comptable qui a sa propre PDP (ApiFirst) : angle conformité + gain de temps. Contact à récupérer."
+  },
+  {
+    "company": "logiciel-de-facturation.fr",
+    "website": "https://logiciel-de-facturation.fr/",
+    "segment": "backlink",
+    "priority": 2,
+    "source": "BACKLINKS.md — roundups",
+    "notes": "Page /secteurs/freelance-auto-entrepreneur. Site spécialisé : demander une fiche dédiée. Contact à récupérer."
+  },
+  {
+    "company": "comparatif-facture-electronique.fr",
+    "website": "https://comparatif-facture-electronique.fr/",
+    "segment": "backlink",
+    "priority": 2,
+    "source": "BACKLINKS.md — roundups",
+    "notes": "Article /meilleurs-logiciels-facturation-electroniques-gratuits/. Angle réforme 2026-2027 + Factur-X natif. Contact à récupérer."
+  },
+  {
+    "company": "Appvizer (annuaire)",
+    "website": "https://www.appvizer.fr/",
+    "segment": "backlink",
+    "priority": 1,
+    "source": "BACKLINKS.md — annuaires",
+    "notes": "Soumission gratuite : https://www.appvizer.fr/partenaires/inscription — catégorie Facturation. Utiliser la fiche produit du Kit (section A). Marquer fait une fois soumis."
+  },
+  {
+    "company": "G2 (annuaire)",
+    "website": "https://www.g2.com/",
+    "segment": "backlink",
+    "priority": 1,
+    "source": "BACKLINKS.md — annuaires",
+    "notes": "Profil gratuit : https://sell.g2.com — très cité par ChatGPT/Perplexity. Fiche EN du Kit (section B)."
+  },
+  {
+    "company": "Capterra / GetApp (annuaire)",
+    "website": "https://www.capterra.fr/",
+    "segment": "backlink",
+    "priority": 1,
+    "source": "BACKLINKS.md — annuaires",
+    "notes": "Un seul dashboard pour Capterra, GetApp et Software Advice : https://www.gartner.com/en/digital-markets"
+  },
+  {
+    "company": "AlternativeTo (annuaire)",
+    "website": "https://alternativeto.net/",
+    "segment": "backlink",
+    "priority": 2,
+    "source": "BACKLINKS.md — annuaires",
+    "notes": "Soumission : https://alternativeto.net/manage-item/ — se positionner en alternative à Henrri, Freebe, Facture.net."
+  },
+  {
+    "company": "There's An AI For That (annuaire)",
+    "website": "https://theresanaiforthat.com/",
+    "segment": "backlink",
+    "priority": 2,
+    "source": "BACKLINKS.md — annuaires",
+    "notes": "Soumission : https://theresanaiforthat.com/submit/ — annuaire IA très cité par les LLM."
+  }
+]

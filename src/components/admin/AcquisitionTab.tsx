@@ -8,8 +8,8 @@ import {
 import {
   subscribeToProspects, subscribeToUnsubscribes, updateProspect, deleteProspect,
   advanceProspect, importProspectsFromJson, makeUnsubToken, resolveTemplate,
-  renderTemplate, stepOf, relativeDay, todayStr,
-  SEGMENT_META, SEGMENTS, STATUS_META, PIPELINE, SEQUENCE,
+  renderTemplate, stepOf, relativeDay, todayStr, statusLabel, sequenceFor,
+  SEGMENT_META, SEGMENTS, STATUS_META, PIPELINE,
   type Prospect, type ProspectSegment, type ProspectStatus,
 } from "@/lib/prospects";
 import { fetchOutreachStatus, sendOutreachEmail, type OutreachStatus } from "@/lib/adminApi";
@@ -210,7 +210,7 @@ const AcquisitionTab: React.FC = () => {
             className={`${card} p-3 text-left transition-all hover:bg-slate-50 ${status === s ? "ring-1 ring-[#BEF221]/40" : ""}`}
           >
             <p className="text-[9px] font-bold uppercase tracking-widest mb-1" style={{ color: STATUS_META[s].color }}>
-              {STATUS_META[s].label}
+              {statusLabel(s, segment)}
             </p>
             <span className="font-black text-2xl text-slate-900">{counts[s] || 0}</span>
           </button>
@@ -267,7 +267,7 @@ const AcquisitionTab: React.FC = () => {
         </select>
         <select className={select} value={status} onChange={(e) => setStatus(e.target.value as ProspectStatus | "open")}>
           <option value="open">En cours</option>
-          {(Object.keys(STATUS_META) as ProspectStatus[]).map((s) => <option key={s} value={s}>{STATUS_META[s].label}</option>)}
+          {(Object.keys(STATUS_META) as ProspectStatus[]).map((s) => <option key={s} value={s}>{statusLabel(s, segment)}</option>)}
         </select>
         <button onClick={() => setShowImport((v) => !v)} className={btnGhost}>
           <span className="flex items-center gap-1.5"><Upload size={12} /> Importer JSON</span>
@@ -313,7 +313,7 @@ const AcquisitionTab: React.FC = () => {
                   <span className="text-[13px] font-bold text-slate-900 truncate flex-1">{p.company}</span>
                   {isOptedOut(p) && <Ban size={12} className="text-red-600 flex-shrink-0" />}
                   <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: `${STATUS_META[p.status].color}1f`, color: STATUS_META[p.status].color }}>
-                    {STATUS_META[p.status].label}
+                    {statusLabel(p.status, p.segment)}
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-500 truncate mt-0.5 pl-3.5">
@@ -368,7 +368,7 @@ const AcquisitionTab: React.FC = () => {
                   className={`${btnPill} ${selected.status === s ? "text-black" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
                   style={selected.status === s ? { backgroundColor: STATUS_META[s].color } : undefined}
                 >
-                  {STATUS_META[s].label}
+                  {statusLabel(s, selected.segment)}
                 </button>
               ))}
             </div>
@@ -376,10 +376,10 @@ const AcquisitionTab: React.FC = () => {
             {/* Séquence */}
             <div>
               <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">
-                Étape {(selected.seqStep ?? 0) + 1} / {SEQUENCE.length} · {stepOf(selected).label}
+                Étape {(selected.seqStep ?? 0) + 1} / {sequenceFor(selected.segment).length} · {stepOf(selected).label}
               </p>
               <div className="flex gap-1">
-                {SEQUENCE.map((_, i) => (
+                {sequenceFor(selected.segment).map((_, i) => (
                   <div key={i} className="flex-1 h-1 rounded-full" style={{ backgroundColor: i <= (selected.seqStep ?? 0) ? ACCENT : "rgba(255,255,255,0.12)" }} />
                 ))}
               </div>
