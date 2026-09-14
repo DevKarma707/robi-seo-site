@@ -6,7 +6,7 @@ import {
   Link2, FolderPlus, HardDriveDownload, Image as ImageIcon, X,
 } from "lucide-react";
 import {
-  listSharedFiles, uploadSharedFile, deleteSharedFile, humanSize, isImage, safeFolder,
+  listSharedFiles, listSharedFolders, uploadSharedFile, deleteSharedFile, humanSize, isImage, safeFolder,
   PRESET_FOLDERS, ROOT_FOLDER, type SharedFile,
 } from "@/lib/sharedFiles";
 import {
@@ -37,7 +37,11 @@ const FichiersTab: React.FC = () => {
   const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [hasRunner, setHasRunner] = useState(false);
   const [dragging, setDragging] = useState(false);
-  const [folder, setFolder] = useState<string>(ALL);
+  // Aucun dossier au départ : on attend de savoir lesquels existent pour en
+  // ouvrir un. Charger « Tous » d'emblée est précisément ce qui faisait
+  // attendre l'onglet plusieurs minutes.
+  const [folder, setFolder] = useState<string>("");
+  const [allFolders, setAllFolders] = useState<string[]>([]);
   const [uploadFolder, setUploadFolder] = useState<string>(PRESET_FOLDERS[1]);
   const [preview, setPreview] = useState<SharedFile | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -67,26 +71,37 @@ const FichiersTab: React.FC = () => {
       setFiles(await listSharedFiles((partiel) => {
         setFiles(partiel);
         setLoading(false);
-      }));
+      }, folder === ALL ? undefined : folder));
     } catch (e) {
       setError((e as Error).message);
     } finally {
       setLoading(false);
     }
+  }, [folder]);
+
+  // 1) Les dossiers d'abord — une requête, l'onglet s'affiche aussitôt.
+  useEffect(() => {
+    listSharedFolders()
+      .then((noms) => {
+        setAllFolders(noms);
+        // Ouvrir le dossier de travail habituel s'il existe, sinon le premier.
+        setFolder(noms.includes(PRESET_FOLDERS[1]) ? PRESET_FOLDERS[1] : noms[0] || ROOT_FOLDER);
+      })
+      .catch((e) => { setError((e as Error).message); setLoading(false); });
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  // 2) Puis les fichiers du dossier ouvert, et de lui seul.
+  useEffect(() => { if (folder) load(); }, [folder, load]);
   useEffect(() => { runnerAvailable().then(setHasRunner); }, []);
 
   /** Dossiers existants + dossiers proposés, sans doublon, racine en dernier. */
   const folders = useMemo(() => {
-    const seen = new Set<string>(PRESET_FOLDERS);
-    files.forEach((f) => seen.add(f.folder));
+    const seen = new Set<string>([...PRESET_FOLDERS, ...allFolders]);
     seen.delete(ROOT_FOLDER);
     const list = Array.from(seen).sort();
-    if (files.some((f) => f.folder === ROOT_FOLDER)) list.push(ROOT_FOLDER);
+    if (allFolders.includes(ROOT_FOLDER)) list.push(ROOT_FOLDER);
     return list;
-  }, [files]);
+  }, [allFolders]);
 
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
@@ -139,7 +154,7 @@ const FichiersTab: React.FC = () => {
     const clean = raw ? safeFolder(raw) : "";
     if (!clean) return;
     setUploadFolder(clean);
-    setFolder(ALL);
+    setFolder(uploadFolder);
     say("ok", `Dossier « ${clean} » prêt : il apparaîtra au premier fichier déposé.`);
   };
 
@@ -353,9 +368,9 @@ const FichiersTab: React.FC = () => {
       {/* Dossiers */}
       {files.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
-          <Chip active={folder === ALL} onClick={() => setFolder(ALL)}>Tous · {files.length}</Chip>
+          <Chip active={folder === ALL} onClick={() => setFolder(ALL)}>Tous</Chip>
           {folders.filter((f) => counts[f]).map((f) => (
-            <Chip key={f} active={folder === f} onClick={() => setFolder(f)}>{f} · {counts[f]}</Chip>
+            <Chip key={f} active={folder === f} onClick={() => setFolder(f)}>{f}{counts[f] ? ` · ${counts[f]}` : ""}</Chip>
           ))}
         </div>
       )}
