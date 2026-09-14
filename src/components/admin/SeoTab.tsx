@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Plus, FileJson, Trash2, ArrowUp, ArrowDown, Minus, ChevronUp, ChevronDown,
-  ExternalLink, Search, RefreshCw, X, Sparkles, Flag,
+  ExternalLink, Search, RefreshCw, X, Sparkles, Flag, Upload,
 } from "lucide-react";
 import {
   SEO_STATUSES, addSeoKeyword, updateSeoKeyword, deleteSeoKeyword, importSeoKeywordsFromJson,
   statusFromPosition, syncKeywordsFromReport, untrackedQueries,
   type SeoKeyword, type SeoStatus,
 } from "@/lib/seoKeywords";
-import { subscribeToSeoReports, type GscReport } from "@/lib/searchConsole";
+import { parseGscFiles, saveSeoReport, subscribeToSeoReports, type GscReport } from "@/lib/searchConsole";
 import seed from "../../../content/seo/seo-keywords-seed.json";
 import { btn, btnAccent, card, input, kpiLabel, kpiValue, sectionTitle, select, ACCENT_INK } from "./ui";
 
@@ -157,6 +157,29 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
     }
   };
 
+  /**
+   * Import du ZIP Search Console directement depuis l'onglet SEO : l'export
+   * est gardé comme dans Analytics (même collection seoReports), puis les
+   * positions des mots-clés suivis sont mises à jour dans la foulée.
+   */
+  const zipRef = useRef<HTMLInputElement>(null);
+  const importZip = async (list: FileList | null) => {
+    const files = list ? Array.from(list) : [];
+    if (!files.length) return;
+    setBusy(true);
+    try {
+      const parsed = await parseGscFiles(files);
+      const id = await saveSeoReport(parsed);
+      const r = await syncKeywordsFromReport({ ...parsed, id }, keywords);
+      say(`✅ Export du ${fmtDate(parsed.periodStart)} au ${fmtDate(parsed.periodEnd)} importé · ${r.updated} position${r.updated > 1 ? "s" : ""} mise${r.updated > 1 ? "s" : ""} à jour · ${r.absent} absent${r.absent > 1 ? "s" : ""} de l'export${r.already ? ` · ${r.already} déjà à jour` : ""}`);
+    } catch (e) {
+      say(`❌ ${(e as Error).message}`);
+    } finally {
+      setBusy(false);
+      if (zipRef.current) zipRef.current.value = "";
+    }
+  };
+
   const loadSeed = async () => {
     setBusy(true);
     try {
@@ -198,8 +221,13 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
         <p className="flex-1 min-w-[220px] text-xs text-white/60">
           {latest
             ? <>Dernier export Search Console : <strong className="text-white/90">{fmtDate(latest.periodStart)} → {fmtDate(latest.periodEnd)}</strong>{pendingSync > 0 && keywords.length > 0 ? ` · ${pendingSync} mot${pendingSync > 1 ? "s" : ""}-clé${pendingSync > 1 ? "s" : ""} à synchroniser` : ""}</>
-            : "Aucun export Search Console : importe le ZIP dans l'onglet Analytics pour synchroniser les positions."}
+            : "Aucun export Search Console : clique sur « Importer un export (ZIP) » pour mettre les positions à jour."}
         </p>
+        <button onClick={() => zipRef.current?.click()} disabled={busy} className={btnAccent}
+          title="Search Console → Performances → Exporter → Télécharger au format CSV (ZIP)">
+          {busy ? <RefreshCw size={13} className="animate-spin" /> : <Upload size={13} />} Importer un export (ZIP)
+        </button>
+        <input ref={zipRef} type="file" accept=".zip,.csv" multiple className="hidden" onChange={(e) => importZip(e.target.files)} />
         <button onClick={loadSeed} disabled={busy} className={keywords.length === 0 ? btnAccent : btn}
           title="Ajoute les mots-clés manquants de la stratégie et complète les champs vides (marché, objectif…), sans rien écraser">
           <Sparkles size={14} /> {keywords.length === 0 ? "Charger la liste de départ" : "Compléter avec la liste de départ"}
