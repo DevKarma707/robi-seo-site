@@ -3,8 +3,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ChevronLeft, ChevronRight, FileJson, RefreshCw, AlertTriangle, Check, Trash2,
-  Pencil, X, Copy, Sparkles, ClipboardCopy,
+  Pencil, X, Copy, Sparkles, ClipboardCopy, ImagePlus, Loader2,
 } from "lucide-react";
+import { listSharedFiles, isImage, type SharedFile } from "@/lib/sharedFiles";
 import {
   subscribeToPosts, addPost, updatePost, updatePostText, deletePost, importPostsFromJson,
   monthGrid, MONTH_NAMES, CHANNEL_META, TYPE_META, STATUS_META, CHANNELS, TYPES,
@@ -55,7 +56,10 @@ const ReseauxTab: React.FC = () => {
   const [ready, setReady] = useState(false);
   const [channel, setChannel] = useState<PostChannel | "all">("all");
   const [openId, setOpenId] = useState<string | null>(null);
-  const [edit, setEdit] = useState<{ id: string; caption: string; hashtags: string; visual: string } | null>(null);
+  const [edit, setEdit] = useState<{ id: string; caption: string; hashtags: string; visual: string; imageUrl: string } | null>(null);
+  // Le sélecteur s'ouvre pour un post donné : la médiathèque n'est chargée
+  // qu'à ce moment-là, jamais à l'affichage du calendrier.
+  const [picker, setPicker] = useState<boolean>(false);
   const [importOpen, setImportOpen] = useState(false);
   const [importText, setImportText] = useState("");
   const [busy, setBusy] = useState(false);
@@ -337,6 +341,25 @@ const ReseauxTab: React.FC = () => {
                   value={ed.visual}
                   onChange={(e) => setEdit({ ...ed, visual: e.target.value })}
                 />
+                {/* Le visuel attaché. Sans ce bloc, imageUrl ne pouvait être
+                    rempli par personne : le champ existait, s'affichait, mais
+                    aucun écran ne permettait de le poser. Les images déposées
+                    dans Fichiers restaient donc inutilisables pour un post. */}
+                <div className="flex items-center gap-2">
+                  {ed.imageUrl ? (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={ed.imageUrl} alt="" className="h-14 w-14 rounded-lg object-cover border border-slate-200" />
+                      <button onClick={() => setPicker(true)} className={btnGhost}>Changer</button>
+                      <button onClick={() => setEdit({ ...ed, imageUrl: "" })} className={btnGhost}>Retirer</button>
+                    </>
+                  ) : (
+                    <button onClick={() => setPicker(true)} className={btnGhost}>
+                      <span className="flex items-center gap-1"><ImagePlus size={11} /> Choisir un visuel</span>
+                    </button>
+                  )}
+                </div>
+
                 <div className="flex gap-1.5">
                   <button onClick={saveEdit} disabled={busy || !ed.caption.trim()} className={btnPrimary}>
                     <span className="flex items-center gap-1"><Check size={11} /> Enregistrer</span>
@@ -375,7 +398,7 @@ const ReseauxTab: React.FC = () => {
               ))}
               {!ed && (
                 <button
-                  onClick={() => setEdit({ id: p.id!, caption: p.caption, hashtags: p.hashtags || "", visual: p.visual || "" })}
+                  onClick={() => setEdit({ id: p.id!, caption: p.caption, hashtags: p.hashtags || "", visual: p.visual || "", imageUrl: p.imageUrl || "" })}
                   className={btnGhost}
                 >
                   <span className="flex items-center gap-1"><Pencil size={11} /> Éditer</span>
@@ -421,6 +444,85 @@ const ReseauxTab: React.FC = () => {
           {flash.text}
         </div>
       )}
+      {picker && edit && (
+        <Mediatheque
+          onClose={() => setPicker(false)}
+          onPick={(url) => { setEdit({ ...edit, imageUrl: url }); setPicker(false); }}
+        />
+      )}
+
+    </div>
+  );
+};
+
+/**
+ * Sélecteur de visuel, alimenté par la médiathèque de l'onglet Fichiers —
+ * elle-même synchronisée depuis ~/Desktop/ROBI_PARTAGE.
+ *
+ * Les images sont listées à l'ouverture seulement : le calendrier affiche
+ * souvent trente posts, et charger le bucket pour chacun serait payé à chaque
+ * changement de mois pour un écran qu'on n'ouvre presque jamais.
+ */
+const Mediatheque = ({ onClose, onPick }: { onClose: () => void; onPick: (url: string) => void }) => {
+  const [fichiers, setFichiers] = useState<SharedFile[] | null>(null);
+  const [erreur, setErreur] = useState<string | null>(null);
+
+  useEffect(() => {
+    listSharedFiles()
+      .then((tous) => setFichiers(tous.filter(isImage)))
+      .catch((e) => setErreur((e as Error).message));
+  }, []);
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] bg-black/70 flex items-center justify-center p-6"
+      onClick={onClose}
+    >
+      <div
+        className={`${card} w-full max-w-3xl max-h-[80vh] overflow-auto p-5`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center gap-2 mb-4">
+          <p className="text-xs font-black uppercase tracking-widest text-slate-900 flex-1">
+            Choisir un visuel
+          </p>
+          <button onClick={onClose} className={btnGhost}>
+            <span className="flex items-center gap-1"><X size={11} /> Fermer</span>
+          </button>
+        </div>
+
+        {erreur && <p className="text-[13px]" style={{ color: "#f87171" }}>{erreur}</p>}
+
+        {!fichiers && !erreur && (
+          <p className="text-[13px] text-slate-500 flex items-center gap-2">
+            <Loader2 size={14} className="animate-spin" /> Lecture de la médiathèque…
+          </p>
+        )}
+
+        {fichiers?.length === 0 && (
+          <p className="text-[13px] text-slate-500">
+            Aucune image dans la médiathèque. Dépose-les dans l&apos;onglet Fichiers, ou dans
+            <code className="mx-1">~/Desktop/ROBI_PARTAGE</code> si la synchronisation est active.
+          </p>
+        )}
+
+        {!!fichiers?.length && (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {fichiers.map((f) => (
+              <button
+                key={f.path}
+                onClick={() => onPick(f.url)}
+                className={`rounded-xl overflow-hidden border border-slate-200 hover:opacity-80 transition-opacity ${focusRing}`}
+                title={f.path}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={f.url} alt={f.name} className="w-full h-28 object-cover" />
+                <span className="block text-[10px] text-slate-500 truncate px-1.5 py-1">{f.name}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
