@@ -3,6 +3,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { LegalContent } from "@/components/sections/LegalContent";
+import { formatEditorBlock } from "@/lib/legalEntity";
 import { CTA } from "@/components/sections/CTA";
 
 export async function generateMetadata({
@@ -32,7 +33,7 @@ export default async function LegalPage({
   const legal = (dict.pages as any).legal || {};
 
   const sections = [
-    { title: legal.editor || "Éditeur", content: legal.editorContent || "" },
+    { title: legal.editor || "Éditeur", content: formatEditorBlock(locale) },
     { title: legal.hosting || "Hébergement", content: legal.hostingContent || "" },
     { title: legal.ip || "Propriété intellectuelle", content: legal.ipContent || "" },
     { title: legal.liability || "Responsabilité", content: legal.liabilityContent || "" },
