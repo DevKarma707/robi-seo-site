@@ -42,20 +42,21 @@ const content: Record<Lang, {
   faq: { question: string; answer: string }[];
 }> = {
   fr: {
-    metaTitle: "Facture AI : Créez vos Factures par Intelligence Artificielle | Robi",
+    metaTitle: "Facture IA (Facture AI) : créez vos factures par l'IA | Robi",
     metaDescription:
-      "Facture AI : créez devis et factures conformes en 30 secondes en parlant à l'IA. Relances automatiques, signature électronique, paiement Stripe. Essai gratuit.",
+      "Facture IA : créez devis et factures conformes Factur-X en 30 secondes en parlant à l'intelligence artificielle. Relances automatiques, paiement en ligne. 2 documents gratuits.",
     keywords: [
-      "facture ai",
       "facture ia",
+      "facture ai",
       "facture intelligence artificielle",
       "générateur de facture ia",
       "créer une facture avec l'ia",
       "logiciel facturation ia",
+      "logiciel de gestion des factures avec ia",
     ],
     hero: {
-      badge: "Facture AI",
-      title: "La facture AI :",
+      badge: "Facture IA · Facture AI",
+      title: "La facture IA :",
       titleAccent: "dites-le, Robi facture",
       subtitle:
         "Créez une facture par intelligence artificielle en 30 secondes : dites « Prépare une facture de 500 € pour Alice » et Robi génère un document conforme, prêt à envoyer.",
@@ -66,7 +67,7 @@ const content: Record<Lang, {
       { value: "10h", label: "Gagnées chaque mois" },
     ],
     definition: {
-      title: "Qu'est-ce qu'une facture AI ?",
+      title: "Qu'est-ce qu'une facture IA (ou facture AI) ?",
       paragraphs: [
         "Une facture AI (ou facture IA) est une facture générée par intelligence artificielle à partir d'une simple instruction en langage naturel, écrite ou dictée à la voix. Au lieu de remplir des champs un par un dans un logiciel de facturation classique, vous décrivez la prestation — « Facture de 850 € pour la refonte du site de Marc, payable à 30 jours » — et l'IA produit une facture complète : client, montant, TVA, mentions légales obligatoires et numérotation séquentielle conforme.",
         "Robi est une application de facture AI conçue pour les freelances, artisans et petites entreprises. L'IA comprend le contexte de votre activité : elle retrouve vos clients existants, applique vos tarifs habituels, calcule la TVA selon votre régime et génère un document conforme à la réglementation française (et de 15 autres pays). Aucune connaissance comptable n'est requise.",
@@ -149,19 +150,21 @@ const content: Record<Lang, {
         { label: "Relances de factures automatiques", href: "/features/relance-automatique" },
         { label: "Robi AI vs Excel pour facturer", href: "/comparisons/vs-excel" },
         { label: "Les mentions obligatoires sur une facture", href: "/blog/mentions-obligatoires-facture" },
+        { label: "Créer une facture avec l'IA : le guide", href: "/blog/creer-facture-avec-ia" },
+        { label: "Facture vocale : créer une facture en parlant", href: "/blog/facture-vocale-creer-en-parlant" },
         { label: "Tarifs de Robi", href: "/pricing" },
       ],
     },
     faq: [
       {
-        question: "C'est quoi, une facture AI ?",
+        question: "C'est quoi, une facture IA (ou facture AI) ?",
         answer:
           "Une facture AI est une facture générée par une intelligence artificielle à partir d'une instruction en langage naturel. Avec Robi, vous dictez ou écrivez « Facture de 500 € pour Alice » et l'IA produit en 30 secondes une facture conforme : client, montants, TVA, mentions légales et numérotation séquentielle.",
       },
       {
         question: "Une facture créée par l'IA est-elle légale et conforme ?",
         answer:
-          "Oui. Robi applique automatiquement les règles de facturation françaises : numérotation séquentielle inaltérable, mentions obligatoires (SIREN/SIRET, TVA, pénalités de retard), et s'adapte à votre régime fiscal (micro-entreprise, TVA non applicable art. 293 B, etc.). La réglementation impose des mentions sur le document, pas la façon dont il est rédigé — une facture AI est aussi légale qu'une facture saisie à la main.",
+          "Oui. Robi applique automatiquement les règles de facturation françaises : numérotation séquentielle inaltérable, mentions obligatoires (SIREN/SIRET, TVA, pénalités de retard), et s'adapte à votre régime fiscal (micro-entreprise, mention « TVA non applicable » avec la référence au CIBS en vigueur depuis le 1er septembre 2026, etc.). La réglementation impose des mentions sur le document, pas la façon dont il est rédigé — une facture AI est aussi légale qu'une facture saisie à la main.",
       },
       {
         question: "Quelle différence entre Robi et ChatGPT pour faire une facture ?",
@@ -174,31 +177,34 @@ const content: Record<Lang, {
           "Oui, c'est l'usage principal de Robi : depuis le navigateur de votre téléphone, sans rien installer, vous dictez une facture ou un devis depuis un chantier, une voiture ou entre deux rendez-vous. Le document est généré, envoyé et suivi depuis le téléphone.",
       },
       {
-        question: "Combien coûte un logiciel de facture AI ?",
+        question: "Combien coûte un logiciel de facture IA ?",
         answer:
-          "Robi propose une offre de lancement à vie à 59 € (paiement unique), un abonnement mensuel à 14 €/mois ou annuel à 89 €/an pour la France. L'essai est gratuit et sans carte bancaire.",
+          "Robi est gratuit pour 2 factures ou devis. Ensuite, en France : 14 €/mois sans engagement, 89 €/an, 149 € pour 2 ans, ou l'offre de lancement à vie à 59 € (paiement unique, réservée aux 1 000 premiers).",
       },
       {
-        question: "La facture AI est-elle compatible avec la facturation électronique obligatoire en 2026 ?",
+        question: "La facture IA est-elle compatible avec la facturation électronique obligatoire ?",
         answer:
-          "Oui. La réforme française de la facturation électronique (2026-2027) impose des formats structurés et des plateformes agréées pour les transactions entre assujettis à la TVA. Robi suit ce calendrier et génère des documents conformes aux exigences en vigueur pour les indépendants et petites entreprises.",
+          "Oui. Depuis le 1er septembre 2026, les entreprises doivent pouvoir recevoir des factures électroniques, et l'émission devient obligatoire pour les micro-entreprises en 2027. Robi génère nativement le format Factur-X (norme EN 16931). La transmission, elle, passe par une plateforme agréée (PDP) : Robi crée la facture conforme, la plateforme l'achemine.",
       },
     ],
   },
   en: {
-    metaTitle: "AI Invoice: Create Invoices with Artificial Intelligence | Robi",
+    metaTitle: "AI Invoice Generator: Create Invoices with AI in 30s | Robi",
     metaDescription:
-      "AI invoice generator: create compliant quotes and invoices in 30 seconds by talking to AI. Automatic reminders, e-signature, Stripe payments. Free trial.",
+      "Invoice AI: generate compliant quotes and invoices in 30 seconds by typing or speaking to AI. Automatic reminders, e-signature, online payments. Free for 2 documents.",
     keywords: [
       "ai invoice",
+      "invoice ai",
       "ai invoice generator",
+      "ai invoice maker",
+      "ai generated invoice",
       "create invoice with ai",
       "ai invoicing software",
       "voice invoicing",
     ],
     hero: {
-      badge: "AI Invoice",
-      title: "The AI invoice:",
+      badge: "AI Invoice Generator",
+      title: "The AI invoice generator:",
       titleAccent: "say it, Robi invoices it",
       subtitle:
         "Create an invoice with artificial intelligence in 30 seconds: say \"Prepare a £500 invoice for Alice\" and Robi generates a compliant document, ready to send.",
@@ -214,6 +220,7 @@ const content: Record<Lang, {
         "An AI invoice is an invoice generated by artificial intelligence from a simple natural-language instruction, typed or spoken aloud. Instead of filling in fields one by one in a classic invoicing tool, you describe the job — \"£850 invoice for Marc's website redesign, due in 30 days\" — and the AI produces a complete invoice: client, amounts, VAT, mandatory legal mentions and compliant sequential numbering.",
         "Robi is an AI invoicing app built for freelancers, tradespeople and small businesses. The AI understands the context of your business: it finds your existing clients, applies your usual rates, calculates VAT according to your tax scheme and generates documents compliant with the regulations of 16 countries. No accounting knowledge required.",
         "The AI invoice doesn't stop at creation: Robi automatically chases late payers with AI-written emails, notifies you when an invoice is opened or paid, and collects payment via Stripe or PayPal in one click. The entire invoicing chain — quote, signature, invoice, reminder, payment — driven by artificial intelligence.",
+        "How is an AI invoice generator different from an invoice template? A template gives you an empty layout to fill in and keep consistent yourself: numbering, tax rates, client details and totals are your job. An AI invoice maker works the other way round — you state the job in one sentence, and the invoice is built, numbered and checked for you. That is why AI-generated invoices take seconds instead of minutes, with fewer errors.",
       ],
     },
     prompts: {
@@ -292,6 +299,9 @@ const content: Record<Lang, {
         { label: "Automatic invoice reminders", href: "/features/relance-automatique" },
         { label: "Robi AI vs Excel for invoicing", href: "/comparisons/vs-excel" },
         { label: "Mandatory information on an invoice", href: "/blog/mentions-obligatoires-facture" },
+        { label: "How to create an invoice with AI", href: "/blog/creer-facture-avec-ia" },
+        { label: "AI invoicing: create an invoice by speaking", href: "/blog/facturation-par-ia-creer-facture-voix" },
+        { label: "Voice invoice: invoicing without typing", href: "/blog/facture-vocale-creer-en-parlant" },
         { label: "Robi pricing", href: "/pricing" },
       ],
     },
@@ -317,9 +327,19 @@ const content: Record<Lang, {
           "Yes, that's Robi's primary use case: right in your phone's browser, with nothing to install, you dictate an invoice or quote from a job site, a van or between two meetings. The document is generated, sent and tracked from your phone.",
       },
       {
+        question: "Is there a free AI invoice generator?",
+        answer:
+          "Yes: Robi is free for your first 2 invoices or quotes, with no credit card. You get the full AI invoice generator — voice or text prompt, compliant numbering, VAT and a payment link — so you can judge it on a real invoice before choosing a plan.",
+      },
+      {
+        question: "Can AI generate an invoice from a text prompt?",
+        answer:
+          "Yes. Type or say something like \"Invoice 3 days of consulting at £450 a day for Nova Ltd\" and Robi's AI extracts the client, quantity, rate and tax, then generates a complete, sequentially numbered invoice. You can review and edit it before sending.",
+      },
+      {
         question: "How much does AI invoicing software cost?",
         answer:
-          "Robi offers a lifetime launch deal at £49 (one-time payment), a monthly plan at £12/month or a yearly plan at £75/year in the UK. The trial is free, no credit card required.",
+          "Robi is free for 2 invoices or quotes. In the UK, paid plans are £12/month with no commitment, £75/year, £125 for 2 years, or a lifetime launch deal at £49 (one-time payment). Pricing is local in each of the 16 countries Robi supports.",
       },
     ],
   },
@@ -457,7 +477,7 @@ const content: Record<Lang, {
       {
         question: "¿Cuánto cuesta un programa de facturas con IA?",
         answer:
-          "Robi ofrece una oferta de lanzamiento de por vida a 59 € (pago único), una suscripción mensual de 14 €/mes o anual de 89 €/año en España. La prueba es gratuita y sin tarjeta.",
+          "Robi es gratis para 2 facturas o presupuestos. Después, en España: 14 €/mes sin compromiso, 89 €/año, 149 € por 2 años, o la oferta de lanzamiento de por vida a 59 € (pago único, reservada a los 1.000 primeros).",
       },
     ],
   },

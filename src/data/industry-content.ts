@@ -10,6 +10,31 @@ export type IndustryRich = {
 };
 
 export const industryContent: Record<string, IndustryRich> = {
+  sophrologue: {
+    intro: {
+      fr: "Séances individuelles, cycles de plusieurs séances, ateliers de groupe, interventions en entreprise : un sophrologue facture des formats très différents, souvent à des particuliers et à des entreprises en même temps. Robi AI te permet de générer une facture ou une note d'honoraires conforme en quelques secondes après la séance, en la dictant simplement. Tu gères tes tarifs multiples, tes forfaits et tes clients professionnels sans logiciel comptable compliqué.",
+      en: "Individual sessions, multi-session programmes, group workshops, corporate interventions: a sophrologist invoices very different formats, often to individuals and companies at the same time. Robi AI lets you generate a compliant invoice in seconds after a session, simply by dictating it — multiple rates, packages and business clients handled without complex accounting software.",
+      es: "Sesiones individuales, ciclos de varias sesiones, talleres grupales, intervenciones en empresa: un sofrólogo factura formatos muy distintos, a menudo a particulares y empresas a la vez. Robi AI te permite generar una factura conforme en segundos tras la sesión, simplemente dictándola — tarifas múltiples, bonos y clientes profesionales sin software contable complicado.",
+    },
+    faq: [
+      {
+        q: { fr: "Quel logiciel de facturation pour un sophrologue ?", en: "Which invoicing software for a sophrologist?", es: "¿Qué software de facturación para un sofrólogo?" },
+        a: { fr: "Un outil qui gère des tarifs différents (séance, cycle, atelier, entreprise), la mention TVA adaptée et la facturation B2B. Robi AI fait tout cela et te laisse créer chaque facture en la dictant, en quelques secondes, depuis ton téléphone.", en: "A tool that handles different rates (session, programme, workshop, company), the right VAT mention and B2B invoicing. Robi AI does all of this and lets you create each invoice by dictating it, in seconds, from your phone.", es: "Una herramienta que gestione tarifas distintas (sesión, ciclo, taller, empresa), la mención de IVA adecuada y la facturación B2B. Robi AI lo hace y te deja crear cada factura dictándola desde el móvil." },
+      },
+      {
+        q: { fr: "Un sophrologue doit-il facturer la TVA ?", en: "Does a sophrologist charge VAT?", es: "¿Un sofrólogo cobra IVA?" },
+        a: { fr: "En micro-entreprise sous le seuil de la franchise en base, non : la facture porte la mention « TVA non applicable » (référence au CIBS depuis le 1er septembre 2026). Au-delà des seuils, la TVA s'applique. En cas de doute sur ta situation, vérifie avec ton expert-comptable ; Robi applique ensuite la bonne mention automatiquement.", en: "As a French micro-business under the VAT exemption threshold, no: the invoice carries the « TVA non applicable » mention. Above the thresholds, VAT applies. Check your situation with your accountant; Robi then applies the right mention automatically.", es: "En microempresa bajo el umbral de franquicia, no: la factura lleva la mención de exención. Por encima de los umbrales se aplica el IVA. Consulta tu situación con tu gestor; Robi aplica luego la mención correcta." },
+      },
+      {
+        q: { fr: "Comment facturer un atelier de sophrologie en entreprise ?", en: "How to invoice a corporate sophrology workshop?", es: "¿Cómo facturar un taller de sofrología en empresa?" },
+        a: { fr: "Une facture B2B avec les coordonnées et le SIREN de l'entreprise, le détail de l'intervention (durée, nombre de participants) et les conditions de paiement. Avec la facturation électronique, l'entreprise attend un format structuré : Robi génère ta facture au format Factur-X.", en: "A B2B invoice with the company's details, a description of the intervention (duration, participants) and payment terms. With e-invoicing, companies expect a structured format: Robi generates your invoice as Factur-X.", es: "Una factura B2B con los datos de la empresa, el detalle de la intervención (duración, participantes) y las condiciones de pago. Robi genera la factura en formato estructurado Factur-X." },
+      },
+      {
+        q: { fr: "Peut-on vendre des cycles ou forfaits de séances ?", en: "Can I sell session packages?", es: "¿Se pueden vender bonos de sesiones?" },
+        a: { fr: "Oui : tu factures le forfait en une fois (par exemple un cycle de 8 séances), ou tu demandes un acompte puis le solde. Robi garde l'historique de chaque client pour suivre ce qui a été réglé.", en: "Yes: invoice the package in one go (for example an 8-session programme), or take a deposit then the balance. Robi keeps each client's history so you can track what has been paid.", es: "Sí: facturas el bono de una vez (por ejemplo un ciclo de 8 sesiones) o pides un anticipo y luego el saldo. Robi guarda el histórico de cada cliente." },
+      },
+    ],
+  },
   plombier: {
     intro: {
       fr: "Entre deux interventions, sortir un devis de plomberie clair et facturer vite n'est pas toujours simple. Déplacement, fourniture de pièces, main d'œuvre, TVA, urgences le week-end… un plombier jongle avec des lignes qui changent à chaque chantier. Robi AI te laisse dicter ta prestation à voix haute depuis ton camion et génère en quelques secondes un devis ou une facture conforme, prêt à envoyer au client.",
