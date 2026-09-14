@@ -12,17 +12,40 @@ import {
 } from "@/lib/socialPosts";
 import { ACCENT, btnGhost, btnPill, btnPrimary, card, focusRing, input, select, sectionTitle } from "./ui";
 
-/** Brief à coller dans Claude Code pour fabriquer un mois de posts. */
-const skillBrief = (year: number, month: number) =>
-  [
+/**
+ * Brief à coller dans Claude Code pour fabriquer un mois de posts.
+ *
+ * Il embarque l'historique des posts existants (publiés, prêts, brouillons)
+ * pour qu'une session Claude Code — qui démarre toujours vide — sache ce qui
+ * a déjà été dit et attaque des angles neufs. La ligne éditoriale, elle,
+ * vit dans le dépôt de l'app (branding/EDITORIAL_LINE.md) : c'est le skill
+ * qui la lit, le brief se contente de la rappeler.
+ */
+const skillBrief = (year: number, month: number, history: SocialPost[]) => {
+  const digest = history
+    .filter((p) => p.status !== "draft" || p.date < `${year}-${String(month + 1).padStart(2, "0")}`)
+    .slice(-60)
+    .map((p) => {
+      const hook = p.caption.split("\n").find((l) => l.trim()) ?? "";
+      return `- ${p.date} · ${p.channel} · ${p.type} · ${p.status} — « ${hook.slice(0, 90)} »`;
+    });
+
+  return [
     `/robi-social-media ${MONTH_NAMES[month]} ${year}`,
     "",
     `Génère le calendrier éditorial de ${MONTH_NAMES[month]} ${year} pour Robi.`,
+    "Lis d'abord branding/EDITORIAL_LINE.md (ligne éditoriale) et branding/BRAND_KIT.md dans ~/Desktop/ROBI_V1_READY.",
     "Sors un tableau JSON prêt à importer dans l'onglet Réseaux de l'admin.",
     "",
     "Champs par post : date (AAAA-MM-JJ), channel (instagram|linkedin|tiktok),",
     "type (bold|feature|stats|testimonial|carrousel|mockup), caption, hashtags, visual.",
+    "",
+    digest.length
+      ? `Déjà écrit (${digest.length} posts) — ne répète ni ces accroches ni ces angles, propose du neuf :`
+      : "Aucun post existant : c'est le premier mois.",
+    ...digest,
   ].join("\n");
+};
 
 const ReseauxTab: React.FC = () => {
   const today = useMemo(() => new Date(), []);
@@ -137,7 +160,7 @@ const ReseauxTab: React.FC = () => {
 
   const copyBrief = async () => {
     try {
-      await navigator.clipboard.writeText(skillBrief(year, month));
+      await navigator.clipboard.writeText(skillBrief(year, month, rows));
       say("ok", "Brief copié — colle-le dans Claude Code.");
     } catch {
       say("err", "Copie refusée par le navigateur.");
