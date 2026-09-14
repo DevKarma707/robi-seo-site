@@ -49,24 +49,56 @@ export const runTask = async (repo: RepoKey, prompt: string, mode: RunMode = "vs
 };
 
 /**
- * Descend le dossier partagé sur le disque, là où Claude Code peut le lire.
- * On n'envoie que des URL : le runner télécharge lui-même, ce qui évite de
- * faire transiter des mégaoctets en base64 dans une requête JSON.
+ * Descend la médiathèque sur le disque, là où Claude Code peut la lire, en
+ * conservant les dossiers (ROBI_PARTAGE/reseaux/post.png). On n'envoie que
+ * des URL : le runner télécharge lui-même, ce qui évite de faire transiter
+ * des mégaoctets en base64 dans une requête JSON.
  */
 export const syncSharedFiles = async (
-  files: { name: string; url: string }[]
+  files: { name: string; url: string; folder?: string }[]
 ): Promise<{ written: string[]; dir: string }> => {
+  const body = await call("/sync", { method: "POST", body: JSON.stringify({ files }) });
+  return { written: (body.written as string[]) ?? [], dir: (body.dir as string) ?? "" };
+};
+
+/** Un fichier de ~/Desktop/ROBI_PARTAGE tel que le runner le décrit. */
+export interface LocalFile {
+  /** Chemin relatif au dossier partagé, ex. app-store-screens/v3/01.png */
+  path: string;
+  name: string;
+  folder: string;
+  size: number;
+  mtime: string;
+  contentType: string;
+}
+
+/** Ce que Claude a déposé sur le Mac, pour l'importer dans la médiathèque. */
+export const listLocalFiles = async (): Promise<{ files: LocalFile[]; dir: string }> => {
+  const body = await call("/shared");
+  return { files: (body.files as LocalFile[]) ?? [], dir: (body.dir as string) ?? "" };
+};
+
+/** Les octets d'un fichier local, prêts à monter dans Storage depuis le navigateur. */
+export const fetchLocalFile = async (path: string): Promise<Blob> => {
   const token = getToken();
   if (!token) throw new Error("Jeton du runner absent — colle-le une fois dans l'admin.");
-
-  const r = await fetch(`${BASE}/sync`, {
-    method: "POST",
-    headers: { "content-type": "application/json", "x-runner-token": token },
-    body: JSON.stringify({ files }),
+  const r = await fetch(`${BASE}/shared/file?path=${encodeURIComponent(path)}`, {
+    headers: { "x-runner-token": token },
   });
-
   if (r.status === 401) throw new Error("Jeton refusé par le runner.");
-  const body = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(body.error || `Erreur ${r.status}`);
-  return { written: body.written ?? [], dir: body.dir ?? "" };
+  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || `Erreur ${r.status}`);
+  return r.blob();
+};
+
+const call = async (route: string, init: RequestInit = {}): Promise<Record<string, unknown>> => {
+  const token = getToken();
+  if (!token) throw new Error("Jeton du runner absent — colle-le une fois dans l'admin.");
+  const r = await fetch(`${BASE}${route}`, {
+    ...init,
+    headers: { "content-type": "application/json", "x-runner-token": token, ...(init.headers || {}) },
+  });
+  if (r.status === 401) throw new Error("Jeton refusé par le runner.");
+  const body = (await r.json().catch(() => ({}))) as Record<string, unknown>;
+  if (!r.ok) throw new Error((body.error as string) || `Erreur ${r.status}`);
+  return body;
 };
