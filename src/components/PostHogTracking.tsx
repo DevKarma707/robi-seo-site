@@ -23,7 +23,18 @@ export function PostHogTracking() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!POSTHOG_KEY) return;
+    if (!POSTHOG_KEY) {
+      // Échouer bruyamment. La clé est figée dans le bundle au moment du
+      // build : si elle manque alors, le site se tait pour toujours sans
+      // qu'aucune erreur n'apparaisse nulle part — on l'a découvert en
+      // constatant zéro page vue côté PostHog alors que tout semblait posé.
+      console.warn(
+        "[PostHog] NEXT_PUBLIC_POSTHOG_KEY absente du build : le site " +
+          "n'envoie aucune mesure. Vérifier la variable sur le projet Vercel " +
+          "du site, puis redéployer (la valeur est lue à la construction).",
+      );
+      return;
+    }
     if (posthog.__loaded) return;
 
     posthog.init(POSTHOG_KEY, {
