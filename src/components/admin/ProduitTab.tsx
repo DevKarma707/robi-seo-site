@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, BugPlay, MousePointerClick, RefreshCw, TrendingDown } from "lucide-react";
+import { AlertTriangle, BugPlay, ClipboardCheck, Copy, MousePointerClick, RefreshCw, TrendingDown } from "lucide-react";
 import { fetchProduitReport, type ProduitReport } from "@/lib/adminApi";
+import { construireResume } from "@/lib/produitResume";
 import { ACCENT, btn, card } from "./ui";
 
 const RED = "#f87171";
@@ -50,6 +51,7 @@ export default function ProduitTab() {
   const [data, setData] = useState<ProduitReport | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [chargement, setChargement] = useState(true);
+  const [copie, setCopie] = useState(false);
 
   const charger = useCallback(async () => {
     setChargement(true);
@@ -103,6 +105,30 @@ export default function ProduitTab() {
 
       {data?.configured && (
         <>
+          {/* Le rapport en toutes lettres, avant les chiffres : c'est ce qu'on
+              relit le lundi matin ou qu'on colle dans une conversation. */}
+          <div className={`${card} p-5`}>
+            <div className="flex items-center gap-2 mb-3">
+              <p className="text-xs font-black uppercase tracking-widest text-slate-900 flex-1">
+                Le rapport en clair
+              </p>
+              <button
+                onClick={() => {
+                  void navigator.clipboard.writeText(construireResume(data));
+                  setCopie(true);
+                  setTimeout(() => setCopie(false), 2000);
+                }}
+                className={btn}
+              >
+                {copie ? <ClipboardCheck size={14} /> : <Copy size={14} />}
+                {copie ? "Copié" : "Copier"}
+              </button>
+            </div>
+            <pre className="text-[13px] leading-relaxed text-slate-300 whitespace-pre-wrap font-sans">
+              {construireResume(data)}
+            </pre>
+          </div>
+
           <div className={`${card} p-5`}>
             <div className="flex items-center gap-2 mb-5">
               <TrendingDown size={16} style={{ color: ACCENT }} />
