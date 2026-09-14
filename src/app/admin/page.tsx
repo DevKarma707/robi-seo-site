@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks, FolderOpen, CalendarDays, Compass } from "lucide-react";
+import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks, FolderOpen, CalendarDays, Compass, TrendingDown } from "lucide-react";
 import {
   auth, onAuthStateChanged, signInWithGoogle, signOut, isAllowedEmail, firebaseReady,
   subscribeToArticles, subscribeToVisits, type Article, type VisitStats, type User,
@@ -13,6 +13,7 @@ import CockpitTab from "@/components/admin/CockpitTab";
 import PilotageTab from "@/components/admin/PilotageTab";
 import LancementTab from "@/components/admin/LancementTab";
 import SanteTab from "@/components/admin/SanteTab";
+import ProduitTab from "@/components/admin/ProduitTab";
 import AcquisitionTab from "@/components/admin/AcquisitionTab";
 import InfluenceursTab from "@/components/admin/InfluenceursTab";
 import KanbanTab from "@/components/admin/KanbanTab";
@@ -21,7 +22,7 @@ import ReseauxTab from "@/components/admin/ReseauxTab";
 import ThemePicker from "@/components/admin/ThemePicker";
 import { focusRing, focusRingDark } from "@/components/admin/ui";
 
-type Tab = "cockpit" | "pilotage" | "kanban" | "reseaux" | "fichiers" | "sante" | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
+type Tab = "cockpit" | "pilotage" | "kanban" | "reseaux" | "fichiers" | "sante" | "produit" | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
 
 const EMPTY_VISITS: VisitStats = {
   today: 0, week: 0, prevWeek: 0, month: 0, days: [], byPage: [], bySource: [],
@@ -133,6 +134,7 @@ export default function AdminPage() {
     { id: "reseaux", label: "Réseaux", icon: <CalendarDays size={17} /> },
     { id: "fichiers", label: "Fichiers", icon: <FolderOpen size={17} /> },
     { id: "sante", label: "Santé", icon: <HeartPulse size={17} /> },
+    { id: "produit", label: "Produit", icon: <TrendingDown size={17} /> },
     { id: "acquisition", label: "Acquisition", icon: <Target size={17} /> },
     { id: "influenceurs", label: "Influenceurs", icon: <Megaphone size={17} /> },
     { id: "analytics", label: "Analytics", icon: <BarChart2 size={17} /> },
@@ -146,6 +148,7 @@ export default function AdminPage() {
     kanban: "Le backlog du lancement, colonne par colonne",
     reseaux: "Calendrier éditorial : posts, visuels et statuts",
     fichiers: "Le dossier de travail partagé avec Claude",
+    produit: "Le tunnel et les bugs, lus dans PostHog",
     sante: "Ce qui casse en silence : emails, plantages, IA, crons",
     acquisition: "Prospects, séquence de relance et envoi des emails",
     influenceurs: "Codes promo, ventes attribuées et commissions dues",
@@ -216,6 +219,7 @@ export default function AdminPage() {
           {tab === "reseaux" && <ReseauxTab />}
           {tab === "fichiers" && <FichiersTab />}
           {tab === "sante" && <SanteTab />}
+          {tab === "produit" && <ProduitTab />}
           {tab === "acquisition" && <AcquisitionTab />}
           {tab === "influenceurs" && <InfluenceursTab />}
           {tab === "analytics" && <AnalyticsTab visits={visits} />}

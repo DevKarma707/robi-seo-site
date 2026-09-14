@@ -119,3 +119,14 @@ export const saveLaunchConfig = (patch: Partial<Omit<LaunchConfig, "realSold">>)
 /** Displayed seat count, mirroring the server formula in adminStats.ts. */
 export const computeDisplayedSold = (c: Pick<LaunchConfig, "manualOverride" | "baseOffset" | "realSold" | "totalSeats">) =>
   Math.max(0, Math.min(c.manualOverride ?? c.baseOffset + c.realSold, c.totalSeats));
+
+export interface ProduitReport {
+  configured: boolean;
+  days?: number;
+  funnel?: { event: string; total: number; personnes: number }[];
+  erreurs?: { type: string; message: string; total: number; personnes: number; dernier: string | null }[];
+  cta?: { page: string; total: number }[];
+}
+
+export const fetchProduitReport = (days = 7) =>
+  authedFetch(`/api/admin/posthog?days=${days}`) as Promise<ProduitReport>;
