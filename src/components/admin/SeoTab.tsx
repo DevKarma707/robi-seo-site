@@ -26,6 +26,7 @@ const EXAMPLE_JSON = `[
   {
     "keyword": "facture ia",
     "segment": "Veine IA · FR",
+    "market": "France",
     "targetUrl": "/fr/facture-ai",
     "goal": 3,
     "notes": "Variante « IA » ajoutée au title le 14/09",
@@ -75,6 +76,7 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
   const [flash, setFlash] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [segFilter, setSegFilter] = useState<string | null>(null);
+  const [marketFilter, setMarketFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState<SeoStatus | null>(null);
   const [sort, setSort] = useState<{ key: SortKey; asc: boolean }>({ key: "position", asc: true });
 
@@ -99,12 +101,18 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
     [keywords]
   );
 
+  const markets = useMemo(
+    () => Array.from(new Set(keywords.map((k) => k.market).filter(Boolean) as string[])).sort(),
+    [keywords]
+  );
+
   const pendingSync = latest ? keywords.filter((k) => k.lastReportId !== latest.id).length : 0;
   const suggestions = useMemo(() => untrackedQueries(latest, keywords).slice(0, 12), [latest, keywords]);
 
   const rows = useMemo(() => {
     let out = keywords;
     if (segFilter) out = out.filter((k) => k.segment === segFilter);
+    if (marketFilter) out = out.filter((k) => k.market === marketFilter);
     if (statusFilter) out = out.filter((k) => k.status === statusFilter);
     const dir = sort.asc ? 1 : -1;
     return [...out].sort((a, b) => {
@@ -124,7 +132,7 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
         default: return a.keyword.localeCompare(b.keyword) * dir;
       }
     });
-  }, [keywords, segFilter, statusFilter, sort]);
+  }, [keywords, segFilter, marketFilter, statusFilter, sort]);
 
   const toggleSort = (key: SortKey) =>
     setSort((s) => (s.key === key ? { key, asc: !s.asc } : { key, asc: key !== "impressions" }));
@@ -191,11 +199,10 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
             ? <>Dernier export Search Console : <strong className="text-slate-700">{fmtDate(latest.periodStart)} → {fmtDate(latest.periodEnd)}</strong>{pendingSync > 0 && keywords.length > 0 ? ` · ${pendingSync} mot${pendingSync > 1 ? "s" : ""}-clé${pendingSync > 1 ? "s" : ""} à synchroniser` : ""}</>
             : "Aucun export Search Console : importe le ZIP dans l'onglet Analytics pour synchroniser les positions."}
         </p>
-        {keywords.length === 0 && (
-          <button onClick={loadSeed} disabled={busy} className={btnAccent}>
-            <Sparkles size={14} /> Charger la liste de départ
-          </button>
-        )}
+        <button onClick={loadSeed} disabled={busy} className={keywords.length === 0 ? btnAccent : btn}
+          title="Ajoute les mots-clés manquants de la stratégie et complète les champs vides (marché, objectif…), sans rien écraser">
+          <Sparkles size={14} /> {keywords.length === 0 ? "Charger la liste de départ" : "Compléter avec la liste de départ"}
+        </button>
         <button onClick={runSync} disabled={busy || !latest || keywords.length === 0 || pendingSync === 0} className={btn}
           title="Met à jour positions, impressions et clics depuis le dernier export importé dans Analytics">
           <RefreshCw size={13} className={busy ? "animate-spin" : ""} /> Synchroniser avec Search Console
@@ -217,7 +224,13 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
       {/* ── Filtres ────────────────────────────────────────── */}
       {keywords.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          <button onClick={() => { setSegFilter(null); setStatusFilter(null); }} className={filterBtn(!segFilter && !statusFilter)}>Tout</button>
+          <button onClick={() => { setSegFilter(null); setStatusFilter(null); setMarketFilter(""); }} className={filterBtn(!segFilter && !statusFilter && !marketFilter)}>Tout</button>
+          {markets.length > 1 && (
+            <select value={marketFilter} onChange={(e) => setMarketFilter(e.target.value)} className={`${select} !py-1.5 text-xs font-bold`} aria-label="Marché">
+              <option value="">Tous les marchés</option>
+              {markets.map((m) => <option key={m} value={m}>{m}</option>)}
+            </select>
+          )}
           {segments.map((s) => (
             <button key={s} onClick={() => setSegFilter(segFilter === s ? null : s)} className={filterBtn(segFilter === s)}>{s}</button>
           ))}
@@ -265,7 +278,10 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
                       ? <p className="text-[11px] mt-0.5 line-clamp-1 font-semibold" style={{ color: ACCENT_INK }}>→ {k.nextAction}</p>
                       : k.notes && <p className="text-[11px] mt-0.5 line-clamp-1 text-slate-400">{k.notes}</p>}
                   </td>
-                  <td className="p-3 hidden md:table-cell text-xs text-slate-500 whitespace-nowrap">{k.segment || "—"}</td>
+                  <td className="p-3 hidden md:table-cell text-xs text-slate-500 whitespace-nowrap">
+                    {k.segment || "—"}
+                    {k.market && <span className="block text-[10px] text-slate-400">{k.market}</span>}
+                  </td>
                   <td className="p-3"><PositionCell k={k} /></td>
                   <td className="p-3 hidden sm:table-cell text-xs text-slate-500 whitespace-nowrap">
                     {typeof k.goal === "number" ? (k.goal <= 3 ? `Top ${k.goal}` : k.goal === 10 ? "Page 1" : `≤ ${k.goal}`) : "—"}
@@ -376,7 +392,7 @@ function ImportModal({ onClose, onResult }: { onClose: () => void; onResult: (m:
       <button onClick={run} disabled={busy || !raw.trim()} className={btnAccent}><FileJson size={13} /> {busy ? "Import…" : "Importer"}</button>
     </>}>
       <p className="text-xs text-slate-500">
-        Saisie (<code>keyword</code>, <code>segment</code>, <code>targetUrl</code>, <code>goal</code>, <code>notes</code>, <code>nextAction</code>)
+        Saisie (<code>keyword</code>, <code>segment</code>, <code>market</code>, <code>targetUrl</code>, <code>goal</code>, <code>notes</code>, <code>nextAction</code>)
         ou lignes Search Console (<code>query</code> + <code>position</code>). Un mot-clé déjà suivi n&apos;est pas dupliqué :
         sa position est mise à jour et l&apos;ancienne sert à calculer l&apos;évolution.
       </p>
@@ -392,6 +408,7 @@ function EditModal({ row, draft, onClose }: { row: SeoKeyword | null; draft: Par
   const [data, setData] = useState({
     keyword: base.keyword ?? "",
     segment: base.segment ?? "",
+    market: base.market ?? "",
     targetUrl: base.targetUrl ?? "",
     position: base.position != null ? String(base.position) : "",
     goal: base.goal != null ? String(base.goal) : "",
@@ -417,6 +434,7 @@ function EditModal({ row, draft, onClose }: { row: SeoKeyword | null; draft: Par
         position: pos,
         status: data.status,
         segment: data.segment.trim(),
+        market: data.market.trim(),
         targetUrl: data.targetUrl.trim(),
         notes: data.notes.trim(),
         nextAction: data.nextAction.trim(),
@@ -468,9 +486,15 @@ function EditModal({ row, draft, onClose }: { row: SeoKeyword | null; draft: Par
           </select>
         </div>
       </div>
-      <div>
-        <label className={label}>Page cible</label>
-        <input value={data.targetUrl} onChange={(e) => set({ targetUrl: e.target.value })} placeholder="/fr/facture-ai" className={input} />
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={label}>Marché</label>
+          <input value={data.market} onChange={(e) => set({ market: e.target.value })} placeholder="France" className={input} />
+        </div>
+        <div>
+          <label className={label}>Page cible</label>
+          <input value={data.targetUrl} onChange={(e) => set({ targetUrl: e.target.value })} placeholder="/fr/facture-ai" className={input} />
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>

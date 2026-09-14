@@ -2,6 +2,7 @@
   {
     "keyword": "facture ai",
     "segment": "Veine IA · FR",
+    "market": "France",
     "targetUrl": "/fr/facture-ai",
     "goal": 3,
     "status": "page-1",
@@ -16,6 +17,7 @@
   {
     "keyword": "factureai",
     "segment": "Veine IA · FR",
+    "market": "France",
     "targetUrl": "/fr/facture-ai",
     "goal": 3,
     "status": "page-1",
@@ -28,6 +30,7 @@
   {
     "keyword": "facture ia",
     "segment": "Veine IA · FR",
+    "market": "France",
     "targetUrl": "/fr/facture-ai",
     "goal": 5,
     "status": "contenu-publie",
@@ -42,6 +45,7 @@
   {
     "keyword": "générateur de facture ia",
     "segment": "Veine IA · FR",
+    "market": "France",
     "targetUrl": "/fr/facture-ai",
     "goal": 5,
     "status": "page-1",
@@ -54,6 +58,7 @@
   {
     "keyword": "ia facture",
     "segment": "Veine IA · FR",
+    "market": "France",
     "targetUrl": "/fr/facture-ai",
     "goal": 5,
     "status": "page-1",
@@ -66,6 +71,7 @@
   {
     "keyword": "facturation ia",
     "segment": "Veine IA · FR",
+    "market": "France",
     "targetUrl": "/fr/blog/facturation-par-ia-creer-facture-voix",
     "goal": 5,
     "status": "page-1",
@@ -78,6 +84,7 @@
   {
     "keyword": "facture avec ia",
     "segment": "Veine IA · FR",
+    "market": "France",
     "targetUrl": "/fr/blog/creer-facture-avec-ia",
     "goal": 10,
     "status": "contenu-publie",
@@ -90,6 +97,7 @@
   {
     "keyword": "logiciel de gestion des factures avec ia",
     "segment": "Veine IA · FR",
+    "market": "France",
     "targetUrl": "/fr/blog/logiciel-gestion-factures-ia",
     "goal": 10,
     "status": "contenu-publie",
@@ -104,6 +112,7 @@
   {
     "keyword": "logiciel de gestion des factures avec intelligence artificielle",
     "segment": "Veine IA · FR",
+    "market": "France",
     "targetUrl": "/fr/blog/logiciel-gestion-factures-ia",
     "goal": 10,
     "status": "contenu-publie",
@@ -116,6 +125,7 @@
   {
     "keyword": "invoice ai",
     "segment": "Veine IA · EN",
+    "market": "Anglophone (UK en tête)",
     "targetUrl": "/en/facture-ai",
     "goal": 10,
     "status": "contenu-publie",
@@ -130,6 +140,7 @@
   {
     "keyword": "ai invoice",
     "segment": "Veine IA · EN",
+    "market": "Anglophone (UK en tête)",
     "targetUrl": "/en/facture-ai",
     "goal": 10,
     "status": "contenu-publie",
@@ -142,6 +153,7 @@
   {
     "keyword": "ai invoice generator",
     "segment": "Veine IA · EN",
+    "market": "Anglophone (UK en tête)",
     "targetUrl": "/en/facture-ai",
     "goal": 10,
     "status": "contenu-publie",
@@ -155,6 +167,7 @@
   {
     "keyword": "ai generated invoice",
     "segment": "Veine IA · EN",
+    "market": "Anglophone (UK en tête)",
     "targetUrl": "/en/facture-ai",
     "goal": 10,
     "status": "contenu-publie",
@@ -167,6 +180,7 @@
   {
     "keyword": "factura ia",
     "segment": "Veine IA · ES",
+    "market": "Espagne",
     "targetUrl": "/es/facture-ai",
     "goal": 5,
     "status": "page-1",
@@ -179,10 +193,11 @@
   {
     "keyword": "ia para hacer facturas",
     "segment": "Veine IA · ES",
+    "market": "Espagne",
     "targetUrl": "/es/facture-ai",
     "goal": 10,
     "status": "contenu-publie",
-    "position": 26.0,
+    "position": 26,
     "impressions": 6,
     "clicks": 0,
     "lastCheckedAt": "2026-09-12",
@@ -191,6 +206,7 @@
   {
     "keyword": "logiciel facturation sophrologue",
     "segment": "Métiers",
+    "market": "France",
     "targetUrl": "/fr/industries/sophrologue",
     "goal": 10,
     "status": "contenu-publie",
@@ -205,6 +221,7 @@
   {
     "keyword": "facture électronique 1er septembre 2026",
     "segment": "Factur-X",
+    "market": "France",
     "targetUrl": "/fr/blog/facture-electronique-septembre-2026-etes-vous-pret",
     "goal": 10,
     "status": "a-travailler",
@@ -214,6 +231,7 @@
   {
     "keyword": "factur-x",
     "segment": "Factur-X",
+    "market": "France",
     "targetUrl": "/fr/blog/factur-x-c-est-quoi-format-facture-electronique",
     "goal": 10,
     "status": "a-travailler",
@@ -223,6 +241,7 @@
   {
     "keyword": "logiciel facture électronique 2026",
     "segment": "Factur-X",
+    "market": "France",
     "targetUrl": "/fr/blog/logiciel-facture-electronique-2026-comment-choisir",
     "goal": 10,
     "status": "a-travailler",
@@ -231,6 +250,7 @@
   {
     "keyword": "vérifier facture factur-x",
     "segment": "Factur-X",
+    "market": "France",
     "targetUrl": "/fr/blog/verifier-facture-factur-x-valide",
     "goal": 10,
     "status": "a-travailler",
@@ -239,6 +259,7 @@
   {
     "keyword": "glossaire facture électronique",
     "segment": "Factur-X",
+    "market": "France",
     "targetUrl": "/fr/blog/factur-x-ubl-chorus-pro-pdp-glossaire",
     "goal": 10,
     "status": "a-travailler",
@@ -247,6 +268,7 @@
   {
     "keyword": "facturation électronique auto-entrepreneur 2026",
     "segment": "Factur-X",
+    "market": "France",
     "targetUrl": "/fr/blog/facturation-electronique-2026-auto-entrepreneur",
     "goal": 10,
     "status": "contenu-publie"
@@ -254,6 +276,7 @@
   {
     "keyword": "mention tva non applicable 2026",
     "segment": "Guides",
+    "market": "France",
     "targetUrl": "/fr/blog/mention-tva-facture-2026-293b-cibs",
     "goal": 10,
     "status": "contenu-publie",
@@ -263,6 +286,7 @@
   {
     "keyword": "comment faire une facture auto-entrepreneur",
     "segment": "Guides",
+    "market": "France",
     "targetUrl": "/fr/blog/comment-faire-une-facture-auto-entrepreneur",
     "goal": 10,
     "status": "contenu-publie"
@@ -270,6 +294,7 @@
   {
     "keyword": "mentions obligatoires facture",
     "segment": "Guides",
+    "market": "France",
     "targetUrl": "/fr/blog/mentions-obligatoires-facture",
     "goal": 10,
     "status": "contenu-publie"
@@ -277,6 +302,7 @@
   {
     "keyword": "comment faire un devis auto-entrepreneur",
     "segment": "Guides",
+    "market": "France",
     "targetUrl": "/fr/blog/comment-faire-un-devis-auto-entrepreneur",
     "goal": 10,
     "status": "contenu-publie"
@@ -284,6 +310,7 @@
   {
     "keyword": "e-reporting 2026",
     "segment": "Guides",
+    "market": "France",
     "targetUrl": "/fr/blog/e-reporting-2026-qui-est-concerne",
     "goal": 10,
     "status": "contenu-publie"
@@ -291,8 +318,29 @@
   {
     "keyword": "meilleur logiciel facturation freelance 2026",
     "segment": "Guides",
+    "market": "France",
     "targetUrl": "/fr/blog/meilleur-logiciel-facturation-freelance-2026",
     "goal": 10,
     "status": "contenu-publie"
+  },
+  {
+    "keyword": "verifactu autónomos 2026",
+    "segment": "Réglementation pays",
+    "market": "Espagne",
+    "targetUrl": "/es/blog/verifactu-2026-autonomos-guia",
+    "goal": 10,
+    "status": "a-travailler",
+    "notes": "Sujet propre à l’Espagne (logiciel anti-fraude AEAT). Article prêt dans articles-batch-2-2026-06.json, non publié.",
+    "nextAction": "Publier l’article Verifactu."
+  },
+  {
+    "keyword": "making tax digital self-employed",
+    "segment": "Réglementation pays",
+    "market": "Royaume-Uni",
+    "targetUrl": "/en/blog/making-tax-digital-self-employed-2026",
+    "goal": 10,
+    "status": "a-travailler",
+    "notes": "Sujet propre au Royaume-Uni. Article prêt dans articles-batch-2-2026-06.json, non publié.",
+    "nextAction": "Publier l’article Making Tax Digital."
   }
 ]

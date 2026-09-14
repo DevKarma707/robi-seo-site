@@ -19,6 +19,7 @@ export interface SeoKeyword {
   id?: string;
   keyword: string;                    // « facture ia »
   segment?: string;                   // « Veine IA · FR », « Factur-X », « Métiers »…
+  market?: string;                    // « France », « Royaume-Uni », « Espagne », « Belgique »…
   targetUrl?: string;                 // « /fr/facture-ai »
   goal?: number;                      // position visée : 3 = top 3, 10 = page 1
   position?: number | null;           // null = pas encore classé
@@ -108,19 +109,29 @@ export async function importSeoKeywordsFromJson(jsonStr: string): Promise<{ impo
     const hit = existing.get(seoKey(keyword));
 
     if (hit) {
-      if (position === null) { skipped++; continue; }
-      const patch: Record<string, unknown> = {
-        position,
-        previousPosition: hit.data.position ?? null,
-        lastCheckedAt: str(r.lastCheckedAt) ?? today,
-        status: statusFromPosition(position, hit.data.status),
-      };
-      if (typeof r.impressions === "number") patch.impressions = r.impressions;
-      if (typeof r.clicks === "number") patch.clicks = r.clicks;
+      const patch: Record<string, unknown> = {};
       // Les champs éditoriaux ne sont complétés que s'ils manquaient.
       if (str(r.targetUrl) && !hit.data.targetUrl) patch.targetUrl = str(r.targetUrl);
       if (str(r.segment) && !hit.data.segment) patch.segment = str(r.segment);
+      if (str(r.market) && !hit.data.market) patch.market = str(r.market);
+      if (str(r.notes) && !hit.data.notes) patch.notes = str(r.notes);
+      if (str(r.nextAction) && !hit.data.nextAction) patch.nextAction = str(r.nextAction);
       if (typeof r.goal === "number" && hit.data.goal == null) patch.goal = r.goal;
+
+      // Même export déjà enregistré → on ne décale pas la position.
+      const sameReport = !!str(r.lastReportId) && r.lastReportId === hit.data.lastReportId;
+      if (position !== null && !sameReport) {
+        Object.assign(patch, {
+          position,
+          previousPosition: hit.data.position ?? null,
+          lastCheckedAt: str(r.lastCheckedAt) ?? today,
+          status: statusFromPosition(position, hit.data.status),
+        });
+        if (str(r.lastReportId)) patch.lastReportId = str(r.lastReportId);
+        if (typeof r.impressions === "number") patch.impressions = r.impressions;
+        if (typeof r.clicks === "number") patch.clicks = r.clicks;
+      }
+      if (!Object.keys(patch).length) { skipped++; continue; }
       await updateSeoKeyword(hit.id, patch as Partial<SeoKeyword>);
       updated++;
       continue;
@@ -133,6 +144,7 @@ export async function importSeoKeywordsFromJson(jsonStr: string): Promise<{ impo
       previousPosition: null,
       status: statusFromPosition(position, fallback),
       segment: str(r.segment),
+      market: str(r.market),
       targetUrl: str(r.targetUrl),
       goal: numOr(r.goal),
       impressions: numOr(r.impressions),

@@ -1,0 +1,22 @@
+[
+  {
+    "keyword": "verifactu autónomos 2026",
+    "segment": "Réglementation pays",
+    "market": "Espagne",
+    "targetUrl": "/es/blog/verifactu-2026-autonomos-guia",
+    "goal": 10,
+    "status": "a-travailler",
+    "notes": "Sujet propre à l’Espagne (logiciel anti-fraude AEAT). Article prêt dans articles-batch-2-2026-06.json, non publié.",
+    "nextAction": "Publier l’article Verifactu."
+  },
+  {
+    "keyword": "making tax digital self-employed",
+    "segment": "Réglementation pays",
+    "market": "Royaume-Uni",
+    "targetUrl": "/en/blog/making-tax-digital-self-employed-2026",
+    "goal": 10,
+    "status": "a-travailler",
+    "notes": "Sujet propre au Royaume-Uni. Article prêt dans articles-batch-2-2026-06.json, non publié.",
+    "nextAction": "Publier l’article Making Tax Digital."
+  }
+]
