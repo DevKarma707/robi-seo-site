@@ -35,6 +35,40 @@ const transporter = () =>
     },
   });
 
+/**
+ * Marque les liens Robi d'un mail de prospection pour que PostHog sache d'où
+ * vient le visiteur.
+ *
+ * Sans ça un prospect arrive en trafic anonyme et la campagne est invisible :
+ * on voit des inscriptions, jamais lesquelles viennent des mails. Les UTM sont
+ * lus par le SDK au premier chargement et attachés à la personne, donc
+ * l'attribution survit jusqu'au paiement, des semaines plus tard.
+ *
+ * Aucun identifiant de destinataire dans l'URL : l'attribution se fait à la
+ * campagne. Mettre l'email du prospect dans un lien le ferait fuiter dans les
+ * journaux de tous les intermédiaires.
+ */
+const UTM_TARGET = /https?:\/\/(?:www\.)?(?:go\.)?robi-app\.com[^\s<>"')]*/g;
+
+export const withUtm = (text: string, campagne: string): string =>
+  text.replace(UTM_TARGET, (brut) => {
+    // Une phrase finit par un point, et ce point se retrouve collé à l'URL.
+    // L'y laisser produirait « robi-app.com.?utm_source=… » : un domaine qui
+    // n'existe pas, donc un lien mort dans chaque mail se terminant par un lien.
+    const fin = brut.match(/[.,;:!?)\]]+$/)?.[0] ?? "";
+    const url = fin ? brut.slice(0, -fin.length) : brut;
+
+    // Un lien déjà marqué à la main l'emporte : réécrire par-dessus
+    // écraserait une intention explicite.
+    if (url.includes("utm_source=")) return brut;
+    // La désinscription reste nue — c'est une obligation légale, pas un canal
+    // d'acquisition, et la polluer de paramètres invite à la casser.
+    if (url.includes("/desinscription")) return brut;
+
+    const sep = url.includes("?") ? "&" : "?";
+    return `${url}${sep}utm_source=prospection&utm_medium=email&utm_campaign=${encodeURIComponent(campagne)}${fin}`;
+  });
+
 const escapeHtml = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -65,7 +99,10 @@ export async function POST(req: Request) {
     );
   }
 
-  let body: { to?: string; subject?: string; text?: string; unsubToken?: string; replyTo?: string };
+  let body: {
+    to?: string; subject?: string; text?: string; unsubToken?: string;
+    replyTo?: string; campagne?: string;
+  };
   try {
     body = await req.json();
   } catch {
@@ -77,11 +114,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "to, subject, text et unsubToken sont requis" }, { status: 400 });
   }
 
+  // Par défaut, le mois d'envoi : deux campagnes lancées à des semaines
+  // d'écart restent comparables au lieu de se confondre dans un seul sac.
+  const campagne = body.campagne?.trim() || `prospection-${new Date().toISOString().slice(0, 7)}`;
+  const texteMarque = withUtm(text, campagne);
+
   const unsubUrl = `${SITE}/desinscription?t=${encodeURIComponent(unsubToken)}`;
   const footerText = `\n\n—\nVous recevez ce message dans un cadre professionnel. Pour ne plus être contacté : ${unsubUrl}`;
   const html =
     `<div style="font-family:system-ui,sans-serif;font-size:15px;line-height:1.6;color:#1f2937">` +
-    escapeHtml(text).replace(/\n/g, "<br>") +
+    escapeHtml(texteMarque).replace(/\n/g, "<br>") +
     `<hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0">` +
     `<p style="font-size:12px;color:#6b7280">Vous recevez ce message dans un cadre professionnel. ` +
     `<a href="${unsubUrl}" style="color:#6b7280">Ne plus être contacté</a>.</p></div>`;
@@ -92,7 +134,7 @@ export async function POST(req: Request) {
       to,
       replyTo: body.replyTo || process.env.SMTP_OUTREACH_REPLY_TO || undefined,
       subject,
-      text: text + footerText,
+      text: texteMarque + footerText,
       html,
       headers: {
         // Lets mail clients offer one-click unsubscribe, which protects sender
@@ -102,8 +144,8 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log(`[outreach] ${guard.email} → ${to} (${info.messageId})`);
-    return NextResponse.json({ ok: true, messageId: info.messageId });
+    console.log(`[outreach] ${guard.email} → ${to} (${info.messageId}) [${campagne}]`);
+    return NextResponse.json({ ok: true, messageId: info.messageId, campagne });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("[outreach] send failed:", message);
