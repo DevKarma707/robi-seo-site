@@ -42,6 +42,13 @@ service cloud.firestore {
       allow read, create, update, delete: if isAdmin();
     }
 
+    // ── Calendrier réseaux sociaux (onglet Réseaux) ──
+    // Oublié à la création de l'onglet : sans règle, Firestore refuse tout,
+    // et l'import JSON échouait en « Missing or insufficient permissions ».
+    match /socialPosts/{id} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
     // ── Désinscriptions ──
     // Le lien d'opt-out est cliqué par un destinataire non authentifié : la
     // création doit donc être ouverte, mais bornée à un jeton opaque. Sans ça,
