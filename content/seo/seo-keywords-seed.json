@@ -1,0 +1,298 @@
+[
+  {
+    "keyword": "facture ai",
+    "segment": "Veine IA · FR",
+    "targetUrl": "/fr/facture-ai",
+    "goal": 3,
+    "status": "page-1",
+    "position": 4.2,
+    "impressions": 165,
+    "clicks": 4,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13",
+    "notes": "Pilier FR — 53 % des clics du site.",
+    "nextAction": "Tenir le top 5, viser le top 3 avec des backlinks."
+  },
+  {
+    "keyword": "factureai",
+    "segment": "Veine IA · FR",
+    "targetUrl": "/fr/facture-ai",
+    "goal": 3,
+    "status": "page-1",
+    "position": 4.8,
+    "impressions": 123,
+    "clicks": 5,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13"
+  },
+  {
+    "keyword": "facture ia",
+    "segment": "Veine IA · FR",
+    "targetUrl": "/fr/facture-ai",
+    "goal": 5,
+    "status": "contenu-publie",
+    "position": 12.9,
+    "impressions": 142,
+    "clicks": 2,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13",
+    "notes": "Levier 2 : « IA » ajouté au title et au H1 le 14/09/2026.",
+    "nextAction": "Mesurer à l'export d'octobre."
+  },
+  {
+    "keyword": "générateur de facture ia",
+    "segment": "Veine IA · FR",
+    "targetUrl": "/fr/facture-ai",
+    "goal": 5,
+    "status": "page-1",
+    "position": 7.7,
+    "impressions": 35,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13"
+  },
+  {
+    "keyword": "ia facture",
+    "segment": "Veine IA · FR",
+    "targetUrl": "/fr/facture-ai",
+    "goal": 5,
+    "status": "page-1",
+    "position": 6.2,
+    "impressions": 28,
+    "clicks": 1,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13"
+  },
+  {
+    "keyword": "facturation ia",
+    "segment": "Veine IA · FR",
+    "targetUrl": "/fr/blog/facturation-par-ia-creer-facture-voix",
+    "goal": 5,
+    "status": "page-1",
+    "position": 9.2,
+    "impressions": 4,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13"
+  },
+  {
+    "keyword": "facture avec ia",
+    "segment": "Veine IA · FR",
+    "targetUrl": "/fr/blog/creer-facture-avec-ia",
+    "goal": 10,
+    "status": "contenu-publie",
+    "position": 21.9,
+    "impressions": 13,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13"
+  },
+  {
+    "keyword": "logiciel de gestion des factures avec ia",
+    "segment": "Veine IA · FR",
+    "targetUrl": "/fr/blog/logiciel-gestion-factures-ia",
+    "goal": 10,
+    "status": "contenu-publie",
+    "position": 41.1,
+    "impressions": 21,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13",
+    "notes": "Levier 3 : aucune page ne répondait (positions 32 à 71).",
+    "nextAction": "Publier l'article logiciel-gestion-factures-ia."
+  },
+  {
+    "keyword": "logiciel de gestion des factures avec intelligence artificielle",
+    "segment": "Veine IA · FR",
+    "targetUrl": "/fr/blog/logiciel-gestion-factures-ia",
+    "goal": 10,
+    "status": "contenu-publie",
+    "position": 37.8,
+    "impressions": 20,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13"
+  },
+  {
+    "keyword": "invoice ai",
+    "segment": "Veine IA · EN",
+    "targetUrl": "/en/facture-ai",
+    "goal": 10,
+    "status": "contenu-publie",
+    "position": 16.1,
+    "impressions": 240,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13",
+    "notes": "Levier 1 : plus grosse réserve (240 imp, 0 clic, page 2).",
+    "nextAction": "Liens depuis le blog EN + annuaires IA anglophones."
+  },
+  {
+    "keyword": "ai invoice",
+    "segment": "Veine IA · EN",
+    "targetUrl": "/en/facture-ai",
+    "goal": 10,
+    "status": "contenu-publie",
+    "position": 29.9,
+    "impressions": 100,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13"
+  },
+  {
+    "keyword": "ai invoice generator",
+    "segment": "Veine IA · EN",
+    "targetUrl": "/en/facture-ai",
+    "goal": 10,
+    "status": "contenu-publie",
+    "position": 20.4,
+    "impressions": 5,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13",
+    "notes": "Title EN recentré sur ce mot-clé le 14/09/2026."
+  },
+  {
+    "keyword": "ai generated invoice",
+    "segment": "Veine IA · EN",
+    "targetUrl": "/en/facture-ai",
+    "goal": 10,
+    "status": "contenu-publie",
+    "position": 39.7,
+    "impressions": 17,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13"
+  },
+  {
+    "keyword": "factura ia",
+    "segment": "Veine IA · ES",
+    "targetUrl": "/es/facture-ai",
+    "goal": 5,
+    "status": "page-1",
+    "position": 7.5,
+    "impressions": 6,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13"
+  },
+  {
+    "keyword": "ia para hacer facturas",
+    "segment": "Veine IA · ES",
+    "targetUrl": "/es/facture-ai",
+    "goal": 10,
+    "status": "contenu-publie",
+    "position": 26.0,
+    "impressions": 6,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13"
+  },
+  {
+    "keyword": "logiciel facturation sophrologue",
+    "segment": "Métiers",
+    "targetUrl": "/fr/industries/sophrologue",
+    "goal": 10,
+    "status": "contenu-publie",
+    "position": 27.4,
+    "impressions": 78,
+    "clicks": 0,
+    "lastCheckedAt": "2026-09-12",
+    "lastReportId": "2026-09-12_2026-06-13",
+    "notes": "Levier 4 : page enrichie (intro + FAQ) le 14/09/2026.",
+    "nextAction": "Demander l'indexation dans Search Console."
+  },
+  {
+    "keyword": "facture électronique 1er septembre 2026",
+    "segment": "Factur-X",
+    "targetUrl": "/fr/blog/facture-electronique-septembre-2026-etes-vous-pret",
+    "goal": 10,
+    "status": "a-travailler",
+    "notes": "Cluster Factur-X.",
+    "nextAction": "Publier le 15/09."
+  },
+  {
+    "keyword": "factur-x",
+    "segment": "Factur-X",
+    "targetUrl": "/fr/blog/factur-x-c-est-quoi-format-facture-electronique",
+    "goal": 10,
+    "status": "a-travailler",
+    "notes": "Centre du cluster Factur-X.",
+    "nextAction": "Publier le 18/09."
+  },
+  {
+    "keyword": "logiciel facture électronique 2026",
+    "segment": "Factur-X",
+    "targetUrl": "/fr/blog/logiciel-facture-electronique-2026-comment-choisir",
+    "goal": 10,
+    "status": "a-travailler",
+    "nextAction": "Publier le 22/09."
+  },
+  {
+    "keyword": "vérifier facture factur-x",
+    "segment": "Factur-X",
+    "targetUrl": "/fr/blog/verifier-facture-factur-x-valide",
+    "goal": 10,
+    "status": "a-travailler",
+    "nextAction": "Publier le 25/09."
+  },
+  {
+    "keyword": "glossaire facture électronique",
+    "segment": "Factur-X",
+    "targetUrl": "/fr/blog/factur-x-ubl-chorus-pro-pdp-glossaire",
+    "goal": 10,
+    "status": "a-travailler",
+    "nextAction": "Publier le 29/09."
+  },
+  {
+    "keyword": "facturation électronique auto-entrepreneur 2026",
+    "segment": "Factur-X",
+    "targetUrl": "/fr/blog/facturation-electronique-2026-auto-entrepreneur",
+    "goal": 10,
+    "status": "contenu-publie"
+  },
+  {
+    "keyword": "mention tva non applicable 2026",
+    "segment": "Guides",
+    "targetUrl": "/fr/blog/mention-tva-facture-2026-293b-cibs",
+    "goal": 10,
+    "status": "contenu-publie",
+    "notes": "Réécrit le 14/09/2026 (report du CIBS au 1er janvier 2027).",
+    "nextAction": "Réimporter le batch 2026-06 avec « Écraser »."
+  },
+  {
+    "keyword": "comment faire une facture auto-entrepreneur",
+    "segment": "Guides",
+    "targetUrl": "/fr/blog/comment-faire-une-facture-auto-entrepreneur",
+    "goal": 10,
+    "status": "contenu-publie"
+  },
+  {
+    "keyword": "mentions obligatoires facture",
+    "segment": "Guides",
+    "targetUrl": "/fr/blog/mentions-obligatoires-facture",
+    "goal": 10,
+    "status": "contenu-publie"
+  },
+  {
+    "keyword": "comment faire un devis auto-entrepreneur",
+    "segment": "Guides",
+    "targetUrl": "/fr/blog/comment-faire-un-devis-auto-entrepreneur",
+    "goal": 10,
+    "status": "contenu-publie"
+  },
+  {
+    "keyword": "e-reporting 2026",
+    "segment": "Guides",
+    "targetUrl": "/fr/blog/e-reporting-2026-qui-est-concerne",
+    "goal": 10,
+    "status": "contenu-publie"
+  },
+  {
+    "keyword": "meilleur logiciel facturation freelance 2026",
+    "segment": "Guides",
+    "targetUrl": "/fr/blog/meilleur-logiciel-facturation-freelance-2026",
+    "goal": 10,
+    "status": "contenu-publie"
+  }
+]

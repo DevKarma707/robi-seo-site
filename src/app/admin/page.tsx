@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks, FolderOpen, CalendarDays, Compass } from "lucide-react";
+import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks, FolderOpen, CalendarDays, Compass, Search } from "lucide-react";
 import {
   auth, onAuthStateChanged, signInWithGoogle, signOut, isAllowedEmail, firebaseReady,
   subscribeToArticles, subscribeToVisits, type Article, type VisitStats, type User,
 } from "@/lib/firebase";
+import { subscribeToSeoKeywords, type SeoKeyword } from "@/lib/seoKeywords";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
+import SeoTab from "@/components/admin/SeoTab";
 import BlogTab from "@/components/admin/BlogTab";
 import CockpitTab from "@/components/admin/CockpitTab";
 import PilotageTab from "@/components/admin/PilotageTab";
@@ -21,7 +23,7 @@ import ReseauxTab from "@/components/admin/ReseauxTab";
 import ThemePicker from "@/components/admin/ThemePicker";
 import { focusRing, focusRingDark } from "@/components/admin/ui";
 
-type Tab = "cockpit" | "pilotage" | "kanban" | "reseaux" | "fichiers" | "sante" | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
+type Tab = "cockpit" | "pilotage" | "kanban" | "reseaux" | "fichiers" | "sante" | "acquisition" | "influenceurs" | "analytics" | "seo" | "blog" | "lancement";
 
 const EMPTY_VISITS: VisitStats = {
   today: 0, week: 0, prevWeek: 0, month: 0, days: [], byPage: [], bySource: [],
@@ -76,6 +78,7 @@ export default function AdminPage() {
   const [tab, setTab] = useState<Tab>("pilotage");
   const [articles, setArticles] = useState<Article[]>([]);
   const [visits, setVisits] = useState<VisitStats>(EMPTY_VISITS);
+  const [seoKeywords, setSeoKeywords] = useState<SeoKeyword[]>([]);
 
   useEffect(() => {
     if (!firebaseReady) {
@@ -95,9 +98,11 @@ export default function AdminPage() {
     if (!loggedIn) return;
     const unsubArticles = subscribeToArticles(setArticles);
     const unsubVisits = subscribeToVisits(setVisits);
+    const unsubSeo = subscribeToSeoKeywords(setSeoKeywords);
     return () => {
       unsubArticles();
       unsubVisits();
+      unsubSeo();
     };
   }, [loggedIn]);
 
@@ -136,6 +141,7 @@ export default function AdminPage() {
     { id: "acquisition", label: "Acquisition", icon: <Target size={17} /> },
     { id: "influenceurs", label: "Influenceurs", icon: <Megaphone size={17} /> },
     { id: "analytics", label: "Analytics", icon: <BarChart2 size={17} /> },
+    { id: "seo", label: "SEO", icon: <Search size={17} />, badge: seoKeywords.filter((k) => k.status === "a-travailler").length || undefined },
     { id: "blog", label: "Blog", icon: <FileText size={17} />, badge: articles.filter((a) => !a.published).length || undefined },
     { id: "lancement", label: "Lancement", icon: <Rocket size={17} /> },
   ];
@@ -150,6 +156,9 @@ export default function AdminPage() {
     acquisition: "Prospects, séquence de relance et envoi des emails",
     influenceurs: "Codes promo, ventes attribuées et commissions dues",
     analytics: `${visits.month} visites ce mois · ${visits.bySource.length} sources détectées`,
+    seo: seoKeywords.length
+      ? `${seoKeywords.length} mots-clés suivis · ${seoKeywords.filter((k) => typeof k.position === "number" && k.position <= 10).length} en page 1`
+      : "Ce qu'on vise, où on ranke, quelle page doit ranker",
     blog: `${articles.filter((a) => a.published).length} publiés · ${articles.filter((a) => !a.published).length} brouillons`,
     lancement: "Compteur de places, date limite et retrait de l'offre",
   };
@@ -219,6 +228,7 @@ export default function AdminPage() {
           {tab === "acquisition" && <AcquisitionTab />}
           {tab === "influenceurs" && <InfluenceursTab />}
           {tab === "analytics" && <AnalyticsTab visits={visits} />}
+          {tab === "seo" && <SeoTab keywords={seoKeywords} />}
           {tab === "blog" && <BlogTab articles={articles} />}
           {tab === "lancement" && <LancementTab />}
         </div>
