@@ -60,7 +60,14 @@ const FichiersTab: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      setFiles(await listSharedFiles());
+      // Les lots partiels s'affichent au fur et à mesure : dès les premiers
+      // fichiers, l'écran se remplit au lieu d'attendre la médiathèque
+      // entière. `setLoading(false)` dès le premier lot pour que la grille
+      // remplace le message de chargement sans attendre la fin.
+      setFiles(await listSharedFiles((partiel) => {
+        setFiles(partiel);
+        setLoading(false);
+      }));
     } catch (e) {
       setError((e as Error).message);
     } finally {

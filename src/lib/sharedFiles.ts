@@ -75,24 +75,97 @@ const describe = async (item: ReturnType<typeof storageRef>, folder: string, sub
 
 const MAX_DEPTH = 5;
 
-/** Descend un préfixe : ses fichiers, puis ses sous-préfixes, jusqu'à MAX_DEPTH. */
-const walk = async (dir: ReturnType<typeof storageRef>, folder: string, sub: string, depth: number): Promise<SharedFile[]> => {
+/** Un fichier repéré, avant d'aller chercher son URL et ses métadonnées. */
+type Located = { item: ReturnType<typeof storageRef>; folder: string; sub: string };
+
+/**
+ * Descend un préfixe et REPÈRE les fichiers, sans rien demander sur chacun.
+ *
+ * La séparation compte : lister est bon marché (une requête par dossier),
+ * décrire coûte deux requêtes PAR FICHIER. Les mélanger faisait partir des
+ * centaines d'appels avant que le premier dossier ne soit connu.
+ */
+const locate = async (
+  dir: ReturnType<typeof storageRef>,
+  folder: string,
+  sub: string,
+  depth: number
+): Promise<Located[]> => {
   const { items, prefixes } = await listAll(dir);
-  const here = await Promise.all(items.map((i) => describe(i, folder, sub)));
+  const here: Located[] = items.map((item) => ({ item, folder, sub }));
   if (depth >= MAX_DEPTH) return here;
   const below = await Promise.all(
-    prefixes.map((p) => walk(p, folder, sub ? `${sub}/${p.name}` : p.name, depth + 1))
+    prefixes.map((p) => locate(p, folder || p.name, sub ? `${sub}/${p.name}` : p.name, depth + 1))
   );
   return [...here, ...below.flat()];
 };
 
-/** Toute la médiathèque, arborescence comprise, du plus récent au plus ancien. */
-export const listSharedFiles = async (): Promise<SharedFile[]> => {
+/** Traite `jobs` par groupes de `size`, en signalant l'avancement. */
+const pool = async <T>(
+  jobs: (() => Promise<T>)[],
+  size: number,
+  onBatch?: (done: T[]) => void
+): Promise<T[]> => {
+  const done: T[] = [];
+  let next = 0;
+  // Dernière taille signalée. Sans ce repère, un fichier illisible relance le
+  // test du modulo sur un total inchangé et réémet le même lot : la grille se
+  // re-rendait plusieurs fois avec exactement les mêmes données.
+  let signale = 0;
+  const worker = async () => {
+    while (next < jobs.length) {
+      const mine = next++;
+      try {
+        done.push(await jobs[mine]());
+      } catch {
+        // Un fichier illisible (droits, objet supprimé entre-temps) ne doit pas
+        // emporter toute la médiathèque : on l'omet et on continue.
+      }
+      // Rafraîchir à chaque fichier ferait re-rendre la grille des centaines
+      // de fois ; tous les 12, l'écran se remplit sans ramer.
+      if (onBatch && done.length > signale && done.length % 12 === 0) {
+        signale = done.length;
+        onBatch([...done]);
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(size, jobs.length) }, worker));
+  return done;
+};
+
+const trierRecent = (l: SharedFile[]) => [...l].sort((a, b) => b.updated.localeCompare(a.updated));
+
+/**
+ * Toute la médiathèque, du plus récent au plus ancien.
+ *
+ * `onProgress` reçoit des lots partiels au fil de l'eau. Sans lui, l'onglet
+ * restait sur « Chargement… » jusqu'au tout dernier fichier : deux requêtes
+ * par fichier lancées d'un bloc, soit plusieurs centaines d'appels simultanés
+ * sur une médiathèque nourrie depuis des semaines. Le navigateur les met en
+ * file, et l'écran reste vide pendant ce temps alors que les premiers
+ * résultats sont déjà là.
+ *
+ * La concurrence est bornée à 6 : au-delà, le navigateur sérialise de toute
+ * façon, et la rafale ne fait qu'ajouter de l'attente.
+ */
+export const listSharedFiles = async (
+  onProgress?: (partiel: SharedFile[]) => void
+): Promise<SharedFile[]> => {
   if (!storage) throw new Error("Firebase Storage non configuré.");
+
   const root = await listAll(storageRef(storage, ROOT));
-  const flat = await Promise.all(root.items.map((i) => describe(i, ROOT_FOLDER, "")));
-  const nested = await Promise.all(root.prefixes.map((p) => walk(p, p.name, "", 1)));
-  return [...flat, ...nested.flat()].sort((a, b) => b.updated.localeCompare(a.updated));
+  const cibles: Located[] = [
+    ...root.items.map((item) => ({ item, folder: ROOT_FOLDER, sub: "" })),
+    ...(await Promise.all(root.prefixes.map((p) => locate(p, p.name, "", 1)))).flat(),
+  ];
+
+  const fichiers = await pool(
+    cibles.map(({ item, folder, sub }) => () => describe(item, folder, sub)),
+    6,
+    onProgress ? (partiel) => onProgress(trierRecent(partiel)) : undefined
+  );
+
+  return trierRecent(fichiers);
 };
 
 /**
