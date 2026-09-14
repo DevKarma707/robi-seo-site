@@ -35,8 +35,28 @@ codebases. Certains sujets sont à cheval : Polar a son webhook ici
 ## L'admin (`/admin`)
 
 Tableau de bord privé (Google sign-in, emails en dur dans `src/lib/firebase.ts`).
-Onglets : Pilotage, Tâches, Fichiers, Santé, Acquisition, Influenceurs,
-Analytics, Blog, Lancement.
+Onglets : Cockpit, Pilotage, Tâches, Réseaux, Fichiers, Santé, Acquisition,
+Influenceurs, Analytics, SEO, Blog, Lancement.
+
+### Imports JSON : un bouton = un skill
+
+Chaque bouton « Importer JSON » de l'admin a son skill dans `~/.claude/skills/`,
+qui connaît le schéma exact et les règles (ne rien inventer). Toujours passer
+par le skill pour préparer un JSON, et **mettre le skill à jour dès qu'on
+modifie un schéma d'import** (champ ajouté, règle de dédoublonnage…).
+
+| Onglet | Skill | Fonction d'import |
+|---|---|---|
+| Blog | `robi-blog` | `importArticlesFromJson` (`src/lib/firebase.ts`) |
+| SEO | `robi-seo` | `importSeoKeywordsFromJson` (`src/lib/seoKeywords.ts`) |
+| Acquisition (prospects, backlinks, influenceurs à recruter) | `robi-acquisition` | `importProspectsFromJson` (`src/lib/prospects.ts`) |
+| Réseaux | `robi-social-media` | `importPostsFromJson` (`src/lib/socialPosts.ts`) |
+
+L'onglet Influenceurs n'a pas d'import JSON : les créateurs à recruter passent
+par Acquisition, segment `influenceur`.
+
+⚠️ Un autre agent peut travailler dans ce dossier en même temps : jamais de
+`git stash`, `git add` uniquement ses propres fichiers.
 
 - **Tâches** — kanban du lancement (`src/lib/launchTasks.ts`, collection
   Firestore `launchTasks`). Les tâches marquées automatisables peuvent
