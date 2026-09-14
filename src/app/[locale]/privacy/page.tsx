@@ -39,6 +39,7 @@ export default async function PrivacyPage({
     { title: privacy.retention || "Conservation", content: privacy.retentionContent || "" },
     { title: privacy.rights || "Vos droits", content: privacy.rightsContent || "" },
     { title: privacy.security || "Sécurité", content: privacy.securityContent || "" },
+    { title: privacy.subprocessors || "Destinataires et sous-traitants", content: privacy.subprocessorsContent || "" },
     { title: privacy.cookies || "Cookies", content: privacy.cookiesContent || "" },
     { title: privacy.contact || "Contact", content: privacy.contactContent || "" },
   ];
