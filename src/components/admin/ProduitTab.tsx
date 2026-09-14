@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, BugPlay, ClipboardCheck, Copy, MousePointerClick, RefreshCw, TrendingDown } from "lucide-react";
+import { AlertTriangle, BugPlay, ClipboardCheck, Copy, MousePointerClick, RefreshCw, Radio, TrendingDown } from "lucide-react";
 import { fetchProduitReport, type ProduitReport } from "@/lib/adminApi";
 import { construireResume } from "@/lib/produitResume";
 import { ACCENT, btn, card } from "./ui";
@@ -22,6 +22,49 @@ const LABELS: Record<string, string> = {
 
 const fmtDate = (iso: string | null) =>
   iso ? new Date(iso).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" }) : "—";
+
+/**
+ * Santé de la collecte. Deux moitiés alimentent le même projet PostHog : le
+ * site public et l'app. Quand l'une se tait, le tunnel affiche des zéros —
+ * impossibles à distinguer d'une absence de trafic. Ce bloc dit laquelle
+ * parle, pour qu'un tableau vide ne soit jamais pris pour une mauvaise
+ * semaine.
+ */
+function Mesure({ mesure }: { mesure: NonNullable<ProduitReport["mesure"]> }) {
+  const parle = (h: string) => mesure.domaines.some((d) => d.domaine.includes(h));
+  const site = parle("robi-app.com") && !mesure.domaines.every((d) => d.domaine.startsWith("go."));
+  const app = parle("go.robi-app.com");
+  const muet = !site || !app;
+
+  return (
+    <div className={`${card} p-5`}>
+      <div className="flex items-center gap-2 mb-3">
+        <Radio size={16} style={{ color: muet ? RED : ACCENT }} />
+        <p className="text-xs font-black uppercase tracking-widest text-slate-900">
+          Santé de la mesure
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-4 mb-3">
+        {[
+          { label: "Site (robi-app.com)", ok: site },
+          { label: "App (go.robi-app.com)", ok: app },
+        ].map((s) => (
+          <span key={s.label} className="text-[13px] font-semibold text-slate-300">
+            <span style={{ color: s.ok ? ACCENT : RED }}>{s.ok ? "●" : "●"}</span>{" "}
+            {s.label} — {s.ok ? "envoie" : "silencieux"}
+          </span>
+        ))}
+      </div>
+      {!site && (
+        <p className="text-[12px] text-slate-500">
+          {mesure.cleSiteConfiguree
+            ? "La clé du site est bien posée sur le serveur, mais elle n'était pas présente au moment du build : sur Next.js, NEXT_PUBLIC_POSTHOG_KEY est figée dans le bundle à la construction. Un redéploiement suffit."
+            : "NEXT_PUBLIC_POSTHOG_KEY est absente de ce projet Vercel. À poser en type Config, puis redéployer."}
+        </p>
+      )}
+    </div>
+  );
+}
 
 function NotConfigured() {
   return (
@@ -102,6 +145,10 @@ export default function ProduitTab() {
       )}
 
       {data && !data.configured && <NotConfigured />}
+
+      {data?.configured && data.mesure && (
+        <Mesure mesure={data.mesure} />
+      )}
 
       {data?.configured && (
         <>
