@@ -194,9 +194,10 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
 
       {/* ── Actions ────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center gap-2">
-        <p className="flex-1 min-w-[220px] text-xs text-slate-500">
+        {/* Posé sur la coquille sombre, pas sur une carte : même encre que le sous-titre de page. */}
+        <p className="flex-1 min-w-[220px] text-xs text-white/60">
           {latest
-            ? <>Dernier export Search Console : <strong className="text-slate-700">{fmtDate(latest.periodStart)} → {fmtDate(latest.periodEnd)}</strong>{pendingSync > 0 && keywords.length > 0 ? ` · ${pendingSync} mot${pendingSync > 1 ? "s" : ""}-clé${pendingSync > 1 ? "s" : ""} à synchroniser` : ""}</>
+            ? <>Dernier export Search Console : <strong className="text-white/90">{fmtDate(latest.periodStart)} → {fmtDate(latest.periodEnd)}</strong>{pendingSync > 0 && keywords.length > 0 ? ` · ${pendingSync} mot${pendingSync > 1 ? "s" : ""}-clé${pendingSync > 1 ? "s" : ""} à synchroniser` : ""}</>
             : "Aucun export Search Console : importe le ZIP dans l'onglet Analytics pour synchroniser les positions."}
         </p>
         <button onClick={loadSeed} disabled={busy} className={keywords.length === 0 ? btnAccent : btn}
