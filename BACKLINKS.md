@@ -133,6 +133,40 @@ Certains demanderont un partenariat/affiliation — tu as déjà AFFILIATION.md,
   payment reminders, Stripe/PayPal collection and real-time notifications.
   Runs in any browser, on desktop and mobile. GDPR compliant, AES-256 encryption, EU hosting.
 
+### B bis. Fiche annuaires IA anglophones (There's An AI For That, Futurepedia, Toolify, SaaSHub)
+
+Objectif (levier 1 de l'analyse Search Console, sept. 2026) : faire passer
+`/en/facture-ai` de la page 2 à la page 1 sur « invoice ai » / « ai invoice
+generator ». Toujours donner **cette URL**, pas la page d'accueil.
+
+- **Name**: Robi AI
+- **URL**: https://robi-app.com/en/facture-ai
+- **Tagline**: AI invoice generator — say it, Robi invoices it.
+- **Short description (≤ 160 chars)**:
+  AI invoice generator for freelancers: describe the job by voice or text and
+  get a ready-to-send invoice in 30 seconds. Free for 2 invoices.
+- **Long description**:
+  Robi AI is an AI invoice generator for freelancers, tradespeople and small
+  businesses. Type or say "Invoice £800 to Acme for the website redesign" and
+  Robi creates a professional invoice in about 30 seconds, with sequential
+  numbering, tax details and fiscal IDs handled for 16 countries. Quotes can be
+  e-signed and turned into invoices in one click, AI-written reminders chase
+  late payments, and clients pay online by card (Stripe) or PayPal. In France,
+  invoices are generated in the Factur-X e-invoicing format (EN 16931). Runs in
+  any browser on desktop and mobile — no download. GDPR compliant, EU hosting.
+- **Category**: Invoicing / Finance · **Tags**: AI invoice generator, invoicing,
+  freelancers, quotes, voice, small business, e-invoicing
+- **Pricing model**: Freemium — free plan (2 invoices/quotes), then
+  $14/month or $89/year (US) · £12/month or £75/year (UK) · launch offer:
+  lifetime access $59 / £49 for the first 1,000 users. Vérifier la page
+  pricing du pays avant de soumettre.
+- **Visuels** : captures de l'app uniquement ; mascotte = `public/robot-mark.svg`,
+  jamais un robot généré.
+
+⚠️ Ces sites bloquent les vérifications automatiques (erreur 403) : ouvrir la
+page de soumission à la main. Certains facturent la soumission — ne rien payer
+sans en parler d'abord.
+
 ### C. Email de pitch roundup (FR) — à personnaliser ligne 1
 
 Objet : Un logiciel de facturation 100% vocal pour votre comparatif ?

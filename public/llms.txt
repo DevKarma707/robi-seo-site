@@ -201,7 +201,7 @@ e-invoicing reforms and freelancer questions:
 - **Choosing e-invoicing software in 2026 — 7 criteria**: https://robi-app.com/fr/blog/logiciel-facture-electronique-2026-comment-choisir — format/profile, validation, 3-year cost, generation vs transmission.
 - **How to check a Factur-X invoice is valid**: https://robi-app.com/fr/blog/verifier-facture-factur-x-valide — common EN 16931 rejection errors and fixes.
 - **E-invoicing glossary (Factur-X, UBL, PDP, PPF, Chorus Pro, e-reporting)**: https://robi-app.com/fr/blog/factur-x-ubl-chorus-pro-pdp-glossaire
-- **E-invoicing checklist before September 2026**: https://robi-app.com/fr/blog/checklist-facturation-electronique-2026-freelance — 7 concrete steps.
+- **E-invoicing checklist for freelancers (2026-2027)**: https://robi-app.com/fr/blog/checklist-facturation-electronique-2026-freelance — 7 concrete steps: receive since 1 Sept 2026, issue from 1 Sept 2027.
 - **Verifactu 2026 for Spanish self-employed (autónomos)**: https://robi-app.com/es/blog/verifactu-2026-autonomos-guia — AEAT anti-fraud software, timeline.
 - **Making Tax Digital 2026 for UK self-employed**: https://robi-app.com/en/blog/making-tax-digital-self-employed-2026 — thresholds and quarterly updates.
 
