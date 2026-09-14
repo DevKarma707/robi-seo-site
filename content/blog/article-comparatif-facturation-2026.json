@@ -3,7 +3,7 @@
     "slug": "meilleur-logiciel-facturation-freelance-2026",
     "category": "guides",
     "date": "2026-09-13",
-    "published": false,
+    "published": true,
     "featured": false,
     "coverImage": "/covers/comparatif-facturation.png",
     "keywords": ["meilleur logiciel facturation freelance 2026", "comparatif logiciel facturation auto-entrepreneur", "logiciel facturation français", "logiciel facture électronique freelance"],
@@ -16,43 +16,61 @@
     "metaDescFr": "Comparatif 2026 des logiciels de facturation français pour freelances : Robi, Tiime, Indy, Abby, Freebe, Henrri. Critères, Factur-X, PDP et pour quel profil.",
     "metaDescEn": "2026 comparison of French invoicing software for freelancers: Robi, Tiime, Indy, Abby, Freebe, Henrri. Criteria, Factur-X, PDP and who each is for.",
     "metaDescEs": "Comparativa 2026 de software de facturación francés para freelances: Robi, Tiime, Indy, Abby, Freebe, Henrri. Criterios, Factur-X y para quién.",
-    "tldrFr": [
-      "En 2026, le bon logiciel dépend de ton besoin : **compta intégrée**, **rapidité de création**, **prix**, et **conformité Factur-X**.",
-      "**Tiime, Indy, Qonto** = suites avec comptabilité (certaines sont **plateformes agréées / PDP**). **Freebe, Abby, Henrri** = facturation freelance plus simple.",
-      "**Robi AI** est le seul à créer une facture **en parlant** et génère le **Factur-X nativement**, en paiement **unique (59 € à vie)** plutôt qu'en abonnement.",
-      "Point clé : un outil **crée** la facture, une **plateforme agréée (PDP)** la **transmet** — ne confonds pas les deux."
-    ],
-    "tldrEn": [
-      "In 2026 the right tool depends on your need: **built-in accounting**, **creation speed**, **price**, and **Factur-X compliance**.",
-      "**Tiime, Indy, Qonto** = suites with accounting (some are **registered platforms / PDP**). **Freebe, Abby, Henrri** = simpler freelance invoicing.",
-      "**Robi AI** is the only one to create an invoice **by voice** and generates **Factur-X natively**, for a **one-time price (€59 lifetime)** rather than a subscription.",
-      "Key point: a tool **creates** the invoice, a **registered platform (PDP)** **transmits** it — don't confuse the two."
-    ],
-    "tldrEs": [
-      "En 2026 la herramienta adecuada depende de tu necesidad: **contabilidad integrada**, **rapidez**, **precio** y **conformidad Factur-X**.",
-      "**Tiime, Indy, Qonto** = suites con contabilidad (algunas son **plataformas registradas / PDP**). **Freebe, Abby, Henrri** = facturación freelance más simple.",
-      "**Robi AI** es el único que crea una factura **hablando** y genera **Factur-X de forma nativa**, con pago **único (59 € de por vida)**.",
-      "Clave: una herramienta **crea** la factura, una **plataforma registrada (PDP)** la **transmite**."
-    ],
+    "tldrFr": ["En 2026, le bon logiciel dépend de ton besoin : **compta intégrée**, **rapidité de création**, **prix**, et **conformité Factur-X**.", "**Tiime, Indy, Qonto** = suites avec comptabilité (certaines sont **plateformes agréées / PDP**). **Freebe, Abby, Henrri** = facturation freelance plus simple.", "**Robi AI** est le seul à créer une facture **en parlant** et génère le **Factur-X nativement**, en paiement **unique (59 € à vie)** plutôt qu'en abonnement.", "Point clé : un outil **crée** la facture, une **plateforme agréée (PDP)** la **transmet** — ne confonds pas les deux."],
+    "tldrEn": ["In 2026 the right tool depends on your need: **built-in accounting**, **creation speed**, **price**, and **Factur-X compliance**.", "**Tiime, Indy, Qonto** = suites with accounting (some are **registered platforms / PDP**). **Freebe, Abby, Henrri** = simpler freelance invoicing.", "**Robi AI** is the only one to create an invoice **by voice** and generates **Factur-X natively**, for a **one-time price (€59 lifetime)** rather than a subscription.", "Key point: a tool **creates** the invoice, a **registered platform (PDP)** **transmits** it — don't confuse the two."],
+    "tldrEs": ["En 2026 la herramienta adecuada depende de tu necesidad: **contabilidad integrada**, **rapidez**, **precio** y **conformidad Factur-X**.", "**Tiime, Indy, Qonto** = suites con contabilidad (algunas son **plataformas registradas / PDP**). **Freebe, Abby, Henrri** = facturación freelance más simple.", "**Robi AI** es el único que crea una factura **hablando** y genera **Factur-X de forma nativa**, con pago **único (59 € de por vida)**.", "Clave: una herramienta **crea** la factura, una **plataforma registrada (PDP)** la **transmite**."],
     "contentFr": "## Comment choisir en 2026 : les critères qui comptent\n\nLe « meilleur » logiciel de facturation n'existe pas dans l'absolu — il dépend de **ton profil**. Voici les critères vraiment décisifs cette année :\n\n- **Conformité Factur-X** : avec la [réforme de la facturation électronique](/fr/blog/facturation-electronique-2026-auto-entrepreneur), ton outil doit produire le **format structuré** (Factur-X), pas juste un PDF.\n- **Rapidité de création** : combien de temps pour sortir une facture propre ?\n- **Comptabilité intégrée ou non** : as-tu besoin d'un suivi compta/URSSAF, ou juste de facturer ?\n- **Modèle tarifaire** : abonnement mensuel, gratuit limité, ou paiement unique ?\n- **Transmission** : l'outil est-il une **plateforme agréée (PDP)** capable de transmettre, ou faut-il en brancher une ?\n\n## Les solutions françaises passées en revue\n\n### Robi AI — la création par IA et par la voix\n\nL'angle unique : tu crées un devis ou une facture **en parlant** (« facture de 500 € pour Alice »), et Robi génère un document **conforme Factur-X nativement**. Prix en **paiement unique — 59 € à vie**, sans abonnement. Idéal si tu veux facturer vite, depuis ton téléphone, et payer une seule fois. Robi **génère** le format conforme ; pour la **transmission**, il se combine à une plateforme agréée.\n\n### Tiime — la suite compta avec plateforme agréée\n\nTiime combine facturation et comptabilité, avec une offre d'entrée gratuite. C'est une **plateforme pré-immatriculée** dans le cadre de la réforme : un bon choix si tu veux une suite compta + transmission dans le même outil.\n\n### Indy — comptabilité et compte pro pour indépendants\n\nIndy vise les indépendants qui veulent gérer **compta + compte professionnel** au même endroit, avec un accompagnement des déclarations. Plutôt pour qui veut du tout-en-un côté gestion.\n\n### Abby — le tout-en-un micro-entreprise\n\nAbby est pensé pour les **micro-entrepreneurs** : facturation, pilotage du chiffre d'affaires, déclarations URSSAF. Bon pour qui veut un copilote administratif dédié à la micro.\n\n### Freebe — la facturation pensée freelances\n\nFreebe est un outil **simple et centré freelance** : devis, factures, suivi client, sans la lourdeur d'une suite compta. Pour qui veut l'essentiel, bien fait.\n\n### Henrri — la facturation gratuite\n\nHenrri propose une **facturation gratuite** (avec options payantes). Une porte d'entrée sans budget, à condition d'accepter ses limites.\n\n*(Pour des besoins plus PME : Qonto — compte pro immatriculé plateforme agréée —, Pennylane ou Sellsy sont davantage orientés entreprises et cabinets.)*\n\n## Le vrai sujet de 2026 : Factur-X + plateforme agréée\n\nC'est LE point que les comparatifs oublient. La réforme distingue deux rôles :\n\n1. **Créer** la facture au bon format (Factur-X). C'est ce que fait un logiciel de facturation comme Robi.\n2. **Transmettre** la facture via une **plateforme agréée (PDP)**. La DGFiP en a immatriculé environ **150** à ce jour — tu dois en choisir une (ou utiliser un outil qui en intègre une).\n\nCertains outils font les deux (Tiime, Qonto…), d'autres se concentrent sur la création et se **branchent** à une PDP. Aucun des deux n'est « mieux » dans l'absolu : ça dépend de si tu veux tout au même endroit ou le meilleur outil de création + la PDP de ton choix. Consulte la **liste officielle des plateformes agréées** sur impots.gouv.fr pour vérifier le statut de chaque solution.\n\n## Quelle solution pour quel profil ?\n\n- **Tu veux facturer le plus vite possible, à la voix, et payer une seule fois** → **Robi AI**.\n- **Tu veux compta + facturation + transmission dans une seule suite** → Tiime ou Indy.\n- **Tu es micro-entrepreneur et tu veux un copilote URSSAF** → Abby.\n- **Tu veux simple et centré freelance** → Freebe.\n- **Tu n'as aucun budget** → Henrri (gratuit).\n\n## Et Robi dans tout ça — franchement\n\nSoyons transparents : [Robi AI](https://go.robi-app.com) **n'est pas une plateforme agréée (PDP)** et ne prétend pas l'être. Ce qu'il fait mieux que les autres : **créer une facture conforme en parlant**, générer le **Factur-X nativement**, et le tout en **paiement unique (59 € à vie)** au lieu d'un abonnement. Si ta priorité est la vitesse de création et le prix, c'est difficile à battre. Pour la transmission, tu le combines à la PDP de ton choix. Découvre la [facturation par IA](/fr/blog/facturation-par-ia-creer-facture-voix).\n\n## Conclusion\n\nEn 2026, ne cherche pas « le meilleur » dans l'absolu : cherche **le meilleur pour toi**. Suite compta complète ou outil de création ultra-rapide ? Abonnement ou paiement unique ? Une chose est sûre : quel que soit ton choix, vérifie qu'il produit du **Factur-X** et sache comment tes factures seront **transmises**.",
     "contentEn": "## How to choose in 2026: the criteria that matter\n\nThere is no absolute « best » invoicing tool — it depends on **your profile**. The decisive criteria this year:\n\n- **Factur-X compliance**: with the [e-invoicing reform](/fr/blog/facturation-electronique-2026-auto-entrepreneur), your tool must produce the **structured format**, not just a PDF.\n- **Creation speed**, **built-in accounting or not**, **pricing model** (subscription, free-limited, one-time), and **transmission** (is it a registered platform / PDP, or do you plug one in?).\n\n## The French solutions reviewed\n\n### Robi AI — creation by AI and voice\n\nThe unique angle: you create a quote or invoice **by voice**, and Robi generates a **natively Factur-X-compliant** document — for a **one-time price, €59 lifetime**, no subscription. Robi **generates** the compliant format; for **transmission** it pairs with a registered platform.\n\n### Tiime — accounting suite with a registered platform\n\nInvoicing + accounting, with a free entry tier; a pre-registered platform under the reform.\n\n### Indy — accounting and a pro account for the self-employed\n\nAll-in-one management (accounting + pro account + returns).\n\n### Abby — the micro-business all-in-one\n\nBuilt for French micro-entrepreneurs (invoicing, revenue tracking, URSSAF).\n\n### Freebe — freelance-focused invoicing\n\nSimple, freelance-centric (quotes, invoices, client tracking).\n\n### Henrri — free invoicing\n\nFree invoicing with paid options.\n\n## The real 2026 topic: Factur-X + registered platform\n\nThe reform splits two roles: **creating** the invoice in the right format (what a tool like Robi does), and **transmitting** it via a **registered platform (PDP)** — the DGFiP has registered about **150** of them. Some tools do both; others focus on creation and plug into a PDP. Check the official list on impots.gouv.fr.\n\n## Who is each for?\n\n- **Fastest creation, by voice, pay once** → **Robi AI**.\n- **Accounting + invoicing + transmission in one suite** → Tiime or Indy.\n- **Micro-entrepreneur wanting a URSSAF copilot** → Abby.\n- **Simple and freelance-focused** → Freebe.\n- **No budget** → Henrri.\n\n## And Robi — honestly\n\n[Robi AI](https://go.robi-app.com) **is not a registered platform (PDP)** and doesn't claim to be. What it does better: **create a compliant invoice by voice**, generate **Factur-X natively**, for a **one-time €59 lifetime** price. For transmission, pair it with the PDP of your choice.\n\n## Conclusion\n\nDon't look for the absolute « best » — look for the best **for you**. Whatever you pick, make sure it produces **Factur-X** and know how your invoices will be **transmitted**.",
     "contentEs": "## Cómo elegir en 2026: los criterios que importan\n\nNo existe el « mejor » software en absoluto — depende de **tu perfil**. Los criterios decisivos este año:\n\n- **Conformidad Factur-X**: con la [reforma](/fr/blog/facturation-electronique-2026-auto-entrepreneur), tu herramienta debe producir el **formato estructurado**, no solo un PDF.\n- **Rapidez**, **contabilidad integrada o no**, **modelo de precio** (suscripción, gratis limitado, pago único) y **transmisión** (¿es una plataforma registrada / PDP o conectas una?).\n\n## Las soluciones francesas\n\n### Robi AI — creación por IA y voz\n\nCreas una factura **hablando**, y Robi genera un documento **conforme Factur-X de forma nativa**, con **pago único — 59 € de por vida**. Robi **genera** el formato; para la **transmisión** se combina con una plataforma registrada.\n\n### Tiime — suite contable con plataforma registrada\n### Indy — contabilidad y cuenta pro para autónomos\n### Abby — todo-en-uno microempresa\n### Freebe — facturación centrada en freelances\n### Henrri — facturación gratuita\n\n## El tema real de 2026: Factur-X + plataforma registrada\n\nLa reforma separa dos roles: **crear** la factura (lo que hace Robi) y **transmitirla** vía una **plataforma registrada (PDP)** — la DGFiP ha registrado unas **150**. Algunas herramientas hacen ambas; otras se centran en la creación y conectan una PDP.\n\n## ¿Para quién es cada una?\n\n- **Creación más rápida, por voz, pago único** → **Robi AI**.\n- **Contabilidad + facturación + transmisión en una suite** → Tiime o Indy.\n- **Microempresa con copiloto** → Abby.\n- **Simple y freelance** → Freebe.\n- **Sin presupuesto** → Henrri.\n\n## Y Robi — con honestidad\n\n[Robi AI](https://go.robi-app.com) **no es una plataforma registrada (PDP)**. Lo que hace mejor: **crear una factura conforme hablando**, generar **Factur-X de forma nativa**, con **pago único de 59 €**. Para la transmisión, combínalo con la PDP que elijas.\n\n## Conclusión\n\nNo busques el « mejor » absoluto — busca el mejor **para ti**. Sea cual sea, asegúrate de que produce **Factur-X** y de saber cómo se **transmiten** tus facturas.",
     "faqFr": [
-      { "q": "Quel est le meilleur logiciel de facturation pour freelance en 2026 ?", "a": "Ça dépend de ton besoin : Robi AI pour créer le plus vite (à la voix) et payer une seule fois (59 € à vie) ; Tiime ou Indy pour une suite compta + transmission ; Abby pour la micro-entreprise ; Henrri si tu veux gratuit." },
-      { "q": "Faut-il une plateforme agréée (PDP) ?", "a": "Oui, pour transmettre tes factures électroniques. Certains outils sont eux-mêmes une PDP (Tiime, Qonto…), d'autres génèrent le format et se branchent à une PDP. La DGFiP publie la liste officielle (~150 plateformes)." },
-      { "q": "Un logiciel de facturation gratuit, ça existe ?", "a": "Oui, par exemple Henrri, ou les offres d'entrée de certaines suites. Attention aux limites (nombre de factures, fonctions). Robi n'est pas gratuit mais coûte 59 € une seule fois, à vie." },
-      { "q": "Robi AI est-il une plateforme agréée (PDP) ?", "a": "Non, et il ne le prétend pas. Robi génère des factures au format Factur-X conforme ; la transmission passe par une PDP de ton choix." },
-      { "q": "Quel logiciel choisir pour la réforme 2026 ?", "a": "Un outil qui produit le format Factur-X (comme Robi) et une plateforme agréée pour la transmission. Vérifie toujours que ta solution génère bien le format structuré, pas seulement un PDF." }
+      {
+        "q": "Quel est le meilleur logiciel de facturation pour freelance en 2026 ?",
+        "a": "Ça dépend de ton besoin : Robi AI pour créer le plus vite (à la voix) et payer une seule fois (59 € à vie) ; Tiime ou Indy pour une suite compta + transmission ; Abby pour la micro-entreprise ; Henrri si tu veux gratuit."
+      },
+      {
+        "q": "Faut-il une plateforme agréée (PDP) ?",
+        "a": "Oui, pour transmettre tes factures électroniques. Certains outils sont eux-mêmes une PDP (Tiime, Qonto…), d'autres génèrent le format et se branchent à une PDP. La DGFiP publie la liste officielle (~150 plateformes)."
+      },
+      {
+        "q": "Un logiciel de facturation gratuit, ça existe ?",
+        "a": "Oui, par exemple Henrri, ou les offres d'entrée de certaines suites. Attention aux limites (nombre de factures, fonctions). Robi n'est pas gratuit mais coûte 59 € une seule fois, à vie."
+      },
+      {
+        "q": "Robi AI est-il une plateforme agréée (PDP) ?",
+        "a": "Non, et il ne le prétend pas. Robi génère des factures au format Factur-X conforme ; la transmission passe par une PDP de ton choix."
+      },
+      {
+        "q": "Quel logiciel choisir pour la réforme 2026 ?",
+        "a": "Un outil qui produit le format Factur-X (comme Robi) et une plateforme agréée pour la transmission. Vérifie toujours que ta solution génère bien le format structuré, pas seulement un PDF."
+      }
     ],
     "faqEn": [
-      { "q": "What is the best invoicing software for freelancers in 2026?", "a": "It depends: Robi AI to create fastest (by voice) and pay once (€59 lifetime); Tiime or Indy for an accounting suite + transmission; Abby for micro-business; Henrri if you want free." },
-      { "q": "Do I need a registered platform (PDP)?", "a": "Yes, to transmit e-invoices. Some tools are a PDP themselves; others generate the format and plug into one. The DGFiP publishes the official list (~150 platforms)." },
-      { "q": "Is Robi AI a registered platform (PDP)?", "a": "No, and it doesn't claim to be. Robi generates Factur-X-compliant invoices; transmission goes through the PDP of your choice." }
+      {
+        "q": "What is the best invoicing software for freelancers in 2026?",
+        "a": "It depends: Robi AI to create fastest (by voice) and pay once (€59 lifetime); Tiime or Indy for an accounting suite + transmission; Abby for micro-business; Henrri if you want free."
+      },
+      {
+        "q": "Do I need a registered platform (PDP)?",
+        "a": "Yes, to transmit e-invoices. Some tools are a PDP themselves; others generate the format and plug into one. The DGFiP publishes the official list (~150 platforms)."
+      },
+      {
+        "q": "Is Robi AI a registered platform (PDP)?",
+        "a": "No, and it doesn't claim to be. Robi generates Factur-X-compliant invoices; transmission goes through the PDP of your choice."
+      }
     ],
     "faqEs": [
-      { "q": "¿Cuál es el mejor software de facturación freelance en 2026?", "a": "Depende: Robi AI para crear más rápido (por voz) y pagar una vez (59 € de por vida); Tiime o Indy para suite contable + transmisión; Abby para microempresa; Henrri si quieres gratis." },
-      { "q": "¿Necesito una plataforma registrada (PDP)?", "a": "Sí, para transmitir facturas electrónicas. Algunas herramientas son una PDP; otras generan el formato y conectan una. La DGFiP publica la lista oficial (~150 plataformas)." },
-      { "q": "¿Robi AI es una plataforma registrada (PDP)?", "a": "No, y no lo pretende. Robi genera facturas conformes Factur-X; la transmisión pasa por la PDP que elijas." }
+      {
+        "q": "¿Cuál es el mejor software de facturación freelance en 2026?",
+        "a": "Depende: Robi AI para crear más rápido (por voz) y pagar una vez (59 € de por vida); Tiime o Indy para suite contable + transmisión; Abby para microempresa; Henrri si quieres gratis."
+      },
+      {
+        "q": "¿Necesito una plataforma registrada (PDP)?",
+        "a": "Sí, para transmitir facturas electrónicas. Algunas herramientas son una PDP; otras generan el formato y conectan una. La DGFiP publica la lista oficial (~150 plataformas)."
+      },
+      {
+        "q": "¿Robi AI es una plataforma registrada (PDP)?",
+        "a": "No, y no lo pretende. Robi genera facturas conformes Factur-X; la transmisión pasa por la PDP que elijas."
+      }
     ]
   }
 ]
