@@ -43,8 +43,17 @@ export interface SocialPost {
   hashtags?: string;
   /** Ce qu'il faut voir sur le visuel — sert de consigne à Higgsfield. */
   visual?: string;
-  /** URL du visuel une fois produit. */
+  /** URL du visuel retenu. C'est celui qui part à la publication. */
   imageUrl?: string;
+  /**
+   * Les visuels proposés pour ce post, parmi lesquels `imageUrl` est choisi.
+   *
+   * La photo coûte un crédit et trente secondes ; la recomposer dans un autre
+   * habillage ne coûte rien. Livrer plusieurs propositions est donc presque
+   * gratuit — ce qui manquait, c'était un endroit où les poser et un geste
+   * pour en retenir une.
+   */
+  imagePropositions?: string[];
   /**
    * La case de la grille éditoriale que ce post occupe (`editorialGrid.ts`).
    *
@@ -133,10 +142,14 @@ export const deletePost = (id: string) => deleteDoc(doc(db, "socialPosts", id));
  */
 export const updatePostText = (
   id: string,
-  patch: { caption: string; hashtags: string; visual: string; imageUrl?: string }
+  patch: { caption: string; hashtags: string; visual: string; imageUrl?: string; date?: string }
 ) =>
   updateDoc(doc(db, "socialPosts", id), {
     caption: patch.caption,
+    // La date était le seul champ qu'aucun écran ne permettait de changer :
+    // décaler un post d'un jour demandait de le supprimer et de le refaire,
+    // ce qui lui faisait perdre son identifiant et son historique d'envoi.
+    ...(patch.date ? { date: patch.date } : {}),
     hashtags: patch.hashtags.trim() ? patch.hashtags.trim() : deleteField(),
     visual: patch.visual.trim() ? patch.visual.trim() : deleteField(),
     // `visual` est la consigne écrite, `imageUrl` le visuel réellement

@@ -27,6 +27,7 @@ export interface ImportPost {
   hashtags?: string;
   visual?: string;
   imageUrl?: string;
+  imagePropositions?: string[];
   /** La case de la grille éditoriale (`editorialGrid.ts`). */
   persona?: string;
   pilier?: string;
@@ -51,6 +52,7 @@ export interface ExistingPost {
   hashtags?: string;
   visual?: string;
   imageUrl?: string;
+  imagePropositions?: string[];
   /** Portés ici aussi, sinon un réimport identique réécrirait la case. */
   persona?: string;
   pilier?: string;
@@ -201,6 +203,28 @@ export const validateImportPost = (
     post.imageUrl = imageUrl;
   }
 
+  // Les propositions suivent la même règle que le visuel retenu : une adresse
+  // locale glissée ici ne casserait rien à l'import, et échouerait à la
+  // publication des jours plus tard, sans rapport visible avec ce fichier.
+  if (o.imagePropositions !== undefined) {
+    const brut = o.imagePropositions;
+    if (!Array.isArray(brut)) {
+      return { ok: false, error: `#${n} : "imagePropositions" doit être un tableau d'URL.` };
+    }
+    const urls = brut.map(str).filter(Boolean);
+    const fautive = urls.find((u) => !/^https:\/\//i.test(u));
+    if (fautive) {
+      return {
+        ok: false,
+        error: `#${n} : proposition de visuel invalide ${JSON.stringify(fautive)} — https:// attendu.`,
+      };
+    }
+    // Les doublons rendraient le choix illisible : deux vignettes identiques
+    // côte à côte, sans moyen de savoir laquelle on vient de retenir.
+    const uniques = [...new Set(urls)];
+    if (uniques.length) post.imagePropositions = uniques;
+  }
+
   const id = str(o.id);
   if (id) post.id = id;
 
@@ -277,6 +301,14 @@ export const planSocialImport = (
     for (const champ of ["caption", "hashtags", "visual", "imageUrl", "date", "type", "persona", "pilier", "angle"] as const) {
       const v = p[champ];
       if (v !== undefined && v !== "" && v !== found[champ]) patch[champ] = v as never;
+    }
+    // Comparées par contenu : un tableau se compare par référence, donc un
+    // réimport identique écrirait à chaque fois sans rien changer.
+    if (
+      p.imagePropositions?.length &&
+      p.imagePropositions.join("\n") !== (found.imagePropositions ?? []).join("\n")
+    ) {
+      patch.imagePropositions = p.imagePropositions;
     }
     // L'identifiant est posé s'il manquait : l'historique devient suivable.
     if (!found.externalId) patch.externalId = p.externalId;
