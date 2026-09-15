@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   ChevronLeft, ChevronRight, FileJson, RefreshCw, AlertTriangle, Check, Trash2,
   Pencil, X, Copy, Sparkles, ClipboardCopy, ImagePlus, Loader2, Send, ShieldCheck,
-  CalendarDays, List, CircleAlert, BookOpen,
+  CalendarDays, List, CircleAlert, BookOpen, Grid3x3, Plus,
 } from "lucide-react";
 import { listSharedFiles, isImage, type SharedFile } from "@/lib/sharedFiles";
 import { rapprocher } from "@/lib/rapprochementVisuels";
@@ -122,7 +122,7 @@ const ReseauxTab: React.FC = () => {
    * brouillons à la suite, éparpillés dans douze cases. La liste est faite
    * pour le travail, le calendrier pour le coup d'œil — d'où la bascule.
    */
-  const [vue, setVue] = useState<"calendrier" | "liste">("calendrier");
+  const [vue, setVue] = useState<"calendrier" | "liste" | "feed">("calendrier");
   /**
    * « à-traiter » n'est pas un statut mais une question : qu'est-ce qui
    * m'empêche de programmer ? C'est la seule que Ralph se pose vraiment.
@@ -236,6 +236,32 @@ const ReseauxTab: React.FC = () => {
   const brouillonsDuMois = useMemo(
     () => monthPosts.filter((p) => p.status === "draft"),
     [monthPosts]
+  );
+
+  /**
+   * Le canal dont on prévisualise le feed.
+   *
+   * La grille est un objet Instagram : c'est là qu'un post se regarde à
+   * côté des autres. « Tous les réseaux » n'a pas de grille, on retombe
+   * donc sur Instagram plutôt que de mélanger des posts qui ne se
+   * côtoieront jamais à l'écran.
+   */
+  const canalDuFeed: PostChannel = channel === "all" ? "instagram" : channel;
+
+  /**
+   * Ce que la grille montre : le canal choisi, tous mois confondus, du plus
+   * récent au plus ancien — l'ordre du vrai profil.
+   *
+   * Les posts sans visuel restent dans la grille, en trou visible : un post
+   * peut être juste tout seul et casser la colonne, et c'est précisément ce
+   * que cette vue sert à voir avant de programmer.
+   */
+  const feedPosts = useMemo(
+    () => rows
+      .filter((p) => p.channel === canalDuFeed)
+      .sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0))
+      .slice(0, 30),
+    [rows, canalDuFeed]
   );
 
   /**
@@ -624,6 +650,42 @@ const ReseauxTab: React.FC = () => {
     }
   };
 
+  /**
+   * Crée un post vide, ouvert en édition.
+   *
+   * Jusqu'ici tout entrait par l'import JSON ou par la duplication d'un
+   * post existant : noter une idée à la volée demandait de dupliquer un
+   * post qui n'avait rien à voir puis de tout effacer.
+   *
+   * La date est celle du jour si le mois affiché est le mois courant,
+   * sinon le 1er du mois affiché — le post apparaît là où on regarde, au
+   * lieu de naître hors écran.
+   */
+  const nouveauPost = async () => {
+    setBusy(true);
+    try {
+      const auj = new Date();
+      const memeMois = auj.getFullYear() === year && auj.getMonth() === month;
+      const jour = memeMois ? auj.getDate() : 1;
+      const date = `${year}-${String(month + 1).padStart(2, "0")}-${String(jour).padStart(2, "0")}`;
+      const ref = await addPost({
+        date,
+        channel: channel === "all" ? "instagram" : channel,
+        type: "bold",
+        caption: "",
+        status: "draft",
+      });
+      setVue("liste");
+      setFiltre("tous");
+      setOpenId(ref.id);
+      setEdit({ id: ref.id, caption: "", hashtags: "", visual: "", imageUrl: "", date });
+    } catch (e) {
+      say("err", (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const duplicate = async (p: SocialPost) => {
     try {
       // Champs optionnels recopiés seulement s'ils portent une valeur :
@@ -759,6 +821,7 @@ const ReseauxTab: React.FC = () => {
           {([
             ["calendrier", CalendarDays, "Calendrier"],
             ["liste", List, "Liste"],
+            ["feed", Grid3x3, "Feed"],
           ] as const).map(([v, Icone, label]) => (
             <button
               key={v}
@@ -773,6 +836,10 @@ const ReseauxTab: React.FC = () => {
             </button>
           ))}
         </div>
+
+        <button onClick={nouveauPost} disabled={busy} className={btnGhost} title="Créer un post vide sur le mois affiché">
+          <span className="flex items-center gap-1.5"><Plus size={12} /> Nouveau post</span>
+        </button>
 
         <div className="ml-auto flex items-center gap-2">
           <a
@@ -912,6 +979,68 @@ const ReseauxTab: React.FC = () => {
         </div>
       )}
 
+      {/* Aperçu du feed — la grille, pas la liste */}
+      {vue === "feed" && (
+        <div className={`${card} p-3`}>
+          <div className="flex flex-wrap items-center gap-2 px-1 pb-2.5">
+            <span
+              className="inline-block h-2 w-2 rounded-full"
+              style={{ background: CHANNEL_META[canalDuFeed].color }}
+            />
+            <p className="text-[11px] font-bold text-slate-600">
+              {CHANNEL_META[canalDuFeed].label} — les 30 derniers, du plus récent au plus ancien
+            </p>
+            <p className="text-[11px] text-slate-400">
+              Tous mois confondus : une grille ne s’arrête pas au 1er du mois.
+            </p>
+          </div>
+
+          {feedPosts.length === 0 ? (
+            <p className="text-[12px] text-slate-500 px-1 py-6 text-center">
+              Aucun post sur {CHANNEL_META[canalDuFeed].label} pour l’instant.
+            </p>
+          ) : (
+            <div className="grid grid-cols-3 gap-1 max-w-[420px] mx-auto">
+              {feedPosts.map((p) => {
+                const meta = STATUS_META[p.status];
+                return (
+                  <button
+                    key={p.id}
+                    onClick={() => {
+                      // On retombe sur la liste, au mois du post : cliquer une
+                      // vignette doit mener au post, pas à un mois vide.
+                      const [a, m] = p.date.split("-").map(Number);
+                      setYear(a);
+                      setMonth(m - 1);
+                      setFiltre("tous");
+                      setVue("liste");
+                      setOpenId(p.id!);
+                    }}
+                    className={`relative aspect-square overflow-hidden bg-slate-100 group ${focusRing}`}
+                    title={`${p.date} · ${meta.label}${p.caption ? ` — ${p.caption.slice(0, 80)}` : ""}`}
+                  >
+                    {p.imageUrl ? (
+                      <img src={p.imageUrl} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="h-full w-full grid place-items-center border border-dashed border-amber-300 bg-amber-50">
+                        <ImagePlus size={16} className="text-amber-400" />
+                      </span>
+                    )}
+                    <span
+                      className="absolute top-1 right-1 h-2 w-2 rounded-full ring-1 ring-white/80"
+                      style={{ background: meta.color }}
+                    />
+                    <span className="absolute inset-x-0 bottom-0 px-1 py-0.5 text-[9px] font-bold text-white bg-black/45 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {p.date.slice(8)}/{p.date.slice(5, 7)}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Calendrier */}
       <div className={`${card} p-3`} hidden={vue !== "calendrier"}>
         <div className="grid grid-cols-7 gap-1.5 mb-1.5">
@@ -921,7 +1050,7 @@ const ReseauxTab: React.FC = () => {
         </div>
         <div className="grid grid-cols-7 gap-1.5">
           {cells.map((date, i) => {
-            if (!date) return <div key={`x${i}`} className="min-h-[92px] rounded-xl bg-slate-50" />;
+            if (!date) return <div key={`x${i}`} className="min-h-[104px] rounded-xl bg-slate-50" />;
             const posts = byDate.get(date) || [];
             const isToday = date === new Date().toISOString().slice(0, 10);
             return (
@@ -942,7 +1071,7 @@ const ReseauxTab: React.FC = () => {
                   if (id) void deplacer(id, date);
                   setGlisse(null);
                 }}
-                className={`min-h-[92px] rounded-xl border p-1.5 transition-colors ${
+                className={`min-h-[104px] rounded-xl border p-1.5 transition-colors ${
                   survol === date && glisse?.depuis !== date
                     ? "border-[var(--color-accent)] bg-[var(--color-accent)]/[0.14] ring-2 ring-[var(--color-accent)]/40"
                     : isToday
@@ -981,11 +1110,26 @@ const ReseauxTab: React.FC = () => {
                         title={`${STATUS_META[p.status].label}${p.publishError ? " · dernier envoi en échec" : ""}\n\n${p.caption}`}
                       >
                         <span className="flex items-center gap-1">
+                          {/* La vignette du visuel retenu. Un calendrier de
+                              posts sans images ne dit pas à quoi ressemblera
+                              le compte : on relisait des débuts de phrases
+                              tronqués à neuf pixels, tous semblables. */}
+                          {p.imageUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={p.imageUrl}
+                              alt=""
+                              className="h-6 w-5 flex-none rounded object-cover border border-black/10"
+                            />
+                          ) : (
+                            // Un visuel manquant bloque la programmation : le
+                            // signaler ici évite de le découvrir à la
+                            // vérification, une fois le mois entier relu.
+                            <span className="h-6 w-5 flex-none rounded border border-dashed border-amber-300 bg-amber-50 grid place-items-center">
+                              <ImagePlus size={9} className="text-amber-500" />
+                            </span>
+                          )}
                           <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: CHANNEL_META[p.channel].color }} />
-                          {/* Un visuel manquant bloque la programmation : le
-                              signaler ici évite de le découvrir à la
-                              vérification, une fois le mois entier relu. */}
-                          {!p.imageUrl && <ImagePlus size={8} className="flex-shrink-0 text-amber-500" />}
                           <span className="text-[9px] font-bold truncate text-slate-700">{p.caption}</span>
                         </span>
                       </button>
@@ -1069,42 +1213,6 @@ const ReseauxTab: React.FC = () => {
                   />
                 </label>
 
-                {/* Les propositions de visuels. Recomposer une même photo dans
-                    un autre habillage ne coûte rien : le choix est presque
-                    gratuit à produire, il manquait juste un geste pour
-                    retenir l'une d'elles. */}
-                {!!p.imagePropositions?.length && (
-                  <div className="space-y-1.5">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                      {p.imagePropositions.length} proposition{p.imagePropositions.length > 1 ? "s" : ""}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {p.imagePropositions.map((url) => {
-                        const retenu = ed.imageUrl === url;
-                        return (
-                          <button
-                            key={url}
-                            onClick={() => setEdit({ ...ed, imageUrl: retenu ? "" : url })}
-                            aria-pressed={retenu}
-                            className={`relative h-24 w-[74px] rounded-lg overflow-hidden border-2 transition-all ${focusRing} ${
-                              retenu ? "border-[var(--color-accent)] scale-[1.03]" : "border-slate-200 hover:border-slate-300 opacity-80 hover:opacity-100"
-                            }`}
-                            title={retenu ? "Retenu — clique pour retirer" : "Retenir ce visuel"}
-                          >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={url} alt="" className="h-full w-full object-cover" />
-                            {retenu && (
-                              <span className="absolute inset-x-0 bottom-0 bg-[var(--color-accent)] text-black text-[9px] font-black py-0.5 text-center">
-                                RETENU
-                              </span>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
                 <div className="flex items-center gap-2">
                   {ed.imageUrl ? (
                     <>
@@ -1179,9 +1287,59 @@ const ReseauxTab: React.FC = () => {
                     <span className="uppercase tracking-widest text-slate-400">Visuel · </span>{p.visual}
                   </p>
                 )}
-                {p.imageUrl && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border border-slate-200" />
+                {/* Le choix du visuel, au même endroit que le choix du texte.
+                    Il vivait dans le mode Édition : il fallait cliquer
+                    « Éditer » pour le voir, donc en pratique on ne le voyait
+                    jamais et les propositions dormaient. */}
+                {(p.imagePropositions?.length ?? 0) > 1 ? (
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                      {p.imagePropositions!.length} visuels proposés
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {p.imagePropositions!.map((url, i) => {
+                        const retenu = p.imageUrl === url;
+                        return (
+                          <button
+                            key={url}
+                            onClick={() =>
+                              p.status !== "publishing" &&
+                              updatePost(p.id!, { imageUrl: retenu ? "" : url })
+                            }
+                            aria-pressed={retenu}
+                            className={`relative h-32 w-[100px] rounded-xl overflow-hidden border-2 transition-all ${focusRing} ${
+                              retenu
+                                ? "border-[var(--color-accent)]"
+                                : "border-slate-200 hover:border-slate-300 opacity-75 hover:opacity-100"
+                            }`}
+                            title={retenu ? "Retenu — clique pour retirer" : "Retenir ce visuel"}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={url} alt="" className="h-full w-full object-cover" />
+                            <span className={`absolute top-1 left-1 text-[10px] font-black rounded-full px-1.5 py-0.5 ${retenu ? "bg-[var(--color-accent)] text-black" : "bg-black/50 text-white"}`}>
+                              {String.fromCharCode(65 + i)}
+                            </span>
+                            {retenu && (
+                              <span className="absolute inset-x-0 bottom-0 bg-[var(--color-accent)] text-black text-[9px] font-black py-0.5 text-center">
+                                RETENU
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {/* Un visuel choisi hors des propositions reste montré :
+                        sinon on croirait n'avoir rien retenu. */}
+                    {!!p.imageUrl && !p.imagePropositions!.includes(p.imageUrl) && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border-2 border-[var(--color-accent)]" />
+                    )}
+                  </div>
+                ) : (
+                  p.imageUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border border-slate-200" />
+                  )
                 )}
                 <SuiviPublication post={p} onRenvoyer={renvoyer} busy={busy} />
               </>
