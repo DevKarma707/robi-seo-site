@@ -150,6 +150,11 @@ const ReseauxTab: React.FC = () => {
    * et les documents ne reviennent qu'au tour suivant.
    */
   const [rapatriementDemande, setRapatriementDemande] = useState(false);
+  /** Post en cours de déplacement, et jour survolé. */
+  const [glisse, setGlisse] = useState<{ id: string; depuis: string } | null>(null);
+  const [survol, setSurvol] = useState<string | null>(null);
+  /** Posts cochés en vue liste, pour agir sur plusieurs d'un coup. */
+  const [coches, setCoches] = useState<Set<string>>(new Set());
 
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
@@ -199,11 +204,18 @@ const ReseauxTab: React.FC = () => {
 
   const jourDuJour = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
-  /** Les posts du mois à plat, dans l'ordre des dates. */
-  const listeDuMois = useMemo(
-    () => [...monthPosts].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0)),
-    [monthPosts]
-  );
+  /**
+   * Ce que la liste affiche.
+   *
+   * « À traiter » sort du mois courant, volontairement : c'est une file de
+   * travail, pas une vue de calendrier. Un échec de la semaine dernière
+   * compterait dans le badge et n'apparaîtrait nulle part si on restait sur
+   * le mois affiché — le compteur dirait « 1 » et l'écran serait vide.
+   */
+  const listeDuMois = useMemo(() => {
+    const base = filtre === "a-traiter" ? rows.filter(retenu) : monthPosts;
+    return [...base].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  }, [filtre, rows, retenu, monthPosts]);
 
   /**
    * Combien de posts demandent une main, tous mois confondus.
@@ -290,12 +302,37 @@ const ReseauxTab: React.FC = () => {
     }
   };
 
+  /**
+   * Raccourcis clavier.
+   *
+   * Jamais quand on écrit : sinon une flèche gauche dans le texte du post
+   * changerait de mois, et on perdrait ce qu'on était en train de taper.
+   */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const cible = e.target as HTMLElement | null;
+      const saisie =
+        cible?.tagName === "INPUT" || cible?.tagName === "TEXTAREA" || cible?.isContentEditable;
+
+      if (e.key === "Escape" && !saisie) { setOpenId(null); setCoches(new Set()); return; }
+      if (saisie || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === "ArrowLeft") { e.preventDefault(); shiftRef.current(-1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); shiftRef.current(1); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   const shift = (delta: number) => {
     const d = new Date(Date.UTC(year, month + delta, 1));
     setYear(d.getUTCFullYear());
     setMonth(d.getUTCMonth());
     setOpenId(null);
   };
+  // La fonction change à chaque rendu ; la référence, non — l'écouteur clavier
+  // reste posé une seule fois au lieu d'être recréé à chaque frappe.
+  const shiftRef = useRef(shift);
+  shiftRef.current = shift;
 
   /**
    * Recopie une image externe dans la médiathèque et renvoie son adresse
@@ -415,6 +452,86 @@ const ReseauxTab: React.FC = () => {
     void lancerRapatriement(visuelsDehors);
   }, [rapatriementDemande, busy, visuelsDehors, lancerRapatriement]);
 
+  /**
+   * Déplace un post sur une autre date.
+   *
+   * Décaler d'un jour demandait jusqu'ici d'ouvrir le post, passer en
+   * édition, changer la date, enregistrer — quatre gestes pour ce que la
+   * souris fait en un.
+   *
+   * Un post déjà publié ne bouge pas : sa date dit quand il est parti, la
+   * changer réécrirait l'histoire. Un envoi en cours non plus — la file le
+   * tient.
+   */
+  const deplacer = async (id: string, vers: string) => {
+    const post = rows.find((r) => r.id === id);
+    if (!post || post.date === vers) return;
+    if (post.status === "published" || post.status === "publishing") {
+      say("err", `Impossible : ce post est ${STATUS_META[post.status].label.toLowerCase()}.`);
+      return;
+    }
+    try {
+      await updatePost(id, { date: vers });
+      // Un post « prêt » déplacé reste prêt : c'est bien ce qu'on veut, il
+      // partira à la nouvelle date. On le dit, parce que c'est une
+      // publication qu'on vient de reprogrammer d'un geste.
+      say("ok", post.status === "ready" ? `Reprogrammé au ${vers}.` : `Déplacé au ${vers}.`);
+    } catch (e) {
+      say("err", (e as Error).message);
+    }
+  };
+
+  const basculerCoche = (id: string) =>
+    setCoches((s) => {
+      const n = new Set(s);
+      if (n.has(id)) n.delete(id);
+      else n.add(id);
+      return n;
+    });
+
+  /** Les posts cochés qui sont encore à l'écran — cocher puis filtrer ne doit pas agir à l'aveugle. */
+  const selection = useMemo(
+    () => listeDuMois.filter((p) => coches.has(p.id!)),
+    [listeDuMois, coches]
+  );
+
+  /**
+   * Décale la sélection de N jours.
+   *
+   * Séquentiel et tolérant : un post publié refuse de bouger sans faire
+   * échouer les autres. Le compte rendu dit ce qui n'a pas suivi.
+   */
+  const decaler = async (jours: number) => {
+    setBusy(true);
+    let faits = 0;
+    let refuses = 0;
+    for (const post of selection) {
+      if (post.status === "published" || post.status === "publishing") { refuses++; continue; }
+      const d = new Date(`${post.date}T12:00:00Z`);
+      d.setUTCDate(d.getUTCDate() + jours);
+      try {
+        await updatePost(post.id!, { date: d.toISOString().slice(0, 10) });
+        faits++;
+      } catch { refuses++; }
+    }
+    setBusy(false);
+    setCoches(new Set());
+    say(faits ? "ok" : "err", `${faits} post(s) décalé(s)` + (refuses ? ` · ${refuses} refusé(s)` : ""));
+  };
+
+  const supprimerSelection = async () => {
+    if (!confirm(`Supprimer ${selection.length} post(s) ? C'est définitif.`)) return;
+    setBusy(true);
+    let faits = 0;
+    for (const post of selection) {
+      try { await deletePost(post.id!); faits++; } catch { /* le compte rendu le dira */ }
+    }
+    setBusy(false);
+    setCoches(new Set());
+    setOpenId(null);
+    say("ok", `${faits} post(s) supprimé(s)`);
+  };
+
   const runImport = async () => {
     setBusy(true);
     try {
@@ -502,7 +619,7 @@ const ReseauxTab: React.FC = () => {
   };
 
   return (
-    <div className="space-y-5">
+    <div className={`space-y-5 transition-[padding] ${openId ? "xl:pr-[424px]" : ""}`}>
       {/* Barre de mois */}
       <div className={`${card} p-4 flex flex-wrap items-center gap-3`}>
         <div className="flex items-center gap-1">
@@ -612,7 +729,13 @@ const ReseauxTab: React.FC = () => {
           return (
             <button
               key={f}
-              onClick={() => setFiltre(f)}
+              onClick={() => {
+                setFiltre(f);
+                // Le calendrier est borné au mois affiché ; « à traiter » ne
+                // l'est pas. Rester en calendrier cacherait ce qu'on vient
+                // de demander à voir.
+                if (f === "a-traiter") setVue("liste");
+              }}
               className={`${btnPill} ${
                 actif
                   ? "bg-[var(--color-primary)] text-[var(--color-accent)]"
@@ -656,22 +779,55 @@ const ReseauxTab: React.FC = () => {
       {/* Liste */}
       {vue === "liste" && (
         <div className={`${card} p-3`}>
-          {listeDuMois.length === 0 ? (
-            <p className="text-[13px] text-slate-500 py-8 text-center">
-              Aucun post ne correspond. Change de filtre, ou importe un lot.
+          {filtre === "a-traiter" && (
+            <p className="text-[11px] text-slate-500 px-1 pb-2">
+              Tous mois confondus — un échec ne se répare pas en changeant de page.
             </p>
+          )}
+          {listeDuMois.length === 0 ? (
+            <EtatVide onBrief={copyBrief} onImporter={() => setImportOpen(true)} filtre={filtre} />
           ) : (
-            <ul className="divide-y divide-slate-100">
-              {listeDuMois.map((p) => (
-                <LignePost
-                  key={p.id}
-                  post={p}
-                  ouvert={openId === p.id}
-                  onOuvrir={() => setOpenId(openId === p.id ? null : p.id!)}
-                  onProgrammer={() => setAVerifier([p])}
-                />
-              ))}
-            </ul>
+            <>
+              {/* La barre n'apparaît qu'une fois quelque chose de coché :
+                  affichée en permanence, elle occuperait de la place pour
+                  une action qu'on ne fait pas à chaque visite. */}
+              {selection.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 mb-2 p-2 rounded-xl bg-[var(--color-primary)] text-white">
+                  <span className="text-[11px] font-bold px-1">
+                    {selection.length} sélectionné{selection.length > 1 ? "s" : ""}
+                  </span>
+                  <button onClick={() => setAVerifier(selection.filter((p) => p.status === "draft"))}
+                    disabled={busy || !selection.some((p) => p.status === "draft")}
+                    className={`${btnPill} bg-[var(--color-accent)] text-black disabled:opacity-40`}>
+                    <span className="flex items-center gap-1"><ShieldCheck size={11} /> Programmer</span>
+                  </button>
+                  <button onClick={() => decaler(1)} disabled={busy} className={`${btnPill} bg-white/15 text-white`}>+1 jour</button>
+                  <button onClick={() => decaler(7)} disabled={busy} className={`${btnPill} bg-white/15 text-white`}>+1 semaine</button>
+                  <button onClick={() => decaler(-1)} disabled={busy} className={`${btnPill} bg-white/15 text-white`}>−1 jour</button>
+                  <button onClick={supprimerSelection} disabled={busy}
+                    className={`${btnPill} bg-white/15 text-white hover:bg-red-500/70 ml-auto`}>
+                    <span className="flex items-center gap-1"><Trash2 size={11} /> Supprimer</span>
+                  </button>
+                  <button onClick={() => setCoches(new Set())} className={`${btnPill} bg-white/15 text-white`}>
+                    <X size={11} />
+                  </button>
+                </div>
+              )}
+
+              <ul className="divide-y divide-slate-100">
+                {listeDuMois.map((p) => (
+                  <LignePost
+                    key={p.id}
+                    post={p}
+                    ouvert={openId === p.id}
+                    coche={coches.has(p.id!)}
+                    onCocher={() => basculerCoche(p.id!)}
+                    onOuvrir={() => setOpenId(openId === p.id ? null : p.id!)}
+                    onProgrammer={() => setAVerifier([p])}
+                  />
+                ))}
+              </ul>
+            </>
           )}
         </div>
       )}
@@ -691,10 +847,27 @@ const ReseauxTab: React.FC = () => {
             return (
               <div
                 key={date}
+                onDragOver={(e) => {
+                  // Sans preventDefault le navigateur refuse le dépôt, en
+                  // silence : la cellule paraît inerte sans qu'on sache pourquoi.
+                  if (!glisse) return;
+                  e.preventDefault();
+                  if (survol !== date) setSurvol(date);
+                }}
+                onDragLeave={() => setSurvol((d) => (d === date ? null : d))}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setSurvol(null);
+                  const id = e.dataTransfer.getData("text/plain") || glisse?.id;
+                  if (id) void deplacer(id, date);
+                  setGlisse(null);
+                }}
                 className={`min-h-[92px] rounded-xl border p-1.5 transition-colors ${
-                  isToday
-                    ? "border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.06] shadow-[inset_0_1px_0_rgba(190,242,33,0.18)]"
-                    : "border-slate-200 bg-slate-50 hover:border-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+                  survol === date && glisse?.depuis !== date
+                    ? "border-[var(--color-accent)] bg-[var(--color-accent)]/[0.14] ring-2 ring-[var(--color-accent)]/40"
+                    : isToday
+                      ? "border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.06] shadow-[inset_0_1px_0_rgba(190,242,33,0.18)]"
+                      : "border-slate-200 bg-slate-50 hover:border-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
                 }`}
               >
                 <p className={`text-[10px] font-bold mb-1 px-0.5 ${isToday ? "text-[var(--admin-ink)]" : "text-slate-400"}`}>
@@ -713,8 +886,17 @@ const ReseauxTab: React.FC = () => {
                     return (
                       <button
                         key={p.id}
+                        draggable={p.status !== "published" && p.status !== "publishing"}
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData("text/plain", p.id!);
+                          e.dataTransfer.effectAllowed = "move";
+                          setGlisse({ id: p.id!, depuis: p.date });
+                        }}
+                        onDragEnd={() => { setGlisse(null); setSurvol(null); }}
                         onClick={() => setOpenId(openId === p.id ? null : p.id!)}
-                        className={`w-full text-left rounded-lg pl-1 pr-1.5 py-1 transition-colors hover:bg-slate-50 border-l-[3px] ${focusRing}`}
+                        className={`w-full text-left rounded-lg pl-1 pr-1.5 py-1 transition-all hover:bg-slate-50 border-l-[3px] ${focusRing} ${
+                          glisse?.id === p.id ? "opacity-40" : ""
+                        } ${p.status !== "published" && p.status !== "publishing" ? "cursor-grab active:cursor-grabbing" : ""}`}
                         style={{ backgroundColor: `${TYPE_META[p.type].color}1a`, borderLeftColor: liseré }}
                         title={`${STATUS_META[p.status].label}${p.publishError ? " · dernier envoi en échec" : ""}\n\n${p.caption}`}
                       >
@@ -744,7 +926,14 @@ const ReseauxTab: React.FC = () => {
         // a l'interieur des callbacks onChange ci-dessous.
         const ed = edit && edit.id === p.id ? edit : null;
         return (
-          <div className={`${card} p-5 space-y-3`}>
+          /* Panneau latéral sur grand écran, bloc en dessous sur petit.
+             Avant, le détail poussait tout vers le bas : sur un mois plein il
+             fallait scroller pour le lire, et on perdait de vue la grille
+             qu'on était en train de relire. `sticky` le garde à hauteur
+             d'œil pendant qu'on passe d'un post à l'autre. */
+          <div
+            className={`${card} p-5 space-y-3 xl:fixed xl:right-6 xl:top-24 xl:bottom-6 xl:w-[400px] xl:overflow-y-auto xl:z-40 xl:shadow-2xl`}
+          >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider"
@@ -973,10 +1162,12 @@ const ReseauxTab: React.FC = () => {
  * neuf pixels — tous les posts s'y ressemblaient.
  */
 const LignePost = ({
-  post, ouvert, onOuvrir, onProgrammer,
+  post, ouvert, coche, onCocher, onOuvrir, onProgrammer,
 }: {
   post: SocialPost;
   ouvert: boolean;
+  coche: boolean;
+  onCocher: () => void;
   onOuvrir: () => void;
   onProgrammer: () => void;
 }) => {
@@ -985,7 +1176,14 @@ const LignePost = ({
   const propositions = post.imagePropositions?.length ?? 0;
 
   return (
-    <li className={`flex gap-3 py-2.5 px-1 ${ouvert ? "bg-slate-50 rounded-xl" : ""}`}>
+    <li className={`flex gap-3 py-2.5 px-1 ${ouvert ? "bg-slate-50 rounded-xl" : ""} ${coche ? "bg-[var(--color-accent)]/[0.08] rounded-xl" : ""}`}>
+      <input
+        type="checkbox"
+        checked={coche}
+        onChange={onCocher}
+        className="mt-5 flex-none h-4 w-4 accent-[var(--color-primary)] cursor-pointer"
+        aria-label={`Sélectionner le post du ${post.date}`}
+      />
       <button
         onClick={onOuvrir}
         className={`h-14 w-14 rounded-lg flex-none overflow-hidden border ${focusRing} ${
@@ -1030,6 +1228,47 @@ const LignePost = ({
         </button>
       )}
     </li>
+  );
+};
+
+/**
+ * Ce qu'on voit quand il n'y a rien.
+ *
+ * Une grille grise et vide ne dit pas quoi faire. Le mois vierge est
+ * justement le moment où on a besoin du brief — autant le tendre.
+ */
+const EtatVide = ({
+  filtre, onBrief, onImporter,
+}: {
+  filtre: string;
+  onBrief: () => void;
+  onImporter: () => void;
+}) => {
+  // Un filtre actif n'est pas un mois vide : proposer d'écrire un mois entier
+  // serait à côté de la question posée.
+  if (filtre !== "tous") {
+    return (
+      <p className="text-[13px] text-slate-500 py-10 text-center">
+        Rien dans cette catégorie. Essaie « Tous ».
+      </p>
+    );
+  }
+  return (
+    <div className="py-10 text-center space-y-3">
+      <p className="text-[13px] text-slate-600">Ce mois est vide.</p>
+      <p className="text-[11px] text-slate-400 max-w-sm mx-auto leading-relaxed">
+        Copie le brief, donne-le à Claude Code, et colle le JSON qu&apos;il te rend.
+        Les visuels se rapatrient tout seuls à l&apos;import.
+      </p>
+      <div className="flex items-center justify-center gap-2 pt-1">
+        <button onClick={onBrief} className={btnPrimary}>
+          <span className="flex items-center gap-1.5"><Sparkles size={12} /> Copier le brief du mois</span>
+        </button>
+        <button onClick={onImporter} className={btnGhost}>
+          <span className="flex items-center gap-1.5"><FileJson size={12} /> Importer du JSON</span>
+        </button>
+      </div>
+    </div>
   );
 };
 

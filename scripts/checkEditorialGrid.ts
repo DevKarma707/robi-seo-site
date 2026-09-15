@@ -129,5 +129,36 @@ t("posts sans case renseignée → ne fait pas planter le diagnostic", (() => {
   return d.renseignes === 0 && d.interdits.personas.length === 0;
 })());
 
+// ── Le mélange des piliers suit les parts, pas une rotation ────────────────
+const part = (posts: SocialPost[], n: number, id: string) => {
+  const c = proposerCases(posts, n);
+  return c.filter((x) => x.pilier === id).length / n;
+};
+
+t("le statement reste minoritaire, pas à égalité avec le reste", (() => {
+  // Une rotation simple donnerait 20 % — le double de la cible, et un compte
+  // deux fois plus bavard que la ligne éditoriale ne le prévoit.
+  const p = part([], 15, "statement");
+  return p <= 0.12;
+})());
+
+t("« situation vécue » reste le pilier dominant",
+  part([], 20, "situation") >= 0.25);
+
+t("chaque pilier garde sa place sur un long lot", (() => {
+  const c = proposerCases([], 40);
+  return PILIERS.every((pil) => {
+    const observe = c.filter((x) => x.pilier === pil.id).length / 40;
+    return Math.abs(observe - pil.part) <= 0.06;
+  });
+})());
+
+t("jamais deux fois le même pilier de suite", (() => {
+  const c = proposerCases([], 30);
+  return c.every((x, i) => i === 0 || x.pilier !== c[i - 1].pilier);
+})());
+
+t("un lot d'un seul post reste valide", proposerCases([], 1).length === 1);
+
 console.log(`\n${ko === 0 ? "✅ TOUT PASSE" : "❌ ÉCHECS"} — ${ok} ok, ${ko} ko\n`);
 process.exit(ko ? 1 : 0);
