@@ -123,7 +123,10 @@ const AcquisitionTab: React.FC = () => {
       });
 
       await updateProspect(selected.id, { lastEmailAt: new Date().toISOString() }, selected);
-      await advanceProspect(selected, `Envoyé : ${message.step.label}`);
+      await advanceProspect(selected, `Envoyé : ${message.step.label}`, {
+        subject: message.subject,
+        body: message.body,
+      });
       say("ok", `Envoyé à ${selected.email}.`);
     } catch (e) {
       say("err", (e as Error).message);
@@ -446,9 +449,20 @@ const AcquisitionTab: React.FC = () => {
                 <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Historique</p>
                 <div className="space-y-1">
                   {[...selected.touches!].reverse().slice(0, 6).map((t, i) => (
-                    <p key={i} className="text-[11px] text-slate-600">
-                      <span className="text-slate-700">{t.date}</span> · {t.channel}{t.note ? ` — ${t.note}` : ""}
-                    </p>
+                    <div key={i} className="text-[11px] text-slate-600">
+                      <p>
+                        <span className="text-slate-700">{t.date}</span> · {t.channel}{t.note ? ` — ${t.note}` : ""}
+                      </p>
+                      {t.body && (
+                        <details className="mt-1 ml-2">
+                          <summary className="cursor-pointer text-slate-500 hover:text-slate-300">Voir le mail envoyé</summary>
+                          <div className="mt-1.5 rounded-lg border border-white/10 bg-black/20 p-2.5">
+                            {t.subject && <p className="text-slate-300 font-medium mb-1.5">{t.subject}</p>}
+                            <pre className="whitespace-pre-wrap font-sans text-slate-400 leading-relaxed">{t.body}</pre>
+                          </div>
+                        </details>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>

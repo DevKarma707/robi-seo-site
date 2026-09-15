@@ -31,6 +31,13 @@ export interface ProspectTouch {
   date: string;   // yyyy-mm-dd
   channel: ProspectChannel;
   note?: string;
+  /**
+   * Copie exacte de ce qui est parti. Sans elle, la fiche avance à l'étape
+   * suivante dès l'envoi et le panneau montre la relance : on ne sait plus
+   * ce que le prospect a reçu, ni comment le retoucher la prochaine fois.
+   */
+  subject?: string;
+  body?: string;
 }
 
 export interface Prospect {
@@ -469,12 +476,16 @@ export const updateProspect = async (id: string, patch: Partial<Prospect>, curre
 export const deleteProspect = (id: string) => deleteDoc(doc(db, "prospects", id));
 
 /** Enregistre un contact et programme l'étape suivante de la séquence. */
-export const advanceProspect = async (p: Prospect, note?: string) => {
+export const advanceProspect = async (
+  p: Prospect,
+  note?: string,
+  sent?: { subject: string; body: string }
+) => {
   if (!p.id) return;
   const seq = sequenceFor(p.segment);
   const cur = stepOf(p);
   const nextIndex = Math.min((p.seqStep ?? 0) + 1, seq.length - 1);
-  const touch: ProspectTouch = { date: todayStr(), channel: cur.channel, note };
+  const touch: ProspectTouch = { date: todayStr(), channel: cur.channel, note, ...sent };
 
   await updateProspect(p.id, {
     status: p.status === "todo" ? cur.status : p.status,
