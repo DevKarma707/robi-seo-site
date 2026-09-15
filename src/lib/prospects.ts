@@ -89,9 +89,31 @@ export interface Prospect {
   unsubToken?: string;
   unsubscribedAt?: string;
   lastEmailAt?: string;
+  /**
+   * Ce que Brevo a réellement fait du dernier mail — rapporté par webhook.
+   * Le bouton « Envoyer » ne sait que si Brevo a accepté le message ; la
+   * livraison, le rebond ou le signalement en spam arrivent après coup.
+   */
+  delivery?: {
+    status: "sent" | "delivered" | "opened" | "clicked" | "soft_bounce" | "hard_bounce" | "spam" | "blocked" | "replied";
+    at: string;
+    reason?: string;
+  };
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }
+
+export const DELIVERY_META: Record<NonNullable<Prospect["delivery"]>["status"], { label: string; color: string }> = {
+  sent:        { label: "Accepté",        color: "#94a3b8" },
+  delivered:   { label: "Livré",          color: "#10b981" },
+  opened:      { label: "Ouvert",         color: "#10b981" },
+  clicked:     { label: "Lien cliqué",    color: "#BEF221" },
+  replied:     { label: "A répondu",      color: "#BEF221" },
+  soft_bounce: { label: "Rebond doux",    color: "#f59e0b" },
+  blocked:     { label: "Bloqué",         color: "#ef4444" },
+  hard_bounce: { label: "Adresse invalide", color: "#ef4444" },
+  spam:        { label: "Signalé spam",   color: "#ef4444" },
+};
 
 export const SEGMENT_META: Record<ProspectSegment, { label: string; hint: string; color: string }> = {
   freelance:  { label: "Freelances",       hint: "Cœur de cible : ils facturent seuls, sans outil",              color: "#BEF221" },

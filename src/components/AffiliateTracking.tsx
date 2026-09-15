@@ -1,16 +1,22 @@
 'use client';
 
 import Script from 'next/script';
+import { useConsent } from '@/hooks/useConsent';
 
 /**
  * AffiliateTracking Component
- * 
+ *
  * Injects Tolt and Reditus tracking scripts.
  * IDs should be provided via environment variables:
  * - NEXT_PUBLIC_TOLT_ID
  * - NEXT_PUBLIC_REDITUS_ID
+ *
+ * Tolt et Reditus déposent des cookies de suivi d'affiliation : ils ne sont
+ * chargés qu'après consentement « marketing ». La propagation du paramètre
+ * `ref` ci-dessous ne dépose rien et reste active sans consentement.
  */
 export function AffiliateTracking() {
+  const { ready, marketing } = useConsent();
   const toltId = process.env.NEXT_PUBLIC_TOLT_ID;
   const reditusId = process.env.NEXT_PUBLIC_REDITUS_ID;
 
@@ -19,10 +25,12 @@ export function AffiliateTracking() {
     return null;
   }
 
+  const allowTrackers = ready && marketing;
+
   return (
     <>
       {/* Tolt Tracking */}
-      {toltId && (
+      {allowTrackers && toltId && (
         <Script
           src="https://cdn.tolt.io/tolt.js"
           data-tolt={toltId}
@@ -31,7 +39,7 @@ export function AffiliateTracking() {
       )}
 
       {/* Reditus Tracking */}
-      {reditusId && (
+      {allowTrackers && reditusId && (
         <Script
           src={`https://app.getreditus.com/v1/scripts/${reditusId}.js`}
           strategy="afterInteractive"

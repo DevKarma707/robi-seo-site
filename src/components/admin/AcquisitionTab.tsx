@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import {
   subscribeToProspects, subscribeToUnsubscribes, updateProspect, deleteProspect,
-  advanceProspect, clearDrafts, importProspectsFromJson, makeUnsubToken, resolveTemplate,
+  advanceProspect, clearDrafts, DELIVERY_META, importProspectsFromJson, makeUnsubToken, resolveTemplate,
   renderTemplate, stepOf, relativeDay, todayStr, statusLabel, sequenceFor,
   SEGMENT_META, SEGMENTS, STATUS_META, PIPELINE,
   type Prospect, type ProspectSegment, type ProspectStatus,
@@ -131,7 +131,12 @@ const AcquisitionTab: React.FC = () => {
         unsubToken,
       });
 
-      await updateProspect(selected.id, { lastEmailAt: new Date().toISOString() }, selected);
+      await updateProspect(selected.id, {
+        lastEmailAt: new Date().toISOString(),
+        // « sent » = accepté par Brevo. Le webhook Brevo affine ensuite :
+        // livré, ouvert, rebond, spam.
+        delivery: { status: "sent", at: new Date().toISOString() },
+      }, selected);
       // L'angle envoyé est tracé sur la touche : c'est ce qui permet de savoir,
       // plus tard, lequel obtient des réponses. Les brouillons consommés sont
       // effacés pour que la prochaine étape reparte sur un texte neuf.
@@ -328,6 +333,9 @@ const AcquisitionTab: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: SEGMENT_META[p.segment].color }} />
                   <span className="text-[13px] font-bold text-slate-900 truncate flex-1">{p.company}</span>
+                  {p.delivery && ["hard_bounce", "spam", "blocked"].includes(p.delivery.status) && (
+                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-red-500" title={DELIVERY_META[p.delivery.status].label} />
+                  )}
                   {p.drafts?.variants?.length ? (
                     <span className="text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-full flex-shrink-0" style={{ backgroundColor: ACCENT, color: ACCENT_INK }} title="Brouillons A/B prêts">
                       A/B
@@ -397,8 +405,17 @@ const AcquisitionTab: React.FC = () => {
 
             {/* Séquence */}
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">
-                Étape {(selected.seqStep ?? 0) + 1} / {sequenceFor(selected.segment).length} · {stepOf(selected).label}
+              <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5 flex items-center gap-2">
+                <span>Étape {(selected.seqStep ?? 0) + 1} / {sequenceFor(selected.segment).length} · {stepOf(selected).label}</span>
+                {selected.delivery && (
+                  <span
+                    className="normal-case tracking-normal font-bold px-1.5 py-0.5 rounded"
+                    style={{ backgroundColor: `${DELIVERY_META[selected.delivery.status].color}1f`, color: DELIVERY_META[selected.delivery.status].color }}
+                    title={`${selected.delivery.at.slice(0, 16).replace("T", " ")}${selected.delivery.reason ? ` — ${selected.delivery.reason}` : ""}`}
+                  >
+                    {DELIVERY_META[selected.delivery.status].label}
+                  </span>
+                )}
               </p>
               <div className="flex gap-1">
                 {sequenceFor(selected.segment).map((_, i) => (

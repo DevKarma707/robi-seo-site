@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Bot } from "lucide-react";
 import { Locale } from "@/lib/i18n/config";
+import { ManageCookiesButton } from "@/components/ui/ManageCookiesButton";
 
 interface FooterProps {
   locale: Locale;
@@ -102,7 +103,7 @@ export function Footer({ locale, dict }: FooterProps) {
           </div>
 
           {/* Links */}
-          {Object.values(footerLinks).map((section) => (
+          {Object.entries(footerLinks).map(([key, section]) => (
             <div key={section.title}>
               <h4 className="font-bold text-white mb-3 text-xs uppercase tracking-wider">
                 {section.title}
@@ -118,6 +119,14 @@ export function Footer({ locale, dict }: FooterProps) {
                     </Link>
                   </li>
                 ))}
+                {/* Retrait du consentement : doit rester accessible en permanence. */}
+                {key === "company" && (
+                  <li>
+                    <ManageCookiesButton
+                      label={dict.footer.manageCookies || "Gérer mes cookies"}
+                    />
+                  </li>
+                )}
               </ul>
             </div>
           ))}

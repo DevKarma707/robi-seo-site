@@ -6,6 +6,8 @@ import { Footer } from "@/components/layouts/Footer";
 import { AffiliateTracking } from "@/components/AffiliateTracking";
 import { VisitLogger } from "@/components/VisitLogger";
 import { PostHogTracking } from "@/components/PostHogTracking";
+import { ConsentModeSync } from "@/components/ConsentModeSync";
+import { CookieConsent } from "@/components/CookieConsent";
 import { locales, Locale, defaultLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
@@ -98,12 +100,14 @@ export default async function LocaleLayout({
         <link rel="prefetch" href="https://go.robi-app.com" />
       </head>
       <body className={`${inter.variable} antialiased`}>
+        <ConsentModeSync />
         <AffiliateTracking />
         <VisitLogger />
         <PostHogTracking />
         <Header locale={locale} dict={dict} />
         <main>{children}</main>
         <Footer locale={locale} dict={dict} />
+        <CookieConsent locale={locale} dict={dict} />
       </body>
     </html>
   );

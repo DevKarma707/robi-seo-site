@@ -13,6 +13,7 @@ import { CTA } from "@/components/sections/CTA";
 import { StickyMobileCTA } from "@/components/ui/StickyMobileCTA";
 import { Locale, locales, defaultLocale, localeCurrencies, priceMap } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getHeroStoryCopy } from "@/lib/i18n/heroStory";
 
 function getValidLocale(locale: string): Locale {
   return locales.includes(locale as Locale) ? (locale as Locale) : defaultLocale;
@@ -161,6 +162,8 @@ export default async function Home({
         secondaryCtaText={dict.hero.secondaryCta}
         secondaryCtaHref="https://go.robi-app.com"
         variant="default"
+        visual="editorial"
+        story={getHeroStoryCopy(locale)}
         socialProof={{
           text: dict.hero.socialProof,
           highlight: dict.hero.socialProofHighlight,
