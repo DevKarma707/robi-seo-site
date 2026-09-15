@@ -1,5 +1,6 @@
 import { cert, getApp, getApps, initializeApp, type App } from "firebase-admin/app";
 import { getFirestore, type Firestore } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
 
 /**
  * Accès Firestore privilégié, réservé aux automatisations sans humain devant
@@ -39,6 +40,27 @@ export const adminDb = (): Firestore | null => {
 
   cached = getFirestore(app);
   return cached;
+};
+
+/**
+ * Le bucket de la médiathèque, ou `null` si rien n'est configuré.
+ *
+ * Même compte de service que Firestore : `partage/` est en lecture admin
+ * seulement (storage.rules), donc inaccessible au SDK client depuis un
+ * serveur, faute de session.
+ */
+export const adminBucket = () => {
+  const nom = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
+  if (!nom) return null;
+  // adminDb() porte l'initialisation de l'app : l'appeler d'abord évite de
+  // dupliquer la lecture du compte de service et sa gestion d'erreur.
+  if (!adminDb()) return null;
+  try {
+    return getStorage(getApp()).bucket(nom);
+  } catch (e) {
+    console.error("[firebaseAdmin] bucket illisible:", (e as Error).message);
+    return null;
+  }
 };
 
 const ADMINS = ["ralphkaram75014@gmail.com", "robi@robi-app.com"];
