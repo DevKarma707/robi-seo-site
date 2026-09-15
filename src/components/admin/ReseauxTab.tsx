@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   ChevronLeft, ChevronRight, FileJson, RefreshCw, AlertTriangle, Check, Trash2,
   Pencil, X, Copy, Sparkles, ClipboardCopy, ImagePlus, Loader2, Send, ShieldCheck,
-  CalendarDays, List, CircleAlert, BookOpen,
+  CalendarDays, List, CircleAlert, BookOpen, Grid3x3, Plus,
 } from "lucide-react";
 import { listSharedFiles, isImage, type SharedFile } from "@/lib/sharedFiles";
 import { rapprocher } from "@/lib/rapprochementVisuels";
@@ -122,7 +122,7 @@ const ReseauxTab: React.FC = () => {
    * brouillons à la suite, éparpillés dans douze cases. La liste est faite
    * pour le travail, le calendrier pour le coup d'œil — d'où la bascule.
    */
-  const [vue, setVue] = useState<"calendrier" | "liste">("calendrier");
+  const [vue, setVue] = useState<"calendrier" | "liste" | "feed">("calendrier");
   /**
    * « à-traiter » n'est pas un statut mais une question : qu'est-ce qui
    * m'empêche de programmer ? C'est la seule que Ralph se pose vraiment.
@@ -236,6 +236,32 @@ const ReseauxTab: React.FC = () => {
   const brouillonsDuMois = useMemo(
     () => monthPosts.filter((p) => p.status === "draft"),
     [monthPosts]
+  );
+
+  /**
+   * Le canal dont on prévisualise le feed.
+   *
+   * La grille est un objet Instagram : c'est là qu'un post se regarde à
+   * côté des autres. « Tous les réseaux » n'a pas de grille, on retombe
+   * donc sur Instagram plutôt que de mélanger des posts qui ne se
+   * côtoieront jamais à l'écran.
+   */
+  const canalDuFeed: PostChannel = channel === "all" ? "instagram" : channel;
+
+  /**
+   * Ce que la grille montre : le canal choisi, tous mois confondus, du plus
+   * récent au plus ancien — l'ordre du vrai profil.
+   *
+   * Les posts sans visuel restent dans la grille, en trou visible : un post
+   * peut être juste tout seul et casser la colonne, et c'est précisément ce
+   * que cette vue sert à voir avant de programmer.
+   */
+  const feedPosts = useMemo(
+    () => rows
+      .filter((p) => p.channel === canalDuFeed)
+      .sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0))
+      .slice(0, 30),
+    [rows, canalDuFeed]
   );
 
   /**
@@ -624,6 +650,42 @@ const ReseauxTab: React.FC = () => {
     }
   };
 
+  /**
+   * Crée un post vide, ouvert en édition.
+   *
+   * Jusqu'ici tout entrait par l'import JSON ou par la duplication d'un
+   * post existant : noter une idée à la volée demandait de dupliquer un
+   * post qui n'avait rien à voir puis de tout effacer.
+   *
+   * La date est celle du jour si le mois affiché est le mois courant,
+   * sinon le 1er du mois affiché — le post apparaît là où on regarde, au
+   * lieu de naître hors écran.
+   */
+  const nouveauPost = async () => {
+    setBusy(true);
+    try {
+      const auj = new Date();
+      const memeMois = auj.getFullYear() === year && auj.getMonth() === month;
+      const jour = memeMois ? auj.getDate() : 1;
+      const date = `${year}-${String(month + 1).padStart(2, "0")}-${String(jour).padStart(2, "0")}`;
+      const ref = await addPost({
+        date,
+        channel: channel === "all" ? "instagram" : channel,
+        type: "bold",
+        caption: "",
+        status: "draft",
+      });
+      setVue("liste");
+      setFiltre("tous");
+      setOpenId(ref.id);
+      setEdit({ id: ref.id, caption: "", hashtags: "", visual: "", imageUrl: "", date });
+    } catch (e) {
+      say("err", (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const duplicate = async (p: SocialPost) => {
     try {
       // Champs optionnels recopiés seulement s'ils portent une valeur :
@@ -759,6 +821,7 @@ const ReseauxTab: React.FC = () => {
           {([
             ["calendrier", CalendarDays, "Calendrier"],
             ["liste", List, "Liste"],
+            ["feed", Grid3x3, "Feed"],
           ] as const).map(([v, Icone, label]) => (
             <button
               key={v}
@@ -773,6 +836,10 @@ const ReseauxTab: React.FC = () => {
             </button>
           ))}
         </div>
+
+        <button onClick={nouveauPost} disabled={busy} className={btnGhost} title="Créer un post vide sur le mois affiché">
+          <span className="flex items-center gap-1.5"><Plus size={12} /> Nouveau post</span>
+        </button>
 
         <div className="ml-auto flex items-center gap-2">
           <a
@@ -908,6 +975,68 @@ const ReseauxTab: React.FC = () => {
                 ))}
               </ul>
             </>
+          )}
+        </div>
+      )}
+
+      {/* Aperçu du feed — la grille, pas la liste */}
+      {vue === "feed" && (
+        <div className={`${card} p-3`}>
+          <div className="flex flex-wrap items-center gap-2 px-1 pb-2.5">
+            <span
+              className="inline-block h-2 w-2 rounded-full"
+              style={{ background: CHANNEL_META[canalDuFeed].color }}
+            />
+            <p className="text-[11px] font-bold text-slate-600">
+              {CHANNEL_META[canalDuFeed].label} — les 30 derniers, du plus récent au plus ancien
+            </p>
+            <p className="text-[11px] text-slate-400">
+              Tous mois confondus : une grille ne s’arrête pas au 1er du mois.
+            </p>
+          </div>
+
+          {feedPosts.length === 0 ? (
+            <p className="text-[12px] text-slate-500 px-1 py-6 text-center">
+              Aucun post sur {CHANNEL_META[canalDuFeed].label} pour l’instant.
+            </p>
+          ) : (
+            <div className="grid grid-cols-3 gap-1 max-w-[420px] mx-auto">
+              {feedPosts.map((p) => {
+                const meta = STATUS_META[p.status];
+                return (
+                  <button
+                    key={p.id}
+                    onClick={() => {
+                      // On retombe sur la liste, au mois du post : cliquer une
+                      // vignette doit mener au post, pas à un mois vide.
+                      const [a, m] = p.date.split("-").map(Number);
+                      setYear(a);
+                      setMonth(m - 1);
+                      setFiltre("tous");
+                      setVue("liste");
+                      setOpenId(p.id!);
+                    }}
+                    className={`relative aspect-square overflow-hidden bg-slate-100 group ${focusRing}`}
+                    title={`${p.date} · ${meta.label}${p.caption ? ` — ${p.caption.slice(0, 80)}` : ""}`}
+                  >
+                    {p.imageUrl ? (
+                      <img src={p.imageUrl} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="h-full w-full grid place-items-center border border-dashed border-amber-300 bg-amber-50">
+                        <ImagePlus size={16} className="text-amber-400" />
+                      </span>
+                    )}
+                    <span
+                      className="absolute top-1 right-1 h-2 w-2 rounded-full ring-1 ring-white/80"
+                      style={{ background: meta.color }}
+                    />
+                    <span className="absolute inset-x-0 bottom-0 px-1 py-0.5 text-[9px] font-bold text-white bg-black/45 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {p.date.slice(8)}/{p.date.slice(5, 7)}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           )}
         </div>
       )}
