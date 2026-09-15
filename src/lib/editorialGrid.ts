@@ -176,24 +176,54 @@ export const diagnostiquer = (posts: SocialPost[]): Diagnostic => {
  * personas et les angles avancent en parallèle dans leur liste de « froids »,
  * en sautant ce qui est trop récent.
  */
+/**
+ * Combien de fois chaque pilier revient dans un lot, et dans quel ordre.
+ *
+ * Une simple rotation donnerait autant de posts à chaque pilier — donc 20 %
+ * de « statement » là où la ligne éditoriale en veut 10 %, et un compte deux
+ * fois plus bavard que prévu. Les parts sont donc appliquées au lot lui-même.
+ *
+ * Reste à répartir : les places sont attribuées à la plus grosse part
+ * restante, en évitant de reprendre le pilier précédent tant qu'un autre est
+ * disponible. Deux `bold` consécutifs sont explicitement interdits par la
+ * ligne éditoriale, et la règle vaut pour les autres piliers.
+ */
+const repartirPiliers = (d: Diagnostic, combien: number): PilierId[] => {
+  // Le retard sur la cible donne un bonus, pour rattraper sur la durée sans
+  // renverser le mélange d'un seul lot.
+  const bonus = new Map(d.piliersEnRetard.map((p, i) => [p.id, (d.piliersEnRetard.length - i) * 0.02]));
+  const restes = new Map<PilierId, number>(
+    PILIERS.map((p) => [p.id, combien * (p.part + (bonus.get(p.id) ?? 0))])
+  );
+
+  const suite: PilierId[] = [];
+  for (let i = 0; i < combien; i++) {
+    const precedent = suite[suite.length - 1];
+    const candidats = [...restes.entries()]
+      .filter(([, r]) => r > 0)
+      .sort((a, b) => b[1] - a[1]);
+    // Éviter la répétition, sauf s'il ne reste que ce pilier-là.
+    const choisi =
+      candidats.find(([id]) => id !== precedent)?.[0] ??
+      candidats[0]?.[0] ??
+      PILIERS[0].id;
+    suite.push(choisi);
+    restes.set(choisi, (restes.get(choisi) ?? 0) - 1);
+  }
+  return suite;
+};
+
 export const proposerCases = (posts: SocialPost[], combien: number): Case[] => {
   const d = diagnostiquer(posts);
 
-  // Les piliers en retard d'abord, puis les autres par part décroissante :
-  // sur un long calendrier, c'est ce qui ramène le mélange vers la cible.
-  const ordrePiliers: PilierId[] = [
-    ...d.piliersEnRetard.map((p) => p.id),
-    ...PILIERS.filter((p) => !d.piliersEnRetard.some((r) => r.id === p.id))
-      .sort((a, b) => b.part - a.part)
-      .map((p) => p.id),
-  ];
+  const ordrePiliers = repartirPiliers(d, combien);
 
   const personas = d.personasFroids.filter((p) => !d.interdits.personas.includes(p));
   const angles = d.anglesFroids.filter((a) => !d.interdits.angles.includes(a));
 
   const sorties: Case[] = [];
   for (let i = 0; i < combien; i++) {
-    const pilier = ordrePiliers[i % ordrePiliers.length];
+    const pilier = ordrePiliers[i];
     const angle = angles[i % angles.length];
     // Le statement ne montre personne : c'est une punchline plein écran.
     const persona = pilier === "statement" ? undefined : personas[i % personas.length];
