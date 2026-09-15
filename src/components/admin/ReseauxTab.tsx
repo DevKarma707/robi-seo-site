@@ -150,6 +150,9 @@ const ReseauxTab: React.FC = () => {
    * et les documents ne reviennent qu'au tour suivant.
    */
   const [rapatriementDemande, setRapatriementDemande] = useState(false);
+  /** Post en cours de déplacement, et jour survolé. */
+  const [glisse, setGlisse] = useState<{ id: string; depuis: string } | null>(null);
+  const [survol, setSurvol] = useState<string | null>(null);
 
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
@@ -199,11 +202,18 @@ const ReseauxTab: React.FC = () => {
 
   const jourDuJour = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
-  /** Les posts du mois à plat, dans l'ordre des dates. */
-  const listeDuMois = useMemo(
-    () => [...monthPosts].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0)),
-    [monthPosts]
-  );
+  /**
+   * Ce que la liste affiche.
+   *
+   * « À traiter » sort du mois courant, volontairement : c'est une file de
+   * travail, pas une vue de calendrier. Un échec de la semaine dernière
+   * compterait dans le badge et n'apparaîtrait nulle part si on restait sur
+   * le mois affiché — le compteur dirait « 1 » et l'écran serait vide.
+   */
+  const listeDuMois = useMemo(() => {
+    const base = filtre === "a-traiter" ? rows.filter(retenu) : monthPosts;
+    return [...base].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  }, [filtre, rows, retenu, monthPosts]);
 
   /**
    * Combien de posts demandent une main, tous mois confondus.
@@ -415,6 +425,35 @@ const ReseauxTab: React.FC = () => {
     void lancerRapatriement(visuelsDehors);
   }, [rapatriementDemande, busy, visuelsDehors, lancerRapatriement]);
 
+  /**
+   * Déplace un post sur une autre date.
+   *
+   * Décaler d'un jour demandait jusqu'ici d'ouvrir le post, passer en
+   * édition, changer la date, enregistrer — quatre gestes pour ce que la
+   * souris fait en un.
+   *
+   * Un post déjà publié ne bouge pas : sa date dit quand il est parti, la
+   * changer réécrirait l'histoire. Un envoi en cours non plus — la file le
+   * tient.
+   */
+  const deplacer = async (id: string, vers: string) => {
+    const post = rows.find((r) => r.id === id);
+    if (!post || post.date === vers) return;
+    if (post.status === "published" || post.status === "publishing") {
+      say("err", `Impossible : ce post est ${STATUS_META[post.status].label.toLowerCase()}.`);
+      return;
+    }
+    try {
+      await updatePost(id, { date: vers });
+      // Un post « prêt » déplacé reste prêt : c'est bien ce qu'on veut, il
+      // partira à la nouvelle date. On le dit, parce que c'est une
+      // publication qu'on vient de reprogrammer d'un geste.
+      say("ok", post.status === "ready" ? `Reprogrammé au ${vers}.` : `Déplacé au ${vers}.`);
+    } catch (e) {
+      say("err", (e as Error).message);
+    }
+  };
+
   const runImport = async () => {
     setBusy(true);
     try {
@@ -502,7 +541,7 @@ const ReseauxTab: React.FC = () => {
   };
 
   return (
-    <div className="space-y-5">
+    <div className={`space-y-5 transition-[padding] ${openId ? "xl:pr-[424px]" : ""}`}>
       {/* Barre de mois */}
       <div className={`${card} p-4 flex flex-wrap items-center gap-3`}>
         <div className="flex items-center gap-1">
@@ -612,7 +651,13 @@ const ReseauxTab: React.FC = () => {
           return (
             <button
               key={f}
-              onClick={() => setFiltre(f)}
+              onClick={() => {
+                setFiltre(f);
+                // Le calendrier est borné au mois affiché ; « à traiter » ne
+                // l'est pas. Rester en calendrier cacherait ce qu'on vient
+                // de demander à voir.
+                if (f === "a-traiter") setVue("liste");
+              }}
               className={`${btnPill} ${
                 actif
                   ? "bg-[var(--color-primary)] text-[var(--color-accent)]"
@@ -656,6 +701,11 @@ const ReseauxTab: React.FC = () => {
       {/* Liste */}
       {vue === "liste" && (
         <div className={`${card} p-3`}>
+          {filtre === "a-traiter" && (
+            <p className="text-[11px] text-slate-500 px-1 pb-2">
+              Tous mois confondus — un échec ne se répare pas en changeant de page.
+            </p>
+          )}
           {listeDuMois.length === 0 ? (
             <p className="text-[13px] text-slate-500 py-8 text-center">
               Aucun post ne correspond. Change de filtre, ou importe un lot.
@@ -691,10 +741,27 @@ const ReseauxTab: React.FC = () => {
             return (
               <div
                 key={date}
+                onDragOver={(e) => {
+                  // Sans preventDefault le navigateur refuse le dépôt, en
+                  // silence : la cellule paraît inerte sans qu'on sache pourquoi.
+                  if (!glisse) return;
+                  e.preventDefault();
+                  if (survol !== date) setSurvol(date);
+                }}
+                onDragLeave={() => setSurvol((d) => (d === date ? null : d))}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setSurvol(null);
+                  const id = e.dataTransfer.getData("text/plain") || glisse?.id;
+                  if (id) void deplacer(id, date);
+                  setGlisse(null);
+                }}
                 className={`min-h-[92px] rounded-xl border p-1.5 transition-colors ${
-                  isToday
-                    ? "border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.06] shadow-[inset_0_1px_0_rgba(190,242,33,0.18)]"
-                    : "border-slate-200 bg-slate-50 hover:border-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+                  survol === date && glisse?.depuis !== date
+                    ? "border-[var(--color-accent)] bg-[var(--color-accent)]/[0.14] ring-2 ring-[var(--color-accent)]/40"
+                    : isToday
+                      ? "border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.06] shadow-[inset_0_1px_0_rgba(190,242,33,0.18)]"
+                      : "border-slate-200 bg-slate-50 hover:border-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
                 }`}
               >
                 <p className={`text-[10px] font-bold mb-1 px-0.5 ${isToday ? "text-[var(--admin-ink)]" : "text-slate-400"}`}>
@@ -713,8 +780,17 @@ const ReseauxTab: React.FC = () => {
                     return (
                       <button
                         key={p.id}
+                        draggable={p.status !== "published" && p.status !== "publishing"}
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData("text/plain", p.id!);
+                          e.dataTransfer.effectAllowed = "move";
+                          setGlisse({ id: p.id!, depuis: p.date });
+                        }}
+                        onDragEnd={() => { setGlisse(null); setSurvol(null); }}
                         onClick={() => setOpenId(openId === p.id ? null : p.id!)}
-                        className={`w-full text-left rounded-lg pl-1 pr-1.5 py-1 transition-colors hover:bg-slate-50 border-l-[3px] ${focusRing}`}
+                        className={`w-full text-left rounded-lg pl-1 pr-1.5 py-1 transition-all hover:bg-slate-50 border-l-[3px] ${focusRing} ${
+                          glisse?.id === p.id ? "opacity-40" : ""
+                        } ${p.status !== "published" && p.status !== "publishing" ? "cursor-grab active:cursor-grabbing" : ""}`}
                         style={{ backgroundColor: `${TYPE_META[p.type].color}1a`, borderLeftColor: liseré }}
                         title={`${STATUS_META[p.status].label}${p.publishError ? " · dernier envoi en échec" : ""}\n\n${p.caption}`}
                       >
@@ -744,7 +820,14 @@ const ReseauxTab: React.FC = () => {
         // a l'interieur des callbacks onChange ci-dessous.
         const ed = edit && edit.id === p.id ? edit : null;
         return (
-          <div className={`${card} p-5 space-y-3`}>
+          /* Panneau latéral sur grand écran, bloc en dessous sur petit.
+             Avant, le détail poussait tout vers le bas : sur un mois plein il
+             fallait scroller pour le lire, et on perdait de vue la grille
+             qu'on était en train de relire. `sticky` le garde à hauteur
+             d'œil pendant qu'on passe d'un post à l'autre. */
+          <div
+            className={`${card} p-5 space-y-3 xl:fixed xl:right-6 xl:top-24 xl:bottom-6 xl:w-[400px] xl:overflow-y-auto xl:z-40 xl:shadow-2xl`}
+          >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider"
