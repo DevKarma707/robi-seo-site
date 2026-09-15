@@ -40,6 +40,15 @@ export interface SocialPost {
   type: PostType;
   /** Le texte du post, prêt à coller. */
   caption: string;
+  /**
+   * Les textes proposés pour ce post, parmi lesquels `caption` est choisi.
+   *
+   * Même logique que `imagePropositions`, et pour la même raison que les
+   * mails de prospection ont deux variantes : écrire deux angles ne coûte
+   * rien de plus à Claude, et choisir entre deux textes prend trois secondes
+   * là où réécrire en prend dix minutes. Le premier est le recommandé.
+   */
+  captionPropositions?: string[];
   hashtags?: string;
   /** Ce qu'il faut voir sur le visuel — sert de consigne à Higgsfield. */
   visual?: string;
@@ -204,9 +213,14 @@ export const importPostsFromJson = async (
       channel: p.channel,
       type: p.type,
       caption: p.caption,
+      captionPropositions: p.captionPropositions,
       hashtags: p.hashtags,
       visual: p.visual,
       imageUrl: p.imageUrl,
+      imagePropositions: p.imagePropositions,
+      persona: p.persona,
+      pilier: p.pilier,
+      angle: p.angle,
       status: p.status,
     };
   });

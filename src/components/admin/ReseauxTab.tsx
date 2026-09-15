@@ -1105,7 +1105,48 @@ const ReseauxTab: React.FC = () => {
               </div>
             ) : (
               <>
-                <p className="text-[13px] text-slate-700 whitespace-pre-wrap leading-relaxed">{p.caption}</p>
+                {/* Deux textes au choix, comme les mails A/B de la prospection :
+                    le retenu est celui qui partira. Cliquer l'autre le remplace ;
+                    « Éditer » reste là pour le retoucher à la main. */}
+                {(p.captionPropositions?.length ?? 0) > 1 ? (
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                      {p.captionPropositions!.length} textes proposés · le premier est recommandé
+                    </p>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      {p.captionPropositions!.map((texte, i) => {
+                        const retenu = p.caption === texte;
+                        return (
+                          <button
+                            key={i}
+                            onClick={() => !retenu && p.status !== "publishing" && updatePost(p.id!, { caption: texte })}
+                            aria-pressed={retenu}
+                            className={`text-left rounded-xl border-2 p-3 transition-all ${focusRing} ${
+                              retenu ? "border-[var(--color-accent)] bg-[var(--color-accent)]/10" : "border-slate-200 hover:border-slate-300"
+                            }`}
+                            title={retenu ? "Retenu — c'est ce texte qui partira" : "Retenir ce texte"}
+                          >
+                            <span className="flex items-center gap-2 mb-1">
+                              <span className={`text-[10px] font-black rounded-full px-2 py-0.5 ${retenu ? "bg-[var(--color-accent)] text-black" : "bg-slate-100 text-slate-500"}`}>
+                                {String.fromCharCode(65 + i)}
+                              </span>
+                              {retenu && <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">retenu</span>}
+                            </span>
+                            <span className="block text-[13px] text-slate-700 whitespace-pre-wrap leading-relaxed">{texte}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {!p.captionPropositions!.includes(p.caption) && (
+                      <p className="text-[13px] text-slate-700 whitespace-pre-wrap leading-relaxed border-l-2 border-[var(--color-accent)] pl-3">
+                        <span className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Texte retenu (modifié à la main)</span>
+                        {p.caption}
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-[13px] text-slate-700 whitespace-pre-wrap leading-relaxed">{p.caption}</p>
+                )}
                 {p.hashtags && <p className="text-[12px] text-[var(--admin-ink)]/70">{p.hashtags}</p>}
                 {p.visual && (
                   <p className="text-[11px] text-slate-500 leading-relaxed">

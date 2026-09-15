@@ -24,6 +24,7 @@ export interface ImportPost {
   channel: PostChannel;
   type: PostType;
   caption: string;
+  captionPropositions?: string[];
   hashtags?: string;
   visual?: string;
   imageUrl?: string;
@@ -49,6 +50,7 @@ export interface ExistingPost {
   channel: PostChannel;
   type?: PostType;
   caption: string;
+  captionPropositions?: string[];
   hashtags?: string;
   visual?: string;
   imageUrl?: string;
@@ -128,7 +130,10 @@ export const validateImportPost = (
     return { ok: false, error: `#${n} : "date" requise au format AAAA-MM-JJ (reçu : ${JSON.stringify(o.date)}).` };
   }
 
-  const caption = str(o.caption);
+  // `caption` peut être absent si `captionPropositions` en fournit : le
+  // premier texte proposé est alors retenu (voir plus bas).
+  const premiereProposition = Array.isArray(o.captionPropositions) ? str(o.captionPropositions[0]) : "";
+  const caption = str(o.caption) || premiereProposition;
   if (!caption) return { ok: false, error: `#${n} : "caption" requis.` };
 
   const channel = str(o.channel);
@@ -225,6 +230,20 @@ export const validateImportPost = (
     if (uniques.length) post.imagePropositions = uniques;
   }
 
+  // Deux textes au choix, comme deux mails A/B : le premier est le recommandé
+  // et devient `caption` si le JSON n'en donne pas. Plafonné à trois — au-delà
+  // ce n'est plus un choix, c'est une liste à relire.
+  if (o.captionPropositions !== undefined) {
+    const brut = o.captionPropositions;
+    if (!Array.isArray(brut)) {
+      return { ok: false, error: `#${n} : "captionPropositions" doit être un tableau de textes.` };
+    }
+    const textes = [...new Set(brut.map(str).filter(Boolean))].slice(0, 3);
+    if (textes.length) {
+      post.captionPropositions = textes;
+    }
+  }
+
   const id = str(o.id);
   if (id) post.id = id;
 
@@ -309,6 +328,12 @@ export const planSocialImport = (
       p.imagePropositions.join("\n") !== (found.imagePropositions ?? []).join("\n")
     ) {
       patch.imagePropositions = p.imagePropositions;
+    }
+    if (
+      p.captionPropositions?.length &&
+      p.captionPropositions.join("\n") !== (found.captionPropositions ?? []).join("\n")
+    ) {
+      patch.captionPropositions = p.captionPropositions;
     }
     // L'identifiant est posé s'il manquait : l'historique devient suivable.
     if (!found.externalId) patch.externalId = p.externalId;

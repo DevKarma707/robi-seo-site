@@ -156,6 +156,31 @@ t("statut « publishing » refusé : il appartient à la file, pas au fichier", 
   return !r.ok && r.error.includes("statut inconnu");
 })());
 
+// ── Propositions de textes (A/B) ───────────────────────────────────────────
+t("deux textes proposés : le premier devient caption si elle manque", (() => {
+  const { caption: _c, ...sans } = BASE;
+  void _c;
+  const r = validateImportPost({ ...sans, captionPropositions: ["Texte A", "Texte B"] }, 1);
+  return r.ok && r.post.caption === "Texte A" && r.post.captionPropositions?.length === 2;
+})());
+
+t("caption donnée + propositions : caption gardée, propositions portées", (() => {
+  const r = validateImportPost({ ...BASE, captionPropositions: ["Texte A", "Texte B"] }, 1);
+  return r.ok && r.post.caption === BASE.caption && r.post.captionPropositions?.[1] === "Texte B";
+})());
+
+t("propositions de textes qui ne sont pas un tableau → refusé", (() => {
+  const r = validateImportPost({ ...BASE, captionPropositions: "Texte A" }, 1);
+  return !r.ok && r.error.includes("tableau");
+})());
+
+t("réimport avec des propositions nouvelles → enrichit sans toucher au texte retenu", (() => {
+  const existing = [{ id: "x", externalId: BASE.externalId, date: BASE.date, channel: "instagram" as const, caption: "Choisi à la main", status: "draft" as const }];
+  const { actions } = planSocialImport([valide({ ...BASE, caption: "Choisi à la main", captionPropositions: ["A", "B"] })], existing);
+  const a = actions[0];
+  return a.action === "enrich" && a.patch.captionPropositions?.length === 2 && a.patch.caption === undefined;
+})());
+
 // ── Propositions de visuels ────────────────────────────────────────────────
 t("propositions https acceptées", (() => {
   const r = validateImportPost({ ...BASE, imagePropositions: ["https://a.test/1.jpg", "https://a.test/2.jpg"] }, 1);
