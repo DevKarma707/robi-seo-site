@@ -11,6 +11,32 @@ import type { ProduitReport } from "./adminApi";
  * même texte, et le calcul reste vérifiable ligne à ligne.
  */
 
+/** En dessous, une seule personne fait bouger un pourcentage de plusieurs dizaines de points. */
+export const SEUIL_ECHANTILLON = 30;
+
+/** « www.google.com » → « Google », « $direct » → « Accès direct ». */
+export function libelleOrigine(domaine: string | null): string {
+  if (!domaine) return "inconnu";
+  if (domaine === "$direct") return "Accès direct";
+  const d = domaine.replace(/^www\./, "");
+  if (/(^|\.)google\./.test(d)) return "Google";
+  if (/(^|\.)bing\./.test(d)) return "Bing";
+  if (/chatgpt\.com|openai\.com/.test(d)) return "ChatGPT";
+  if (/perplexity\.ai/.test(d)) return "Perplexity";
+  return d;
+}
+
+/** URL d'arrivée → chemin lisible ; les pages de l'app sont préfixées pour ne pas les confondre avec le site. */
+export function libellePage(url: string | null): string {
+  if (!url) return "inconnue";
+  try {
+    const u = new URL(url);
+    return u.hostname.startsWith("go.") ? `app · ${u.pathname}` : u.pathname;
+  } catch {
+    return url;
+  }
+}
+
 const pct = (part: number, total: number): string =>
   total > 0 ? `${Math.round((part / total) * 100)} %` : "—";
 
@@ -43,6 +69,24 @@ export function construireResume(data: ProduitReport): string {
     `Activation : ${pl(actives, "personne")} ${actives > 1 ? "ont" : "a"} créé un premier document${inscrits > 0 ? ` (${pct(actives, inscrits)} des inscrits)` : ""}, ${pl(pdf, "a téléchargé un PDF", "ont téléchargé un PDF")}.`,
     `Paiement : ${pl(paywall, "personne")} ${paywall > 1 ? "ont" : "a"} atteint la limite gratuite, ${checkout} ${checkout > 1 ? "ont" : "a"} lancé un paiement, ${pl(payes, "a payé", "ont payé")}.`,
   ];
+
+  const avant = (event: string) => data.funnel!.find((f) => f.event === event)?.precedent;
+  if (avant("$pageview") !== undefined) {
+    lignes.push(
+      `Période précédente : ${pl(avant("$pageview") ?? 0, "visiteur")}, ${pl(avant("signup") ?? 0, "inscrit")}, ${pl(avant("checkout_completed") ?? 0, "payant")}.`
+    );
+  }
+
+  const meilleure = (data.origines ?? []).find((o) => o.inscrits > 0 || o.payants > 0);
+  if (meilleure) {
+    lignes.push(
+      `Page qui amène le plus d'inscrits : ${libellePage(meilleure.page)} (${pl(meilleure.inscrits, "inscrit")}, ${pl(meilleure.payants, "payant")}, venus de ${libelleOrigine(meilleure.origine)}).`
+    );
+  }
+
+  if (vues > 0 && vues < SEUIL_ECHANTILLON) {
+    lignes.push(`Attention : moins de ${SEUIL_ECHANTILLON} visiteurs, les pourcentages ne sont pas significatifs.`);
+  }
 
   if (erreurs.length === 0) {
     lignes.push("Bugs : aucun sur la période.");

@@ -123,8 +123,11 @@ export const computeDisplayedSold = (c: Pick<LaunchConfig, "manualOverride" | "b
 export interface ProduitReport {
   configured: boolean;
   days?: number;
-  funnel?: { event: string; total: number; personnes: number }[];
-  erreurs?: { type: string; message: string; total: number; personnes: number; dernier: string | null }[];
+  /** `precedent` : mêmes personnes sur la période d'avant · `anciens` : inscrits avant la période. */
+  funnel?: { event: string; total: number; personnes: number; precedent?: number; anciens?: number }[];
+  erreurs?: { type: string; message: string; total: number; personnes: number; dernier: string | null; replay?: string | null }[];
+  /** Page d'arrivée (URL complète) et site d'origine des inscrits et payants de la période. */
+  origines?: { page: string | null; origine: string | null; inscrits: number; payants: number }[] | null;
   cta?: { page: string; total: number }[];
   mesure?: {
     cleSiteConfiguree: boolean;

@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, BugPlay, ClipboardCheck, Copy, MousePointerClick, RefreshCw, Radio, TrendingDown } from "lucide-react";
+import { AlertTriangle, ArrowDown, ArrowUp, BugPlay, ClipboardCheck, Copy, ExternalLink, Info, MousePointerClick, RefreshCw, Radio, Route, TrendingDown } from "lucide-react";
 import { fetchProduitReport, type ProduitReport } from "@/lib/adminApi";
-import { construireResume } from "@/lib/produitResume";
+import { construireResume, libelleOrigine, libellePage, SEUIL_ECHANTILLON } from "@/lib/produitResume";
 import { ACCENT, ACCENT_INK, btn, card } from "./ui";
 
 // Rouge lisible sur carte blanche : #f87171 tombait sous 3:1 en texte.
@@ -67,6 +67,26 @@ function Mesure({ mesure }: { mesure: NonNullable<ProduitReport["mesure"]> }) {
   );
 }
 
+/** Écart avec la période précédente, en personnes : sur de petits nombres, un pourcentage affole. */
+function Evolution({ cur, prev }: { cur: number; prev?: number }) {
+  if (prev === undefined) return null;
+  const d = cur - prev;
+  if (d === 0) {
+    return <span className="text-[11px] font-bold text-slate-400" title="Identique à la période précédente">=</span>;
+  }
+  const up = d > 0;
+  return (
+    <span
+      className="inline-flex items-center gap-0.5 text-[11px] font-bold tabular-nums"
+      style={{ color: up ? ACCENT_INK : RED }}
+      title={`${prev} sur la période précédente`}
+    >
+      {up ? <ArrowUp size={11} /> : <ArrowDown size={11} />}
+      {up ? "+" : ""}{d}
+    </span>
+  );
+}
+
 function NotConfigured() {
   return (
     <div className={`${card} p-6`}>
@@ -119,6 +139,7 @@ export default function ProduitTab() {
   // dépassent les inscriptions de deux ordres de grandeur — ce qui est la
   // situation normale d'un site public.
   const base = funnel.find((f) => f.personnes > 0)?.personnes || 1;
+  const vues = funnel.find((f) => f.event === "$pageview")?.personnes ?? 0;
 
   return (
     <div className="space-y-6">
@@ -153,6 +174,19 @@ export default function ProduitTab() {
 
       {data?.configured && (
         <>
+          {/* Avant tout chiffre : dire quand ils ne permettent pas de conclure. */}
+          {vues < SEUIL_ECHANTILLON && (
+            <div className={`${card} p-4 flex items-start gap-3`}>
+              <Info size={16} className="mt-0.5 shrink-0" style={{ color: ACCENT_INK }} />
+              <p className="text-[13px] leading-relaxed text-slate-700">
+                <strong className="text-slate-900">Échantillon trop petit pour conclure.</strong>{" "}
+                {vues} visiteur{vues > 1 ? "s" : ""} sur {data.days} jours : une seule personne fait varier les
+                pourcentages de plusieurs dizaines de points. Lis surtout les nombres, et attends au moins{" "}
+                {SEUIL_ECHANTILLON} visiteurs avant de juger une étape.
+              </p>
+            </div>
+          )}
+
           {/* Le rapport en toutes lettres, avant les chiffres : c'est ce qu'on
               relit le lundi matin ou qu'on colle dans une conversation. */}
           <div className={`${card} p-5`}>
@@ -187,13 +221,23 @@ export default function ProduitTab() {
             <div className="space-y-3">
               {funnel.map((etape, i) => {
                 const precedent = i > 0 ? funnel[i - 1].personnes : 0;
-                const taux = precedent > 0 ? Math.round((etape.personnes / precedent) * 100) : null;
+                // Les inscrits d'avant la période ne sont pas passés par la marche
+                // précédente cette fois-ci : ils ne comptent pas dans le taux de passage.
+                const anciens = etape.anciens ?? 0;
+                const nouveaux = Math.max(0, etape.personnes - anciens);
+                const taux = precedent > 0 ? Math.round((nouveaux / precedent) * 100) : null;
                 return (
                   <div key={etape.event}>
                     <div className="flex items-baseline gap-2 mb-1">
                       <span className="text-[13px] font-semibold text-slate-700 flex-1">
                         {LABELS[etape.event] || etape.event}
+                        {anciens > 0 && (
+                          <span className="ml-2 text-[11px] font-medium text-slate-500">
+                            dont {anciens} inscrit{anciens > 1 ? "s" : ""} avant la période
+                          </span>
+                        )}
                       </span>
+                      <Evolution cur={etape.personnes} prev={etape.precedent} />
                       <span className="font-black text-lg text-slate-900 tabular-nums">{etape.personnes}</span>
                       {taux !== null && (
                         <span
@@ -219,7 +263,8 @@ export default function ProduitTab() {
             </div>
             <p className="text-[11px] text-slate-500 mt-4">
               Nombre de personnes distinctes, pas d&apos;événements. Le pourcentage compare chaque
-              marche à la précédente.
+              marche à la précédente, sans les inscrits d&apos;avant la période. La flèche compare au
+              même nombre de jours juste avant.
             </p>
           </div>
 
@@ -250,6 +295,21 @@ export default function ProduitTab() {
                       <p className="text-[11px] text-slate-500">
                         {e.type} · {e.personnes} personne{e.personnes > 1 ? "s" : ""} · dernier{" "}
                         {fmtDate(e.dernier)}
+                        {e.replay && (
+                          <>
+                            {" · "}
+                            <a
+                              href={e.replay}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-0.5 font-semibold hover:underline"
+                              style={{ color: ACCENT_INK }}
+                              title="Enregistrement de la dernière session où l'erreur est apparue (si l'enregistrement est activé dans PostHog)"
+                            >
+                              voir la session <ExternalLink size={10} />
+                            </a>
+                          </>
+                        )}
                       </p>
                     </div>
                   </div>
@@ -257,6 +317,56 @@ export default function ProduitTab() {
               </div>
             ) : (
               <p className="text-sm text-slate-500">Aucune erreur sur la période.</p>
+            )}
+          </div>
+
+          {/* Ce qui relie le SEO au chiffre : la page d'arrivée des gens qui
+              s'inscrivent ou paient, pas seulement de ceux qui visitent. */}
+          <div className={`${card} p-5`}>
+            <div className="flex items-center gap-2 mb-1">
+              <Route size={16} style={{ color: ACCENT_INK }} />
+              <p className="text-xs font-black uppercase tracking-widest text-slate-900">
+                Pages qui amènent des inscrits
+              </p>
+            </div>
+            <p className="text-[11px] text-slate-500 mb-4">
+              Première page vue par chaque personne inscrite ou payante sur la période, et le site d&apos;où
+              elle arrivait.
+            </p>
+            {data.origines?.length ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-[13px]">
+                  <thead>
+                    <tr className="text-[10px] uppercase tracking-wider text-slate-400 border-b border-slate-100">
+                      <th className="py-2 pr-3 font-bold">Page d&apos;arrivée</th>
+                      <th className="py-2 pr-3 font-bold">Venu de</th>
+                      <th className="py-2 pr-3 font-bold text-right">Inscrits</th>
+                      <th className="py-2 font-bold text-right">Payants</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.origines.map((o, i) => (
+                      <tr key={i} className="border-b border-slate-50">
+                        <td className="py-2 pr-3 text-slate-800 max-w-[360px] truncate">{libellePage(o.page)}</td>
+                        <td className="py-2 pr-3 text-slate-600">{libelleOrigine(o.origine)}</td>
+                        <td className="py-2 pr-3 text-right font-black tabular-nums text-slate-900">{o.inscrits}</td>
+                        <td
+                          className="py-2 text-right font-black tabular-nums text-slate-900"
+                          style={o.payants ? { color: ACCENT_INK } : undefined}
+                        >
+                          {o.payants}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : data.origines === null ? (
+              <p className="text-sm text-slate-500">
+                Lecture indisponible : PostHog a refusé la requête (détail dans les logs Vercel).
+              </p>
+            ) : (
+              <p className="text-sm text-slate-500">Aucune inscription ni aucun paiement sur la période.</p>
             )}
           </div>
 
