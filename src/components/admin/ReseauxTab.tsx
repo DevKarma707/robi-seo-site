@@ -921,7 +921,7 @@ const ReseauxTab: React.FC = () => {
         </div>
         <div className="grid grid-cols-7 gap-1.5">
           {cells.map((date, i) => {
-            if (!date) return <div key={`x${i}`} className="min-h-[92px] rounded-xl bg-slate-50" />;
+            if (!date) return <div key={`x${i}`} className="min-h-[104px] rounded-xl bg-slate-50" />;
             const posts = byDate.get(date) || [];
             const isToday = date === new Date().toISOString().slice(0, 10);
             return (
@@ -942,7 +942,7 @@ const ReseauxTab: React.FC = () => {
                   if (id) void deplacer(id, date);
                   setGlisse(null);
                 }}
-                className={`min-h-[92px] rounded-xl border p-1.5 transition-colors ${
+                className={`min-h-[104px] rounded-xl border p-1.5 transition-colors ${
                   survol === date && glisse?.depuis !== date
                     ? "border-[var(--color-accent)] bg-[var(--color-accent)]/[0.14] ring-2 ring-[var(--color-accent)]/40"
                     : isToday
@@ -981,11 +981,26 @@ const ReseauxTab: React.FC = () => {
                         title={`${STATUS_META[p.status].label}${p.publishError ? " · dernier envoi en échec" : ""}\n\n${p.caption}`}
                       >
                         <span className="flex items-center gap-1">
+                          {/* La vignette du visuel retenu. Un calendrier de
+                              posts sans images ne dit pas à quoi ressemblera
+                              le compte : on relisait des débuts de phrases
+                              tronqués à neuf pixels, tous semblables. */}
+                          {p.imageUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={p.imageUrl}
+                              alt=""
+                              className="h-6 w-5 flex-none rounded object-cover border border-black/10"
+                            />
+                          ) : (
+                            // Un visuel manquant bloque la programmation : le
+                            // signaler ici évite de le découvrir à la
+                            // vérification, une fois le mois entier relu.
+                            <span className="h-6 w-5 flex-none rounded border border-dashed border-amber-300 bg-amber-50 grid place-items-center">
+                              <ImagePlus size={9} className="text-amber-500" />
+                            </span>
+                          )}
                           <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: CHANNEL_META[p.channel].color }} />
-                          {/* Un visuel manquant bloque la programmation : le
-                              signaler ici évite de le découvrir à la
-                              vérification, une fois le mois entier relu. */}
-                          {!p.imageUrl && <ImagePlus size={8} className="flex-shrink-0 text-amber-500" />}
                           <span className="text-[9px] font-bold truncate text-slate-700">{p.caption}</span>
                         </span>
                       </button>
@@ -1069,42 +1084,6 @@ const ReseauxTab: React.FC = () => {
                   />
                 </label>
 
-                {/* Les propositions de visuels. Recomposer une même photo dans
-                    un autre habillage ne coûte rien : le choix est presque
-                    gratuit à produire, il manquait juste un geste pour
-                    retenir l'une d'elles. */}
-                {!!p.imagePropositions?.length && (
-                  <div className="space-y-1.5">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                      {p.imagePropositions.length} proposition{p.imagePropositions.length > 1 ? "s" : ""}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {p.imagePropositions.map((url) => {
-                        const retenu = ed.imageUrl === url;
-                        return (
-                          <button
-                            key={url}
-                            onClick={() => setEdit({ ...ed, imageUrl: retenu ? "" : url })}
-                            aria-pressed={retenu}
-                            className={`relative h-24 w-[74px] rounded-lg overflow-hidden border-2 transition-all ${focusRing} ${
-                              retenu ? "border-[var(--color-accent)] scale-[1.03]" : "border-slate-200 hover:border-slate-300 opacity-80 hover:opacity-100"
-                            }`}
-                            title={retenu ? "Retenu — clique pour retirer" : "Retenir ce visuel"}
-                          >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={url} alt="" className="h-full w-full object-cover" />
-                            {retenu && (
-                              <span className="absolute inset-x-0 bottom-0 bg-[var(--color-accent)] text-black text-[9px] font-black py-0.5 text-center">
-                                RETENU
-                              </span>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
                 <div className="flex items-center gap-2">
                   {ed.imageUrl ? (
                     <>
@@ -1179,9 +1158,59 @@ const ReseauxTab: React.FC = () => {
                     <span className="uppercase tracking-widest text-slate-400">Visuel · </span>{p.visual}
                   </p>
                 )}
-                {p.imageUrl && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border border-slate-200" />
+                {/* Le choix du visuel, au même endroit que le choix du texte.
+                    Il vivait dans le mode Édition : il fallait cliquer
+                    « Éditer » pour le voir, donc en pratique on ne le voyait
+                    jamais et les propositions dormaient. */}
+                {(p.imagePropositions?.length ?? 0) > 1 ? (
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                      {p.imagePropositions!.length} visuels proposés
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {p.imagePropositions!.map((url, i) => {
+                        const retenu = p.imageUrl === url;
+                        return (
+                          <button
+                            key={url}
+                            onClick={() =>
+                              p.status !== "publishing" &&
+                              updatePost(p.id!, { imageUrl: retenu ? "" : url })
+                            }
+                            aria-pressed={retenu}
+                            className={`relative h-32 w-[100px] rounded-xl overflow-hidden border-2 transition-all ${focusRing} ${
+                              retenu
+                                ? "border-[var(--color-accent)]"
+                                : "border-slate-200 hover:border-slate-300 opacity-75 hover:opacity-100"
+                            }`}
+                            title={retenu ? "Retenu — clique pour retirer" : "Retenir ce visuel"}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={url} alt="" className="h-full w-full object-cover" />
+                            <span className={`absolute top-1 left-1 text-[10px] font-black rounded-full px-1.5 py-0.5 ${retenu ? "bg-[var(--color-accent)] text-black" : "bg-black/50 text-white"}`}>
+                              {String.fromCharCode(65 + i)}
+                            </span>
+                            {retenu && (
+                              <span className="absolute inset-x-0 bottom-0 bg-[var(--color-accent)] text-black text-[9px] font-black py-0.5 text-center">
+                                RETENU
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {/* Un visuel choisi hors des propositions reste montré :
+                        sinon on croirait n'avoir rien retenu. */}
+                    {!!p.imageUrl && !p.imagePropositions!.includes(p.imageUrl) && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border-2 border-[var(--color-accent)]" />
+                    )}
+                  </div>
+                ) : (
+                  p.imageUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border border-slate-200" />
+                  )
                 )}
                 <SuiviPublication post={p} onRenvoyer={renvoyer} busy={busy} />
               </>
