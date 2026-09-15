@@ -1,6 +1,5 @@
 import { cert, getApp, getApps, initializeApp, type App } from "firebase-admin/app";
 import { getFirestore, type Firestore } from "firebase-admin/firestore";
-import { getAuth } from "firebase-admin/auth";
 
 /**
  * Accès Firestore privilégié, réservé aux automatisations sans humain devant
@@ -19,7 +18,6 @@ import { getAuth } from "firebase-admin/auth";
 const RAW = process.env.FIREBASE_SERVICE_ACCOUNT;
 
 let cached: Firestore | null = null;
-let cachedApp: App | null = null;
 
 /** `null` si le compte de service n'est pas configuré — l'appelant le dit. */
 export const adminDb = (): Firestore | null => {
@@ -39,7 +37,6 @@ export const adminDb = (): Firestore | null => {
     return null;
   }
 
-  cachedApp = app;
   cached = getFirestore(app);
   return cached;
 };
@@ -53,12 +50,27 @@ const ADMINS = ["ralphkaram75014@gmail.com", "robi@robi-app.com"];
  * Blotato) : le SDK client ne peut pas porter la clé Blotato, la route le
  * fait à sa place — mais seulement pour un humain identifié comme admin,
  * la même liste que les règles Firestore.
+ *
+ * Vérifié par l'API Identity Toolkit (accounts:lookup) plutôt que par
+ * `firebase-admin/auth` : ce dernier tire `jwks-rsa` → `jose` en ESM, que le
+ * Node de Vercel refuse de `require` — la route tombait en 500 avant même
+ * de lire la requête. Google ne rend un utilisateur que pour un jeton
+ * valide, non expiré, émis pour ce projet (clé web publique du projet).
  */
 export const adminDepuisJeton = async (idToken: string): Promise<string | null> => {
-  if (!adminDb() || !cachedApp) return null;
+  const key = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+  if (!key) return null;
   try {
-    const decoded = await getAuth(cachedApp).verifyIdToken(idToken);
-    const email = decoded.email ?? "";
+    const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${key}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ idToken }),
+      cache: "no-store",
+    });
+    if (!r.ok) return null;
+    const body = (await r.json()) as { users?: { email?: string; emailVerified?: boolean }[] };
+    const u = body.users?.[0];
+    const email = u?.email ?? "";
     return ADMINS.includes(email) ? email : null;
   } catch {
     return null;
