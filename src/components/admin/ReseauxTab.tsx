@@ -159,10 +159,13 @@ const ReseauxTab: React.FC = () => {
 
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
+  // Cinq secondes ne suffisaient pas à lire un compte rendu d'import, encore
+  // moins à le capturer pour le montrer. Une erreur reste plus longtemps
+  // qu'une confirmation : c'est elle qu'on a besoin de relire.
   const say = useCallback((kind: "ok" | "err", text: string) => {
     setFlash({ kind, text });
     if (flashTimer.current) clearTimeout(flashTimer.current);
-    flashTimer.current = setTimeout(() => setFlash(null), 5000);
+    flashTimer.current = setTimeout(() => setFlash(null), kind === "err" ? 15000 : 8000);
   }, []);
 
   useEffect(() => {
@@ -537,7 +540,7 @@ const ReseauxTab: React.FC = () => {
    * Ne remplace jamais un visuel déjà attaché : écraser un choix fait à la
    * main serait pire que ne rien faire.
    */
-  const attacherDepuisMediatheque = useCallback(async () => {
+  const attacherDepuisMediatheque = useCallback(async (apresImport = false) => {
     setBusy(true);
     try {
       const fichiers = (await listSharedFiles()).filter(isImage);
@@ -545,13 +548,26 @@ const ReseauxTab: React.FC = () => {
 
       for (const { post, url } of attacher) await updatePost(post.id!, { imageUrl: url });
 
-      const parts = [`${attacher.length} visuel(s) attaché(s)`];
-      if (sansVisuel.length) parts.push(`${sansVisuel.length} post(s) encore sans visuel`);
+      // Seuls comptent les posts qui n'ont VRAIMENT pas d'image. `sansVisuel`
+      // liste ceux que la médiathèque ne peut pas servir — y compris ceux qui
+      // en ont déjà une, posée à la main ou venue avec l'import. Les compter
+      // affichait « 4 posts sans visuel » en rouge sur un lot où les quatre
+      // arrivaient avec leur image.
+      const manquants = sansVisuel.filter((p) => !p.imageUrl);
+      const parts: string[] = [];
+      if (attacher.length) parts.push(`${attacher.length} visuel(s) attaché(s)`);
+      if (manquants.length) parts.push(`${manquants.length} post(s) sans visuel`);
       // Un orphelin veut dire qu'un identifiant a changé quelque part : c'est
       // le seul cas où le nom de fichier et le post ont divergé.
       if (orphelins.length) parts.push(`${orphelins.length} visuel(s) sans post — identifiant modifié ?`);
-      say(attacher.length ? "ok" : "err", parts.join(" · "));
       if (orphelins.length) console.warn("[visuels orphelins]", orphelins);
+
+      // Après un import, on ne parle que s'il y a quelque chose à dire : le
+      // compte rendu de l'import est déjà à l'écran, et l'écraser par un
+      // « 0 attaché » en rouge fait croire que le lot est arrivé sans images.
+      if (apresImport && !attacher.length && !orphelins.length) return;
+      if (!parts.length) parts.push("Tous les posts ont leur visuel.");
+      say(manquants.length || orphelins.length ? "err" : "ok", parts.join(" · "));
     } catch (e) {
       say("err", (e as Error).message);
     } finally {
@@ -568,7 +584,7 @@ const ReseauxTab: React.FC = () => {
       await lancerRapatriement(visuelsDehors);
       // Puis on comble ce qui manque avec la médiathèque : un lot importé sans
       // imageUrl trouve ainsi ses visuels sans un seul clic.
-      await attacherDepuisMediatheque();
+      await attacherDepuisMediatheque(true);
     })();
   }, [rapatriementDemande, busy, visuelsDehors, lancerRapatriement, attacherDepuisMediatheque]);
 
@@ -576,7 +592,8 @@ const ReseauxTab: React.FC = () => {
     setBusy(true);
     try {
       const { imported, updated, skipped, errors } = await importPostsFromJson(importText);
-      const parts = [`${imported} post(s) importé(s)`];
+      const avecImage = importText ? (JSON.parse(importText) as unknown[]).filter((o) => o && typeof o === "object" && (o as { imageUrl?: string }).imageUrl).length : 0;
+      const parts = [`${imported} post(s) importé(s)${avecImage ? ` (${avecImage} avec visuel)` : ""}`];
       if (updated) parts.push(`${updated} complété(s)`);
       if (skipped) parts.push(`${skipped} inchangé(s)`);
       if (errors.length) parts.push(`${errors.length} rejeté(s)`);
@@ -693,7 +710,7 @@ const ReseauxTab: React.FC = () => {
 
         {counts.total > 0 && (
           <button
-            onClick={attacherDepuisMediatheque}
+            onClick={() => attacherDepuisMediatheque()}
             disabled={busy}
             className={btnGhost}
             title="Attacher les visuels de la médiathèque dont le nom correspond à un post"
