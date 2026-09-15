@@ -64,6 +64,18 @@ const nomSur = (brut: string): string => {
   return propre || `visuel-${Date.now()}.jpg`;
 };
 
+/**
+ * Une erreur du bucket (compte de service sans droit Storage, bucket mal
+ * nommé) sortait en 500 sans corps : impossible à diagnostiquer depuis
+ * l'extérieur, et les journaux Vercel ne sont pas toujours lisibles. On la
+ * renvoie en clair — le message vient de Google, pas d'un secret.
+ */
+const erreurStockage = (verbe: string, e: unknown) => {
+  const detail = (e as Error).message ?? String(e);
+  console.error(`[social/media] impossible de ${verbe} dans le bucket :`, detail);
+  return NextResponse.json({ error: "storage_error", verbe, detail }, { status: 502 });
+};
+
 const bucketOuErreur = () => {
   const b = adminBucket();
   if (!b) {
@@ -90,7 +102,12 @@ export async function GET(req: Request) {
   const dossier = url.searchParams.get("dossier");
   const prefix = dossier ? `${RACINE}/${nomSur(dossier)}/` : `${RACINE}/`;
 
-  const [fichiers] = await bucket.getFiles({ prefix });
+  let fichiers: Awaited<ReturnType<Bucket["getFiles"]>>[0];
+  try {
+    [fichiers] = await bucket.getFiles({ prefix });
+  } catch (e) {
+    return erreurStockage("lister", e);
+  }
   const items = fichiers
     // Storage n'a pas de répertoires : un objet dont le nom finit par « / » est
     // un dossier factice, pas un fichier.
@@ -240,10 +257,14 @@ const ecrire = async (
   // renvoyée ci-dessous serait refusée, et l'appelant croirait le dépôt réussi
   // en récupérant un lien mort.
   const jetonTelechargement = crypto.randomUUID();
-  await bucket.file(chemin).save(octets, {
-    contentType: type,
-    metadata: { metadata: { firebaseStorageDownloadTokens: jetonTelechargement } },
-  });
+  try {
+    await bucket.file(chemin).save(octets, {
+      contentType: type,
+      metadata: { metadata: { firebaseStorageDownloadTokens: jetonTelechargement } },
+    });
+  } catch (e) {
+    return erreurStockage("écrire", e);
+  }
 
   return NextResponse.json({
     ok: true,
