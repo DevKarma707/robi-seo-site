@@ -44,6 +44,8 @@ const ilYA = (ms: number) => new Date(MAINTENANT.getTime() - ms).toISOString();
 
 // ── Qui sort de la file ────────────────────────────────────────────────────
 t("post prêt et dû → réservable", estReservable(post(), MAINTENANT));
+t("programmé chez Blotato → jamais réservable (il publie lui-même)",
+  !estReservable(post({ scheduledVia: "blotato" }), MAINTENANT));
 t("post prêt daté demain → pas réservable",
   !estReservable(post({ date: "2026-09-16" }), MAINTENANT));
 t("post en retard → réservable, pas oublié",

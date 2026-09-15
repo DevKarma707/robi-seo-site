@@ -8,7 +8,11 @@ export const maxDuration = 60;
 /**
  * Le publieur : prend la file (`/api/social/queue`) et envoie à Blotato.
  *
- * Déclenché chaque matin par le cron Vercel (vercel.json), ou à la main.
+ * Secours manuel (`curl -H "Authorization: Bearer $SOCIAL_AUTOMATION_TOKEN"
+ * https://robi-app.com/api/social/publish`) : le chemin normal est
+ * `/api/social/schedule`, appelé par l'admin, qui confie l'horaire à Blotato.
+ * Cette route publie IMMÉDIATEMENT ce qui est « prêt », dû, et pas déjà
+ * programmé chez Blotato — utile si un post n'a pas pu être programmé.
  * Il ne décide de rien : ce qui est publié a été marqué « prêt » dans
  * l'admin, la file l'a réservé, et le résultat est consigné par POST sur la
  * même file — c'est elle qui tient l'état, pas ce module.

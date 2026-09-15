@@ -90,6 +90,7 @@ const enFile = (d: DocFirestore): PostEnFile => {
     claimId: (p.claimId as string) ?? null,
     claimedAt: (p.claimedAt as string) ?? null,
     publishAttempts: (p.publishAttempts as number) ?? 0,
+    scheduledVia: (p.scheduledVia as string) ?? null,
   };
 };
 

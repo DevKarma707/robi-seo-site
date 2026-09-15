@@ -6,7 +6,7 @@
  * Ce qui est testé ici part sur un compte public sans relecture : le texte
  * envoyé, le compte choisi, les options obligatoires par réseau.
  */
-import { texteFinal, compteFor, cibleFor, preparer, type CompteBlotato } from "../src/lib/blotato";
+import { texteFinal, compteFor, cibleFor, preparer, scheduledTimeParis, type CompteBlotato } from "../src/lib/blotato";
 
 let ok = 0;
 let ko = 0;
@@ -51,6 +51,11 @@ t("plateforme du contenu = cible", p.ok && p.corps.post.content.platform === "li
 t("sans visuel → refusé, motif explicite", !preparer({ ...base, imageUrl: null }).ok && (preparer({ ...base, imageUrl: null }) as { motif: string }).motif === "visuel_manquant");
 t("réseau sans compte → refusé", (preparer({ ...base, channel: "facebook" }, comptes) as { motif: string }).motif === "aucun_compte_facebook");
 t("texte vide → refusé", (preparer({ ...base, caption: "  ", hashtags: "" }, comptes) as { motif: string }).motif === "texte_vide");
+
+// Heure de programmation
+t("été : 10h Paris = +02:00", scheduledTimeParis("2026-09-21") === "2026-09-21T10:00:00+02:00");
+t("hiver : 10h Paris = +01:00", scheduledTimeParis("2026-11-10") === "2026-11-10T10:00:00+01:00");
+t("heure personnalisée", scheduledTimeParis("2026-10-01", "18:30") === "2026-10-01T18:30:00+02:00");
 
 console.log(`\n${ok} ok, ${ko} ko`);
 process.exit(ko ? 1 : 0);

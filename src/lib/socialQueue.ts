@@ -49,6 +49,8 @@ export interface PostEnFile {
   /** Horodatage ISO de la réservation en cours. */
   claimedAt?: string | null;
   publishAttempts?: number | null;
+  /** Déjà programmé chez un fournisseur qui publiera lui-même (ex. "blotato"). */
+  scheduledVia?: string | null;
 }
 
 /** Date du jour en AAAA-MM-JJ, le format dans lequel les dates sont stockées. */
@@ -63,6 +65,9 @@ export const jour = (maintenant: Date): string => maintenant.toISOString().slice
  * tourné doit sortir, pas être oublié.
  */
 export const estReservable = (post: PostEnFile, maintenant: Date): boolean => {
+  // Programmé chez Blotato : c'est lui qui publie à l'heure dite. Le sortir
+  // d'ici le publierait une seconde fois.
+  if (post.scheduledVia) return false;
   if (post.date > jour(maintenant)) return false;
   if (post.status === "ready") return true;
   // Une réservation abandonnée redevient disponible, sinon un plantage

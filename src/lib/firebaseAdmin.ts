@@ -1,5 +1,6 @@
 import { cert, getApp, getApps, initializeApp, type App } from "firebase-admin/app";
 import { getFirestore, type Firestore } from "firebase-admin/firestore";
+import { getAuth } from "firebase-admin/auth";
 
 /**
  * Accès Firestore privilégié, réservé aux automatisations sans humain devant
@@ -18,6 +19,7 @@ import { getFirestore, type Firestore } from "firebase-admin/firestore";
 const RAW = process.env.FIREBASE_SERVICE_ACCOUNT;
 
 let cached: Firestore | null = null;
+let cachedApp: App | null = null;
 
 /** `null` si le compte de service n'est pas configuré — l'appelant le dit. */
 export const adminDb = (): Firestore | null => {
@@ -37,6 +39,28 @@ export const adminDb = (): Firestore | null => {
     return null;
   }
 
+  cachedApp = app;
   cached = getFirestore(app);
   return cached;
+};
+
+const ADMINS = ["ralphkaram75014@gmail.com", "robi@robi-app.com"];
+
+/**
+ * L'e-mail de l'admin qui présente ce jeton Firebase, ou null.
+ *
+ * Sert aux routes que l'admin appelle depuis le navigateur (programmer chez
+ * Blotato) : le SDK client ne peut pas porter la clé Blotato, la route le
+ * fait à sa place — mais seulement pour un humain identifié comme admin,
+ * la même liste que les règles Firestore.
+ */
+export const adminDepuisJeton = async (idToken: string): Promise<string | null> => {
+  if (!adminDb() || !cachedApp) return null;
+  try {
+    const decoded = await getAuth(cachedApp).verifyIdToken(idToken);
+    const email = decoded.email ?? "";
+    return ADMINS.includes(email) ? email : null;
+  } catch {
+    return null;
+  }
 };

@@ -140,6 +140,26 @@ export const preparer = (
   };
 };
 
+/** Heure de publication par défaut, heure de Paris. */
+export const HEURE_PUBLICATION = "10:00";
+
+/**
+ * `AAAA-MM-JJ` → ISO 8601 avec le décalage de Paris ce jour-là
+ * (Blotato exige un décalage explicite). Le calcul passe par Intl pour
+ * suivre l'heure d'été sans table à maintenir.
+ */
+export const scheduledTimeParis = (date: string, heure = HEURE_PUBLICATION): string => {
+  const [h, m] = heure.split(":").map(Number);
+  // Décalage Paris à midi UTC ce jour-là (stable, loin des changements d'heure à 1h/2h).
+  const midi = new Date(`${date}T12:00:00Z`);
+  const parts = new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", hour12: false }).formatToParts(midi);
+  const heureParis = Number(parts.find((p) => p.type === "hour")?.value ?? "12");
+  const offset = heureParis - 12; // +1 l'hiver, +2 l'été
+  const signe = offset >= 0 ? "+" : "-";
+  const off = `${signe}${String(Math.abs(offset)).padStart(2, "0")}:00`;
+  return `${date}T${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:00${off}`;
+};
+
 // ─── Appels réseau ─────────────────────────────────────────────────────
 
 const headers = (apiKey: string) => ({

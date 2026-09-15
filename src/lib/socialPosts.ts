@@ -52,6 +52,10 @@ export interface SocialPost {
   /** Renseignés par la file : ce qui s'est passé au dernier envoi. */
   publishedAt?: string | null;
   publishedUrl?: string | null;
+  /** Programmé chez un fournisseur qui publiera à la date prévue. */
+  scheduledVia?: "blotato" | null;
+  scheduledAt?: string | null;
+  scheduledFor?: string | null;
   publishError?: string | null;
   publishAttempts?: number | null;
   createdAt?: Timestamp;

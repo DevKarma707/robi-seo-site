@@ -12,6 +12,7 @@ import {
   type SocialPost, type PostChannel,
 } from "@/lib/socialPosts";
 import { verifierAvantProgrammation, estProgrammable, type Verdict } from "@/lib/publicationCheck";
+import { auth } from "@/lib/firebase";
 import { ACCENT, btnGhost, btnPill, btnPrimary, card, focusRing, input, select, sectionTitle } from "./ui";
 
 /**
@@ -134,6 +135,35 @@ const ReseauxTab: React.FC = () => {
    * échoue, les autres passent quand même, et le compte rendu dit lesquels.
    * Tout annuler sur une erreur réseau ferait perdre une relecture entière.
    */
+  /**
+   * Envoie un post à Blotato, qui le publiera à la date prévue (10h Paris).
+   * La clé Blotato reste côté serveur : on présente notre jeton Firebase,
+   * la route vérifie qu'il appartient à un admin.
+   */
+  const envoyerABlotato = async (post: SocialPost): Promise<string> => {
+    const user = auth?.currentUser;
+    if (!user) throw new Error("Session expirée — reconnecte-toi.");
+    const token = await user.getIdToken();
+    const r = await fetch("/api/social/schedule", {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id: post.id }),
+    });
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      const motifs: Record<string, string> = {
+        not_configured: "Blotato n'est pas configuré sur le serveur (clé API ou compte de service).",
+        visuel_manquant: "Pas de visuel attaché.",
+        deja_publie: "Déjà publié.",
+        blotato_accounts: "Blotato ne répond pas sur la liste des comptes.",
+        blotato_publish: "Blotato a refusé le post.",
+      };
+      const err = String(body.error || r.status);
+      throw new Error(`${motifs[err] || err}${body.detail ? ` — ${body.detail}` : ""}`);
+    }
+    return String(body.scheduledFor || "");
+  };
+
   const programmer = async (posts: SocialPost[]) => {
     setBusy(true);
     let faits = 0;
@@ -141,6 +171,7 @@ const ReseauxTab: React.FC = () => {
     for (const post of posts) {
       try {
         await updatePost(post.id!, { status: "ready", publishError: null, publishAttempts: 0 });
+        await envoyerABlotato(post);
         faits++;
       } catch (e) {
         echecs.push(`${post.date} · ${CHANNEL_META[post.channel].label} : ${(e as Error).message}`);
@@ -148,8 +179,21 @@ const ReseauxTab: React.FC = () => {
     }
     setBusy(false);
     setAVerifier(null);
-    if (echecs.length) say("err", `${faits} programmé(s), ${echecs.length} en échec — ${echecs[0]}`);
-    else say("ok", faits === 1 ? "Post programmé." : `${faits} posts programmés.`);
+    if (echecs.length) say("err", `${faits} programmé(s) chez Blotato, ${echecs.length} en échec — ${echecs[0]}`);
+    else say("ok", faits === 1 ? "Post programmé chez Blotato." : `${faits} posts programmés chez Blotato.`);
+  };
+
+  /** Un post déjà programmé mais modifié depuis : on le renvoie tel quel. */
+  const renvoyer = async (post: SocialPost) => {
+    setBusy(true);
+    try {
+      const quand = await envoyerABlotato(post);
+      say("ok", `Renvoyé à Blotato pour le ${quand.slice(0, 10)} à ${quand.slice(11, 16)}.`);
+    } catch (e) {
+      say("err", (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
   };
 
   const shift = (delta: number) => {
@@ -462,7 +506,7 @@ const ReseauxTab: React.FC = () => {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border border-slate-200" />
                 )}
-                <SuiviPublication post={p} />
+                <SuiviPublication post={p} onRenvoyer={renvoyer} busy={busy} />
               </>
             )}
 
@@ -632,7 +676,31 @@ const Mediatheque = ({ onClose, onPick }: { onClose: () => void; onPick: (url: s
  * l'admin l'affiche comme les autres, et on découvre des semaines plus tard
  * qu'il n'est jamais parti.
  */
-const SuiviPublication = ({ post }: { post: SocialPost }) => {
+const SuiviPublication = ({ post, onRenvoyer, busy }: { post: SocialPost; onRenvoyer?: (p: SocialPost) => void; busy?: boolean }) => {
+  if (post.status !== "published" && post.scheduledVia === "blotato") {
+    const quand = post.scheduledFor ? `${post.scheduledFor.slice(0, 10)} à ${post.scheduledFor.slice(11, 16)}` : post.date;
+    // Modifié après l'envoi : ce que Blotato publiera n'est plus ce qu'on voit ici.
+    const modifieDepuis = !!(post.updatedAt && post.scheduledAt && post.updatedAt.toDate().toISOString() > post.scheduledAt);
+    return (
+      <div className="text-[11px] space-y-1">
+        <p className="flex items-center gap-1.5" style={{ color: "#10B981" }}>
+          <Check size={12} /> Programmé chez Blotato — publication le {quand} (heure de Paris).
+          {post.publishedUrl && (
+            <a href={post.publishedUrl} target="_blank" rel="noreferrer noopener" className="underline">Voir chez Blotato</a>
+          )}
+        </p>
+        {modifieDepuis && (
+          <p style={{ color: "#fbbf24" }}>
+            Modifié depuis l&apos;envoi : Blotato publiera l&apos;ancienne version tant que tu ne l&apos;as pas renvoyé.
+          </p>
+        )}
+        {onRenvoyer && (
+          <button onClick={() => onRenvoyer(post)} disabled={busy} className={`${btnGhost} mt-1`}>Renvoyer à Blotato</button>
+        )}
+        {post.publishError && <p style={{ color: "#f87171" }}>Dernier envoi en échec : {post.publishError}</p>}
+      </div>
+    );
+  }
   if (post.status === "publishing") {
     return (
       <p className="text-[11px] flex items-center gap-1.5" style={{ color: "#fbbf24" }}>
