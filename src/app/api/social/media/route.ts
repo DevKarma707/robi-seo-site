@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { verifierJeton } from "@/lib/apiToken";
 import { adminBucket, adminDepuisJeton } from "@/lib/firebaseAdmin";
-import type { Bucket } from "@google-cloud/storage";
+import type { Bucket, File as FichierStorage } from "@google-cloud/storage";
 
 export const dynamic = "force-dynamic";
 
@@ -102,7 +102,7 @@ export async function GET(req: Request) {
   const dossier = url.searchParams.get("dossier");
   const prefix = dossier ? `${RACINE}/${nomSur(dossier)}/` : `${RACINE}/`;
 
-  let fichiers: Awaited<ReturnType<Bucket["getFiles"]>>[0];
+  let fichiers: FichierStorage[];
   try {
     [fichiers] = await bucket.getFiles({ prefix });
   } catch (e) {
