@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   ChevronLeft, ChevronRight, FileJson, RefreshCw, AlertTriangle, Check, Trash2,
   Pencil, X, Copy, Sparkles, ClipboardCopy, ImagePlus, Loader2, Send, ShieldCheck,
-  CalendarDays, List, CircleAlert,
+  CalendarDays, List, CircleAlert, BookOpen,
 } from "lucide-react";
 import { listSharedFiles, isImage, type SharedFile } from "@/lib/sharedFiles";
 import { rapprocher } from "@/lib/rapprochementVisuels";
@@ -775,6 +775,15 @@ const ReseauxTab: React.FC = () => {
         </div>
 
         <div className="ml-auto flex items-center gap-2">
+          <a
+            href="https://claude.ai/artifact/7DNaPSd7CoLQpjh5ZewQxn"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={btnGhost}
+            title="Mode d'emploi : une commande à Claude, un clic ici — pas à pas"
+          >
+            <span className="flex items-center gap-1.5"><BookOpen size={12} /> Tuto</span>
+          </a>
           <button onClick={copyBrief} className={btnGhost} title="Copier le brief du skill robi-social-media">
             <span className="flex items-center gap-1.5"><Sparkles size={12} /> Brief du mois</span>
           </button>
