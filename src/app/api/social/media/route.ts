@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { verifierJeton } from "@/lib/apiToken";
-import { adminBucket } from "@/lib/firebaseAdmin";
+import { adminBucket, adminDepuisJeton } from "@/lib/firebaseAdmin";
 
 export const dynamic = "force-dynamic";
 
@@ -16,9 +16,29 @@ export const dynamic = "force-dynamic";
  * confier la clé du compte de service à l'agent, ce qui lui donnerait un
  * accès total à Firestore pour un besoin qui tient en deux verbes.
  *
- * Le jeton n'ouvre que cette route et la file de publication, et se révoque
- * en changeant une variable sur Vercel, sans toucher à Firebase.
+ * Deux façons d'entrer, et la seconde est la bonne pour l'admin :
+ *
+ * - le jeton d'automatisation, pour un agent qui tourne sans personne ;
+ * - le jeton Firebase de l'admin connecté, présenté par l'onglet Réseaux.
+ *
+ * Le second ne demande AUCUN secret partagé : c'est la session de Ralph, déjà
+ * ouverte dans son navigateur, qui autorise la copie. La clé du compte de
+ * service ne quitte jamais le serveur.
  */
+
+/** `null` si autorisé — par le jeton d'automatisation ou par un admin connecté. */
+const autoriser = async (req: Request): Promise<NextResponse | null> => {
+  const refusJeton = verifierJeton(req);
+  if (!refusJeton) return null;
+
+  const entete = req.headers.get("authorization") || "";
+  const idToken = entete.startsWith("Bearer ") ? entete.slice(7) : "";
+  if (idToken && (await adminDepuisJeton(idToken))) return null;
+
+  // On renvoie le refus du jeton : il distingue « pas configuré » de
+  // « refusé », ce qu'un 401 sec ne dirait pas.
+  return refusJeton;
+};
 
 const RACINE = "partage";
 const DOSSIER_DEFAUT = "reseaux";
@@ -58,7 +78,7 @@ const bucketOuErreur = () => {
 
 /** Liste les fichiers de la médiathèque. */
 export async function GET(req: Request) {
-  const refus = verifierJeton(req);
+  const refus = await autoriser(req);
   if (refus) return refus;
 
   const bucket = bucketOuErreur();
@@ -87,7 +107,7 @@ export async function GET(req: Request) {
 
 /** Dépose une image dans la médiathèque, depuis son URL. */
 export async function POST(req: Request) {
-  const refus = verifierJeton(req);
+  const refus = await autoriser(req);
   if (refus) return refus;
 
   const bucket = bucketOuErreur();
