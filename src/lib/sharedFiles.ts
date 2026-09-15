@@ -207,6 +207,76 @@ export const uploadSharedFile = async (file: File | Blob, name: string, folder =
   await uploadBytes(storageRef(storage, path), file, { contentType: file.type || "application/octet-stream" });
 };
 
+/** Ce qu'on accepte de sortir d'une archive. */
+const TYPES_ARCHIVE: Record<string, string> = {
+  jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp",
+  json: "application/json", txt: "text/plain", md: "text/markdown", pdf: "application/pdf",
+};
+
+/** 40 Mo par fichier extrait : au-delà, ce n'est plus un visuel de post. */
+const TAILLE_MAX_EXTRAIT = 40 * 1024 * 1024;
+
+export interface ResultatZip {
+  deposes: string[];
+  ignores: { nom: string; motif: string }[];
+}
+
+/**
+ * Étale une archive dans la médiathèque.
+ *
+ * Un lot de visuels arrive en zip — c'est le format dans lequel on le reçoit,
+ * et l'alternative était de glisser les fichiers un par un. Sur dix posts
+ * c'est dix gestes, et c'est l'étape où l'on abandonne.
+ *
+ * L'archive est ouverte dans le navigateur : rien n'est envoyé ailleurs, et
+ * le tri de ce qu'on accepte se fait avant tout dépôt.
+ */
+export const uploadZip = async (
+  fichier: File,
+  folder = ROOT_FOLDER,
+  onProgres?: (fait: number, total: number) => void
+): Promise<ResultatZip> => {
+  if (!storage) throw new Error("Firebase Storage non configuré.");
+  const { unzipSync } = await import("fflate");
+
+  let entrees: Record<string, Uint8Array>;
+  try {
+    entrees = unzipSync(new Uint8Array(await fichier.arrayBuffer()));
+  } catch (e) {
+    throw new Error(`Archive illisible : ${(e as Error).message}`);
+  }
+
+  const deposes: string[] = [];
+  const ignores: { nom: string; motif: string }[] = [];
+
+  const noms = Object.keys(entrees).filter((n) => !n.endsWith("/"));
+  let fait = 0;
+
+  for (const nom of noms) {
+    const octets = entrees[nom];
+    // Le nom interne d'une archive peut contenir des « ../ » : on ne garde que
+    // le dernier segment. Un chemin fabriqué ne doit pas pouvoir désigner un
+    // autre dossier du bucket.
+    const base = nom.split("/").pop() ?? "";
+    const ext = base.toLowerCase().split(".").pop() ?? "";
+
+    // Les métadonnées de macOS sont dans toutes les archives faites sur Mac.
+    if (base.startsWith(".") || nom.startsWith("__MACOSX/")) {
+      ignores.push({ nom: base, motif: "fichier système" });
+    } else if (!TYPES_ARCHIVE[ext]) {
+      ignores.push({ nom: base, motif: `extension .${ext} non acceptée` });
+    } else if (octets.byteLength > TAILLE_MAX_EXTRAIT) {
+      ignores.push({ nom: base, motif: "plus de 40 Mo" });
+    } else {
+      await uploadSharedFile(new Blob([octets as BlobPart], { type: TYPES_ARCHIVE[ext] }), base, folder);
+      deposes.push(base);
+    }
+    onProgres?.(++fait, noms.length);
+  }
+
+  return { deposes, ignores };
+};
+
 export const deleteSharedFile = (path: string) => {
   if (!storage) throw new Error("Firebase Storage non configuré.");
   return deleteObject(storageRef(storage, path));

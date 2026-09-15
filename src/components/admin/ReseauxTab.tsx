@@ -7,6 +7,7 @@ import {
   CalendarDays, List, CircleAlert,
 } from "lucide-react";
 import { listSharedFiles, isImage, type SharedFile } from "@/lib/sharedFiles";
+import { rapprocher } from "@/lib/rapprochementVisuels";
 import {
   subscribeToPosts, addPost, updatePost, updatePostText, deletePost, importPostsFromJson,
   monthGrid, MONTH_NAMES, CHANNEL_META, TYPE_META, STATUS_META, STATUTS_MANUELS, CHANNELS, TYPES,
@@ -444,13 +445,6 @@ const ReseauxTab: React.FC = () => {
     [say]
   );
 
-  // L'import a écrit ; les posts arrivent au tour suivant. On rapatrie dès
-  // qu'ils sont là, une seule fois.
-  useEffect(() => {
-    if (!rapatriementDemande || busy || !visuelsDehors.length) return;
-    setRapatriementDemande(false);
-    void lancerRapatriement(visuelsDehors);
-  }, [rapatriementDemande, busy, visuelsDehors, lancerRapatriement]);
 
   /**
    * Déplace un post sur une autre date.
@@ -531,6 +525,52 @@ const ReseauxTab: React.FC = () => {
     setOpenId(null);
     say("ok", `${faits} post(s) supprimé(s)`);
   };
+
+  /**
+   * Attache aux posts les visuels que la médiathèque contient déjà.
+   *
+   * Le compositeur nomme chaque visuel `robi_post_<externalId>.jpg` et le post
+   * porte ce même identifiant : la correspondance est donnée, il n'y avait
+   * qu'à la lire. Sans ça, dix visuels demandaient quarante gestes — ouvrir,
+   * éditer, choisir, enregistrer, dix fois.
+   *
+   * Ne remplace jamais un visuel déjà attaché : écraser un choix fait à la
+   * main serait pire que ne rien faire.
+   */
+  const attacherDepuisMediatheque = useCallback(async () => {
+    setBusy(true);
+    try {
+      const fichiers = (await listSharedFiles()).filter(isImage);
+      const { attacher, sansVisuel, orphelins } = rapprocher(rows, fichiers);
+
+      for (const { post, url } of attacher) await updatePost(post.id!, { imageUrl: url });
+
+      const parts = [`${attacher.length} visuel(s) attaché(s)`];
+      if (sansVisuel.length) parts.push(`${sansVisuel.length} post(s) encore sans visuel`);
+      // Un orphelin veut dire qu'un identifiant a changé quelque part : c'est
+      // le seul cas où le nom de fichier et le post ont divergé.
+      if (orphelins.length) parts.push(`${orphelins.length} visuel(s) sans post — identifiant modifié ?`);
+      say(attacher.length ? "ok" : "err", parts.join(" · "));
+      if (orphelins.length) console.warn("[visuels orphelins]", orphelins);
+    } catch (e) {
+      say("err", (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }, [rows, say]);
+
+  // L'import a écrit ; les posts arrivent au tour suivant. On rapatrie dès
+  // qu'ils sont là, une seule fois.
+  useEffect(() => {
+    if (!rapatriementDemande || busy) return;
+    setRapatriementDemande(false);
+    void (async () => {
+      await lancerRapatriement(visuelsDehors);
+      // Puis on comble ce qui manque avec la médiathèque : un lot importé sans
+      // imageUrl trouve ainsi ses visuels sans un seul clic.
+      await attacherDepuisMediatheque();
+    })();
+  }, [rapatriementDemande, busy, visuelsDehors, lancerRapatriement, attacherDepuisMediatheque]);
 
   const runImport = async () => {
     setBusy(true);
@@ -649,6 +689,20 @@ const ReseauxTab: React.FC = () => {
             <AlertTriangle size={12} />
             {counts.enErreur} en échec
           </span>
+        )}
+
+        {counts.total > 0 && (
+          <button
+            onClick={attacherDepuisMediatheque}
+            disabled={busy}
+            className={btnGhost}
+            title="Attacher les visuels de la médiathèque dont le nom correspond à un post"
+          >
+            <span className="flex items-center gap-1">
+              {busy ? <Loader2 size={11} className="animate-spin" /> : <ImagePlus size={11} />}
+              Attacher les visuels
+            </span>
+          </button>
         )}
 
         {visuelsDehors.length > 0 && (

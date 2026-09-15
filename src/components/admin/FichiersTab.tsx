@@ -6,7 +6,7 @@ import {
   Link2, FolderPlus, HardDriveDownload, Image as ImageIcon, X,
 } from "lucide-react";
 import {
-  listSharedFiles, listSharedFolders, uploadSharedFile, deleteSharedFile, humanSize, isImage, safeFolder,
+  listSharedFiles, listSharedFolders, uploadSharedFile, uploadZip, deleteSharedFile, humanSize, isImage, safeFolder,
   PRESET_FOLDERS, ROOT_FOLDER, type SharedFile,
 } from "@/lib/sharedFiles";
 import {
@@ -111,17 +111,43 @@ const FichiersTab: React.FC = () => {
 
   const visible = folder === ALL ? files : files.filter((f) => f.folder === folder);
 
+  const estZip = (f: File) =>
+    f.name.toLowerCase().endsWith(".zip") || f.type === "application/zip";
+
   const upload = async (list: FileList | null) => {
     if (!list?.length) return;
     setBusy(true);
+    setProgress(null);
     try {
-      for (const f of Array.from(list)) await uploadSharedFile(f, f.name, uploadFolder);
-      say("ok", `${list.length} fichier(s) déposé(s) dans ${uploadFolder}.`);
+      let simples = 0;
+      const comptes = { deposes: 0, ignores: 0 };
+
+      for (const f of Array.from(list)) {
+        // Une archive est étalée plutôt que déposée telle quelle : un zip dans
+        // la médiathèque ne sert à rien, on ne peut ni le prévisualiser ni
+        // l'attacher à un post.
+        if (estZip(f)) {
+          const r = await uploadZip(f, uploadFolder, (fait, total) => setProgress(`${f.name} — ${fait}/${total}`));
+          comptes.deposes += r.deposes.length;
+          comptes.ignores += r.ignores.length;
+          if (r.ignores.length) console.warn("[zip] ignorés :", r.ignores);
+        } else {
+          await uploadSharedFile(f, f.name, uploadFolder);
+          simples++;
+        }
+      }
+
+      const parts: string[] = [];
+      if (simples) parts.push(`${simples} fichier(s)`);
+      if (comptes.deposes) parts.push(`${comptes.deposes} extrait(s) d'archive`);
+      const suffixe = comptes.ignores ? ` · ${comptes.ignores} ignoré(s), voir la console` : "";
+      say("ok", `${parts.join(" · ") || "Rien"} déposé(s) dans ${uploadFolder}${suffixe}.`);
       await load();
     } catch (e) {
       say("err", (e as Error).message);
     } finally {
       setBusy(false);
+      setProgress(null);
       if (fileInput.current) fileInput.current.value = "";
     }
   };
@@ -263,7 +289,7 @@ const FichiersTab: React.FC = () => {
       >
         <Upload size={22} className="mx-auto mb-2 text-slate-400" />
         <p className="text-sm text-slate-600">
-          Dépose tes fichiers ici, ou{" "}
+          Dépose tes fichiers <b>ou un .zip</b> ici, ou{" "}
           <button onClick={() => fileInput.current?.click()} className={`underline text-[var(--admin-ink)] ${focusRing}`}>
             choisis-les
           </button>
@@ -280,6 +306,11 @@ const FichiersTab: React.FC = () => {
           <button onClick={newFolder} className={`${btnGhost} ml-2 align-middle`} title="Nouveau dossier">
             <FolderPlus size={11} />
           </button>
+        </p>
+        <p className="text-[11px] text-slate-400 mt-2">
+          Une archive est ouverte ici même et ses images déposées une à une — le zip
+          lui-même n&apos;est pas conservé : il ne se prévisualise pas et ne s&apos;attache
+          pas à un post.
         </p>
         <p className="text-[11px] text-slate-400 mt-1.5">
           Visuels, exports, documents de marque… 50 Mo par fichier. Lecture réservée à ton compte admin.
