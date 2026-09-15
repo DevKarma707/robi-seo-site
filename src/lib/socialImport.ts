@@ -1,4 +1,4 @@
-import { CHANNELS, TYPES, type PostChannel, type PostStatus, type PostType } from "./socialPosts";
+import { CHANNELS, TYPES, STATUTS_MANUELS, type PostChannel, type PostStatus, type PostType } from "./socialPosts";
 
 /**
  * Décider ce qu'un import doit faire, sans toucher à Firestore.
@@ -131,7 +131,10 @@ export const validateImportPost = (
   }
 
   const status = str(o.status);
-  if (status && !["draft", "ready", "published"].includes(status)) {
+  // `STATUTS_MANUELS` et non tous les statuts : « publishing » appartient à la
+  // file de publication. Un fichier généré qui le réclamerait ferait
+  // disparaître le post de la file jusqu'à expiration de la réservation.
+  if (status && !(STATUTS_MANUELS as readonly string[]).includes(status)) {
     return { ok: false, error: `#${n} : statut inconnu ${JSON.stringify(o.status)}.` };
   }
 

@@ -3,14 +3,15 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ChevronLeft, ChevronRight, FileJson, RefreshCw, AlertTriangle, Check, Trash2,
-  Pencil, X, Copy, Sparkles, ClipboardCopy, ImagePlus, Loader2,
+  Pencil, X, Copy, Sparkles, ClipboardCopy, ImagePlus, Loader2, Send, ShieldCheck,
 } from "lucide-react";
 import { listSharedFiles, isImage, type SharedFile } from "@/lib/sharedFiles";
 import {
   subscribeToPosts, addPost, updatePost, updatePostText, deletePost, importPostsFromJson,
-  monthGrid, MONTH_NAMES, CHANNEL_META, TYPE_META, STATUS_META, CHANNELS, TYPES,
-  type SocialPost, type PostChannel, type PostStatus,
+  monthGrid, MONTH_NAMES, CHANNEL_META, TYPE_META, STATUS_META, STATUTS_MANUELS, CHANNELS, TYPES,
+  type SocialPost, type PostChannel,
 } from "@/lib/socialPosts";
+import { verifierAvantProgrammation, estProgrammable, type Verdict } from "@/lib/publicationCheck";
 import { ACCENT, btnGhost, btnPill, btnPrimary, card, focusRing, input, select, sectionTitle } from "./ui";
 
 /**
@@ -75,6 +76,14 @@ const ReseauxTab: React.FC = () => {
   const [importText, setImportText] = useState("");
   const [busy, setBusy] = useState(false);
   const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
+  /**
+   * Posts soumis à vérification avant de passer « prêt ».
+   *
+   * Passer un post en « prêt » ouvre la porte de la publication automatique :
+   * plus personne ne le relira avant qu'il ne soit dans le feed. Le clic
+   * n'écrit donc plus directement — il ouvre cet écran.
+   */
+  const [aVerifier, setAVerifier] = useState<SocialPost[] | null>(null);
 
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
@@ -109,6 +118,39 @@ const ReseauxTab: React.FC = () => {
     () => cells.filter(Boolean).flatMap((d) => byDate.get(d as string) || []),
     [cells, byDate]
   );
+
+  const jourDuJour = useMemo(() => new Date().toISOString().slice(0, 10), []);
+
+  /** Les brouillons du mois affiché, dans l'ordre du calendrier. */
+  const brouillonsDuMois = useMemo(
+    () => monthPosts.filter((p) => p.status === "draft"),
+    [monthPosts]
+  );
+
+  /**
+   * Bascule en « prêt » les posts validés à l'écran de vérification.
+   *
+   * L'écriture est séquentielle et tolère l'échec unitaire : si un post
+   * échoue, les autres passent quand même, et le compte rendu dit lesquels.
+   * Tout annuler sur une erreur réseau ferait perdre une relecture entière.
+   */
+  const programmer = async (posts: SocialPost[]) => {
+    setBusy(true);
+    let faits = 0;
+    const echecs: string[] = [];
+    for (const post of posts) {
+      try {
+        await updatePost(post.id!, { status: "ready", publishError: null, publishAttempts: 0 });
+        faits++;
+      } catch (e) {
+        echecs.push(`${post.date} · ${CHANNEL_META[post.channel].label} : ${(e as Error).message}`);
+      }
+    }
+    setBusy(false);
+    setAVerifier(null);
+    if (echecs.length) say("err", `${faits} programmé(s), ${echecs.length} en échec — ${echecs[0]}`);
+    else say("ok", faits === 1 ? "Post programmé." : `${faits} posts programmés.`);
+  };
 
   const shift = (delta: number) => {
     const d = new Date(Date.UTC(year, month + delta, 1));
@@ -195,6 +237,8 @@ const ReseauxTab: React.FC = () => {
     total: monthPosts.length,
     ready: monthPosts.filter((p) => p.status === "ready").length,
     published: monthPosts.filter((p) => p.status === "published").length,
+    enCours: monthPosts.filter((p) => p.status === "publishing").length,
+    enErreur: monthPosts.filter((p) => !!p.publishError).length,
   };
 
   return (
@@ -217,7 +261,31 @@ const ReseauxTab: React.FC = () => {
           {counts.total} post{counts.total > 1 ? "s" : ""}
           {counts.ready > 0 && ` · ${counts.ready} prêt${counts.ready > 1 ? "s" : ""}`}
           {counts.published > 0 && ` · ${counts.published} publié${counts.published > 1 ? "s" : ""}`}
+          {counts.enCours > 0 && ` · ${counts.enCours} en cours d'envoi`}
         </span>
+
+        {counts.enErreur > 0 && (
+          <span
+            className="text-[11px] font-bold flex items-center gap-1"
+            style={{ color: "#f87171" }}
+          >
+            <AlertTriangle size={12} />
+            {counts.enErreur} en échec
+          </span>
+        )}
+
+        {brouillonsDuMois.length > 0 && (
+          <button
+            onClick={() => setAVerifier(brouillonsDuMois)}
+            className={btnPrimary}
+            title="Vérifier puis programmer tous les brouillons du mois"
+          >
+            <span className="flex items-center gap-1">
+              <ShieldCheck size={12} /> Vérifier {brouillonsDuMois.length} brouillon
+              {brouillonsDuMois.length > 1 ? "s" : ""}
+            </span>
+          </button>
+        )}
 
         <select className={select} value={channel} onChange={(e) => setChannel(e.target.value as PostChannel | "all")}>
           <option value="all">Tous les réseaux</option>
@@ -394,18 +462,26 @@ const ReseauxTab: React.FC = () => {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border border-slate-200" />
                 )}
+                <SuiviPublication post={p} />
               </>
             )}
 
             <div className="flex flex-wrap gap-1.5 pt-1">
-              {(Object.keys(STATUS_META) as PostStatus[]).map((s) => (
+              {/* « Envoi en cours » n'est pas proposé : seule la file le pose. */}
+              {STATUTS_MANUELS.map((s) => (
                 <button
                   key={s}
-                  onClick={() => updatePost(p.id!, { status: s })}
+                  disabled={p.status === "publishing"}
+                  onClick={() =>
+                    // « Prêt » passe par l'écran de vérification : c'est le
+                    // dernier moment où quelqu'un regarde avant le feed.
+                    s === "ready" ? setAVerifier([p]) : updatePost(p.id!, { status: s })
+                  }
                   className={`${btnPill} ${p.status === s ? "text-black" : "bg-slate-100 text-slate-600"}`}
                   style={p.status === s ? { backgroundColor: STATUS_META[s].color } : undefined}
+                  title={p.status === "publishing" ? "Envoi en cours — impossible de changer le statut" : undefined}
                 >
-                  {STATUS_META[s].label}
+                  {s === "ready" ? "Programmer…" : STATUS_META[s].label}
                 </button>
               ))}
               {!ed && (
@@ -455,6 +531,16 @@ const ReseauxTab: React.FC = () => {
           {flash.kind === "ok" ? <Check size={13} /> : <AlertTriangle size={13} />}
           {flash.text}
         </div>
+      )}
+      {aVerifier && (
+        <EcranVerification
+          posts={aVerifier}
+          voisins={rows}
+          jourDuJour={jourDuJour}
+          busy={busy}
+          onClose={() => setAVerifier(null)}
+          onConfirm={programmer}
+        />
       )}
       {picker && edit && (
         <Mediatheque
@@ -534,6 +620,158 @@ const Mediatheque = ({ onClose, onPick }: { onClose: () => void; onPick: (url: s
             ))}
           </div>
         )}
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Ce que la file a fait du post au dernier passage.
+ *
+ * Sans ça, un échec de publication est invisible : le post reste « prêt »,
+ * l'admin l'affiche comme les autres, et on découvre des semaines plus tard
+ * qu'il n'est jamais parti.
+ */
+const SuiviPublication = ({ post }: { post: SocialPost }) => {
+  if (post.status === "publishing") {
+    return (
+      <p className="text-[11px] flex items-center gap-1.5" style={{ color: "#fbbf24" }}>
+        <Loader2 size={12} className="animate-spin" />
+        Envoi en cours depuis {post.claimedAt ? new Date(post.claimedAt).toLocaleTimeString("fr-FR") : "peu"}.
+        Le statut se débloque tout seul si l&apos;envoi ne répond plus.
+      </p>
+    );
+  }
+
+  return (
+    <>
+      {post.publishedUrl && (
+        <a
+          href={post.publishedUrl}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="text-[11px] font-bold underline"
+          style={{ color: "#10B981" }}
+        >
+          Voir le post publié
+        </a>
+      )}
+      {post.publishError && (
+        <p className="text-[11px] leading-relaxed" style={{ color: "#f87171" }}>
+          <span className="font-bold">Dernier envoi en échec</span>
+          {post.publishAttempts ? ` (${post.publishAttempts} essai${post.publishAttempts > 1 ? "s" : ""})` : ""} :{" "}
+          {post.publishError}
+        </p>
+      )}
+    </>
+  );
+};
+
+/** Une ligne de l'écran de vérification : le post, et ce qui cloche. */
+const LigneVerification = ({ post, verdict }: { post: SocialPost; verdict: Verdict }) => {
+  const bloque = !estProgrammable(verdict);
+  return (
+    <li
+      className="rounded-xl border p-3 flex gap-3"
+      style={{ borderColor: bloque ? "#f8717155" : "#e2e8f0", backgroundColor: bloque ? "#f871710d" : undefined }}
+    >
+      {post.imageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={post.imageUrl} alt="" className="w-16 h-16 rounded-lg object-cover border border-slate-200 shrink-0" />
+      ) : (
+        <div className="w-16 h-16 rounded-lg bg-slate-100 border border-slate-200 shrink-0 flex items-center justify-center">
+          <ImagePlus size={16} className="text-slate-400" />
+        </div>
+      )}
+
+      <div className="min-w-0 flex-1 space-y-1.5">
+        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: CHANNEL_META[post.channel].color }}>
+          {CHANNEL_META[post.channel].label} · {post.date} · {TYPE_META[post.type].label}
+        </p>
+        {/* Le texte en entier, pas un extrait : c'est ce qui part. */}
+        <p className="text-[12px] text-slate-700 whitespace-pre-wrap leading-relaxed">{post.caption}</p>
+        {post.hashtags && <p className="text-[11px] text-slate-400">{post.hashtags}</p>}
+
+        {verdict.blocages.map((b) => (
+          <p key={b} className="text-[11px] font-bold flex items-start gap-1" style={{ color: "#f87171" }}>
+            <X size={12} className="mt-0.5 shrink-0" /> {b}
+          </p>
+        ))}
+        {verdict.avertissements.map((a) => (
+          <p key={a} className="text-[11px] flex items-start gap-1" style={{ color: "#b45309" }}>
+            <AlertTriangle size={12} className="mt-0.5 shrink-0" /> {a}
+          </p>
+        ))}
+      </div>
+    </li>
+  );
+};
+
+/**
+ * Dernier écran avant la publication automatique.
+ *
+ * Il montre exactement ce qui partira — texte entier et visuel, pas un
+ * résumé — parce qu'après validation plus personne ne regardera. Les posts
+ * bloqués sont affichés mais exclus de l'envoi : les cacher laisserait croire
+ * qu'ils sont programmés.
+ */
+const EcranVerification = ({
+  posts, voisins, jourDuJour, busy, onClose, onConfirm,
+}: {
+  posts: SocialPost[];
+  voisins: SocialPost[];
+  jourDuJour: string;
+  busy: boolean;
+  onClose: () => void;
+  onConfirm: (posts: SocialPost[]) => void;
+}) => {
+  const examens = useMemo(
+    () => posts.map((post) => ({ post, verdict: verifierAvantProgrammation(post, voisins, jourDuJour) })),
+    [posts, voisins, jourDuJour]
+  );
+  const partants = examens.filter((e) => estProgrammable(e.verdict)).map((e) => e.post);
+  const bloques = examens.length - partants.length;
+  const alertes = examens.filter((e) => estProgrammable(e.verdict) && e.verdict.avertissements.length).length;
+
+  return (
+    <div className="fixed inset-0 z-[60] bg-black/70 flex items-center justify-center p-6" onClick={onClose}>
+      <div className={`${card} w-full max-w-2xl max-h-[85vh] flex flex-col p-5`} onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center gap-2 mb-1">
+          <p className="text-xs font-black uppercase tracking-widest text-slate-900 flex-1">
+            Vérifier avant programmation
+          </p>
+          <button onClick={onClose} className={btnGhost}>
+            <span className="flex items-center gap-1"><X size={11} /> Annuler</span>
+          </button>
+        </div>
+        <p className="text-[11px] text-slate-500 mb-3 leading-relaxed">
+          Une fois programmé, le post part tout seul à sa date, sans nouvelle relecture.
+          C&apos;est le dernier écran où tu peux encore le retenir.
+        </p>
+
+        <ul className="space-y-2 overflow-auto flex-1 -mx-1 px-1">
+          {examens.map(({ post, verdict }) => (
+            <LigneVerification key={post.id} post={post} verdict={verdict} />
+          ))}
+        </ul>
+
+        <div className="pt-4 flex flex-wrap items-center gap-3 border-t border-slate-200 mt-3">
+          <span className="text-[11px] text-slate-500 flex-1 min-w-[180px]">
+            {partants.length} post{partants.length > 1 ? "s" : ""} prêt{partants.length > 1 ? "s" : ""} à programmer
+            {bloques > 0 && ` · ${bloques} bloqué${bloques > 1 ? "s" : ""}, à corriger d'abord`}
+            {alertes > 0 && ` · ${alertes} à relire`}
+          </span>
+          <button
+            onClick={() => onConfirm(partants)}
+            disabled={busy || partants.length === 0}
+            className={btnPrimary}
+          >
+            <span className="flex items-center gap-1">
+              {busy ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
+              Programmer {partants.length > 0 ? partants.length : ""}
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   );
