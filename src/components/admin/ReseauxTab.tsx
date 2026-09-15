@@ -144,6 +144,12 @@ const ReseauxTab: React.FC = () => {
    * n'écrit donc plus directement — il ouvre cet écran.
    */
   const [aVerifier, setAVerifier] = useState<SocialPost[] | null>(null);
+  /**
+   * Posé par l'import, consommé une fois que l'abonnement Firestore a livré
+   * les nouveaux posts. L'import ne peut pas rapatrier lui-même : il écrit,
+   * et les documents ne reviennent qu'au tour suivant.
+   */
+  const [rapatriementDemande, setRapatriementDemande] = useState(false);
 
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
@@ -291,6 +297,124 @@ const ReseauxTab: React.FC = () => {
     setOpenId(null);
   };
 
+  /**
+   * Recopie une image externe dans la médiathèque et renvoie son adresse
+   * stable.
+   *
+   * Ce n'est pas du confort : les URL rendues par un générateur d'images
+   * expirent. Un post programmé dans trois semaines partirait avec un lien
+   * mort, et l'échec se produirait à la publication — loin de l'import, sans
+   * rapport visible avec lui.
+   *
+   * La copie passe par le serveur, qui seul détient la clé du compte de
+   * service. On présente le jeton Firebase de la session ouverte : aucun
+   * secret partagé n'est nécessaire.
+   */
+  const rapatrier = async (url: string, nom: string): Promise<string> => {
+    const user = auth?.currentUser;
+    if (!user) throw new Error("Session expirée — reconnecte-toi.");
+    const token = await user.getIdToken();
+    const r = await fetch("/api/social/media", {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+      body: JSON.stringify({ url, nom, dossier: "reseaux" }),
+    });
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(String(body.detail || body.error || r.status));
+    return String(body.url);
+  };
+
+  /** Une image déjà dans notre Storage n'a rien à y être recopiée. */
+  const dejaChezNous = (url: string) => url.includes("firebasestorage.googleapis.com");
+
+  /**
+   * Rapatrie les visuels des posts importés, puis réécrit leurs adresses.
+   *
+   * Un échec unitaire ne fait pas échouer l'import : le post garde son URL
+   * d'origine, qui marchera un temps, et le compte rendu dit combien sont
+   * restés dehors. Tout annuler ferait perdre des textes valides pour une
+   * image.
+   */
+  const rapatrierVisuels = async (posts: SocialPost[]) => {
+    let copies = 0;
+    let echecs = 0;
+    for (const post of posts) {
+      const patch: { imageUrl?: string; imagePropositions?: string[] } = {};
+
+      if (post.imageUrl && !dejaChezNous(post.imageUrl)) {
+        try {
+          patch.imageUrl = await rapatrier(post.imageUrl, `${post.externalId || post.id}.jpg`);
+          copies++;
+        } catch { echecs++; }
+      }
+
+      if (post.imagePropositions?.length) {
+        const rapatriees: string[] = [];
+        for (const [i, u] of post.imagePropositions.entries()) {
+          if (dejaChezNous(u)) { rapatriees.push(u); continue; }
+          try {
+            rapatriees.push(await rapatrier(u, `${post.externalId || post.id}-${i + 1}.jpg`));
+            copies++;
+          } catch { rapatriees.push(u); echecs++; }
+        }
+        if (rapatriees.join("\n") !== post.imagePropositions.join("\n")) {
+          patch.imagePropositions = rapatriees;
+          // Le visuel retenu doit suivre sa proposition, sinon il pointerait
+          // encore vers l'URL expirable pendant que la vignette, elle, est à
+          // jour — et personne ne verrait la différence avant la publication.
+          const i = post.imagePropositions.indexOf(post.imageUrl ?? "");
+          if (i >= 0) patch.imageUrl = rapatriees[i];
+        }
+      }
+
+      if (Object.keys(patch).length) await updatePost(post.id!, patch);
+    }
+    return { copies, echecs };
+  };
+
+  /** Les posts dont au moins un visuel vit encore hors de notre médiathèque. */
+  const visuelsDehors = useMemo(
+    () =>
+      rows.filter(
+        (p) =>
+          (p.imageUrl && !p.imageUrl.includes("firebasestorage.googleapis.com")) ||
+          p.imagePropositions?.some((u) => !u.includes("firebasestorage.googleapis.com"))
+      ),
+    [rows]
+  );
+
+  const lancerRapatriement = useCallback(
+    async (posts: SocialPost[]) => {
+      if (!posts.length) return;
+      setBusy(true);
+      try {
+        const { copies, echecs } = await rapatrierVisuels(posts);
+        if (copies || echecs) {
+          say(
+            echecs && !copies ? "err" : "ok",
+            `${copies} visuel(s) rapatrié(s) dans la médiathèque` +
+              (echecs ? ` · ${echecs} resté(s) dehors` : "")
+          );
+        }
+      } catch (e) {
+        say("err", (e as Error).message);
+      } finally {
+        setBusy(false);
+      }
+    },
+    // rapatrierVisuels ne dépend que de fonctions stables du module.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [say]
+  );
+
+  // L'import a écrit ; les posts arrivent au tour suivant. On rapatrie dès
+  // qu'ils sont là, une seule fois.
+  useEffect(() => {
+    if (!rapatriementDemande || busy || !visuelsDehors.length) return;
+    setRapatriementDemande(false);
+    void lancerRapatriement(visuelsDehors);
+  }, [rapatriementDemande, busy, visuelsDehors, lancerRapatriement]);
+
   const runImport = async () => {
     setBusy(true);
     try {
@@ -301,7 +425,11 @@ const ReseauxTab: React.FC = () => {
       if (errors.length) parts.push(`${errors.length} rejeté(s)`);
       say(errors.length && !imported ? "err" : "ok", parts.join(" · "));
       if (errors.length) console.warn("[import réseaux]", errors);
-      if (imported) { setImportText(""); setImportOpen(false); }
+      if (imported || updated) {
+        setImportText("");
+        setImportOpen(false);
+        setRapatriementDemande(true);
+      }
     } catch (e) {
       say("err", (e as Error).message);
     } finally {
@@ -404,6 +532,20 @@ const ReseauxTab: React.FC = () => {
             <AlertTriangle size={12} />
             {counts.enErreur} en échec
           </span>
+        )}
+
+        {visuelsDehors.length > 0 && (
+          <button
+            onClick={() => lancerRapatriement(visuelsDehors)}
+            disabled={busy}
+            className={btnGhost}
+            title="Copier les visuels externes dans la médiathèque, pour qu'ils ne périment pas"
+          >
+            <span className="flex items-center gap-1">
+              {busy ? <Loader2 size={11} className="animate-spin" /> : <ImagePlus size={11} />}
+              Rapatrier {visuelsDehors.length} visuel{visuelsDehors.length > 1 ? "s" : ""}
+            </span>
+          </button>
         )}
 
         {brouillonsDuMois.length > 0 && (
