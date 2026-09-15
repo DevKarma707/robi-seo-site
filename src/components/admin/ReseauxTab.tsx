@@ -153,6 +153,8 @@ const ReseauxTab: React.FC = () => {
   /** Post en cours de déplacement, et jour survolé. */
   const [glisse, setGlisse] = useState<{ id: string; depuis: string } | null>(null);
   const [survol, setSurvol] = useState<string | null>(null);
+  /** Posts cochés en vue liste, pour agir sur plusieurs d'un coup. */
+  const [coches, setCoches] = useState<Set<string>>(new Set());
 
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
@@ -300,12 +302,37 @@ const ReseauxTab: React.FC = () => {
     }
   };
 
+  /**
+   * Raccourcis clavier.
+   *
+   * Jamais quand on écrit : sinon une flèche gauche dans le texte du post
+   * changerait de mois, et on perdrait ce qu'on était en train de taper.
+   */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const cible = e.target as HTMLElement | null;
+      const saisie =
+        cible?.tagName === "INPUT" || cible?.tagName === "TEXTAREA" || cible?.isContentEditable;
+
+      if (e.key === "Escape" && !saisie) { setOpenId(null); setCoches(new Set()); return; }
+      if (saisie || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === "ArrowLeft") { e.preventDefault(); shiftRef.current(-1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); shiftRef.current(1); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   const shift = (delta: number) => {
     const d = new Date(Date.UTC(year, month + delta, 1));
     setYear(d.getUTCFullYear());
     setMonth(d.getUTCMonth());
     setOpenId(null);
   };
+  // La fonction change à chaque rendu ; la référence, non — l'écouteur clavier
+  // reste posé une seule fois au lieu d'être recréé à chaque frappe.
+  const shiftRef = useRef(shift);
+  shiftRef.current = shift;
 
   /**
    * Recopie une image externe dans la médiathèque et renvoie son adresse
@@ -452,6 +479,57 @@ const ReseauxTab: React.FC = () => {
     } catch (e) {
       say("err", (e as Error).message);
     }
+  };
+
+  const basculerCoche = (id: string) =>
+    setCoches((s) => {
+      const n = new Set(s);
+      if (n.has(id)) n.delete(id);
+      else n.add(id);
+      return n;
+    });
+
+  /** Les posts cochés qui sont encore à l'écran — cocher puis filtrer ne doit pas agir à l'aveugle. */
+  const selection = useMemo(
+    () => listeDuMois.filter((p) => coches.has(p.id!)),
+    [listeDuMois, coches]
+  );
+
+  /**
+   * Décale la sélection de N jours.
+   *
+   * Séquentiel et tolérant : un post publié refuse de bouger sans faire
+   * échouer les autres. Le compte rendu dit ce qui n'a pas suivi.
+   */
+  const decaler = async (jours: number) => {
+    setBusy(true);
+    let faits = 0;
+    let refuses = 0;
+    for (const post of selection) {
+      if (post.status === "published" || post.status === "publishing") { refuses++; continue; }
+      const d = new Date(`${post.date}T12:00:00Z`);
+      d.setUTCDate(d.getUTCDate() + jours);
+      try {
+        await updatePost(post.id!, { date: d.toISOString().slice(0, 10) });
+        faits++;
+      } catch { refuses++; }
+    }
+    setBusy(false);
+    setCoches(new Set());
+    say(faits ? "ok" : "err", `${faits} post(s) décalé(s)` + (refuses ? ` · ${refuses} refusé(s)` : ""));
+  };
+
+  const supprimerSelection = async () => {
+    if (!confirm(`Supprimer ${selection.length} post(s) ? C'est définitif.`)) return;
+    setBusy(true);
+    let faits = 0;
+    for (const post of selection) {
+      try { await deletePost(post.id!); faits++; } catch { /* le compte rendu le dira */ }
+    }
+    setBusy(false);
+    setCoches(new Set());
+    setOpenId(null);
+    say("ok", `${faits} post(s) supprimé(s)`);
   };
 
   const runImport = async () => {
@@ -707,21 +785,49 @@ const ReseauxTab: React.FC = () => {
             </p>
           )}
           {listeDuMois.length === 0 ? (
-            <p className="text-[13px] text-slate-500 py-8 text-center">
-              Aucun post ne correspond. Change de filtre, ou importe un lot.
-            </p>
+            <EtatVide onBrief={copyBrief} onImporter={() => setImportOpen(true)} filtre={filtre} />
           ) : (
-            <ul className="divide-y divide-slate-100">
-              {listeDuMois.map((p) => (
-                <LignePost
-                  key={p.id}
-                  post={p}
-                  ouvert={openId === p.id}
-                  onOuvrir={() => setOpenId(openId === p.id ? null : p.id!)}
-                  onProgrammer={() => setAVerifier([p])}
-                />
-              ))}
-            </ul>
+            <>
+              {/* La barre n'apparaît qu'une fois quelque chose de coché :
+                  affichée en permanence, elle occuperait de la place pour
+                  une action qu'on ne fait pas à chaque visite. */}
+              {selection.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 mb-2 p-2 rounded-xl bg-[var(--color-primary)] text-white">
+                  <span className="text-[11px] font-bold px-1">
+                    {selection.length} sélectionné{selection.length > 1 ? "s" : ""}
+                  </span>
+                  <button onClick={() => setAVerifier(selection.filter((p) => p.status === "draft"))}
+                    disabled={busy || !selection.some((p) => p.status === "draft")}
+                    className={`${btnPill} bg-[var(--color-accent)] text-black disabled:opacity-40`}>
+                    <span className="flex items-center gap-1"><ShieldCheck size={11} /> Programmer</span>
+                  </button>
+                  <button onClick={() => decaler(1)} disabled={busy} className={`${btnPill} bg-white/15 text-white`}>+1 jour</button>
+                  <button onClick={() => decaler(7)} disabled={busy} className={`${btnPill} bg-white/15 text-white`}>+1 semaine</button>
+                  <button onClick={() => decaler(-1)} disabled={busy} className={`${btnPill} bg-white/15 text-white`}>−1 jour</button>
+                  <button onClick={supprimerSelection} disabled={busy}
+                    className={`${btnPill} bg-white/15 text-white hover:bg-red-500/70 ml-auto`}>
+                    <span className="flex items-center gap-1"><Trash2 size={11} /> Supprimer</span>
+                  </button>
+                  <button onClick={() => setCoches(new Set())} className={`${btnPill} bg-white/15 text-white`}>
+                    <X size={11} />
+                  </button>
+                </div>
+              )}
+
+              <ul className="divide-y divide-slate-100">
+                {listeDuMois.map((p) => (
+                  <LignePost
+                    key={p.id}
+                    post={p}
+                    ouvert={openId === p.id}
+                    coche={coches.has(p.id!)}
+                    onCocher={() => basculerCoche(p.id!)}
+                    onOuvrir={() => setOpenId(openId === p.id ? null : p.id!)}
+                    onProgrammer={() => setAVerifier([p])}
+                  />
+                ))}
+              </ul>
+            </>
           )}
         </div>
       )}
@@ -1056,10 +1162,12 @@ const ReseauxTab: React.FC = () => {
  * neuf pixels — tous les posts s'y ressemblaient.
  */
 const LignePost = ({
-  post, ouvert, onOuvrir, onProgrammer,
+  post, ouvert, coche, onCocher, onOuvrir, onProgrammer,
 }: {
   post: SocialPost;
   ouvert: boolean;
+  coche: boolean;
+  onCocher: () => void;
   onOuvrir: () => void;
   onProgrammer: () => void;
 }) => {
@@ -1068,7 +1176,14 @@ const LignePost = ({
   const propositions = post.imagePropositions?.length ?? 0;
 
   return (
-    <li className={`flex gap-3 py-2.5 px-1 ${ouvert ? "bg-slate-50 rounded-xl" : ""}`}>
+    <li className={`flex gap-3 py-2.5 px-1 ${ouvert ? "bg-slate-50 rounded-xl" : ""} ${coche ? "bg-[var(--color-accent)]/[0.08] rounded-xl" : ""}`}>
+      <input
+        type="checkbox"
+        checked={coche}
+        onChange={onCocher}
+        className="mt-5 flex-none h-4 w-4 accent-[var(--color-primary)] cursor-pointer"
+        aria-label={`Sélectionner le post du ${post.date}`}
+      />
       <button
         onClick={onOuvrir}
         className={`h-14 w-14 rounded-lg flex-none overflow-hidden border ${focusRing} ${
@@ -1113,6 +1228,47 @@ const LignePost = ({
         </button>
       )}
     </li>
+  );
+};
+
+/**
+ * Ce qu'on voit quand il n'y a rien.
+ *
+ * Une grille grise et vide ne dit pas quoi faire. Le mois vierge est
+ * justement le moment où on a besoin du brief — autant le tendre.
+ */
+const EtatVide = ({
+  filtre, onBrief, onImporter,
+}: {
+  filtre: string;
+  onBrief: () => void;
+  onImporter: () => void;
+}) => {
+  // Un filtre actif n'est pas un mois vide : proposer d'écrire un mois entier
+  // serait à côté de la question posée.
+  if (filtre !== "tous") {
+    return (
+      <p className="text-[13px] text-slate-500 py-10 text-center">
+        Rien dans cette catégorie. Essaie « Tous ».
+      </p>
+    );
+  }
+  return (
+    <div className="py-10 text-center space-y-3">
+      <p className="text-[13px] text-slate-600">Ce mois est vide.</p>
+      <p className="text-[11px] text-slate-400 max-w-sm mx-auto leading-relaxed">
+        Copie le brief, donne-le à Claude Code, et colle le JSON qu&apos;il te rend.
+        Les visuels se rapatrient tout seuls à l&apos;import.
+      </p>
+      <div className="flex items-center justify-center gap-2 pt-1">
+        <button onClick={onBrief} className={btnPrimary}>
+          <span className="flex items-center gap-1.5"><Sparkles size={12} /> Copier le brief du mois</span>
+        </button>
+        <button onClick={onImporter} className={btnGhost}>
+          <span className="flex items-center gap-1.5"><FileJson size={12} /> Importer du JSON</span>
+        </button>
+      </div>
+    </div>
   );
 };
 
