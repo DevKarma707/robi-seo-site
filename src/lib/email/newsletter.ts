@@ -58,7 +58,7 @@ export interface NewsletterInput {
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-const nl = (s: string) => esc(s).replace(/\n/g, "<br>");
+const nl = (s: string) => esc(s).replace(/\n/g, "<br>").replace(/&amp;nbsp;/g, "&nbsp;");
 
 const FONT_DISPLAY = "'Outfit',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif";
 const FONT_BODY = "'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif";
