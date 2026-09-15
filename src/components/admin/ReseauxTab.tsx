@@ -12,6 +12,10 @@ import {
   type SocialPost, type PostChannel,
 } from "@/lib/socialPosts";
 import { verifierAvantProgrammation, estProgrammable, type Verdict } from "@/lib/publicationCheck";
+import {
+  diagnostiquer, proposerCases, libellePersona, libellePilier, libelleAngle,
+  PERSONAS, PILIERS, ANGLES, ECART_PERSONA, ECART_ANGLE,
+} from "@/lib/editorialGrid";
 import { auth } from "@/lib/firebase";
 import { ACCENT, btnGhost, btnPill, btnPrimary, card, focusRing, input, select, sectionTitle } from "./ui";
 
@@ -25,13 +29,21 @@ import { ACCENT, btnGhost, btnPill, btnPrimary, card, focusRing, input, select, 
  * qui la lit, le brief se contente de la rappeler.
  */
 const skillBrief = (year: number, month: number, history: SocialPost[]) => {
-  const digest = history
-    .filter((p) => p.status !== "draft" || p.date < `${year}-${String(month + 1).padStart(2, "0")}`)
-    .slice(-60)
-    .map((p) => {
-      const hook = p.caption.split("\n").find((l) => l.trim()) ?? "";
-      return `- ${p.date} · ${p.channel} · ${p.type} · ${p.status} — « ${hook.slice(0, 90)} »`;
-    });
+  const passe = history.filter(
+    (p) => p.status !== "draft" || p.date < `${year}-${String(month + 1).padStart(2, "0")}`
+  );
+
+  // L'accroche seule ne suffit pas à éviter la redondance : deux posts très
+  // différents à la lecture peuvent viser le même métier sur le même levier.
+  // La case se lit d'un coup d'œil, l'accroche demande de tout relire.
+  const digest = passe.slice(-60).map((p) => {
+    const hook = p.caption.split("\n").find((l) => l.trim()) ?? "";
+    const boite = [p.pilier, p.persona, p.angle].filter(Boolean).join("/") || "case non renseignée";
+    return `- ${p.date} · ${p.channel} · ${p.type} · ${boite} — « ${hook.slice(0, 80)} »`;
+  });
+
+  const diag = diagnostiquer(passe);
+  const cases = proposerCases(passe, 12);
 
   return [
     `/robi-social-media ${MONTH_NAMES[month]} ${year}`,
@@ -54,8 +66,43 @@ const skillBrief = (year: number, month: number, history: SocialPost[]) => {
     "N'émets pas de statut : un import crée toujours un brouillon, le passage",
     "en « prêt » se fait après relecture dans l'admin.",
     "",
+    "── LA GRILLE ÉDITORIALE ──",
+    "",
+    "Chaque post occupe une CASE à trois axes, et la porte dans son JSON :",
+    "  pilier  : " + PILIERS.map((x) => x.id).join(" | "),
+    "  persona : " + PERSONAS.map((x) => x.id).join(" | "),
+    "  angle   : " + ANGLES.map((x) => x.id).join(" | "),
+    "",
+    "Ce n'est pas de la paperasse : c'est ce qui permet au mois SUIVANT de",
+    "savoir ce que tu as déjà dit. Un post sans case est un post que la",
+    "prochaine génération refera sans le savoir. Un identifiant inconnu fait",
+    "rejeter le lot — prends-les dans les listes ci-dessus.",
+    "",
+    `Espacement : jamais deux fois le même persona à moins de ${ECART_PERSONA} posts,`,
+    `ni le même angle à moins de ${ECART_ANGLE}.`,
+    "",
+    diag.piliersEnRetard.length
+      ? "Piliers sous leur part cible, à rattraper en priorité : " +
+        diag.piliersEnRetard
+          .map((x) => `${x.id} (${Math.round(x.observe * 100)} % vs ${Math.round(x.cible * 100)} % visés)`)
+          .join(", ")
+      : "Le mélange des piliers est conforme à la cible.",
+    "",
+    diag.interdits.personas.length || diag.interdits.angles.length
+      ? "TROP RÉCENTS, ne pas reprendre maintenant : " +
+        [...diag.interdits.personas, ...diag.interdits.angles].join(", ")
+      : "Aucune case n'est trop récente.",
+    "",
+    "Cases libres proposées, dans l'ordre — écarte-t'en si tu as mieux, mais",
+    "dis pourquoi :",
+    ...cases.map(
+      (c, i) =>
+        `  ${i + 1}. ${libellePilier(c.pilier)} · ${libellePersona(c.persona)} · ${libelleAngle(c.angle)}` +
+        `   → "pilier":"${c.pilier}"${c.persona ? `, "persona":"${c.persona}"` : ""}, "angle":"${c.angle}"`
+    ),
+    "",
     digest.length
-      ? `Déjà écrit (${digest.length} posts) — ne répète ni ces accroches ni ces angles, propose du neuf :`
+      ? `Déjà écrit (${digest.length} posts) — ni ces accroches, ni ces cases :`
       : "Aucun post existant : c'est le premier mois.",
     ...digest,
   ].join("\n");

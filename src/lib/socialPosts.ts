@@ -45,6 +45,17 @@ export interface SocialPost {
   visual?: string;
   /** URL du visuel une fois produit. */
   imageUrl?: string;
+  /**
+   * La case de la grille éditoriale que ce post occupe (`editorialGrid.ts`).
+   *
+   * Facultatifs, et c'est assumé : les posts écrits avant la grille n'en ont
+   * pas, et un post ponctuel n'a pas à en porter. Mais sans eux, la
+   * génération suivante ne peut pas savoir ce qui a déjà été dit — elle ne
+   * voit que des accroches, pas des angles.
+   */
+  persona?: string;
+  pilier?: string;
+  angle?: string;
   status: PostStatus;
   /** Réservation en cours, posée par la file de publication. */
   claimId?: string | null;
