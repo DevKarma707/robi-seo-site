@@ -109,9 +109,10 @@ const ReseauxTab: React.FC = () => {
   const runImport = async () => {
     setBusy(true);
     try {
-      const { imported, skipped, errors } = await importPostsFromJson(importText);
+      const { imported, updated, skipped, errors } = await importPostsFromJson(importText);
       const parts = [`${imported} post(s) importé(s)`];
-      if (skipped) parts.push(`${skipped} doublon(s) ignoré(s)`);
+      if (updated) parts.push(`${updated} complété(s)`);
+      if (skipped) parts.push(`${skipped} inchangé(s)`);
       if (errors.length) parts.push(`${errors.length} rejeté(s)`);
       say(errors.length && !imported ? "err" : "ok", parts.join(" · "));
       if (errors.length) console.warn("[import réseaux]", errors);
