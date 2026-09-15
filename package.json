@@ -9,7 +9,7 @@
     "runner": "node scripts/robi-task-runner.mjs",
     "lint": "eslint",
     "check:webhook": "tsx scripts/checkPolarWebhook.ts",
-    "check:social": "tsx scripts/checkSocialImport.ts && tsx scripts/checkSocialQueue.ts && tsx scripts/checkPublication.ts && tsx scripts/checkBlotato.ts"
+    "check:social": "tsx scripts/checkSocialImport.ts && tsx scripts/checkSocialQueue.ts && tsx scripts/checkPublication.ts && tsx scripts/checkBlotato.ts && tsx scripts/checkEditorialGrid.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

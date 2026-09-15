@@ -1,4 +1,5 @@
 import { CHANNELS, TYPES, STATUTS_MANUELS, type PostChannel, type PostStatus, type PostType } from "./socialPosts";
+import { PERSONAS, PILIERS, ANGLES } from "./editorialGrid";
 
 /**
  * Décider ce qu'un import doit faire, sans toucher à Firestore.
@@ -26,6 +27,10 @@ export interface ImportPost {
   hashtags?: string;
   visual?: string;
   imageUrl?: string;
+  /** La case de la grille éditoriale (`editorialGrid.ts`). */
+  persona?: string;
+  pilier?: string;
+  angle?: string;
   status: PostStatus;
 }
 
@@ -46,6 +51,10 @@ export interface ExistingPost {
   hashtags?: string;
   visual?: string;
   imageUrl?: string;
+  /** Portés ici aussi, sinon un réimport identique réécrirait la case. */
+  persona?: string;
+  pilier?: string;
+  angle?: string;
   status: PostStatus;
 }
 
@@ -153,6 +162,26 @@ export const validateImportPost = (
   if (status && status !== "draft") {
     post.statusIgnored = status as PostStatus;
   }
+  // La case éditoriale. Un identifiant inconnu est refusé plutôt qu'ignoré :
+  // silencieusement accepté, il ne compterait dans aucune statistique, et la
+  // grille se croirait à jour en laissant un angle se répéter.
+  const cases = [
+    ["persona", PERSONAS],
+    ["pilier", PILIERS],
+    ["angle", ANGLES],
+  ] as const;
+  for (const [champ, valeurs] of cases) {
+    const v = str(o[champ]);
+    if (!v) continue;
+    if (!valeurs.some((x) => x.id === v)) {
+      return {
+        ok: false,
+        error: `#${n} : ${champ} inconnu ${JSON.stringify(o[champ])} — attendu ${valeurs.map((x) => x.id).join(", ")}.`,
+      };
+    }
+    post[champ] = v;
+  }
+
   for (const champ of ["hashtags", "visual"] as const) {
     const v = str(o[champ]);
     if (v) post[champ] = v;
@@ -245,7 +274,7 @@ export const planSocialImport = (
     const patch: Partial<ImportPost> = {};
     // Seulement ce qui CHANGE : recopier à l'identique ferait une écriture
     // et un updatedAt à chaque réimport, pour rien.
-    for (const champ of ["caption", "hashtags", "visual", "imageUrl", "date", "type"] as const) {
+    for (const champ of ["caption", "hashtags", "visual", "imageUrl", "date", "type", "persona", "pilier", "angle"] as const) {
       const v = p[champ];
       if (v !== undefined && v !== "" && v !== found[champ]) patch[champ] = v as never;
     }
