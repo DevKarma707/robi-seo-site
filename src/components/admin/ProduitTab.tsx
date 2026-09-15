@@ -4,9 +4,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { AlertTriangle, BugPlay, ClipboardCheck, Copy, MousePointerClick, RefreshCw, Radio, TrendingDown } from "lucide-react";
 import { fetchProduitReport, type ProduitReport } from "@/lib/adminApi";
 import { construireResume } from "@/lib/produitResume";
-import { ACCENT, btn, card } from "./ui";
+import { ACCENT, ACCENT_INK, btn, card } from "./ui";
 
-const RED = "#f87171";
+// Rouge lisible sur carte blanche : #f87171 tombait sous 3:1 en texte.
+const RED = "#dc2626";
 
 /** Le parcours en français. Les noms techniques ne se lisent pas d'un coup d'œil. */
 const LABELS: Record<string, string> = {
@@ -39,7 +40,7 @@ function Mesure({ mesure }: { mesure: NonNullable<ProduitReport["mesure"]> }) {
   return (
     <div className={`${card} p-5`}>
       <div className="flex items-center gap-2 mb-3">
-        <Radio size={16} style={{ color: muet ? RED : ACCENT }} />
+        <Radio size={16} style={{ color: muet ? RED : ACCENT_INK }} />
         <p className="text-xs font-black uppercase tracking-widest text-slate-900">
           Santé de la mesure
         </p>
@@ -49,8 +50,8 @@ function Mesure({ mesure }: { mesure: NonNullable<ProduitReport["mesure"]> }) {
           { label: "Site (robi-app.com)", ok: site },
           { label: "App (go.robi-app.com)", ok: app },
         ].map((s) => (
-          <span key={s.label} className="text-[13px] font-semibold text-slate-300">
-            <span style={{ color: s.ok ? ACCENT : RED }}>{s.ok ? "●" : "●"}</span>{" "}
+          <span key={s.label} className="text-[13px] font-semibold text-slate-700">
+            <span style={{ color: s.ok ? ACCENT_INK : RED }}>{s.ok ? "●" : "●"}</span>{" "}
             {s.label} — {s.ok ? "envoie" : "silencieux"}
           </span>
         ))}
@@ -73,11 +74,11 @@ function NotConfigured() {
         <AlertTriangle size={18} />
         <p className="text-xs font-black uppercase tracking-widest">Clé PostHog manquante</p>
       </div>
-      <p className="text-sm text-slate-400 mb-4">
+      <p className="text-sm text-slate-600 mb-4">
         Deux variables à ajouter sur le projet Vercel de ce site, en type <strong>Secret</strong> —
         cette clé-ci lit toutes les données du projet et ne doit jamais partir dans le navigateur.
       </p>
-      <pre className="text-[12px] leading-relaxed p-4 rounded-xl bg-black/30 text-slate-300 overflow-x-auto">
+      <pre className="text-[12px] leading-relaxed p-4 rounded-xl bg-slate-100 text-slate-700 overflow-x-auto">
 {`POSTHOG_PERSONAL_API_KEY = phx_…
 POSTHOG_PROJECT_ID       = 12345`}
       </pre>
@@ -171,14 +172,14 @@ export default function ProduitTab() {
                 {copie ? "Copié" : "Copier"}
               </button>
             </div>
-            <pre className="text-[13px] leading-relaxed text-slate-300 whitespace-pre-wrap font-sans">
+            <pre className="text-[13px] leading-relaxed text-slate-700 whitespace-pre-wrap font-sans">
               {construireResume(data)}
             </pre>
           </div>
 
           <div className={`${card} p-5`}>
             <div className="flex items-center gap-2 mb-5">
-              <TrendingDown size={16} style={{ color: ACCENT }} />
+              <TrendingDown size={16} style={{ color: ACCENT_INK }} />
               <p className="text-xs font-black uppercase tracking-widest text-slate-900">
                 Le tunnel, sur {data.days} jours
               </p>
@@ -190,20 +191,20 @@ export default function ProduitTab() {
                 return (
                   <div key={etape.event}>
                     <div className="flex items-baseline gap-2 mb-1">
-                      <span className="text-[13px] font-semibold text-slate-300 flex-1">
+                      <span className="text-[13px] font-semibold text-slate-700 flex-1">
                         {LABELS[etape.event] || etape.event}
                       </span>
-                      <span className="font-black text-lg text-white">{etape.personnes}</span>
+                      <span className="font-black text-lg text-slate-900 tabular-nums">{etape.personnes}</span>
                       {taux !== null && (
                         <span
                           className="text-[11px] font-bold w-12 text-right"
-                          style={{ color: taux < 20 ? RED : ACCENT }}
+                          style={{ color: taux < 20 ? RED : ACCENT_INK }}
                         >
                           {taux}%
                         </span>
                       )}
                     </div>
-                    <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+                    <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
                       <div
                         className="h-full rounded-full"
                         style={{
@@ -224,7 +225,7 @@ export default function ProduitTab() {
 
           <div className={`${card} p-5`}>
             <div className="flex items-center gap-2 mb-4">
-              <BugPlay size={16} style={{ color: data.erreurs?.length ? RED : ACCENT }} />
+              <BugPlay size={16} style={{ color: data.erreurs?.length ? RED : ACCENT_INK }} />
               <p className="text-xs font-black uppercase tracking-widest text-slate-900">
                 Bugs rencontrés
               </p>
@@ -245,7 +246,7 @@ export default function ProduitTab() {
                       {e.total}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[13px] font-semibold text-slate-200 truncate">{e.message}</p>
+                      <p className="text-[13px] font-semibold text-slate-800 truncate">{e.message}</p>
                       <p className="text-[11px] text-slate-500">
                         {e.type} · {e.personnes} personne{e.personnes > 1 ? "s" : ""} · dernier{" "}
                         {fmtDate(e.dernier)}
@@ -261,7 +262,7 @@ export default function ProduitTab() {
 
           <div className={`${card} p-5`}>
             <div className="flex items-center gap-2 mb-4">
-              <MousePointerClick size={16} style={{ color: ACCENT }} />
+              <MousePointerClick size={16} style={{ color: ACCENT_INK }} />
               <p className="text-xs font-black uppercase tracking-widest text-slate-900">
                 Pages qui envoient vers l&apos;app
               </p>
@@ -270,10 +271,10 @@ export default function ProduitTab() {
               <div className="space-y-2">
                 {data.cta.map((c) => (
                   <div key={c.page} className="flex items-baseline gap-3">
-                    <span className="font-black text-sm w-8 text-right" style={{ color: ACCENT }}>
+                    <span className="font-black text-sm w-8 text-right" style={{ color: ACCENT_INK }}>
                       {c.total}
                     </span>
-                    <span className="text-[13px] text-slate-300 truncate">{c.page}</span>
+                    <span className="text-[13px] text-slate-700 truncate">{c.page}</span>
                   </div>
                 ))}
               </div>
