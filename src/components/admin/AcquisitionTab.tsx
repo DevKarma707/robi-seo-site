@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Target, Send, Copy, Mail, Check, AlertTriangle, Upload, Search,
   ArrowRight, Ban, ExternalLink, Trash2, RefreshCw, Megaphone,
-} from "lucide-react";
+ BookOpen } from "lucide-react";
 import {
   subscribeToProspects, subscribeToUnsubscribes, updateProspect, deleteProspect,
   advanceProspect, clearDrafts, DELIVERY_META, importProspectsFromJson, makeUnsubToken, resolveTemplate,
@@ -291,6 +291,15 @@ const AcquisitionTab: React.FC = () => {
           <option value="open">En cours</option>
           {(Object.keys(STATUS_META) as ProspectStatus[]).map((s) => <option key={s} value={s}>{statusLabel(s, segment)}</option>)}
         </select>
+        <a
+          href="https://claude.ai/artifact/NkMT6tt4Det1LwVby5svii"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={btnGhost}
+          title="Mode d'emploi : trouver, écrire, envoyer — pas à pas"
+        >
+          <span className="flex items-center gap-1.5"><BookOpen size={12} /> Tuto</span>
+        </a>
         <button onClick={() => setShowImport((v) => !v)} className={btnGhost}>
           <span className="flex items-center gap-1.5"><Upload size={12} /> Importer JSON</span>
         </button>
