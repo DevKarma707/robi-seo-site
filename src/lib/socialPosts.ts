@@ -9,9 +9,13 @@
 // le skill `robi-social` les fabrique, l'admin les range et les édite.
 import {
   collection, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot,
-  serverTimestamp, getDocs, writeBatch, deleteField, Timestamp,
+  serverTimestamp, getDocs, deleteField, runTransaction, Timestamp,
 } from "firebase/firestore";
 import { db } from "./firebase";
+import {
+  parseSocialImport, validateImportPost, planSocialImport,
+  type ExistingPost, type ImportPost,
+} from "./socialImport";
 
 export type PostChannel = "instagram" | "linkedin" | "tiktok";
 export type PostStatus = "draft" | "ready" | "published";
@@ -19,6 +23,12 @@ export type PostType = "bold" | "feature" | "stats" | "testimonial" | "carrousel
 
 export interface SocialPost {
   id?: string;
+  /**
+   * Identité stable donnée par le générateur, et id du document Firestore
+   * pour tout post créé par import. Les posts antérieurs n'en ont pas : ils
+   * gardent leur id aléatoire et ne se modifient qu'en le désignant.
+   */
+  externalId?: string;
   /** Date de publication prévue, en AAAA-MM-JJ. Sert de clé de calendrier. */
   date: string;
   channel: PostChannel;
@@ -105,15 +115,6 @@ export const updatePostText = (
  * bascule au 2 mars. Sans l'aller-retour ci-dessous, un post daté d'un jour
  * inexistant serait accepté puis affiché sur une autre date que celle écrite.
  */
-const isDate = (s: unknown): s is string => {
-  if (typeof s !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
-  const d = new Date(`${s}T00:00:00Z`);
-  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
-};
-
-const oneOf = <T extends string>(v: unknown, allowed: readonly T[], fallback: T): T =>
-  typeof v === "string" && (allowed as readonly string[]).includes(v) ? (v as T) : fallback;
-
 /**
  * Même contrat que les autres imports de l'admin : un tableau d'objets,
  * les invalides sont signalés sans faire échouer le lot.
@@ -123,67 +124,101 @@ const oneOf = <T extends string>(v: unknown, allowed: readonly T[], fallback: T)
  */
 export const importPostsFromJson = async (
   jsonStr: string
-): Promise<{ imported: number; skipped: number; errors: string[] }> => {
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(jsonStr);
-  } catch (e) {
-    throw new Error(`JSON invalide : ${(e as Error).message}`);
-  }
-  const items = (Array.isArray(parsed) ? parsed : [parsed]) as Record<string, unknown>[];
-  const errors: string[] = [];
+): Promise<{ imported: number; updated: number; skipped: number; errors: string[] }> => {
+  const lu = parseSocialImport(jsonStr);
+  if (!lu.ok) throw new Error(lu.error);
 
-  const existing = await getDocs(col());
-  const seen = new Set<string>();
-  const key = (p: { date: string; channel: string; caption: string }) =>
-    `${p.date}|${p.channel}|${p.caption.slice(0, 40).toLowerCase()}`;
-  existing.docs.forEach((d) => {
-    const p = d.data() as SocialPost;
-    if (p.date && p.caption) seen.add(key(p));
+  const errors: string[] = [];
+  const posts: ImportPost[] = [];
+  lu.items.forEach((raw, i) => {
+    const r = validateImportPost(raw, i);
+    if (r.ok) posts.push(r.post);
+    else errors.push(r.error);
   });
 
-  const batch = writeBatch(db);
-  let imported = 0;
-  let skipped = 0;
-
-  for (const [i, raw] of items.entries()) {
-    if (!isDate(raw.date)) {
-      errors.push(`#${i + 1} : "date" requise au format AAAA-MM-JJ.`);
-      continue;
-    }
-    const caption = typeof raw.caption === "string" ? raw.caption.trim() : "";
-    if (!caption) {
-      errors.push(`#${i + 1} : "caption" requis.`);
-      continue;
-    }
-    const channel = oneOf(raw.channel, CHANNELS, "instagram");
-    if (seen.has(key({ date: raw.date, channel, caption }))) {
-      skipped++;
-      continue;
-    }
-    seen.add(key({ date: raw.date, channel, caption }));
-
-    const post: Record<string, unknown> = {
-      date: raw.date,
-      channel,
-      type: oneOf(raw.type, TYPES, "bold"),
-      caption,
-      status: oneOf(raw.status, ["draft", "ready", "published"] as const, "draft"),
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    };
-    // Champs optionnels ajoutés seulement s'ils portent une valeur : écrire
-    // `undefined` ferait lever le SDK.
-    if (typeof raw.hashtags === "string" && raw.hashtags.trim()) post.hashtags = raw.hashtags.trim();
-    if (typeof raw.visual === "string" && raw.visual.trim()) post.visual = raw.visual.trim();
-    if (typeof raw.imageUrl === "string" && raw.imageUrl.trim()) post.imageUrl = raw.imageUrl.trim();
-
-    batch.set(doc(col()), post);
-    imported++;
+  // Les statuts réclamés mais non appliqués sont dits, pas tus : sans ça, un
+  // générateur qui produit « ready » croirait ses posts prêts à partir.
+  const forces = posts.filter((p) => p.statusIgnored).length;
+  if (forces) {
+    errors.push(`${forces} post(s) demandaient un statut autre que brouillon : ignoré. Le passage en « prêt » se fait dans l'admin, après relecture.`);
   }
 
-  if (imported) await batch.commit();
-  return { imported, skipped, errors };
+  const snap = await getDocs(col());
+  const existing: ExistingPost[] = snap.docs.map((d) => {
+    const p = d.data() as SocialPost;
+    return {
+      id: d.id,
+      externalId: p.externalId,
+      date: p.date,
+      channel: p.channel,
+      type: p.type,
+      caption: p.caption,
+      hashtags: p.hashtags,
+      visual: p.visual,
+      imageUrl: p.imageUrl,
+      status: p.status,
+    };
+  });
+
+  const { actions, errors: planErrors } = planSocialImport(posts, existing);
+  errors.push(...planErrors);
+
+  let imported = 0;
+  let updated = 0;
+  let skipped = actions.filter((a) => a.action === "skip").length;
+
+  const aEcrire = actions.filter((a) => a.action !== "skip");
+  if (aEcrire.length === 0) return { imported, updated, skipped, errors };
+
+  // Une transaction plutôt qu'un batch : il faut RELIRE la cible avant
+  // d'écrire. Deux imports lancés en même temps — deux onglets, un double
+  // clic — verraient sinon chacun une base vide et créeraient deux fois le
+  // même post.
+  await runTransaction(db, async (tx) => {
+    imported = 0;
+    updated = 0;
+
+    const cibles = aEcrire.map((a) => ({
+      action: a,
+      // L'id du document EST l'externalId pour tout post créé par import :
+      // le doublon devient impossible par construction, pas seulement
+      // improbable après vérification.
+      ref: a.action === "create" ? doc(col(), a.post.externalId) : doc(col(), a.id),
+    }));
+
+    // Firestore impose toutes les lectures avant la première écriture.
+    const lus = await Promise.all(cibles.map((c) => tx.get(c.ref)));
+
+    cibles.forEach(({ action, ref }, i) => {
+      const dejaLa = lus[i].exists();
+
+      if (action.action === "create") {
+        if (dejaLa) {
+          // Apparu entre le plan et la transaction : ne rien écraser.
+          skipped++;
+          errors.push(`"${action.post.externalId}" existait déjà au moment de l'écriture — rien n'a été remplacé.`);
+          return;
+        }
+        const { statusIgnored, id: _ignore, ...champs } = action.post;
+        void statusIgnored;
+        void _ignore;
+        tx.set(ref, { ...champs, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+        imported++;
+        return;
+      }
+
+      if (!dejaLa) {
+        // Supprimé entre-temps. `update` lèverait et emporterait tout le lot.
+        skipped++;
+        errors.push(`Le post visé (${ref.id}) n'existe plus — mise à jour abandonnée.`);
+        return;
+      }
+      tx.update(ref, { ...action.patch, updatedAt: serverTimestamp() });
+      updated++;
+    });
+  });
+
+  return { imported, updated, skipped, errors };
 };
 
 // ─── Utilitaires de calendrier ────────────────────────────────────────
