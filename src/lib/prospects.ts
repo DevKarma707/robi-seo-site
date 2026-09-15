@@ -514,8 +514,13 @@ export const advanceProspect = async (
   const nextIndex = Math.min((p.seqStep ?? 0) + 1, seq.length - 1);
   const touch: ProspectTouch = { date: todayStr(), channel: cur.channel, note, ...sent };
 
+  // Le statut suit la séquence tant qu'on est dans la mécanique d'envoi
+  // (à contacter → contacté → en relance). Au-delà — intéressé, inscrit,
+  // client, perdu — c'est Ralph qui décide, on n'y touche pas.
+  const auto: ProspectStatus[] = ["todo", "contacted", "followup"];
+  const status = auto.includes(p.status) && rank(cur.status) > rank(p.status) ? cur.status : p.status;
   await updateProspect(p.id, {
-    status: p.status === "todo" ? cur.status : p.status,
+    status,
     seqStep: nextIndex,
     touches: [...(p.touches || []), touch],
     nextActionDate: cur.delay > 0 ? addDays(todayStr(), cur.delay) : undefined,

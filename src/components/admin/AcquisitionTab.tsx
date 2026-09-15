@@ -481,7 +481,7 @@ const AcquisitionTab: React.FC = () => {
                       {busy ? <RefreshCw size={12} className="animate-spin" /> : <Send size={12} />} Envoyer
                     </span>
                   </button>
-                  <button onClick={() => advanceProspect(selected, "Marqué manuellement")} disabled={busy} className={btnGhost}>
+                  <button onClick={() => advanceProspect(selected, `Fait à la main : ${stepOf(selected).label}`)} disabled={busy} className={btnGhost}>
                     <span className="flex items-center gap-1.5"><Check size={12} /> Marquer fait</span>
                   </button>
                   {selected.segment === "influenceur" && (
