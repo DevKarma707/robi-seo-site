@@ -6,7 +6,7 @@
 // account from the one that delivers customers' invoices — see that route.
 import {
   collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy,
-  onSnapshot, serverTimestamp, Timestamp,
+  onSnapshot, serverTimestamp, Timestamp, deleteField,
 } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -40,6 +40,21 @@ export interface ProspectTouch {
   body?: string;
 }
 
+export interface ProspectDraft {
+  key: "A" | "B";
+  /** Id d'angle de la bibliothèque de la skill (ex. `in-code`) — sert au suivi des résultats. */
+  angle: string;
+  subject: string;
+  body: string;
+}
+
+export interface ProspectDrafts {
+  generatedAt?: string;
+  recommended: "A" | "B";
+  reason: string;
+  variants: ProspectDraft[];
+}
+
 export interface Prospect {
   id?: string;
   company: string;          // seul champ obligatoire
@@ -62,6 +77,14 @@ export interface Prospect {
   lostReason?: string;
   /** Plus haut palier atteint : sans ça un prospect perdu disparaît de l'entonnoir. */
   maxStage?: ProspectStatus;
+  /**
+   * Brouillons rédigés par la skill robi-outreach, directement sur la fiche :
+   * deux variantes d'angle différent + une recommandation. Ralph choisit dans
+   * l'admin ; le brouillon choisi remplace le modèle générique à l'envoi.
+   */
+  drafts?: ProspectDrafts;
+  /** Variante retenue (A ou B). Sans choix, la recommandation s'applique. */
+  chosenDraft?: "A" | "B";
   /** Jeton du lien de désinscription, généré au premier envoi. */
   unsubToken?: string;
   unsubscribedAt?: string;
@@ -474,6 +497,10 @@ export const updateProspect = async (id: string, patch: Partial<Prospect>, curre
 };
 
 export const deleteProspect = (id: string) => deleteDoc(doc(db, "prospects", id));
+
+/** Efface les brouillons consommés — `undefined` n'est pas accepté par Firestore. */
+export const clearDrafts = (id: string) =>
+  updateDoc(doc(db, "prospects", id), { drafts: deleteField(), chosenDraft: deleteField(), updatedAt: serverTimestamp() });
 
 /** Enregistre un contact et programme l'étape suivante de la séquence. */
 export const advanceProspect = async (

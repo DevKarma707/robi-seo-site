@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import {
   subscribeToProspects, subscribeToUnsubscribes, updateProspect, deleteProspect,
-  advanceProspect, importProspectsFromJson, makeUnsubToken, resolveTemplate,
+  advanceProspect, clearDrafts, importProspectsFromJson, makeUnsubToken, resolveTemplate,
   renderTemplate, stepOf, relativeDay, todayStr, statusLabel, sequenceFor,
   SEGMENT_META, SEGMENTS, STATUS_META, PIPELINE,
   type Prospect, type ProspectSegment, type ProspectStatus,
@@ -84,12 +84,21 @@ const AcquisitionTab: React.FC = () => {
   const message = useMemo(() => {
     if (!selected) return null;
     const step = stepOf(selected);
+    // Un brouillon rédigé pour cette fiche prime sur le modèle générique.
+    // Sans choix explicite, la variante recommandée s'applique.
+    const drafts = selected.drafts;
+    if (drafts?.variants?.length) {
+      const key = selected.chosenDraft || drafts.recommended;
+      const d = drafts.variants.find((v) => v.key === key) || drafts.variants[0];
+      return { step, subject: d.subject, body: d.body, draft: d };
+    }
     const tpl = resolveTemplate(selected, step.templateKey);
     if (!tpl) return null;
     return {
       step,
       subject: renderTemplate(tpl.subject, selected),
       body: renderTemplate(tpl.body, selected),
+      draft: null as null | { key: "A" | "B"; angle: string },
     };
   }, [selected]);
 
@@ -123,10 +132,15 @@ const AcquisitionTab: React.FC = () => {
       });
 
       await updateProspect(selected.id, { lastEmailAt: new Date().toISOString() }, selected);
-      await advanceProspect(selected, `Envoyé : ${message.step.label}`, {
+      // L'angle envoyé est tracé sur la touche : c'est ce qui permet de savoir,
+      // plus tard, lequel obtient des réponses. Les brouillons consommés sont
+      // effacés pour que la prochaine étape reparte sur un texte neuf.
+      const angle = message.draft ? ` · angle:${message.draft.angle} (${message.draft.key})` : "";
+      await advanceProspect(selected, `Envoyé : ${message.step.label}${angle}`, {
         subject: message.subject,
         body: message.body,
       });
+      if (message.draft) await clearDrafts(selected.id);
       say("ok", `Envoyé à ${selected.email}.`);
     } catch (e) {
       say("err", (e as Error).message);
@@ -314,6 +328,11 @@ const AcquisitionTab: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: SEGMENT_META[p.segment].color }} />
                   <span className="text-[13px] font-bold text-slate-900 truncate flex-1">{p.company}</span>
+                  {p.drafts?.variants?.length ? (
+                    <span className="text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-full flex-shrink-0" style={{ backgroundColor: ACCENT, color: ACCENT_INK }} title="Brouillons A/B prêts">
+                      A/B
+                    </span>
+                  ) : null}
                   {isOptedOut(p) && <Ban size={12} className="text-red-600 flex-shrink-0" />}
                   <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: `${STATUS_META[p.status].color}1f`, color: STATUS_META[p.status].color }}>
                     {statusLabel(p.status, p.segment)}
@@ -387,6 +406,39 @@ const AcquisitionTab: React.FC = () => {
                 ))}
               </div>
             </div>
+
+            {/* Brouillons A / B rédigés par la skill */}
+            {selected.drafts?.variants?.length ? (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">Brouillons</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {selected.drafts.variants.map((v) => {
+                    const active = (selected.chosenDraft || selected.drafts!.recommended) === v.key;
+                    const reco = selected.drafts!.recommended === v.key;
+                    return (
+                      <button
+                        key={v.key}
+                        onClick={() => updateProspect(selected.id!, { chosenDraft: v.key }, selected)}
+                        className={`text-left rounded-xl border p-2.5 transition ${active ? "border-transparent" : "border-slate-200 bg-white hover:bg-slate-50"}`}
+                        style={active ? { backgroundColor: ACCENT, color: ACCENT_INK } : undefined}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[11px] font-bold">Variante {v.key}</span>
+                          {reco && (
+                            <span className={`text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-full ${active ? "bg-black/10" : "bg-slate-900 text-white"}`}>
+                              Recommandé
+                            </span>
+                          )}
+                        </div>
+                        <p className={`text-[11px] mt-1 font-medium ${active ? "" : "text-slate-800"}`}>{v.subject}</p>
+                        <p className={`text-[10px] mt-0.5 ${active ? "opacity-70" : "text-slate-400"}`}>angle : {v.angle}</p>
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-[11px] text-slate-500 mt-1.5">{selected.drafts.reason}</p>
+              </div>
+            ) : null}
 
             {/* Message */}
             {message ? (
