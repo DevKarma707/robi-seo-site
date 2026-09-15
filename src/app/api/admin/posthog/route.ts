@@ -20,6 +20,9 @@ const API_HOST = process.env.POSTHOG_API_HOST || "https://eu.posthog.com";
 const API_KEY = process.env.POSTHOG_PERSONAL_API_KEY;
 const PROJECT_ID = process.env.POSTHOG_PROJECT_ID;
 
+/** Emails de l'équipe, exclus des statistiques. Surchargeable par POSTHOG_INTERNAL_EMAILS (séparés par des virgules). */
+const INTERNAL_EMAILS = "ralphkaram75014@gmail.com,robi@robi-app.com";
+
 /** Les moments du parcours, dans l'ordre où un utilisateur les traverse. */
 const FUNNEL_EVENTS = [
   "$pageview",
@@ -71,8 +74,34 @@ export async function GET(req: Request) {
   const raw = Number(new URL(req.url).searchParams.get("days") || 7);
   const days = Number.isFinite(raw) ? Math.min(90, Math.max(1, Math.trunc(raw))) : 7;
 
-  const since = `timestamp > now() - INTERVAL ${days} DAY`;
-  const sincePrev = `timestamp > now() - INTERVAL ${days * 2} DAY AND timestamp <= now() - INTERVAL ${days} DAY`;
+  // Trafic de l'équipe exclu par email : couvre l'app sur tous les appareils,
+  // historique compris. Les visites anonymes du site sont, elles, coupées à la
+  // source sur les appareils marqués (voir src/lib/internalTraffic.ts).
+  const email = "lower(coalesce(person.properties.email, ''))";
+  const emailsInternes = (process.env.POSTHOG_INTERNAL_EMAILS || INTERNAL_EMAILS)
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    // Réinjectés dans du HogQL : rien d'autre qu'une adresse email ne passe.
+    .filter((e) => /^[a-z0-9._+-]+@[a-z0-9.-]+$/.test(e))
+    .map((e) => `'${e}'`)
+    .join(", ");
+  const horsInterne = `NOT (${emailsInternes ? `${email} IN (${emailsInternes}) OR ` : ""}endsWith(${email}, '@robi-app.com'))`;
+
+  const fenetre = `timestamp > now() - INTERVAL ${days} DAY`;
+  const fenetrePrev = `timestamp > now() - INTERVAL ${days * 2} DAY AND timestamp <= now() - INTERVAL ${days} DAY`;
+
+  // Filet de sécurité : si PostHog refuse la condition sur les propriétés de
+  // la personne, on repart sur les chiffres bruts plutôt que de faire tomber
+  // tout l'onglet — et l'onglet le signale.
+  let exclusionInterne = true;
+  try {
+    await hogql(`SELECT count() FROM events WHERE ${fenetre} AND ${horsInterne}`);
+  } catch (e) {
+    console.error("[posthog] exclusion de l'équipe refusée, statistiques brutes", e);
+    exclusionInterne = false;
+  }
+  const since = exclusionInterne ? `${fenetre} AND ${horsInterne}` : fenetre;
+  const sincePrev = exclusionInterne ? `${fenetrePrev} AND ${horsInterne}` : fenetrePrev;
   const eventList = FUNNEL_EVENTS.map((e) => `'${e}'`).join(", ");
   const afterSignup = FUNNEL_EVENTS.slice(FUNNEL_EVENTS.indexOf("signup") + 1).map((e) => `'${e}'`).join(", ");
 
@@ -113,9 +142,10 @@ export async function GET(req: Request) {
       // même projet : si l'un des deux disparaît de cette liste, la moitié du
       // tunnel est morte sans que les chiffres ne le disent — ils affichent
       // seulement des zéros, indistinguables d'une absence de trafic.
+      // Sans exclure l'équipe : c'est un contrôle de santé, pas une statistique.
       hogql(
         `SELECT properties.$host AS domaine, count() AS total, max(timestamp) AS dernier
-         FROM events WHERE ${since} AND isNotNull(properties.$host)
+         FROM events WHERE ${fenetre} AND isNotNull(properties.$host)
          GROUP BY domaine ORDER BY total DESC LIMIT 10`
       ),
       // Même tunnel sur la période d'avant, pour la flèche d'évolution.
@@ -168,6 +198,7 @@ export async function GET(req: Request) {
     return NextResponse.json({
       configured: true,
       days,
+      exclusionInterne,
       // L'ordre du parcours vient du code, pas de PostHog : un événement jamais
       // déclenché n'a pas de ligne dans le résultat et disparaîtrait du tunnel
       // au moment où son absence est justement l'information utile.

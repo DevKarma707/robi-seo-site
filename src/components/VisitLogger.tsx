@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { logVisit } from "@/lib/firebase";
+import { isInternalDevice } from "@/lib/internalTraffic";
 
 /**
  * Logs one visit per (session, path) into Firestore — powers the homegrown
@@ -14,6 +15,7 @@ export function VisitLogger() {
   useEffect(() => {
     if (!pathname) return;
     if (pathname.startsWith("/admin")) return; // ne pas compter l'admin
+    if (isInternalDevice()) return; // ni les appareils de l'équipe (voir internalTraffic)
     if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) return;
     void logVisit(pathname);
   }, [pathname]);

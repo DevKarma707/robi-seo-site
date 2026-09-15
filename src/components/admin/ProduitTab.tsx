@@ -172,6 +172,17 @@ export default function ProduitTab() {
         <Mesure mesure={data.mesure} />
       )}
 
+      {data?.configured && data.exclusionInterne === false && (
+        <div className={`${card} p-4 flex items-start gap-3`}>
+          <AlertTriangle size={16} className="mt-0.5 shrink-0" style={{ color: RED }} />
+          <p className="text-[13px] leading-relaxed text-slate-700">
+            <strong className="text-slate-900">Ton activité n&apos;a pas pu être exclue.</strong> PostHog a refusé
+            le filtre sur les emails de l&apos;équipe (détail dans les logs Vercel) : les chiffres ci-dessous
+            incluent tes propres passages dans l&apos;app.
+          </p>
+        </div>
+      )}
+
       {data?.configured && (
         <>
           {/* Avant tout chiffre : dire quand ils ne permettent pas de conclure. */}
@@ -265,6 +276,9 @@ export default function ProduitTab() {
               Nombre de personnes distinctes, pas d&apos;événements. Le pourcentage compare chaque
               marche à la précédente, sans les inscrits d&apos;avant la période. La flèche compare au
               même nombre de jours juste avant.
+              {data.exclusionInterne !== false && (
+                <> Hors activité de l&apos;équipe : emails admin, adresses @robi-app.com et appareils ayant ouvert l&apos;admin.</>
+              )}
             </p>
           </div>
 

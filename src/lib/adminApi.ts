@@ -123,6 +123,8 @@ export const computeDisplayedSold = (c: Pick<LaunchConfig, "manualOverride" | "b
 export interface ProduitReport {
   configured: boolean;
   days?: number;
+  /** false si PostHog a refusé le filtre qui exclut l'équipe : les chiffres sont alors bruts. */
+  exclusionInterne?: boolean;
   /** `precedent` : mêmes personnes sur la période d'avant · `anciens` : inscrits avant la période. */
   funnel?: { event: string; total: number; personnes: number; precedent?: number; anciens?: number }[];
   erreurs?: { type: string; message: string; total: number; personnes: number; dernier: string | null; replay?: string | null }[];

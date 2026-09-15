@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import posthog from "posthog-js";
+import { isInternalDevice } from "@/lib/internalTraffic";
 
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 const POSTHOG_HOST =
@@ -36,6 +37,9 @@ export function PostHogTracking() {
       return;
     }
     if (posthog.__loaded) return;
+    // Appareil de l'équipe (marqué en ouvrant l'admin) : on n'initialise pas,
+    // rien ne part. Les deux effets suivants s'arrêtent sur la même condition.
+    if (isInternalDevice()) return;
 
     posthog.init(POSTHOG_KEY, {
       api_host: POSTHOG_HOST,
@@ -59,7 +63,7 @@ export function PostHogTracking() {
   // window plutôt que construit depuis `pathname` : il porte la query string,
   // donc les `utm_*` et le `?ref=` d'affiliation.
   useEffect(() => {
-    if (!POSTHOG_KEY || !pathname) return;
+    if (!POSTHOG_KEY || !pathname || isInternalDevice()) return;
     posthog.capture("$pageview", { $current_url: window.location.href });
   }, [pathname]);
 
@@ -68,7 +72,7 @@ export function PostHogTracking() {
   // sont dispersés dans une quinzaine de composants, les intercepter un par un
   // serait à refaire à chaque nouvelle page.
   useEffect(() => {
-    if (!POSTHOG_KEY) return;
+    if (!POSTHOG_KEY || isInternalDevice()) return;
 
     const onClick = (e: MouseEvent) => {
       const link = (e.target as HTMLElement | null)?.closest?.("a");

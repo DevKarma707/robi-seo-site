@@ -7,6 +7,7 @@ import {
   auth, onAuthStateChanged, signInWithGoogle, signOut, isAllowedEmail, firebaseReady,
   subscribeToArticles, subscribeToVisits, type Article, type VisitStats, type User,
 } from "@/lib/firebase";
+import { markInternalDevice } from "@/lib/internalTraffic";
 import { subscribeToSeoKeywords, type SeoKeyword } from "@/lib/seoKeywords";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
 import SeoTab from "@/components/admin/SeoTab";
@@ -87,7 +88,11 @@ export default function AdminPage() {
       return;
     }
     const unsub = onAuthStateChanged(auth, (u) => {
-      setUser(u && isAllowedEmail(u.email) ? u : null);
+      const admin = !!u && isAllowedEmail(u.email);
+      // Un appareil qui ouvre l'admin est un appareil de l'équipe : ses
+      // visites du site ne comptent plus dans les statistiques.
+      if (admin) markInternalDevice();
+      setUser(admin ? u : null);
       setAuthReady(true);
     });
     return () => unsub();
