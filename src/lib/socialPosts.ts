@@ -18,7 +18,12 @@ import {
 } from "./socialImport";
 
 export type PostChannel = "instagram" | "linkedin" | "tiktok";
-export type PostStatus = "draft" | "ready" | "published";
+/**
+ * `publishing` n'est jamais choisi par un humain : la file le pose le temps
+ * d'une publication, pour qu'un second passage ne reprenne pas le même post.
+ * Voir `socialQueue.ts`.
+ */
+export type PostStatus = "draft" | "ready" | "publishing" | "published";
 export type PostType = "bold" | "feature" | "stats" | "testimonial" | "carrousel" | "mockup";
 
 export interface SocialPost {
@@ -41,6 +46,14 @@ export interface SocialPost {
   /** URL du visuel une fois produit. */
   imageUrl?: string;
   status: PostStatus;
+  /** Réservation en cours, posée par la file de publication. */
+  claimId?: string | null;
+  claimedAt?: string | null;
+  /** Renseignés par la file : ce qui s'est passé au dernier envoi. */
+  publishedAt?: string | null;
+  publishedUrl?: string | null;
+  publishError?: string | null;
+  publishAttempts?: number | null;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }
@@ -63,8 +76,18 @@ export const TYPE_META: Record<PostType, { label: string; color: string }> = {
 export const STATUS_META: Record<PostStatus, { label: string; color: string }> = {
   draft: { label: "Brouillon", color: "#94a3b8" },
   ready: { label: "Prêt", color: "#BEF221" },
+  publishing: { label: "Envoi en cours", color: "#fbbf24" },
   published: { label: "Publié", color: "#10B981" },
 };
+
+/**
+ * Les statuts qu'un humain peut poser lui-même.
+ *
+ * `publishing` en est exclu : le proposer dans l'admin permettrait de
+ * fabriquer une réservation sans réservation, donc de faire disparaître un
+ * post de la file jusqu'à expiration, sans que rien ne l'explique.
+ */
+export const STATUTS_MANUELS: PostStatus[] = ["draft", "ready", "published"];
 
 export const CHANNELS = Object.keys(CHANNEL_META) as PostChannel[];
 export const TYPES = Object.keys(TYPE_META) as PostType[];

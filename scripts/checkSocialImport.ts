@@ -151,5 +151,10 @@ t("id ancien existant → enrichissement ciblé", (() => {
   return a.action === "enrich" && a.id === "vieux" && (a as { patch: ImportPost }).patch.externalId === BASE.externalId;
 })());
 
+t("statut « publishing » refusé : il appartient à la file, pas au fichier", (() => {
+  const r = validateImportPost({ ...BASE, status: "publishing" }, 1);
+  return !r.ok && r.error.includes("statut inconnu");
+})());
+
 console.log(`\n${ko === 0 ? "✅ TOUT PASSE" : "❌ ÉCHECS"} — ${ok} ok, ${ko} ko\n`);
 process.exit(ko ? 1 : 0);
