@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { verifierJeton } from "@/lib/apiToken";
 import { adminBucket, adminDepuisJeton } from "@/lib/firebaseAdmin";
+import type { Bucket } from "@google-cloud/storage";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +9,8 @@ export const dynamic = "force-dynamic";
  * La médiathèque, atteignable par une automatisation.
  *
  * GET  → ce qu'il y a dans `partage/`
- * POST → y déposer une image, depuis son URL
+ * POST → y déposer une image : depuis son URL (JSON) ou en la joignant
+ *        (multipart/form-data, champ `fichier`)
  *
  * Pourquoi cette route existe : les visuels produits par un agent devaient
  * jusqu'ici transiter par un humain — télécharger, glisser dans l'onglet
@@ -105,13 +107,31 @@ export async function GET(req: Request) {
   return NextResponse.json({ total: items.length, prefix, fichiers: items });
 }
 
-/** Dépose une image dans la médiathèque, depuis son URL. */
+/**
+ * Dépose une image dans la médiathèque.
+ *
+ * Deux entrées, un seul chemin d'écriture :
+ *
+ * - JSON `{ url, nom?, dossier? }` : l'image est rapatriée depuis son URL.
+ *   C'est ce que fait l'admin pour un `imageUrl` externe.
+ * - multipart/form-data `fichier` (+ `nom?`, `dossier?`) : l'image est jointe.
+ *   C'est ce que fait un compositeur qui tourne sur le Mac — son JPEG n'a pas
+ *   d'URL, et lui en fabriquer une ailleurs pour la rapatrier ensuite serait
+ *   un détour pour rien.
+ *
+ * Mêmes refus dans les deux cas : type, taille, nom nettoyé.
+ */
 export async function POST(req: Request) {
   const refus = await autoriser(req);
   if (refus) return refus;
 
   const bucket = bucketOuErreur();
   if (bucket instanceof NextResponse) return bucket;
+
+  const contentType = (req.headers.get("content-type") ?? "").split(";")[0].trim();
+  if (contentType === "multipart/form-data") {
+    return deposerFichier(req, bucket);
+  }
 
   let corps: { url?: string; nom?: string; dossier?: string };
   try {
@@ -158,8 +178,62 @@ export async function POST(req: Request) {
     );
   }
 
-  const dossier = nomSur(corps.dossier ?? DOSSIER_DEFAUT);
-  const nom = nomSur(corps.nom ?? new URL(corps.url).pathname);
+  return ecrire(bucket, octets, type, corps.nom ?? new URL(corps.url).pathname, corps.dossier);
+}
+
+/** Branche multipart : l'image est dans le corps de la requête. */
+const deposerFichier = async (req: Request, bucket: Bucket) => {
+  let form: FormData;
+  try {
+    form = await req.formData();
+  } catch {
+    return NextResponse.json({ error: "invalid_multipart" }, { status: 400 });
+  }
+  const fichier = form.get("fichier");
+  if (!(fichier instanceof File)) {
+    return NextResponse.json(
+      { error: "fichier_requis", detail: "Un champ multipart `fichier` est attendu." },
+      { status: 400 }
+    );
+  }
+
+  const type = (fichier.type ?? "").split(";")[0].trim();
+  if (!TYPES.has(type)) {
+    return NextResponse.json(
+      { error: "type_refuse", detail: `${type || "type inconnu"} — attendu ${[...TYPES].join(", ")}.` },
+      { status: 415 }
+    );
+  }
+
+  const octets = Buffer.from(await fichier.arrayBuffer());
+  if (octets.length > TAILLE_MAX) {
+    return NextResponse.json(
+      { error: "trop_gros", detail: `${Math.round(octets.length / 1024 / 1024)} Mo, maximum ${TAILLE_MAX / 1024 / 1024} Mo.` },
+      { status: 413 }
+    );
+  }
+
+  const nom = form.get("nom");
+  const dossier = form.get("dossier");
+  return ecrire(
+    bucket,
+    octets,
+    type,
+    typeof nom === "string" && nom ? nom : fichier.name,
+    typeof dossier === "string" && dossier ? dossier : undefined
+  );
+};
+
+/** Écrit dans `partage/<dossier>/<nom>` et renvoie l'URL de téléchargement. */
+const ecrire = async (
+  bucket: Bucket,
+  octets: Buffer,
+  type: string,
+  nomBrut: string,
+  dossierBrut?: string
+) => {
+  const dossier = nomSur(dossierBrut ?? DOSSIER_DEFAUT);
+  const nom = nomSur(nomBrut);
   const chemin = `${RACINE}/${dossier}/${nom}`;
 
   // Le jeton de téléchargement est posé à l'écriture : sans lui, l'URL publique
@@ -178,4 +252,4 @@ export async function POST(req: Request) {
     taille: octets.length,
     type,
   });
-}
+};
