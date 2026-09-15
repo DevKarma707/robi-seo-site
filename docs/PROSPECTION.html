@@ -1,0 +1,233 @@
+<title>Prospection Robi</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+  :root{
+    --bg:#F5F6F7; --paper:#FFFFFF; --ink:#0D0630; --ink-2:#18314F; --muted:#64748B; --line:#E2E8F0;
+    --lime:#BEF221; --lime-ink:#0D0630; --code-bg:#0D0630; --code-ink:#F5F6F7; --note:#F0F4F8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0B0824; --paper:#14103A; --ink:#F1F2F7; --ink-2:#C7CBE0; --muted:#9AA3B8; --line:#2A2556;
+      --code-bg:#050318; --code-ink:#E8EAF2; --note:#1B1746;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0B0824; --paper:#14103A; --ink:#F1F2F7; --ink-2:#C7CBE0; --muted:#9AA3B8; --line:#2A2556;
+    --code-bg:#050318; --code-ink:#E8EAF2; --note:#1B1746;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.6;padding-block:40px 80px;padding-inline:20px}
+  .wrap{max-width:680px;margin:0 auto}
+  h1,h2,h3{font-family:Outfit,Inter,sans-serif;letter-spacing:-.02em;text-wrap:balance;margin:0}
+  h1{font-size:40px;font-weight:700;line-height:1.05}
+  h2{font-size:24px;font-weight:700;line-height:1.2}
+  h3{font-size:17px;font-weight:600}
+  p{margin:0}
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .lede{color:var(--ink-2);font-size:17px;max-width:56ch;margin-top:14px}
+  header{display:flex;flex-direction:column;gap:10px;padding-bottom:28px;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:10px;font-family:Outfit,sans-serif;font-weight:700;font-size:15px}
+  .brand svg{width:24px;height:24px}
+  /* Le circuit en un coup d'œil */
+  .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:28px 0 0}
+  .flow > div{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:6px}
+  .flow b{font-family:Outfit,sans-serif;font-size:15px}
+  .flow small{color:var(--muted);font-size:13px;line-height:1.4}
+  .flow code{font-size:12px}
+  @media (max-width:520px){.flow{grid-template-columns:1fr}}
+  /* Étapes */
+  section{padding-top:40px}
+  .step{display:grid;grid-template-columns:44px 1fr;gap:16px}
+  .num{width:44px;height:44px;border-radius:999px;background:var(--lime);color:var(--lime-ink);font-family:Outfit,sans-serif;font-weight:700;font-size:18px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+  .step-body{display:flex;flex-direction:column;gap:14px;min-width:0}
+  .step-body p{max-width:60ch}
+  ol.todo{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+  ol.todo li::marker{color:var(--muted);font-weight:600}
+  code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:var(--note);padding:2px 6px;border-radius:6px}
+  pre{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:14px;padding:14px 16px;overflow-x:auto;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:14px;line-height:1.5}
+  pre code{background:none;padding:0;color:inherit;font-size:inherit}
+  pre .c{color:#9AA3B8}
+  .say{border-left:3px solid var(--lime);padding:2px 0 2px 14px;color:var(--ink-2);font-style:italic}
+  .happens{background:var(--note);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+  .happens .eyebrow{color:var(--ink-2)}
+  .happens ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+  .ui{display:inline-block;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:1px 8px;font-size:.9em;font-weight:500;white-space:nowrap}
+  .badge{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:600;white-space:nowrap}
+  .badge.lime{background:var(--lime);color:var(--lime-ink)}
+  .badge.ok{background:#10B98122;color:#10B981}
+  .badge.grey{background:#94a3b833;color:var(--muted)}
+  .badge.red{background:#EF444422;color:#EF4444}
+  /* Règles & dépannage */
+  .rules{display:flex;flex-direction:column;gap:10px}
+  .rule{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline;padding:12px 0;border-top:1px solid var(--line)}
+  .rule:last-child{border-bottom:1px solid var(--line)}
+  .rule b{font-family:Outfit,sans-serif;font-size:15px;white-space:nowrap}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:10px 8px;border-top:1px solid var(--line);vertical-align:top}
+  th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;border-top:none}
+  tr:last-child td{border-bottom:1px solid var(--line)}
+  td:first-child{font-weight:600;white-space:nowrap}
+  .tablewrap{overflow-x:auto}
+  footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:4px}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#BEF221" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+      Robi AI
+    </div>
+    <p class="eyebrow">Mode d'emploi · prospection par email</p>
+    <h1>Envoyer des mails de prospection avec l'admin</h1>
+    <p class="lede">Tu parles à Claude, Claude remplit l'admin, tu cliques <span class="ui">Envoyer</span>. Le reste — livraison, réponses, relances — se met à jour tout seul.</p>
+
+    <div class="flow" aria-label="Le circuit en trois étapes">
+      <div><b>1 · Trouver</b><small>Claude cherche des prospects et crée les fiches.</small><code>/robi-acquisition</code></div>
+      <div><b>2 · Écrire</b><small>Claude rédige 2 mails par fiche + une reco.</small><code>/robi-outreach</code></div>
+      <div><b>3 · Envoyer</b><small>Toi, dans l'admin, une fiche à la fois.</small><code>robi-app.com/admin</code></div>
+    </div>
+  </header>
+
+  <!-- ÉTAPE 1 -->
+  <section>
+    <div class="step">
+      <div class="num">1</div>
+      <div class="step-body">
+        <h2>Trouver des prospects</h2>
+        <p>Ouvre une session Claude Code (n'importe quel projet Robi) et dis ce que tu veux, avec un segment et un nombre.</p>
+        <pre><code>/robi-acquisition experts-comptables 20
+<span class="c">— ou en français, même effet —</span>
+trouve-moi 20 experts-comptables à Lyon pour Robi</code></pre>
+        <p>Segments possibles : <code>freelance</code> · <code>artisan</code> · <code>agence</code> · <code>comptable</code> · <code>coworking</code> · <code>federation</code> · <code>tpe</code> · <code>influenceur</code> · <code>backlink</code>.</p>
+        <div class="happens">
+          <p class="eyebrow">Ce qui se passe</p>
+          <ul>
+            <li>Claude cherche sur le web, ne garde que les emails <b>publiés</b> (jamais devinés).</li>
+            <li>Il crée les fiches <b>directement dans l'admin</b>, onglet Acquisition. Rien à importer.</li>
+            <li>Chaque fiche a une note « ce qu'il fait, pour qui » — c'est ce qui personnalisera le mail.</li>
+            <li>Il te dit combien de fiches sont créées, combien ignorées (déjà présentes).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÉTAPE 2 -->
+  <section>
+    <div class="step">
+      <div class="num">2</div>
+      <div class="step-body">
+        <h2>Écrire les mails</h2>
+        <p>Même session ou une autre, le lendemain : peu importe. Le ton et les angles sont dans le skill, pas dans la mémoire de la session.</p>
+        <pre><code>/robi-outreach comptable 20
+<span class="c">— ou —</span>
+écris les mails pour les 20 experts-comptables</code></pre>
+        <div class="happens">
+          <p class="eyebrow">Ce qui se passe</p>
+          <ul>
+            <li>Claude prend les fiches du segment encore <span class="badge grey">À contacter</span>.</li>
+            <li>Pour chacune : <b>variante A</b> et <b>variante B</b> (deux angles différents, personnalisés depuis la fiche) + <b>une recommandation</b> en une phrase.</li>
+            <li>Il les pose sur les fiches. Dans l'admin, elles portent le badge <span class="badge lime">A/B</span>.</li>
+            <li>Il te montre deux exemples complets pour que tu valides le ton.</li>
+          </ul>
+        </div>
+        <p class="say">Pas content du ton ? Dis-le : « refais les brouillons de X, plus court » — il réécrit la fiche.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÉTAPE 3 -->
+  <section>
+    <div class="step">
+      <div class="num">3</div>
+      <div class="step-body">
+        <h2>Envoyer</h2>
+        <p>Va sur <a href="https://robi-app.com/admin">robi-app.com/admin</a> → onglet <span class="ui">Acquisition</span>.</p>
+        <ol class="todo">
+          <li>Clique une fiche avec le badge <span class="badge lime">A/B</span>.</li>
+          <li>La variante <b>recommandée</b> est déjà sélectionnée. Clique l'autre carte si tu préfères B.</li>
+          <li>Relis le message en dessous.</li>
+          <li>Clique <span class="ui">Envoyer</span>. Fiche suivante.</li>
+        </ol>
+        <div class="happens">
+          <p class="eyebrow">Ce qui se passe</p>
+          <ul>
+            <li>Le mail part de <code>hello@mail.robi-app.com</code> (Brevo), avec lien de désinscription et suivi.</li>
+            <li>Le texte exact est archivé sur la fiche : Historique → <span class="ui">Voir le mail envoyé</span>.</li>
+            <li>Le badge à côté de l'étape évolue tout seul : <span class="badge grey">Accepté</span> → <span class="badge ok">Livré</span> → <span class="badge ok">Ouvert</span>. Rebond ou spam → fiche fermée automatiquement.</li>
+            <li>La fiche passe <span class="badge grey">Contacté</span> et programme la relance (dans 4 à 8 jours selon le segment).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÉTAPE 4 -->
+  <section>
+    <div class="step">
+      <div class="num">4</div>
+      <div class="step-body">
+        <h2>Les jours suivants</h2>
+        <p>En haut de l'onglet Acquisition, le bloc <span class="ui">Aujourd'hui</span> liste qui relancer. Pour chaque fiche :</p>
+        <ol class="todo">
+          <li>Si elle n'a pas de brouillon : <code>/robi-outreach comptable</code> réécrit les relances (angle différent, plus court).</li>
+          <li>Ouvre la fiche → <span class="ui">Envoyer</span>.</li>
+          <li>Relance faite par téléphone ou LinkedIn ? <span class="ui">Marquer fait</span>.</li>
+        </ol>
+        <p>Les <b>réponses</b> sont détectées chaque matin (boîte <code>robi@robi-app.com</code>) : la fiche passe <span class="badge ok">Intéressé</span> et la séquence s'arrête. Pour vérifier tout de suite : <span class="ui">Vérifier les réponses</span> en haut de l'onglet.</p>
+        <p>Ensuite c'est toi : <span class="badge ok">Inscrit</span>, <span class="badge ok">Client</span> ou <span class="badge red">Perdu</span>, d'un clic sur le statut.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RÈGLES -->
+  <section>
+    <p class="eyebrow">Trois règles</p>
+    <h2 style="margin-top:6px">Ce qu'on ne fait pas</h2>
+    <div class="rules" style="margin-top:16px">
+      <div class="rule"><b>≤ 30 mails / jour</b><span>Le domaine <code>mail.robi-app.com</code> construit sa réputation. Un pic et tout part en spam pendant des semaines.</span></div>
+      <div class="rule"><b>Jamais depuis robi@</b><span><code>robi@robi-app.com</code> envoie les factures des clients. La prospection reste sur <code>hello@mail.robi-app.com</code> — si elle se fait griller, les factures continuent d'arriver.</span></div>
+      <div class="rule"><b>Pas d'email deviné</b><span>Un email inventé = rebond = réputation en baisse. Pas d'email publié → contact par formulaire ou LinkedIn, noté sur la fiche.</span></div>
+    </div>
+  </section>
+
+  <!-- DÉPANNAGE -->
+  <section>
+    <p class="eyebrow">Si ça coince</p>
+    <h2 style="margin-top:6px">Dépannage</h2>
+    <div class="tablewrap" style="margin-top:16px">
+      <table>
+        <tr><th>Symptôme</th><th>Où regarder</th></tr>
+        <tr><td>Bandeau « SMTP non configuré »</td><td>Vercel → projet <code>robi-seo-site</code> → variables <code>SMTP_OUTREACH_*</code>. Demande à Claude : « vérifie le SMTP de prospection ».</td></tr>
+        <tr><td>Envoyé mais jamais reçu</td><td>Brevo → Transactionnel → Logs : le statut et le motif y sont. Souvent : expéditeur non vérifié.</td></tr>
+        <tr><td>Badge reste « Accepté »</td><td>Le webhook Brevo n'est plus branché : Brevo → Transactionnel → Paramètres → Webhooks.</td></tr>
+        <tr><td>Réponse reçue, fiche pas à jour</td><td>Clique <span class="ui">Vérifier les réponses</span>. Toujours rien : la réponse est arrivée ailleurs que sur <code>robi@</code>.</td></tr>
+        <tr><td>Pas de badge A/B après <code>/robi-outreach</code></td><td>Rafraîchis l'admin. Sinon Claude n'a pas trouvé de fiche « À contacter » dans ce segment.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- FICHE TECHNIQUE -->
+  <section>
+    <p class="eyebrow">Pour Claude, ou pour toi dans six mois</p>
+    <h2 style="margin-top:6px">Où vivent les choses</h2>
+    <div class="tablewrap" style="margin-top:16px">
+      <table>
+        <tr><th>Quoi</th><th>Où</th></tr>
+        <tr><td>Skill acquisition</td><td><code>~/.claude/skills/robi-acquisition/SKILL.md</code></td></tr>
+        <tr><td>Skill rédaction</td><td><code>~/.claude/skills/robi-outreach/SKILL.md</code> — ton, bibliothèque d'angles, format</td></tr>
+        <tr><td>Accès direct aux fiches</td><td><code>~/.claude/skills/robi-outreach/scripts/prospects.mjs</code> (Firestore <code>robi-ai-website</code>, collection <code>prospects</code>)</td></tr>
+        <tr><td>Admin</td><td>dépôt <code>robi-seo-site</code> → <code>src/components/admin/AcquisitionTab.tsx</code>, <code>src/lib/prospects.ts</code></td></tr>
+        <tr><td>Envoi</td><td><code>src/app/api/admin/outreach/route.ts</code> — Brevo SMTP, expéditeur <code>hello@mail.robi-app.com</code>, réponses vers <code>robi@robi-app.com</code></td></tr>
+        <tr><td>Livraison</td><td><code>src/app/api/webhooks/brevo/route.ts</code> — déclaré dans Brevo avec le secret <code>BREVO_WEBHOOK_SECRET</code></td></tr>
+        <tr><td>Réponses</td><td><code>src/app/api/admin/replies/route.ts</code> — IMAP, cron Vercel tous les matins 8h</td></tr>
+        <tr><td>Newsletter HTML</td><td><code>src/lib/email/newsletter.ts</code> — pour les envois groupés aux inscrits, pas pour la prospection</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <span>Robi AI · Parlez. Facturez. Encaissez.</span>
+    <span>Mis en place le 15 septembre 2026.</span>
+  </footer>
+</div>
