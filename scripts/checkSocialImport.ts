@@ -156,5 +156,42 @@ t("statut « publishing » refusé : il appartient à la file, pas au fichier", 
   return !r.ok && r.error.includes("statut inconnu");
 })());
 
+// ── Propositions de visuels ────────────────────────────────────────────────
+t("propositions https acceptées", (() => {
+  const r = validateImportPost({ ...BASE, imagePropositions: ["https://a.test/1.jpg", "https://a.test/2.jpg"] }, 1);
+  return r.ok && r.post.imagePropositions?.length === 2;
+})());
+
+t("une proposition en http fait rejeter le lot", (() => {
+  const r = validateImportPost({ ...BASE, imagePropositions: ["https://a.test/1.jpg", "http://a.test/2.jpg"] }, 1);
+  return !r.ok && r.error.includes("https");
+})());
+
+t("propositions qui ne sont pas un tableau → refusé", (() => {
+  const r = validateImportPost({ ...BASE, imagePropositions: "https://a.test/1.jpg" }, 1);
+  return !r.ok && r.error.includes("tableau");
+})());
+
+t("doublons retirés : deux vignettes identiques rendraient le choix illisible", (() => {
+  const r = validateImportPost({ ...BASE, imagePropositions: ["https://a.test/1.jpg", "https://a.test/1.jpg"] }, 1);
+  return r.ok && r.post.imagePropositions?.length === 1;
+})());
+
+t("propositions identiques au réimport → aucune écriture", (() => {
+  const props = ["https://a.test/1.jpg", "https://a.test/2.jpg"];
+  const ancien = enBase({ imagePropositions: props });
+  const a = planSocialImport([valide({ ...BASE, imagePropositions: props })], [ancien]).actions[0];
+  return a.action === "skip";
+})());
+
+t("propositions changées au réimport → enrichissement", (() => {
+  const ancien = enBase({ imagePropositions: ["https://a.test/1.jpg"] });
+  const a = planSocialImport(
+    [valide({ ...BASE, imagePropositions: ["https://a.test/1.jpg", "https://a.test/2.jpg"] })],
+    [ancien]
+  ).actions[0];
+  return a.action === "enrich" && (a as { patch: ImportPost }).patch.imagePropositions?.length === 2;
+})());
+
 console.log(`\n${ko === 0 ? "✅ TOUT PASSE" : "❌ ÉCHECS"} — ${ok} ok, ${ko} ko\n`);
 process.exit(ko ? 1 : 0);

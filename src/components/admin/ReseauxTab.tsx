@@ -4,12 +4,13 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   ChevronLeft, ChevronRight, FileJson, RefreshCw, AlertTriangle, Check, Trash2,
   Pencil, X, Copy, Sparkles, ClipboardCopy, ImagePlus, Loader2, Send, ShieldCheck,
+  CalendarDays, List, CircleAlert,
 } from "lucide-react";
 import { listSharedFiles, isImage, type SharedFile } from "@/lib/sharedFiles";
 import {
   subscribeToPosts, addPost, updatePost, updatePostText, deletePost, importPostsFromJson,
   monthGrid, MONTH_NAMES, CHANNEL_META, TYPE_META, STATUS_META, STATUTS_MANUELS, CHANNELS, TYPES,
-  type SocialPost, type PostChannel,
+  type SocialPost, type PostChannel, type PostStatus,
 } from "@/lib/socialPosts";
 import { verifierAvantProgrammation, estProgrammable, type Verdict } from "@/lib/publicationCheck";
 import {
@@ -115,8 +116,19 @@ const ReseauxTab: React.FC = () => {
   const [rows, setRows] = useState<SocialPost[]>([]);
   const [ready, setReady] = useState(false);
   const [channel, setChannel] = useState<PostChannel | "all">("all");
+  /**
+   * Le calendrier montre la répartition ; il est mauvais pour traiter douze
+   * brouillons à la suite, éparpillés dans douze cases. La liste est faite
+   * pour le travail, le calendrier pour le coup d'œil — d'où la bascule.
+   */
+  const [vue, setVue] = useState<"calendrier" | "liste">("calendrier");
+  /**
+   * « à-traiter » n'est pas un statut mais une question : qu'est-ce qui
+   * m'empêche de programmer ? C'est la seule que Ralph se pose vraiment.
+   */
+  const [filtre, setFiltre] = useState<"tous" | "a-traiter" | PostStatus>("tous");
   const [openId, setOpenId] = useState<string | null>(null);
-  const [edit, setEdit] = useState<{ id: string; caption: string; hashtags: string; visual: string; imageUrl: string } | null>(null);
+  const [edit, setEdit] = useState<{ id: string; caption: string; hashtags: string; visual: string; imageUrl: string; date: string } | null>(null);
   // Le sélecteur s'ouvre pour un post donné : la médiathèque n'est chargée
   // qu'à ce moment-là, jamais à l'affichage du calendrier.
   const [picker, setPicker] = useState<boolean>(false);
@@ -151,16 +163,28 @@ const ReseauxTab: React.FC = () => {
 
   const cells = useMemo(() => monthGrid(year, month), [year, month]);
 
+  const retenu = useCallback(
+    (p: SocialPost) => {
+      if (channel !== "all" && p.channel !== channel) return false;
+      if (filtre === "tous") return true;
+      // À traiter : tout ce qui demande une main humaine — un brouillon, ou
+      // un envoi qui a échoué. Un post prêt ou publié n'attend personne.
+      if (filtre === "a-traiter") return p.status === "draft" || !!p.publishError;
+      return p.status === filtre;
+    },
+    [channel, filtre]
+  );
+
   const byDate = useMemo(() => {
     const m = new Map<string, SocialPost[]>();
     for (const p of rows) {
-      if (channel !== "all" && p.channel !== channel) continue;
+      if (!retenu(p)) continue;
       const list = m.get(p.date) || [];
       list.push(p);
       m.set(p.date, list);
     }
     return m;
-  }, [rows, channel]);
+  }, [rows, retenu]);
 
   const monthPosts = useMemo(
     () => cells.filter(Boolean).flatMap((d) => byDate.get(d as string) || []),
@@ -168,6 +192,23 @@ const ReseauxTab: React.FC = () => {
   );
 
   const jourDuJour = useMemo(() => new Date().toISOString().slice(0, 10), []);
+
+  /** Les posts du mois à plat, dans l'ordre des dates. */
+  const listeDuMois = useMemo(
+    () => [...monthPosts].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0)),
+    [monthPosts]
+  );
+
+  /**
+   * Combien de posts demandent une main, tous mois confondus.
+   *
+   * Sur le mois courant seulement, un échec du mois dernier resterait
+   * invisible — et un post en échec ne se répare pas tout seul.
+   */
+  const aTraiter = useMemo(
+    () => rows.filter((p) => p.status === "draft" || !!p.publishError).length,
+    [rows]
+  );
 
   /** Les brouillons du mois affiché, dans l'ordre du calendrier. */
   const brouillonsDuMois = useMemo(
@@ -383,6 +424,26 @@ const ReseauxTab: React.FC = () => {
           {CHANNELS.map((c) => <option key={c} value={c}>{CHANNEL_META[c].label}</option>)}
         </select>
 
+        {/* Calendrier pour voir, liste pour faire. */}
+        <div className="flex rounded-xl border border-slate-200 overflow-hidden">
+          {([
+            ["calendrier", CalendarDays, "Calendrier"],
+            ["liste", List, "Liste"],
+          ] as const).map(([v, Icone, label]) => (
+            <button
+              key={v}
+              onClick={() => setVue(v)}
+              aria-pressed={vue === v}
+              className={`px-2.5 py-1.5 text-[11px] font-bold transition-colors ${focusRing} ${
+                vue === v ? "bg-[var(--color-primary)] text-[var(--color-accent)]" : "bg-white text-slate-500 hover:bg-slate-50"
+              }`}
+              title={label}
+            >
+              <span className="flex items-center gap-1"><Icone size={12} /> {label}</span>
+            </button>
+          ))}
+        </div>
+
         <div className="ml-auto flex items-center gap-2">
           <button onClick={copyBrief} className={btnGhost} title="Copier le brief du skill robi-social-media">
             <span className="flex items-center gap-1.5"><Sparkles size={12} /> Brief du mois</span>
@@ -391,6 +452,37 @@ const ReseauxTab: React.FC = () => {
             <span className="flex items-center gap-1.5"><FileJson size={12} /> Importer du JSON</span>
           </button>
         </div>
+      </div>
+
+      {/* Filtres de statut. Séparés de la barre de mois : ce sont deux gestes
+          différents — l'un navigue dans le temps, l'autre restreint ce qu'on
+          regarde. Mélangés, on cherche le bon bouton à chaque fois. */}
+      <div className="flex flex-wrap items-center gap-1.5 -mt-2">
+        {([
+          ["tous", `Tous (${monthPosts.length})`],
+          ["a-traiter", aTraiter ? `À traiter (${aTraiter})` : "À traiter"],
+          ["draft", "Brouillons"],
+          ["ready", "Prêts"],
+          ["published", "Publiés"],
+        ] as const).map(([f, label]) => {
+          const actif = filtre === f;
+          const urgent = f === "a-traiter" && aTraiter > 0;
+          return (
+            <button
+              key={f}
+              onClick={() => setFiltre(f)}
+              className={`${btnPill} ${
+                actif
+                  ? "bg-[var(--color-primary)] text-[var(--color-accent)]"
+                  : urgent
+                    ? "bg-amber-50 text-amber-700 border border-amber-200"
+                    : "bg-slate-100 text-slate-600"
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
       </div>
 
       {/* Import */}
@@ -419,8 +511,31 @@ const ReseauxTab: React.FC = () => {
         </div>
       )}
 
+      {/* Liste */}
+      {vue === "liste" && (
+        <div className={`${card} p-3`}>
+          {listeDuMois.length === 0 ? (
+            <p className="text-[13px] text-slate-500 py-8 text-center">
+              Aucun post ne correspond. Change de filtre, ou importe un lot.
+            </p>
+          ) : (
+            <ul className="divide-y divide-slate-100">
+              {listeDuMois.map((p) => (
+                <LignePost
+                  key={p.id}
+                  post={p}
+                  ouvert={openId === p.id}
+                  onOuvrir={() => setOpenId(openId === p.id ? null : p.id!)}
+                  onProgrammer={() => setAVerifier([p])}
+                />
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
       {/* Calendrier */}
-      <div className={`${card} p-3`}>
+      <div className={`${card} p-3`} hidden={vue !== "calendrier"}>
         <div className="grid grid-cols-7 gap-1.5 mb-1.5">
           {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => (
             <p key={d} className="text-[10px] font-black uppercase tracking-widest text-slate-400 text-center py-1">{d}</p>
@@ -444,20 +559,34 @@ const ReseauxTab: React.FC = () => {
                   {date.slice(8)}
                 </p>
                 <div className="space-y-1">
-                  {posts.map((p) => (
-                    <button
-                      key={p.id}
-                      onClick={() => setOpenId(openId === p.id ? null : p.id!)}
-                      className={`w-full text-left rounded-lg px-1.5 py-1 transition-colors hover:bg-slate-50 ${focusRing}`}
-                      style={{ backgroundColor: `${TYPE_META[p.type].color}1a` }}
-                      title={p.caption}
-                    >
-                      <span className="flex items-center gap-1">
-                        <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: CHANNEL_META[p.channel].color }} />
-                        <span className="text-[9px] font-bold truncate text-slate-700">{p.caption}</span>
-                      </span>
-                    </button>
-                  ))}
+                  {posts.map((p) => {
+                    // Le liseré à gauche porte le statut : c'est la seule
+                    // information qu'on cherche en balayant un mois du regard,
+                    // et elle manquait complètement. Le fond garde le type.
+                    const liseré = p.publishError
+                      ? "#ef4444"
+                      : p.status === "draft"
+                        ? "transparent"
+                        : STATUS_META[p.status].color;
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => setOpenId(openId === p.id ? null : p.id!)}
+                        className={`w-full text-left rounded-lg pl-1 pr-1.5 py-1 transition-colors hover:bg-slate-50 border-l-[3px] ${focusRing}`}
+                        style={{ backgroundColor: `${TYPE_META[p.type].color}1a`, borderLeftColor: liseré }}
+                        title={`${STATUS_META[p.status].label}${p.publishError ? " · dernier envoi en échec" : ""}\n\n${p.caption}`}
+                      >
+                        <span className="flex items-center gap-1">
+                          <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: CHANNEL_META[p.channel].color }} />
+                          {/* Un visuel manquant bloque la programmation : le
+                              signaler ici évite de le découvrir à la
+                              vérification, une fois le mois entier relu. */}
+                          {!p.imageUrl && <ImagePlus size={8} className="flex-shrink-0 text-amber-500" />}
+                          <span className="text-[9px] font-bold truncate text-slate-700">{p.caption}</span>
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             );
@@ -516,6 +645,55 @@ const ReseauxTab: React.FC = () => {
                     rempli par personne : le champ existait, s'affichait, mais
                     aucun écran ne permettait de le poser. Les images déposées
                     dans Fichiers restaient donc inutilisables pour un post. */}
+                {/* La date : seul champ qu'aucun écran ne permettait de
+                    changer. Décaler un post demandait de le supprimer et de
+                    le refaire — en lui faisant perdre son identifiant. */}
+                <label className="flex items-center gap-2 text-[11px] text-slate-500">
+                  Publier le
+                  <input
+                    type="date"
+                    className={`${select} !py-1`}
+                    value={ed.date}
+                    onChange={(e) => setEdit({ ...ed, date: e.target.value })}
+                  />
+                </label>
+
+                {/* Les propositions de visuels. Recomposer une même photo dans
+                    un autre habillage ne coûte rien : le choix est presque
+                    gratuit à produire, il manquait juste un geste pour
+                    retenir l'une d'elles. */}
+                {!!p.imagePropositions?.length && (
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                      {p.imagePropositions.length} proposition{p.imagePropositions.length > 1 ? "s" : ""}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {p.imagePropositions.map((url) => {
+                        const retenu = ed.imageUrl === url;
+                        return (
+                          <button
+                            key={url}
+                            onClick={() => setEdit({ ...ed, imageUrl: retenu ? "" : url })}
+                            aria-pressed={retenu}
+                            className={`relative h-24 w-[74px] rounded-lg overflow-hidden border-2 transition-all ${focusRing} ${
+                              retenu ? "border-[var(--color-accent)] scale-[1.03]" : "border-slate-200 hover:border-slate-300 opacity-80 hover:opacity-100"
+                            }`}
+                            title={retenu ? "Retenu — clique pour retirer" : "Retenir ce visuel"}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={url} alt="" className="h-full w-full object-cover" />
+                            {retenu && (
+                              <span className="absolute inset-x-0 bottom-0 bg-[var(--color-accent)] text-black text-[9px] font-black py-0.5 text-center">
+                                RETENU
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex items-center gap-2">
                   {ed.imageUrl ? (
                     <>
@@ -526,7 +704,7 @@ const ReseauxTab: React.FC = () => {
                     </>
                   ) : (
                     <button onClick={() => setPicker(true)} className={btnGhost}>
-                      <span className="flex items-center gap-1"><ImagePlus size={11} /> Choisir un visuel</span>
+                      <span className="flex items-center gap-1"><ImagePlus size={11} /> Choisir dans la médiathèque</span>
                     </button>
                   )}
                 </div>
@@ -577,7 +755,7 @@ const ReseauxTab: React.FC = () => {
               ))}
               {!ed && (
                 <button
-                  onClick={() => setEdit({ id: p.id!, caption: p.caption, hashtags: p.hashtags || "", visual: p.visual || "", imageUrl: p.imageUrl || "" })}
+                  onClick={() => setEdit({ id: p.id!, caption: p.caption, hashtags: p.hashtags || "", visual: p.visual || "", imageUrl: p.imageUrl || "", date: p.date })}
                   className={btnGhost}
                 >
                   <span className="flex items-center gap-1"><Pencil size={11} /> Éditer</span>
@@ -641,6 +819,97 @@ const ReseauxTab: React.FC = () => {
       )}
 
     </div>
+  );
+};
+
+/**
+ * Une ligne de la vue liste.
+ *
+ * Elle répond d'un coup d'œil aux trois questions qu'on se pose vraiment :
+ * qu'est-ce que ça dit, est-ce que le visuel est là, est-ce que ça peut
+ * partir. Le calendrier, lui, ne montrait qu'un début de phrase tronqué à
+ * neuf pixels — tous les posts s'y ressemblaient.
+ */
+const LignePost = ({
+  post, ouvert, onOuvrir, onProgrammer,
+}: {
+  post: SocialPost;
+  ouvert: boolean;
+  onOuvrir: () => void;
+  onProgrammer: () => void;
+}) => {
+  const hook = post.caption.split("\n").find((l) => l.trim()) ?? post.caption;
+  const bloquant = !post.imageUrl;
+  const propositions = post.imagePropositions?.length ?? 0;
+
+  return (
+    <li className={`flex gap-3 py-2.5 px-1 ${ouvert ? "bg-slate-50 rounded-xl" : ""}`}>
+      <button
+        onClick={onOuvrir}
+        className={`h-14 w-14 rounded-lg flex-none overflow-hidden border ${focusRing} ${
+          bloquant ? "border-dashed border-amber-300 bg-amber-50" : "border-slate-200"
+        }`}
+        title={bloquant ? "Aucun visuel attaché" : "Ouvrir"}
+      >
+        {post.imageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={post.imageUrl} alt="" className="h-full w-full object-cover" />
+        ) : (
+          <span className="grid h-full w-full place-items-center">
+            <ImagePlus size={15} className="text-amber-500" />
+          </span>
+        )}
+      </button>
+
+      <button onClick={onOuvrir} className={`min-w-0 flex-1 text-left ${focusRing} rounded-lg`}>
+        <span className="flex flex-wrap items-center gap-1.5 mb-1">
+          <span className="text-[11px] font-bold text-slate-400 tabular-nums">{post.date.slice(5)}</span>
+          <span
+            className="w-1.5 h-1.5 rounded-full"
+            style={{ backgroundColor: CHANNEL_META[post.channel].color }}
+            title={CHANNEL_META[post.channel].label}
+          />
+          <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: TYPE_META[post.type].color }}>
+            {TYPE_META[post.type].label}
+          </span>
+          <PastilleStatut post={post} />
+          {bloquant && (
+            <span className="text-[10px] font-bold text-amber-700">
+              {propositions ? `${propositions} visuel${propositions > 1 ? "s" : ""} à choisir` : "visuel manquant"}
+            </span>
+          )}
+        </span>
+        <span className="block text-[12.5px] text-slate-700 leading-snug line-clamp-2">{hook}</span>
+      </button>
+
+      {post.status === "draft" && (
+        <button onClick={onProgrammer} className={`${btnGhost} self-center flex-none`} title="Vérifier puis programmer">
+          <span className="flex items-center gap-1"><ShieldCheck size={11} /> Programmer</span>
+        </button>
+      )}
+    </li>
+  );
+};
+
+/** Le statut, lisible partout de la même façon. */
+const PastilleStatut = ({ post }: { post: SocialPost }) => {
+  // Un échec prime sur le statut : le post est « prêt », mais ce qui compte
+  // c'est qu'il n'est pas parti.
+  if (post.publishError) {
+    return (
+      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1 bg-red-50 text-red-600">
+        <CircleAlert size={10} /> Échec
+      </span>
+    );
+  }
+  const m = STATUS_META[post.status];
+  return (
+    <span
+      className="text-[10px] font-bold px-1.5 py-0.5 rounded"
+      style={{ backgroundColor: `${m.color}24`, color: post.status === "draft" ? "#64748B" : m.color }}
+    >
+      {m.label}
+    </span>
   );
 };
 
