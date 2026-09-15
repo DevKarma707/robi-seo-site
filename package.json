@@ -21,6 +21,7 @@
     "firebase": "^12.14.0",
     "firebase-admin": "^14.4.0",
     "gray-matter": "^4.0.3",
+    "imapflow": "^1.7.8",
     "lightningcss": "^1.32.0",
     "lucide-react": "^0.564.0",
     "next": "16.1.6",

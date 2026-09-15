@@ -88,6 +88,10 @@ export interface OutreachStatus {
   host: string | null;
 }
 
+/** Lit la boîte de réponse et marque « intéressé » les prospects qui ont répondu. */
+export const checkReplies = () =>
+  authedFetch("/api/admin/replies") as Promise<{ ok: true; days: number; senders: number; replied: string[] }>;
+
 export const fetchOutreachStatus = () =>
   authedFetch("/api/admin/outreach") as Promise<OutreachStatus>;
 

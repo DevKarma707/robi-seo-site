@@ -12,7 +12,7 @@ import {
   SEGMENT_META, SEGMENTS, STATUS_META, PIPELINE,
   type Prospect, type ProspectSegment, type ProspectStatus,
 } from "@/lib/prospects";
-import { fetchOutreachStatus, sendOutreachEmail, type OutreachStatus } from "@/lib/adminApi";
+import { checkReplies, fetchOutreachStatus, sendOutreachEmail, type OutreachStatus } from "@/lib/adminApi";
 import { addInfluencer, suggestPromoCode } from "@/lib/influencers";
 import { ACCENT, ACCENT_INK, btnGhost, btnPill, btnPrimary, card, input, select } from "./ui";
 
@@ -293,6 +293,24 @@ const AcquisitionTab: React.FC = () => {
         </select>
         <button onClick={() => setShowImport((v) => !v)} className={btnGhost}>
           <span className="flex items-center gap-1.5"><Upload size={12} /> Importer JSON</span>
+        </button>
+        <button
+          onClick={async () => {
+            setBusy(true);
+            try {
+              const r = await checkReplies();
+              say("ok", r.replied.length ? `${r.replied.length} réponse(s) : ${r.replied.join(", ")}` : `Aucune nouvelle réponse (${r.senders} expéditeurs sur ${r.days} j).`);
+            } catch (e) {
+              say("err", (e as Error).message);
+            } finally {
+              setBusy(false);
+            }
+          }}
+          disabled={busy}
+          className={btnGhost}
+          title="Lit la boîte de réponse et marque « intéressé » ceux qui ont répondu"
+        >
+          <span className="flex items-center gap-1.5"><Mail size={12} /> Vérifier les réponses</span>
         </button>
       </div>
 
