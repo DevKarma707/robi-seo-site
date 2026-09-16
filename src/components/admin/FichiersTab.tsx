@@ -33,7 +33,15 @@ const FichiersTab: React.FC = () => {
   const [files, setFiles] = useState<SharedFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
-  const [progress, setProgress] = useState<string | null>(null);
+  /**
+   * L'avancement du dépôt.
+   *
+   * C'était une simple chaîne, affichée dans le panneau d'import depuis le
+   * Mac — donc invisible quand on glisse un zip dans la zone de dépôt. Vingt-
+   * deux visuels partaient pendant de longues minutes sans que rien ne bouge
+   * à l'écran : impossible de distinguer un envoi en cours d'un écran figé.
+   */
+  const [progress, setProgress] = useState<{ nom: string; fait: number; total: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [hasRunner, setHasRunner] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -121,7 +129,7 @@ const FichiersTab: React.FC = () => {
         // la médiathèque ne sert à rien, on ne peut ni le prévisualiser ni
         // l'attacher à un post.
         if (estZip(f)) {
-          const r = await uploadZip(f, uploadFolder, (fait, total) => setProgress(`${f.name} — ${fait}/${total}`));
+          const r = await uploadZip(f, uploadFolder, (fait, total) => setProgress({ nom: f.name, fait, total }));
           comptes.deposes += r.deposes.length;
           comptes.ignores += r.ignores.length;
           if (r.ignores.length) console.warn("[zip] ignorés :", r.ignores);
@@ -244,7 +252,7 @@ const FichiersTab: React.FC = () => {
     let done = 0;
     try {
       for (const f of targets) {
-        setProgress(`${done + 1}/${targets.length} · ${f.name}`);
+        setProgress({ nom: f.name, fait: done, total: targets.length });
         const blob = await fetchLocalFile(f.path);
         // Sous-chemin conservé sous le dossier : app-store-screens/v3/png/01.png
         const rel = f.folder === ROOT_FOLDER ? f.name : f.path.slice(f.folder.length + 1);
@@ -282,6 +290,31 @@ const FichiersTab: React.FC = () => {
         }`}
       >
         <Upload size={22} className="mx-auto mb-2 text-slate-400" />
+
+        {busy && (
+          <div className="mx-auto mb-4 max-w-sm" aria-live="polite">
+            <div className="flex items-baseline justify-between gap-3 mb-1.5">
+              <span className="text-[12px] font-semibold text-slate-700 truncate">
+                {progress ? progress.nom : "Envoi en cours…"}
+              </span>
+              {progress && (
+                <span className="text-[11px] tabular-nums text-slate-500 flex-none">
+                  {progress.fait} / {progress.total}
+                </span>
+              )}
+            </div>
+            <div className="h-1.5 rounded-full bg-slate-200 overflow-hidden">
+              {/* Sans total connu — l'ouverture de l'archive, un fichier seul —
+                  une barre à 0 % ferait croire à un blocage. On remplit alors
+                  la piste plutôt que de mentir sur l'avancement. */}
+              <div
+                className={`h-full rounded-full bg-[var(--color-primary)] ${progress ? "transition-[width] duration-200" : "animate-pulse"}`}
+                style={{ width: progress ? `${Math.round((progress.fait / Math.max(progress.total, 1)) * 100)}%` : "100%" }}
+              />
+            </div>
+          </div>
+        )}
+
         <p className="text-sm text-slate-600">
           Dépose tes fichiers <b>ou un .zip</b> ici, ou{" "}
           <button onClick={() => fileInput.current?.click()} className={`underline text-[var(--admin-ink)] ${focusRing}`}>
@@ -383,7 +416,7 @@ const FichiersTab: React.FC = () => {
                     <Upload size={12} /> Importer {picked.size ? `(${picked.size})` : ""}
                   </span>
                 </button>
-                {progress && <span className="text-[11px] text-slate-500">{progress}</span>}
+                {progress && <span className="text-[11px] text-slate-500">{progress.nom} — {progress.fait}/{progress.total}</span>}
               </div>
             </>
           )}

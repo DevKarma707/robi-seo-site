@@ -231,6 +231,22 @@ const ReseauxTab: React.FC = () => {
    * Sur le mois courant seulement, un échec du mois dernier resterait
    * invisible — et un post en échec ne se répare pas tout seul.
    */
+  /**
+   * Le rang de chaque post dans le calendrier entier, dans l'ordre des dates.
+   *
+   * Vingt posts qui se ressemblent, répartis sur deux mois, ne se repèrent
+   * pas par leur date : « le 09-23 » ne dit pas où on en est. Un numéro, si.
+   * Il court sur tout le lot et non sur le mois affiché, sinon octobre
+   * recommencerait à 1 et deux posts porteraient le même numéro.
+   */
+  const rangs = useMemo(() => {
+    const m = new Map<string, number>();
+    [...rows]
+      .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
+      .forEach((p, i) => m.set(p.id!, i + 1));
+    return m;
+  }, [rows]);
+
   /** Combien de posts déjà publiés le vidage emporterait avec lui. */
   const publiesEnBase = useMemo(
     () => rows.filter((p) => p.status === "published").length,
@@ -816,6 +832,12 @@ const ReseauxTab: React.FC = () => {
 
         <span className="text-[11px] text-slate-500">
           {counts.total} post{counts.total > 1 ? "s" : ""}
+          {/* Le calendrier est borné au mois ; le compte l'était aussi, sans
+              le dire. Importer vingt posts et n'en voir que huit fait croire
+              que l'import a échoué — il faut nommer les douze autres. */}
+          {rows.length > counts.total && (
+            <span className="text-slate-400"> sur {rows.length} au total</span>
+          )}
           {counts.ready > 0 && ` · ${counts.ready} prêt${counts.ready > 1 ? "s" : ""}`}
           {counts.published > 0 && ` · ${counts.published} publié${counts.published > 1 ? "s" : ""}`}
           {counts.enCours > 0 && ` · ${counts.enCours} en cours d'envoi`}
@@ -1077,6 +1099,7 @@ const ReseauxTab: React.FC = () => {
                   <LignePost
                     key={p.id}
                     post={p}
+                    rang={rangs.get(p.id!) ?? 0}
                     ouvert={openId === p.id}
                     coche={coches.has(p.id!)}
                     onCocher={() => basculerCoche(p.id!)}
@@ -1542,9 +1565,10 @@ const ReseauxTab: React.FC = () => {
  * neuf pixels — tous les posts s'y ressemblaient.
  */
 const LignePost = ({
-  post, ouvert, coche, onCocher, onOuvrir, onProgrammer,
+  post, rang, ouvert, coche, onCocher, onOuvrir, onProgrammer,
 }: {
   post: SocialPost;
+  rang: number;
   ouvert: boolean;
   coche: boolean;
   onCocher: () => void;
@@ -1564,6 +1588,14 @@ const LignePost = ({
         className="mt-5 flex-none h-4 w-4 accent-[var(--color-primary)] cursor-pointer"
         aria-label={`Sélectionner le post du ${post.date}`}
       />
+      {rang > 0 && (
+        <span
+          className="mt-4 flex-none text-[11px] font-black tabular-nums text-slate-300 w-6 text-right"
+          title={`${rang}ᵉ post du calendrier`}
+        >
+          {String(rang).padStart(2, "0")}
+        </span>
+      )}
       <button
         onClick={onOuvrir}
         className={`h-14 w-14 rounded-lg flex-none overflow-hidden border ${focusRing} ${

@@ -204,7 +204,17 @@ export const uploadSharedFile = async (file: File | Blob, name: string, folder =
   const dir = safeFolder(folder);
   const rel = safePath(name) || safeName(name);
   const path = dir && dir !== ROOT_FOLDER ? `${ROOT}/${dir}/${rel}` : `${ROOT}/${safeName(rel)}`;
-  await uploadBytes(storageRef(storage, path), file, { contentType: file.type || "application/octet-stream" });
+  await uploadBytes(storageRef(storage, path), file, {
+    contentType: file.type || "application/octet-stream",
+    // Sans en-tête explicite, Firebase Storage répond « private, max-age=0 » :
+    // le navigateur retélécharge la médiathèque entière à chaque visite, soit
+    // plusieurs mégaoctets pour regarder les mêmes vingt visuels.
+    //
+    // Mettre une semaine est sûr parce que l'URL de téléchargement porte un
+    // jeton régénéré à chaque envoi : remplacer un fichier change son URL, et
+    // la version en cache n'est donc jamais servie à la place de la nouvelle.
+    cacheControl: "public, max-age=604800",
+  });
 };
 
 /** Ce qu'on accepte de sortir d'une archive. */
@@ -250,8 +260,10 @@ export const uploadZip = async (
   const ignores: { nom: string; motif: string }[] = [];
 
   const noms = Object.keys(entrees).filter((n) => !n.endsWith("/"));
-  let fait = 0;
 
+  // Le tri d'abord, l'envoi ensuite : rien ne part tant qu'on n'a pas décidé
+  // de tout ce qu'on accepte.
+  const aEnvoyer: { base: string; blob: Blob }[] = [];
   for (const nom of noms) {
     const octets = entrees[nom];
     // Le nom interne d'une archive peut contenir des « ../ » : on ne garde que
@@ -268,10 +280,35 @@ export const uploadZip = async (
     } else if (octets.byteLength > TAILLE_MAX_EXTRAIT) {
       ignores.push({ nom: base, motif: "plus de 40 Mo" });
     } else {
-      await uploadSharedFile(new Blob([octets as BlobPart], { type: TYPES_ARCHIVE[ext] }), base, folder);
-      deposes.push(base);
+      aEnvoyer.push({ base, blob: new Blob([octets as BlobPart], { type: TYPES_ARCHIVE[ext] }) });
     }
-    onProgres?.(++fait, noms.length);
+  }
+
+  // Les envois partent à plusieurs de front.
+  //
+  // En série, chaque image attendait l'aller-retour de la précédente : vingt-
+  // deux visuels prenaient plusieurs minutes alors que la liaison n'était pas
+  // saturée une seconde. Six à la fois tiennent le lien occupé sans noyer un
+  // réseau lent, et c'est la même mécanique que la lecture de la médiathèque.
+  let fait = 0;
+  const resultats = await pool(
+    aEnvoyer.map(({ base, blob }) => async () => {
+      await uploadSharedFile(blob, base, folder);
+      onProgres?.(++fait, aEnvoyer.length);
+      return base;
+    }),
+    6
+  );
+  deposes.push(...resultats);
+
+  // `pool` avale l'échec unitaire pour ne pas perdre le lot : ce qui manque à
+  // l'arrivée n'est donc pas arrivé, et doit être dit plutôt que compté comme
+  // déposé.
+  if (resultats.length < aEnvoyer.length) {
+    const partis = new Set(resultats);
+    for (const { base } of aEnvoyer) {
+      if (!partis.has(base)) ignores.push({ nom: base, motif: "envoi refusé" });
+    }
   }
 
   return { deposes, ignores };
