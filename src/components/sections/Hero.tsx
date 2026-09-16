@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { LaunchSeats } from "@/components/ui/LaunchSeats";
 import { HeroMockups } from "@/components/ui/HeroMockups";
 import { HeroStory } from "@/components/ui/HeroStory";
 import type { HeroStoryCopy } from "@/lib/i18n/heroStory";
@@ -26,6 +27,8 @@ interface HeroProps {
   launchOffer?: {
     text: string;
     highlight: string;
+    /** Compteur de places live (LaunchSeats), affiché après le prix. */
+    seats?: { locale: string; remainingText: string; deadlineText?: string };
   };
   rotatingWords?: string[];
   visual?: "mockups" | "editorial";
@@ -95,6 +98,9 @@ export function Hero({
           <span className="text-white/70 text-xs">
             {launchOffer.text}{" "}
             <span className="text-[#BEF221] font-bold">{launchOffer.highlight}</span>
+            {launchOffer.seats && (
+              <LaunchSeats compact className="text-white/50" {...launchOffer.seats} />
+            )}
           </span>
         </div>
       )}

@@ -177,6 +177,11 @@ export default async function Home({
             maximumFractionDigits: 0,
           }).format((priceMap[locale] || priceMap["fr"]).launch) +
             " — " + (dict.pricing?.launchOfferLifetime || "Accès à vie"),
+          seats: {
+            locale,
+            remainingText: dict.pricing?.launchOfferRemaining || "{remaining} places restantes sur {total}",
+            deadlineText: dict.pricing?.launchOfferDeadline || "jusqu'au {date}",
+          },
         }}
       />
 

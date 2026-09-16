@@ -121,6 +121,8 @@
     "launchOfferNormalPrice": "Preço normal antigo",
     "launchOfferLifetime": "Passaporte Vitalício • Robi Pro",
     "launchOfferCta": "RESGATAR ACESSO VITALÍCIO",
+    "launchOfferRemaining": "Restam {remaining} vagas de {total}",
+    "launchOfferDeadline": "até {date}",
     "features": {
       "unlimitedInvoices": "Criação de faturas limitadas",
       "autoReminders": "Ativação de lembretes autônomos",

@@ -121,6 +121,8 @@
     "launchOfferNormalPrice": "Precio normal",
     "launchOfferLifetime": "Acceso de por vida • Robi Pro",
     "launchOfferCta": "APROVECHAR LA OFERTA",
+    "launchOfferRemaining": "Quedan {remaining} plazas de {total}",
+    "launchOfferDeadline": "hasta el {date}",
     "features": {
       "unlimitedInvoices": "Facturas y presupuestos ilimitados",
       "autoReminders": "Recordatorios y notificaciones automáticos",

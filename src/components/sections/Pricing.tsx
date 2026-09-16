@@ -3,6 +3,7 @@
 import { Check, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { LaunchSeats } from "@/components/ui/LaunchSeats";
 import { Locale, localeCurrencies, priceMap } from "@/lib/i18n/config";
 
 interface PricingProps {
@@ -77,9 +78,15 @@ export function Pricing({
               <h3 className="text-2xl md:text-3xl font-black text-white mb-4">
                 {p.launchOfferTitle || "Accès à Vie - Robi Pro"}
               </h3>
-              <p className="text-white/60 mb-8 max-w-lg mx-auto">
+              <p className="text-white/60 mb-4 max-w-lg mx-auto">
                 {p.launchOfferSubtitle || "Pour les 1000 premiers utilisateurs uniquement"}
               </p>
+              <LaunchSeats
+                locale={locale}
+                remainingText={p.launchOfferRemaining || "{remaining} places restantes sur {total}"}
+                deadlineText={p.launchOfferDeadline || "jusqu'au {date}"}
+                className="mb-8"
+              />
               <div className="flex items-center justify-center gap-3 md:gap-4 mb-3 md:mb-6">
                 <span className="text-4xl md:text-6xl font-black text-white">{formatPrice(prices.launch)}</span>
                 <div className="text-left">
