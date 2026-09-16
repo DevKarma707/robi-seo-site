@@ -19,7 +19,8 @@ import {
   PERSONAS, PILIERS, ANGLES, ECART_PERSONA, ECART_ANGLE,
 } from "@/lib/editorialGrid";
 import { auth } from "@/lib/firebase";
-import { ACCENT, btnGhost, btnPill, btnPrimary, card, focusRing, input, select, sectionTitle } from "./ui";
+import { btnGhost, btnPill, btnPrimary, card, focusRing, input, select, sectionTitle } from "./ui";
+import { toast } from "./toast";
 
 /**
  * Brief à coller dans Claude Code pour fabriquer un mois de posts.
@@ -136,7 +137,6 @@ const ReseauxTab: React.FC = () => {
   const [importOpen, setImportOpen] = useState(false);
   const [importText, setImportText] = useState("");
   const [busy, setBusy] = useState(false);
-  const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   /**
    * Posts soumis à vérification avant de passer « prêt ».
    *
@@ -157,15 +157,10 @@ const ReseauxTab: React.FC = () => {
   /** Posts cochés en vue liste, pour agir sur plusieurs d'un coup. */
   const [coches, setCoches] = useState<Set<string>>(new Set());
 
-  const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
   // Cinq secondes ne suffisaient pas à lire un compte rendu d'import, encore
-  // moins à le capturer pour le montrer. Une erreur reste plus longtemps
-  // qu'une confirmation : c'est elle qu'on a besoin de relire.
+  // moins à le capturer pour le montrer.
   const say = useCallback((kind: "ok" | "err", text: string) => {
-    setFlash({ kind, text });
-    if (flashTimer.current) clearTimeout(flashTimer.current);
-    flashTimer.current = setTimeout(() => setFlash(null), kind === "err" ? 15000 : 8000);
+    toast(kind, text, kind === "err" ? 15000 : 8000);
   }, []);
 
   useEffect(() => {
@@ -723,7 +718,7 @@ const ReseauxTab: React.FC = () => {
 
   if (!ready) {
     return (
-      <div className="flex items-center gap-2 text-white/50 text-sm py-10">
+      <div className="flex items-center gap-2 text-slate-400 text-sm py-10">
         <RefreshCw size={16} className="animate-spin" /> Chargement du calendrier…
       </div>
     );
@@ -1402,15 +1397,6 @@ const ReseauxTab: React.FC = () => {
         ))}
       </div>
 
-      {flash && (
-        <div
-          className="fixed bottom-6 right-6 px-4 py-3 rounded-xl shadow-2xl text-[12px] font-bold z-50 flex items-center gap-2"
-          style={{ backgroundColor: flash.kind === "ok" ? ACCENT : "#f87171", color: flash.kind === "ok" ? "#000" : "#fff" }}
-        >
-          {flash.kind === "ok" ? <Check size={13} /> : <AlertTriangle size={13} />}
-          {flash.text}
-        </div>
-      )}
       {aVerifier && (
         <EcranVerification
           posts={aVerifier}
@@ -1427,7 +1413,6 @@ const ReseauxTab: React.FC = () => {
           onPick={(url) => { setEdit({ ...edit, imageUrl: url }); setPicker(false); }}
         />
       )}
-
     </div>
   );
 };

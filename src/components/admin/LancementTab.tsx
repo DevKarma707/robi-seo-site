@@ -54,7 +54,7 @@ const LancementTab: React.FC = () => {
 
   if (loading && !config) {
     return (
-      <div className="flex items-center gap-2 text-white/50 text-sm py-10">
+      <div className="flex items-center gap-2 text-slate-400 text-sm py-10">
         <RefreshCw size={16} className="animate-spin" /> Chargement de l&apos;offre…
       </div>
     );

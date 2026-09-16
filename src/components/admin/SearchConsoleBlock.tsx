@@ -6,7 +6,9 @@ import {
   subscribeToSeoReports, saveSeoReport, deleteSeoReport, parseGscFiles, findRow,
   WATCHED_QUERIES, isForeignBrandNoise, type GscReport, type GscRow,
 } from "@/lib/searchConsole";
-import { btn, btnAccent, card, input, kpiLabel, kpiValue, sectionTitle, select, ACCENT, ACCENT_INK } from "./ui";
+import { btn, btnAccent, card, input, kpiLabel, kpiValue, sectionTitle, select, ACCENT_INK } from "./ui";
+import { toast } from "./toast";
+import { AreaCurve, CountUp } from "./motion";
 
 type Dim = "queries" | "pages" | "countries";
 
@@ -55,18 +57,14 @@ const SearchConsoleBlock: React.FC = () => {
   const [showAll, setShowAll] = useState(false);
   const [busy, setBusy] = useState(false);
   const [dragging, setDragging] = useState(false);
-  const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(
-    () => subscribeToSeoReports(setReports, (e) => setFlash({ kind: "err", text: String(e) })),
+    () => subscribeToSeoReports(setReports, (e) => toast("err", String(e))),
     []
   );
 
-  const say = (kind: "ok" | "err", text: string) => {
-    setFlash({ kind, text });
-    setTimeout(() => setFlash(null), 6000);
-  };
+  const say = toast;
 
   const currentIndex = Math.max(0, reports.findIndex((r) => r.id === selectedId));
   const current = reports[currentIndex];
@@ -105,7 +103,6 @@ const SearchConsoleBlock: React.FC = () => {
     return { impressions: n.reduce((s, r) => s + r.impressions, 0), count: n.length };
   }, [current]);
 
-  const maxDay = current ? Math.max(1, ...current.daily.map((d) => d.impressions)) : 1;
   const visible = showAll ? rows.slice(0, 200) : rows.slice(0, 15);
 
   return (
@@ -181,7 +178,7 @@ const SearchConsoleBlock: React.FC = () => {
               <div key={k.label} className={`${card} p-4`}>
                 <p className={kpiLabel}>{k.label}</p>
                 <div className="flex items-end gap-2 mt-1.5">
-                  <span className={`${kpiValue} text-slate-900`}>{k.value}</span>
+                  <span className={kpiValue}><CountUp value={k.value} /></span>
                   <span className="mb-1">{k.delta}</span>
                 </div>
               </div>
@@ -196,24 +193,16 @@ const SearchConsoleBlock: React.FC = () => {
           {/* Impressions par jour */}
           <div className={`${card} p-5`}>
             <p className={`${sectionTitle} mb-4`}>Impressions par jour</p>
-            <div className="flex items-end gap-[2px] h-28">
-              {current.daily.map((d) => (
-                <div
-                  key={d.date}
-                  className="flex-1 h-full flex flex-col justify-end"
-                  title={`${fmtDate(d.date)} · ${fmtInt(d.impressions)} impressions · ${d.clicks} clic${d.clicks > 1 ? "s" : ""}`}
-                >
-                  <div
-                    className="w-full rounded-sm"
-                    style={{
-                      height: `${Math.max(2, Math.round((d.impressions / maxDay) * 100))}%`,
-                      backgroundColor: d.clicks > 0 ? ACCENT : "rgba(190,242,33,0.3)",
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-            <p className="text-[10px] text-slate-400 mt-2">Barre pleine = au moins un clic ce jour-là. Survole une barre pour le détail.</p>
+            <AreaCurve
+              height={130}
+              format={fmtInt}
+              points={current.daily.map((d) => ({
+                value: d.impressions,
+                label: `${fmtDate(d.date)} · ${d.clicks} clic${d.clicks > 1 ? "s" : ""}`,
+                mark: d.clicks > 0,
+              }))}
+            />
+            <p className="text-[11px] text-slate-400 mt-3">Pastille lime = au moins un clic ce jour-là. Survole la courbe pour le détail.</p>
           </div>
 
           {/* Requêtes suivies */}
@@ -312,15 +301,6 @@ const SearchConsoleBlock: React.FC = () => {
             )}
           </div>
         </>
-      )}
-
-      {flash && (
-        <div
-          className="fixed bottom-6 right-6 px-4 py-3 rounded-xl shadow-2xl text-[12px] font-bold z-50 max-w-sm"
-          style={{ backgroundColor: flash.kind === "ok" ? ACCENT : "#f87171", color: flash.kind === "ok" ? "#000" : "#fff" }}
-        >
-          {flash.text}
-        </div>
       )}
     </div>
   );

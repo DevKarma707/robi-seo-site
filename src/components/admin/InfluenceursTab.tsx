@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Megaphone, Plus, RefreshCw, AlertTriangle, Trash2, ExternalLink, Ticket, Check,
+  Megaphone, Plus, RefreshCw, AlertTriangle, Trash2, ExternalLink, Ticket,
 } from "lucide-react";
 import {
   subscribeToInfluencers, addInfluencer, updateInfluencer, deleteInfluencer,
@@ -12,6 +12,7 @@ import {
 } from "@/lib/influencers";
 import { fetchAttributionStats } from "@/lib/adminApi";
 import { ACCENT, ACCENT_INK, btnGhost, btnPill, btnPrimary, card, input } from "./ui";
+import { toast } from "./toast";
 
 const EMPTY: Omit<Influencer, "id"> = {
   name: "", platform: "instagram", status: "prospect", discountPct: 20, commissionPct: 20,
@@ -24,20 +25,16 @@ const InfluenceursTab: React.FC = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Omit<Influencer, "id"> | null>(null);
   const [busy, setBusy] = useState(false);
-  const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
 
   useEffect(() => {
-    const unsub = subscribeToInfluencers(setRows, (e) => setFlash({ kind: "err", text: String(e) }));
+    const unsub = subscribeToInfluencers(setRows, (e) => toast("err", String(e)));
     fetchAttributionStats()
       .then(setStats)
       .catch((e) => setStatsError((e as Error).message));
     return () => unsub();
   }, []);
 
-  const say = (kind: "ok" | "err", text: string) => {
-    setFlash({ kind, text });
-    setTimeout(() => setFlash(null), 4000);
-  };
+  const say = toast;
 
   const selected = rows.find((r) => r.id === selectedId) || null;
 
@@ -448,16 +445,6 @@ const InfluenceursTab: React.FC = () => {
           <span className="flex items-center gap-1.5"><RefreshCw size={12} /> Actualiser les ventes</span>
         </button>
       </div>
-
-      {flash && (
-        <div
-          className="fixed bottom-6 right-6 px-4 py-3 rounded-xl shadow-2xl text-[12px] font-bold z-50 flex items-center gap-2"
-          style={{ backgroundColor: flash.kind === "ok" ? ACCENT : "#f87171", color: flash.kind === "ok" ? "#000" : "#fff" }}
-        >
-          {flash.kind === "ok" ? <Check size={13} /> : <AlertTriangle size={13} />}
-          {flash.text}
-        </div>
-      )}
     </div>
   );
 };

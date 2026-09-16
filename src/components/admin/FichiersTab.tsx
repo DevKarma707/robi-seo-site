@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  Upload, Trash2, RefreshCw, AlertTriangle, Check, Download, FolderSync, FileText,
+  Upload, Trash2, RefreshCw, AlertTriangle, Download, FolderSync, FileText,
   Link2, FolderPlus, HardDriveDownload, Image as ImageIcon, X,
 } from "lucide-react";
 import {
@@ -13,7 +13,8 @@ import {
   runnerAvailable, syncSharedFiles, listLocalFiles, fetchLocalFile, getToken, setToken,
   type LocalFile,
 } from "@/lib/taskRunner";
-import { ACCENT, ACCENT_INK, btn, btnGhost, btnPrimary, card, focusRing, sectionTitle } from "./ui";
+import { ACCENT_INK, btn, btnGhost, btnPrimary, card, focusRing, sectionTitle } from "./ui";
+import { toast } from "./toast";
 
 const ALL = "__tous__";
 
@@ -34,7 +35,6 @@ const FichiersTab: React.FC = () => {
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [hasRunner, setHasRunner] = useState(false);
   const [dragging, setDragging] = useState(false);
   // Aucun dossier au départ : on attend de savoir lesquels existent pour en
@@ -52,13 +52,7 @@ const FichiersTab: React.FC = () => {
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [localFolder, setLocalFolder] = useState<string>(ALL);
 
-  const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
-  const say = useCallback((kind: "ok" | "err", text: string) => {
-    setFlash({ kind, text });
-    if (flashTimer.current) clearTimeout(flashTimer.current);
-    flashTimer.current = setTimeout(() => setFlash(null), 5000);
-  }, []);
+  const say = toast;
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -270,7 +264,7 @@ const FichiersTab: React.FC = () => {
 
   if (loading && !files.length && !error) {
     return (
-      <div className="flex items-center gap-2 text-white/50 text-sm py-10">
+      <div className="flex items-center gap-2 text-slate-400 text-sm py-10">
         <RefreshCw size={16} className="animate-spin" /> Chargement de la médiathèque…
       </div>
     );
@@ -284,7 +278,7 @@ const FichiersTab: React.FC = () => {
         onDragLeave={() => setDragging(false)}
         onDrop={(e) => { e.preventDefault(); setDragging(false); upload(e.dataTransfer.files); }}
         className={`rounded-2xl border border-dashed p-6 text-center transition-colors ${
-          dragging ? "border-[var(--color-accent)]/50 bg-[var(--color-accent)]/[0.04]" : "border-white/[0.12] bg-slate-50"
+          dragging ? "border-[var(--color-accent)]/50 bg-[var(--color-accent)]/[0.04]" : "border-slate-300 bg-slate-50"
         }`}
       >
         <Upload size={22} className="mx-auto mb-2 text-slate-400" />
@@ -476,16 +470,6 @@ const FichiersTab: React.FC = () => {
           </div>
         </div>
       )}
-
-      {flash && (
-        <div
-          className="fixed bottom-6 right-6 px-4 py-3 rounded-xl shadow-2xl text-[12px] font-bold z-50 flex items-center gap-2"
-          style={{ backgroundColor: flash.kind === "ok" ? ACCENT : "#f87171", color: flash.kind === "ok" ? "#000" : "#fff" }}
-        >
-          {flash.kind === "ok" ? <Check size={13} /> : <AlertTriangle size={13} />}
-          {flash.text}
-        </div>
-      )}
     </div>
   );
 };
@@ -494,7 +478,7 @@ const Chip: React.FC<{ active: boolean; onClick: () => void; children: React.Rea
   <button
     onClick={onClick}
     className={`px-3 py-1 rounded-full text-[11px] font-bold transition-colors ${focusRing} ${
-      active ? "bg-[var(--admin-ink)] text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+      active ? "bg-[var(--color-accent)] text-[var(--a-on-accent)]" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
     }`}
   >
     {children}

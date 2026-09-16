@@ -527,119 +527,364 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ADMIN — système de profondeur
+   ADMIN — refonte de septembre 2026
    ═══════════════════════════════════════════════════════════════
-   L'admin manquait de relief : cartes, sidebar et fond partageaient une
-   surface unique (blanc à 3 %), donc rien ne se détachait. On introduit
-   une source de lumière implicite, en haut à gauche : les surfaces sont
-   plus claires en haut qu'en bas, portent un liseré clair sur l'arête
-   supérieure, et projettent une ombre vers le bas.
+   Deux modes, une seule interface : clair (« Encre ») et sombre
+   (« Amethyst nocturne »), choisis par Ralph sur la planche de refonte.
+
+   Le principe qui rend ça possible sans réécrire 600 classes : `.a-root`
+   redéfinit la palette `slate` de Tailwind. `text-slate-900` est donc une
+   encre sombre en clair et une encre claire en sombre ; `bg-slate-50` un
+   gris lilas très pâle en clair et une couche d'Amethyst en sombre.
+   Les neutres tirent vers le violet de la marque plutôt que vers le bleu
+   froid du slate d'origine.
+
+   Ce qu'on a retiré : halos, chiffres en dégradé, ombres portées, cartes
+   blanches sur coquille sombre. Ce qu'on a gardé : la barre lime lumineuse
+   de l'onglet actif. Ce qu'on a ajouté : des détails qui bougent.
    ─────────────────────────────────────────────────────────────── */
 
-/* Fond de page : deux halos très diffus au lieu d'un aplat mort. */
-.a-shell {
-  background:
-    radial-gradient(1100px 620px at 12% -12%, rgb(var(--color-accent-rgb) / 0.06), transparent 62%),
-    radial-gradient(900px 520px at 92% -4%, rgb(var(--color-primary-rgb) / 0.30), transparent 58%),
-    var(--admin-shell);
+.a-root {
+  --a-bg: #FAFAFC;
+  --a-side: #F4F3F8;
+  --a-surface: #FFFFFF;
+  --a-line: #E8E6EF;
+  --a-on-accent: var(--color-text-on-accent, #0D0630);
+  --a-curve: var(--color-primary);
+  --a-toast-bg: #16122A;
+  --a-toast-ink: #FFFFFF;
+  --admin-shell: var(--a-bg);
+
+  --color-slate-50: #F6F5F9;
+  --color-slate-100: #EFEDF4;
+  --color-slate-200: #E4E1EB;
+  --color-slate-300: #CFCBDA;
+  --color-slate-400: #9B96AD;
+  --color-slate-500: #6F6A84;
+  --color-slate-600: #534E67;
+  --color-slate-700: #3B3650;
+  --color-slate-800: #26213A;
+  --color-slate-900: #16122A;
+  --color-slate-950: #0B0820;
+
+  color-scheme: light;
+  color: var(--color-slate-900);
+  font-family: var(--font-manrope), "Manrope", system-ui, sans-serif;
+  font-feature-settings: "ss01";
 }
 
-/* Surface standard — CLAIRE.
-   Les cartes reprennent le fond de l'app (blanc, bordure #E2E8F0) posé sur la
-   coquille Amethyst : c'est le contraste qui manquait quand tout partageait un
-   blanc à 3 % sur fond sombre. Le texte des cartes bascule donc en foncé —
-   voir la règle `.a-card` ci-dessous, qui donne la couleur par défaut. */
+[data-admin-mode="dark"] .a-root {
+  --a-bg: #0B0720;
+  --a-side: #0B0720;
+  --a-surface: #130D2E;
+  --a-line: rgb(255 255 255 / 0.07);
+  --a-curve: var(--color-accent);
+  --a-toast-bg: #F2F0FA;
+  --a-toast-ink: #0B0720;
+  /* L'accent brut est lisible sur Amethyst : plus besoin de l'assombrir. */
+  --admin-ink: var(--color-accent);
+
+  --color-slate-50: #19133A;
+  --color-slate-100: #1F1844;
+  --color-slate-200: #2A2350;
+  --color-slate-300: #3A3364;
+  --color-slate-400: #7C75A0;
+  --color-slate-500: #968FB5;
+  --color-slate-600: #B2ACCB;
+  --color-slate-700: #CBC6DF;
+  --color-slate-800: #E0DCEE;
+  --color-slate-900: #F2F0FA;
+  --color-slate-950: #FFFFFF;
+
+  /* Pastilles d'état : les fonds « -50 » deviennent des voiles, les encres
+     « -600/700 » s'éclaircissent pour rester lisibles sur le sombre. */
+  --color-red-50: rgb(229 72 77 / 0.12);
+  --color-red-200: rgb(229 72 77 / 0.32);
+  --color-red-500: #F2555A;
+  --color-red-600: #FF7B80;
+  --color-red-700: #FF9EA1;
+  --color-amber-50: rgb(245 165 36 / 0.12);
+  --color-amber-200: rgb(245 165 36 / 0.32);
+  --color-amber-600: #F7B955;
+  --color-amber-700: #FAC978;
+  --color-emerald-50: rgb(190 242 33 / 0.10);
+  --color-emerald-200: rgb(190 242 33 / 0.26);
+  --color-emerald-600: #BEF221;
+  --color-emerald-700: #C9F24A;
+  --color-emerald-800: #D6F57A;
+  --color-blue-50: rgb(96 165 250 / 0.12);
+  --color-blue-200: rgb(96 165 250 / 0.32);
+  --color-blue-700: #93C5FD;
+
+  color-scheme: dark;
+}
+
+/* `bg-white` et ses variantes étaient les surfaces claires des onglets. */
+[data-admin-mode="dark"] .a-root .bg-white,
+[data-admin-mode="dark"] .a-root .focus\:bg-white:focus { background-color: var(--a-surface); }
+[data-admin-mode="dark"] .a-root .bg-white\/95 { background-color: rgb(19 13 46 / 0.95); }
+
+/* Fond du document : sans ça, le rebond du défilement laissait voir
+   l'Amethyst du site public sous un admin clair. */
+html[data-admin-mode="light"] body { background: #FAFAFC; }
+html[data-admin-mode="dark"] body { background: #0B0720; }
+
+/* Bascule clair/sombre : les couleurs glissent, le temps de la bascule seulement. */
+.a-mode-switching .a-root,
+.a-mode-switching .a-root * {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+}
+
+/* Typographie : les graisses 900 criaient. Manrope plafonne à 800, on
+   ramène tout à 700 — la hiérarchie vient de la taille et de la couleur. */
+.a-root .font-black,
+.a-root .font-extrabold { font-weight: 700; }
+.a-root .font-sans { font-family: inherit; }
+.a-root .font-mono,
+.a-mono { font-family: var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace; }
+.a-display { font-family: var(--font-manrope), "Manrope", system-ui, sans-serif; }
+
+.a-root ::selection { background: rgb(var(--color-accent-rgb) / 0.45); color: inherit; }
+.a-root ::-webkit-scrollbar-track { background: transparent; }
+.a-root ::-webkit-scrollbar-thumb { background: var(--color-slate-200); border-radius: 8px; }
+.a-root ::-webkit-scrollbar-thumb:hover { background: var(--color-slate-300); }
+
+/* Fond de page : un aplat. Les halos faisaient « template ». */
+.a-shell { background: var(--a-bg); }
+
+/* Surface standard. En clair un filet sur blanc, en sombre une couche
+   d'Amethyst un ton au-dessus du fond. Pas d'ombre dans les deux cas. */
 .a-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  color: #0F172A;
-  box-shadow:
-    0 1px 2px rgb(var(--color-primary-rgb) / 0.06),
-    0 12px 28px -16px rgb(var(--color-primary-rgb) / 0.45);
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  background: var(--a-surface);
+  border: 1px solid var(--a-line);
+  border-radius: 12px;
+  color: var(--color-slate-900);
+  transition: border-color 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
+}
+[data-admin-mode="dark"] .a-card { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.03); }
+
+.a-card-hover:hover { border-color: var(--color-slate-300); }
+
+/* Menus déroulants : seule surface qui flotte, donc seule à porter une ombre. */
+.a-pop {
+  box-shadow: 0 16px 40px -18px rgb(11 8 32 / 0.35);
+  animation: a-pop 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
 }
 
-.a-card-hover:hover {
-  border-color: #CBD5E1;
-  box-shadow:
-    0 1px 2px rgb(var(--color-primary-rgb) / 0.08),
-    0 18px 38px -18px rgb(var(--color-primary-rgb) / 0.55);
-}
+/* Ancien liseré lime des KPI : retiré, la classe reste inoffensive. */
+.a-kpi { position: relative; }
 
-/* Carte KPI : un liseré lime discret en haut, allumé au survol. Il donne
-   le point d'accroche qui manquait à des cartes aux trois quarts vides. */
-.a-kpi { position: relative; overflow: hidden; }
-.a-kpi::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-  opacity: 0.55;
-  transition: opacity 0.25s ease;
-}
-.a-kpi:hover::before { opacity: 1; }
-
-/* Sidebar : légèrement plus sombre que le contenu, pour qu'elle recule. */
 .a-sidebar {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012));
-  border-right: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.35);
+  background: var(--a-side);
+  border-right: 1px solid var(--a-line);
 }
 
-/* Onglet actif : barre lime à gauche plutôt qu'un simple fond teinté —
-   l'œil trouve sa position sans lire. */
+/* Onglet actif : la barre lime lumineuse, gardée à la demande de Ralph,
+   posée contre le bord de la sidebar ; l'icône prend l'encre de l'accent. */
 .a-nav-active {
   position: relative;
-  background: linear-gradient(90deg, rgb(var(--color-accent-rgb) / 0.14), rgb(var(--color-accent-rgb) / 0.03));
-  border: 1px solid rgb(var(--color-accent-rgb) / 0.18);
+  background: linear-gradient(90deg, rgb(var(--color-primary-rgb) / 0.07), rgb(var(--color-primary-rgb) / 0.015));
 }
+[data-admin-mode="dark"] .a-nav-active {
+  background: linear-gradient(90deg, rgb(var(--color-accent-rgb) / 0.13), rgb(var(--color-accent-rgb) / 0.02));
+}
+.a-nav-active svg { color: var(--admin-ink); }
 .a-nav-active::before {
   content: "";
   position: absolute;
-  left: -1px; top: 50%;
+  left: -12px; top: 50%;
   transform: translateY(-50%);
-  width: 2px; height: 60%;
-  border-radius: 0 2px 2px 0;
+  width: 3px; height: 56%;
+  border-radius: 0 3px 3px 0;
   background: var(--color-accent);
-  box-shadow: 0 0 10px rgb(var(--color-accent-rgb) / 0.8);
+  box-shadow: 0 0 12px rgb(var(--color-accent-rgb) / 0.9);
+  animation: a-bar-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
 }
 
-/* Barres de progression : dégradé + lueur. Un aplat lime pleine largeur
-   lisait comme une dalle publicitaire. */
-.a-bar {
-  background: linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 80%, #fff), var(--admin-ink));
-}
+/* Barres de progression : un aplat, primaire en clair, accent en sombre. */
+.a-bar { background: var(--a-curve); }
+.a-track { background: var(--color-slate-100); }
 
-/* Chiffre de KPI : léger dégradé vertical, comme un chiffre gravé. */
+/* Chiffres : JetBrains Mono, aplat. Graisse moyenne en clair, fine en
+   sombre — un chiffre clair sur fond sombre paraît toujours plus gras. */
 .a-figure {
-  background: linear-gradient(180deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 55%, #7C74C9));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-family: var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace;
+  font-weight: 400;
+  color: var(--color-slate-900);
 }
-.a-figure-accent {
-  background: linear-gradient(180deg, var(--admin-ink), color-mix(in srgb, var(--admin-ink) 75%, #fff));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+[data-admin-mode="dark"] .a-figure { font-weight: 300; }
+.a-figure-accent { color: var(--admin-ink); }
+.a-figure > small, .a-figure > span:not(:only-child) { font-family: var(--font-manrope), sans-serif; }
+
+/* ── Mouvement ─────────────────────────────────────────────────── */
+
+/* Changement d'onglet : chaque onglet rend une racine unique, ce sont ses
+   blocs (sections, grilles, cartes) qui arrivent en cascade. */
+.a-tab-enter > * > * { animation: a-rise 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.a-tab-enter > * > *:nth-child(2) { animation-delay: 0.04s; }
+.a-tab-enter > * > *:nth-child(3) { animation-delay: 0.08s; }
+.a-tab-enter > * > *:nth-child(4) { animation-delay: 0.12s; }
+.a-tab-enter > * > *:nth-child(n + 5) { animation-delay: 0.16s; }
+.a-rise { animation: a-rise 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+/* Courbes d'aire (motion.tsx). */
+.a-curve { position: relative; width: 100%; }
+.a-curve-stop-top { stop-color: var(--a-curve); stop-opacity: 0.2; }
+.a-curve-stop-bottom { stop-color: var(--a-curve); stop-opacity: 0; }
+.a-curve-grid { stroke: var(--color-slate-100); stroke-width: 1; stroke-dasharray: 3 4; }
+.a-curve-area { animation: a-fade 0.8s 0.55s ease both; }
+.a-curve-line {
+  fill: none;
+  stroke: var(--a-curve);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: a-draw 1.2s 0.1s cubic-bezier(0.6, 0, 0.2, 1) forwards;
 }
-
-/* Un enfant d'un chiffre dégradé garde sa propre couleur : sans ça, le
-   `-webkit-text-fill-color: transparent` s'hérite et un libellé atténué
-   ("index en cours") se retrouve peint comme le chiffre, donc lu comme une
-   valeur au lieu d'un état d'attente. */
-.a-figure > *,
-.a-figure-accent > * {
-  -webkit-text-fill-color: currentColor;
-  background: none;
+.a-curve-end,
+.a-curve-mark,
+.a-curve-dot {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
 }
+.a-curve-end {
+  width: 9px; height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--a-surface);
+  animation: a-fade 0.3s 1.2s both;
+}
+.a-curve-end::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--color-accent);
+  animation: a-halo 2.2s 1.3s ease-out infinite;
+}
+.a-curve-mark {
+  width: 6px; height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 1.5px var(--a-curve);
+  animation: a-fade 0.3s 1.1s both;
+}
+.a-curve-hit { position: absolute; top: 0; bottom: 0; }
+.a-curve-cursor {
+  position: absolute; top: 0; bottom: 0; left: 50%;
+  width: 1px;
+  background: var(--color-slate-300);
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.a-curve-dot {
+  left: 50%;
+  width: 9px; height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  background: var(--a-surface);
+  border: 2px solid var(--a-curve);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.12s, transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+.a-curve-tip {
+  position: absolute; left: 50%;
+  translate: -50% calc(-100% - 12px);
+  z-index: 2;
+  white-space: nowrap;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--a-toast-bg);
+  color: var(--a-toast-ink);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s;
+}
+.a-curve-hit:hover .a-curve-cursor,
+.a-curve-hit:hover .a-curve-tip { opacity: 1; }
+.a-curve-hit:hover .a-curve-dot { opacity: 1; transform: scale(1); }
+.a-curve-hit:first-child .a-curve-tip { translate: -8px calc(-100% - 12px); }
+.a-curve-hit:last-of-type .a-curve-tip { translate: calc(-100% + 8px) calc(-100% - 12px); }
 
-/* Titres : Outfit, la police display de la charte (§3). Inter reste pour
-   l'UI et le corps. Sans ça, titres et texte ne se distinguaient que par
-   la graisse — d'où l'impression de bloc uniforme. */
-.a-display { font-family: var(--font-outfit), "Outfit", sans-serif; }
+/* Toasts (toast.tsx). */
+.a-toasts {
+  position: fixed;
+  right: 20px; bottom: 20px;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  pointer-events: none;
+}
+.a-toast {
+  pointer-events: auto;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 12px;
+  width: min(380px, calc(100vw - 40px));
+  padding: 12px 10px 14px 12px;
+  border-radius: 12px;
+  background: var(--a-toast-bg);
+  color: var(--a-toast-ink);
+  font-size: 13px;
+  line-height: 1.45;
+  box-shadow: 0 20px 44px -18px rgb(0 0 0 / 0.5);
+  animation: a-toast-in 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+}
+.a-toast.is-leaving { animation: a-toast-out 0.2s ease-in forwards; }
+.a-toast p { margin: 3px 0 0; font-weight: 600; white-space: pre-line; overflow-wrap: anywhere; }
+.a-toast button {
+  display: grid; place-items: center;
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  opacity: 0.5;
+  transition: opacity 0.15s, background-color 0.15s;
+}
+.a-toast button:hover { opacity: 1; background: rgb(127 127 127 / 0.15); }
+.a-toast-icon {
+  display: grid; place-items: center;
+  width: 24px; height: 24px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--a-on-accent);
+  animation: a-pop 0.35s 0.08s cubic-bezier(0.2, 0.9, 0.3, 1.5) both;
+}
+.a-toast[data-kind="err"] .a-toast-icon { background: #E5484D; color: #FFFFFF; }
+.a-toast-icon path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: a-draw 0.4s 0.22s ease-out forwards; }
+.a-toast-timer {
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 2px;
+  background: var(--color-accent);
+  transform-origin: left;
+  animation: a-shrink var(--a-toast-ms, 6000ms) linear forwards;
+}
+.a-toast[data-kind="err"] .a-toast-timer { background: #E5484D; }
 
-/* Piste des barres, sur carte claire. */
-.a-track { background: #E8EDF3; }
+@keyframes a-rise { from { opacity: 0.001; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes a-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes a-pop { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
+@keyframes a-draw { to { stroke-dashoffset: 0; } }
+@keyframes a-halo { from { transform: scale(1); opacity: 0.5; } to { transform: scale(3.2); opacity: 0; } }
+@keyframes a-shrink { to { transform: scaleX(0); } }
+@keyframes a-bar-in { from { height: 0; opacity: 0; } }
+@keyframes a-toast-in { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes a-toast-out { to { opacity: 0; transform: translateX(16px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .a-root *, .a-root *::before, .a-root *::after,
+  .a-toast, .a-toast * {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

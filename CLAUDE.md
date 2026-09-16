@@ -71,8 +71,17 @@ par Acquisition, segment `influenceur`.
   Storage soit provisionné sur le projet `robi-ai-website`.
 
 Primitives visuelles communes dans `src/components/admin/ui.ts` — s'en
-servir plutôt que de recopier des classes : surfaces `rounded-2xl`,
-contrôles `rounded-xl`, marqueurs `rounded-full`.
+servir plutôt que de recopier des classes : surfaces 12 px,
+contrôles `rounded-lg`, marqueurs `rounded-full`.
+
+Refonte de sept. 2026 (DA choisie par Ralph) : Manrope + JetBrains Mono pour
+les chiffres, mode clair **et** sombre (`src/lib/adminMode.ts`), lime réservé
+aux signaux / onglet actif / action principale, aucune ombre portée.
+- Couleurs : utiliser `slate-*` — `.a-root` (globals.css) redéfinit la palette
+  selon le mode. Jamais de `text-white` / `bg-[#…]` sur une surface de page.
+- Messages : `toast("ok" | "err", texte)` (`toast.tsx`), jamais de bandeau local.
+- Mouvement : `CountUp` pour les KPI, `AreaCurve` pour les séries (`motion.tsx`).
+- Banc d'essai sans connexion : `/admin/apercu` (dev uniquement).
 
 ## Contexte produit (à connaître avant d'écrire)
 

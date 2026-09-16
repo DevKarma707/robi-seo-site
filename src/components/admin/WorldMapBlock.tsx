@@ -6,7 +6,7 @@ import { COUNTRY_PATH, COUNTRY_LABEL, MAP_WIDTH, MAP_HEIGHT } from "@/lib/worldP
 
 const ACCENT = "#BEF221";
 /** Lime lisible sur carte blanche — voir ui.ts. */
-const ACCENT_INK = "#6FA300";
+const ACCENT_INK = "var(--admin-ink)";
 
 /**
  * The 16 countries Robi actually supports — mirrors COUNTRIES_CONFIG in the
@@ -72,7 +72,7 @@ const WorldMapBlock: React.FC<Props> = ({ countries }) => {
       return { fill: ACCENT_INK, fillOpacity: 0.14, stroke: ACCENT_INK, strokeOpacity: 0.8, width: 1 };
     }
     // Hors cible : gris ardoise visible mais discret, jamais du blanc.
-    return { fill: "#CBD5E1", fillOpacity: 0.55, stroke: "#94A3B8", strokeOpacity: 0.5, width: 0.4 };
+    return { fill: "var(--color-slate-300)", fillOpacity: 0.55, stroke: "var(--color-slate-400)", strokeOpacity: 0.5, width: 0.4 };
   };
 
   const hovered = hover
@@ -112,14 +112,14 @@ const WorldMapBlock: React.FC<Props> = ({ countries }) => {
               <path
                 key={code}
                 d={d}
-                fill={s.fill}
                 fillOpacity={isHover ? Math.min(1, s.fillOpacity + 0.25) : s.fillOpacity}
-                stroke={s.stroke}
                 strokeOpacity={s.strokeOpacity}
                 strokeWidth={isHover ? 1.4 : s.width}
                 onMouseEnter={() => setHover(code)}
                 onMouseLeave={() => setHover((h) => (h === code ? null : h))}
-                style={{ cursor: "default", transition: "fill-opacity 150ms" }}
+                // Couleurs en style et non en attribut : un attribut SVG ne résout pas
+                // les variables CSS, dont dépend le mode clair/sombre.
+                style={{ fill: s.fill, stroke: s.stroke, cursor: "default", transition: "fill-opacity 150ms" }}
               />
             );
           })}

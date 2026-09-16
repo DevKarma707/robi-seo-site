@@ -13,6 +13,8 @@ import {
 import { parseGscFiles, saveSeoReport, subscribeToSeoReports, type GscReport } from "@/lib/searchConsole";
 import seed from "../../../content/seo/seo-keywords-seed.json";
 import { btn, btnAccent, card, input, kpiLabel, kpiValue, sectionTitle, select, ACCENT_INK } from "./ui";
+import { toast } from "./toast";
+import { CountUp } from "./motion";
 
 // ─── Métadonnées d'affichage ─────────────────────────────────────────
 const STATUS_META: Record<SeoStatus, { label: string; cls: string }> = {
@@ -73,7 +75,6 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
   const [showImport, setShowImport] = useState(false);
   const [editing, setEditing] = useState<SeoKeyword | null>(null);
   const [creating, setCreating] = useState<Partial<SeoKeyword> | null>(null);
-  const [flash, setFlash] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [segFilter, setSegFilter] = useState<string | null>(null);
   const [marketFilter, setMarketFilter] = useState("");
@@ -83,7 +84,11 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
   useEffect(() => subscribeToSeoReports(setReports), []);
   const latest = reports[0];
 
-  const say = (text: string) => { setFlash(text); setTimeout(() => setFlash(null), 8000); };
+  // Les messages d'erreur sont préfixés « ❌ » par les appelants.
+  const say = (text: string) => {
+    const err = text.startsWith("❌");
+    toast(err ? "err" : "ok", text.replace(/^(❌|✅)\s*/u, ""), err ? 12000 : 8000);
+  };
 
   const stats = useMemo(() => {
     const ranked = keywords.filter((k) => typeof k.position === "number");
@@ -210,17 +215,17 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
         ].map((s) => (
           <div key={s.label} className={`${card} p-4`}>
             <p className={kpiLabel}>{s.label}</p>
-            <p className={`${kpiValue} mt-2 text-slate-900`}>{s.value}</p>
+            <p className={`${kpiValue} mt-3`}><CountUp value={s.value} /></p>
           </div>
         ))}
       </div>
 
       {/* ── Actions ────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center gap-2">
-        {/* Posé sur la coquille sombre, pas sur une carte : même encre que le sous-titre de page. */}
-        <p className="flex-1 min-w-[220px] text-xs text-white/60">
+        {/* Posé sur le fond de page, pas sur une carte : même encre que le sous-titre de page. */}
+        <p className="flex-1 min-w-[220px] text-xs text-slate-500">
           {latest
-            ? <>Dernier export Search Console : <strong className="text-white/90">{fmtDate(latest.periodStart)} → {fmtDate(latest.periodEnd)}</strong>{pendingSync > 0 && keywords.length > 0 ? ` · ${pendingSync} mot${pendingSync > 1 ? "s" : ""}-clé${pendingSync > 1 ? "s" : ""} à synchroniser` : ""}</>
+            ? <>Dernier export Search Console : <strong className="text-slate-900">{fmtDate(latest.periodStart)} → {fmtDate(latest.periodEnd)}</strong>{pendingSync > 0 && keywords.length > 0 ? ` · ${pendingSync} mot${pendingSync > 1 ? "s" : ""}-clé${pendingSync > 1 ? "s" : ""} à synchroniser` : ""}</>
             : "Aucun export Search Console : clique sur « Importer un export (ZIP) » pour mettre les positions à jour."}
         </p>
         <button onClick={() => zipRef.current?.click()} disabled={busy} className={btnAccent}
@@ -244,11 +249,6 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
         </button>
       </div>
 
-      {flash && (
-        <div className={`text-sm px-4 py-3 rounded-xl border ${flash.startsWith("❌") ? "bg-red-50 border-red-200 text-red-700" : "bg-emerald-50 border-emerald-200 text-emerald-800"}`}>
-          {flash}
-        </div>
-      )}
 
       {/* ── Filtres ────────────────────────────────────────── */}
       {keywords.length > 0 && (

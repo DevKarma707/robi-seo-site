@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ListChecks, Plus, Trash2, AlertTriangle, Check, Bot, User, Download, RefreshCw,
   Search, Pencil, X, FolderInput, Sparkles, ClipboardCopy, Terminal, Code2,
@@ -15,6 +15,7 @@ import {
 } from "@/lib/launchTasks";
 import { runnerAvailable, runTask, getToken, setToken } from "@/lib/taskRunner";
 import { ACCENT, ACCENT_INK, btnGhost, btnPill, btnPrimary, card, focusRing, input, select } from "./ui";
+import { toast } from "./toast";
 
 const PRIORITY_COLOR: Record<number, string> = { 1: "#f87171", 2: "#fbbf24", 3: "#64748b" };
 
@@ -30,7 +31,6 @@ const KanbanTab: React.FC = () => {
   const [search, setSearch] = useState("");
   const [autoOnly, setAutoOnly] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   /** Tâche en cours d'édition, avec son brouillon titre/détail. */
   const [edit, setEdit] = useState<{ id: string; title: string; detail: string } | null>(null);
   /** Sélection multiple, pour faire le ménage sans cliquer trente fois. */
@@ -46,21 +46,12 @@ const KanbanTab: React.FC = () => {
   useEffect(() => {
     const unsub = subscribeToTasks(
       (r) => { setRows(r); setReady(true); },
-      (e) => { setFlash({ kind: "err", text: String(e) }); setReady(true); }
+      (e) => { toast("err", String(e)); setReady(true); }
     );
     return () => unsub();
   }, []);
 
-  // Le timer était posé sans être nettoyé : quitter l'onglet pendant qu'un
-  // message est affiché déclenchait un setState sur composant démonté.
-  const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
-
-  const say = useCallback((kind: "ok" | "err", text: string) => {
-    setFlash({ kind, text });
-    if (flashTimer.current) clearTimeout(flashTimer.current);
-    flashTimer.current = setTimeout(() => setFlash(null), 4000);
-  }, []);
+  const say = toast;
 
   /** Les déplacements par bouton n'étaient ni attendus ni attrapés : quand
    *  Firestore refusait l'écriture, la carte ne bougeait pas sans un mot. */
@@ -295,7 +286,7 @@ const KanbanTab: React.FC = () => {
 
   if (!ready) {
     return (
-      <div className="flex items-center gap-2 text-white/50 text-sm py-10">
+      <div className="flex items-center gap-2 text-slate-400 text-sm py-10">
         <RefreshCw size={16} className="animate-spin" /> Chargement du tableau…
       </div>
     );
@@ -679,16 +670,6 @@ const KanbanTab: React.FC = () => {
           );
         })}
       </div>
-
-      {flash && (
-        <div
-          className="fixed bottom-6 right-6 px-4 py-3 rounded-xl shadow-2xl text-[12px] font-bold z-50 flex items-center gap-2"
-          style={{ backgroundColor: flash.kind === "ok" ? ACCENT : "#f87171", color: flash.kind === "ok" ? "#000" : "#fff" }}
-        >
-          {flash.kind === "ok" ? <Check size={13} /> : <AlertTriangle size={13} />}
-          {flash.text}
-        </div>
-      )}
     </div>
   );
 };

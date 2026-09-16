@@ -10,6 +10,7 @@ import {
   type AppStats, type HealthReport, type LaunchConfig,
 } from "@/lib/adminApi";
 import { ACCENT_INK, btn, card, kpiLabel, kpiValue, sectionTitle } from "./ui";
+import { CountUp } from "./motion";
 
 /**
  * Le cockpit : ce qui brûle, et ce qui arrive.
@@ -176,7 +177,7 @@ function Kpi({ label, value, sub }: { label: string; value: React.ReactNode; sub
   return (
     <div className={`${card} p-4`}>
       <p className={kpiLabel}>{label}</p>
-      <p className={`${kpiValue} mt-2`}>{value}</p>
+      <p className={`${kpiValue} mt-3`}><CountUp value={value} /></p>
       {sub && <p className="text-[11px] mt-1.5 text-slate-500">{sub}</p>}
     </div>
   );

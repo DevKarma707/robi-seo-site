@@ -143,7 +143,7 @@ function DailyBars({ days, windowDays }: { days: { date: string; count: number }
           <div key={d.date} className="flex-1 h-full flex flex-col justify-end group relative">
             <div
               className="w-full rounded-sm"
-              style={{ height: `${Math.max((d.count / max) * 100, 4)}%`, backgroundColor: d.count > 0 ? RED : "rgba(255,255,255,0.08)" }}
+              style={{ height: `${Math.max((d.count / max) * 100, 4)}%`, backgroundColor: d.count > 0 ? RED : "var(--color-slate-100)" }}
             />
             <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-slate-900 opacity-0 group-hover:opacity-100 whitespace-nowrap">
               {d.count} · {d.date.slice(5)}
@@ -177,7 +177,7 @@ const SanteTab: React.FC = () => {
 
   if (loading && !report) {
     return (
-      <div className="flex items-center gap-2 text-white/50 text-sm py-10">
+      <div className="flex items-center gap-2 text-slate-400 text-sm py-10">
         <RefreshCw size={16} className="animate-spin" /> Diagnostic en cours…
       </div>
     );

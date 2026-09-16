@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { JetBrains_Mono, Manrope } from "next/font/google";
+import { MODE_SCRIPT } from "@/lib/adminMode";
 
 /**
  * `<html>` et `<body>` vivaient uniquement dans `[locale]/layout.tsx`, or
@@ -10,14 +11,14 @@ import { Inter, Outfit } from "next/font/google";
  *
  * L'admin est privé : pas d'indexation, et la langue est fixée à fr.
  */
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 /**
- * Outfit est la police de titres de la charte (BRAND_KIT §3, poids 600–800).
- * L'admin ne l'utilisait nulle part : tout était en Inter, d'où des titres
- * qui ne se distinguaient du corps de texte que par la graisse.
+ * Refonte de septembre 2026 : Manrope pour toute l'interface, JetBrains Mono
+ * pour les chiffres. Outfit et Inter se ressemblaient trop pour créer une
+ * hiérarchie ; un couple sans-serif / monospace la donne sans effort.
  */
-const outfit = Outfit({ subsets: ["latin"], weight: ["500", "600", "700", "800"], variable: "--font-outfit" });
+const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--font-manrope" });
+const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["300", "400", "500"], variable: "--font-jetbrains" });
 
 export const metadata: Metadata = {
   title: "Admin — Robi AI",
@@ -26,8 +27,13 @@ export const metadata: Metadata = {
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
-      <body className={`${inter.variable} ${outfit.variable} antialiased`}>{children}</body>
+    // Le script pose `data-admin-mode` sur <html> avant l'hydratation : React
+    // ne l'a pas rendu, d'où le suppressHydrationWarning.
+    <html lang="fr" suppressHydrationWarning>
+      <body className={`${manrope.variable} ${mono.variable} antialiased`}>
+        <script dangerouslySetInnerHTML={{ __html: MODE_SCRIPT }} />
+        {children}
+      </body>
     </html>
   );
 }

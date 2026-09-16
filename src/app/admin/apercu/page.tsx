@@ -23,7 +23,10 @@ import {
 import { Lancement, Revenu, Alertes } from "@/components/admin/PilotageTab";
 import WorldMapBlock from "@/components/admin/WorldMapBlock";
 import ThemePicker from "@/components/admin/ThemePicker";
-import { ACCENT, ACCENT_INK, btn, btnGhost, btnPill, btnPrimary, card, focusRingDark, kpiLabel, kpiValue, sectionTitle } from "@/components/admin/ui";
+import { ACCENT, btn, btnAccent, btnGhost, btnPill, btnPrimary, card, focusRing, kpiLabel, kpiValue, sectionTitle } from "@/components/admin/ui";
+import ModeToggle from "@/components/admin/ModeToggle";
+import { Toaster, toast } from "@/components/admin/toast";
+import { AreaCurve, CountUp } from "@/components/admin/motion";
 
 const NAV = [
   { label: "Pilotage", icon: <Gauge size={17} />, active: true },
@@ -63,52 +66,59 @@ const COUNTRIES = [
 export default function ApercuAdmin() {
   if (process.env.NODE_ENV === "production") notFound();
 
-  const navItem = "text-white/50 hover:text-white hover:bg-white/[0.06]";
-  const navActive = "a-nav-active text-[#BEF221]";
-  const maxFunnel = Math.max(...FUNNEL.map((f) => f.value));
+  const navItem = "text-slate-500 font-medium hover:text-slate-900 hover:bg-slate-900/[0.04]";
+  const navActive = "a-nav-active text-slate-900 font-semibold";
+  const CURVE = [18, 22, 19, 31, 27, 24, 38, 35, 29, 44, 41, 37, 52, 58].map((value, i) => ({
+    value,
+    label: `${i + 2} sept.`,
+    mark: i % 4 === 1,
+  }));
 
   return (
-    <div className="a-shell min-h-screen flex">
+    <div className="a-root a-shell min-h-screen flex">
       <aside className="a-sidebar w-[232px] flex-shrink-0 flex flex-col h-screen sticky top-0">
-        <div className="px-4 py-4 border-b border-white/[0.06] flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#BEF221]/20 flex items-center justify-center text-[#BEF221] font-black text-xs">R</div>
+        <div className="px-5 h-[68px] flex items-center gap-3 flex-shrink-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.svg" alt="Robi AI" className="w-8 h-8" />
           <div>
-            <p className="font-black text-sm text-white leading-none">Robi AI</p>
-            <p className="text-[10px] uppercase tracking-widest text-white/30 mt-0.5">Admin</p>
+            <p className="text-[14px] font-bold tracking-[-0.01em] text-slate-900 leading-none">Robi AI</p>
+            <p className="a-mono text-[10px] uppercase tracking-[0.14em] text-slate-400 mt-1">Admin</p>
           </div>
         </div>
-        <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
+        <nav className="flex-1 px-3 pb-3 space-y-0.5 overflow-y-auto">
           {NAV.map((t) => (
             <button
               key={t.label}
-              className={`a-display w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[15px] font-semibold transition-all ${focusRingDark} ${t.active ? navActive : navItem}`}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] transition-colors ${focusRing} ${t.active ? navActive : navItem}`}
             >
               {t.icon}
-              <span className="flex-1 text-left font-semibold tracking-[-0.01em]">{t.label}</span>
+              <span className="flex-1 text-left">{t.label}</span>
               {t.badge ? (
-                <span className="min-w-[20px] h-5 px-1 rounded-full bg-[#BEF221] text-black text-[10px] flex items-center justify-center font-black">{t.badge}</span>
+                <span className="a-mono min-w-[20px] h-5 px-1.5 rounded-full bg-[var(--color-accent)] text-[var(--a-on-accent)] text-[10.5px] font-medium flex items-center justify-center">{t.badge}</span>
               ) : null}
             </button>
           ))}
         </nav>
-        <div className="p-3 border-t border-white/[0.06] space-y-0.5">
+        <div className="p-3 border-t border-slate-200 space-y-0.5">
+          <ModeToggle />
           <ThemePicker />
-          <span className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold ${navItem}`}>
-            <ArrowUpRight size={17} /><span className="font-bold tracking-wide">Voir le site</span>
+          <span className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] ${navItem}`}>
+            <ArrowUpRight size={16} strokeWidth={1.75} /><span>Voir le site</span>
           </span>
-          <span className="w-full flex items-center gap-3 px-3 py-2 rounded-xl a-display text-[15px] font-semibold text-red-400">
-            <LogOut size={17} /><span className="font-bold tracking-wide">Déconnexion</span>
+          <span className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium text-slate-500">
+            <LogOut size={16} strokeWidth={1.75} /><span>Déconnexion</span>
           </span>
         </div>
       </aside>
 
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 min-w-0 overflow-auto">
         <div className="mx-auto w-full max-w-[1600px] px-6 py-8 md:px-10">
-          <div className="mb-8">
-            <h1 className="a-display font-extrabold text-[34px] leading-none tracking-[-0.025em] text-white">Pilotage</h1>
-            <p className="text-[13px] mt-2.5 text-slate-500">Inscriptions, activation, usage et funnel — agrégats uniquement</p>
-          </div>
+          <header className="a-rise mb-8 pb-6 border-b border-slate-200">
+            <h1 className="text-[28px] font-bold leading-none tracking-[-0.03em] text-slate-900">Pilotage</h1>
+            <p className="text-[13.5px] mt-2.5 text-slate-500">Inscriptions, activation, usage et funnel — agrégats uniquement</p>
+          </header>
 
+          <div className="a-tab-enter">
           <div className="space-y-6">
             {/* Les vrais composants du Pilotage, nourris de données factices. */}
             <Lancement
@@ -138,7 +148,7 @@ export default function ApercuAdmin() {
               {KPIS.map((k) => (
                 <div key={k.label} className={`${card} a-card-hover a-kpi p-4`}>
                   <p className={`${kpiLabel} mb-2`}>{k.label}</p>
-                  <span className={`${kpiValue} ${k.accent ? "a-figure-accent" : ""}`}>{k.value}</span>
+                  <span className={`${kpiValue} ${k.accent ? "a-figure-accent" : ""}`}><CountUp value={k.value} /></span>
                   {k.sub && <p className="text-[11px] mt-2 text-slate-500">{k.sub}</p>}
                 </div>
               ))}
@@ -146,6 +156,15 @@ export default function ApercuAdmin() {
                 <p className={`${kpiLabel} mb-2`}>{KPI_NODE.label}</p>
                 <span className={kpiValue}><span className="text-slate-400 text-xl">index en cours</span></span>
               </div>
+            </div>
+
+            <div className={`${card} p-5`}>
+              <div className="flex flex-wrap items-center gap-2 mb-5">
+                <p className={`${sectionTitle} flex-1`}>Visiteurs · 14 jours</p>
+                <button className={btnAccent} onClick={() => toast("ok", "12 emails de bienvenue envoyés aux nouveaux inscrits")}>Tester un toast</button>
+                <button className={btn} onClick={() => toast("err", "Envoi impossible : la clé Resend est absente.")}>Tester une erreur</button>
+              </div>
+              <AreaCurve points={CURVE} height={150} />
             </div>
 
             <div className={`${card} p-5`}>
@@ -161,7 +180,7 @@ export default function ApercuAdmin() {
                       <div className="a-bar h-full rounded-full" style={{ width: `${s.rate === null ? 100 : s.rate}%` }} />
                     </div>
                     <span className="text-sm font-black w-12 text-right text-slate-900 tabular-nums">{s.value}</span>
-                    <span className="text-[11px] w-16 text-right font-bold" style={{ color: s.rate === null ? "transparent" : s.rate < 10 ? "#f87171" : ACCENT }}>
+                    <span className="text-[11px] w-16 text-right font-bold" style={{ color: s.rate === null ? "transparent" : s.rate < 10 ? "#f87171" : "var(--admin-ink)" }}>
                       {s.rate === null ? "—" : `${s.rate}%`}
                     </span>
                   </div>
@@ -215,8 +234,10 @@ export default function ApercuAdmin() {
               </div>
             </div>
           </div>
+          </div>
         </div>
       </main>
+      <Toaster />
     </div>
   );
 }

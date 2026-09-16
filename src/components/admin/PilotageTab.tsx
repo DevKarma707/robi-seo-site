@@ -9,6 +9,7 @@ import {
 } from "@/lib/adminApi";
 import type { VisitStats } from "@/lib/firebase";
 import { ACCENT, ACCENT_INK, btn, card, kpiLabel, kpiValue, sectionTitle } from "./ui";
+import { CountUp } from "./motion";
 
 // ~110 Ko de tracés SVG : chargés seulement quand l'onglet Pilotage s'ouvre.
 const WorldMapBlock = dynamic(() => import("./WorldMapBlock"), {
@@ -31,7 +32,7 @@ function Kpi({ label, value, sub, accent }: { label: string; value: React.ReactN
   return (
     <div className={`${card} a-card-hover a-kpi p-4`}>
       <p className={`${kpiLabel} mb-2`}>{label}</p>
-      <span className={`${kpiValue} ${accent ? "a-figure-accent" : ""}`}>{value}</span>
+      <span className={`${kpiValue} ${accent ? "a-figure-accent" : ""}`}><CountUp value={value} /></span>
       {sub && <p className="text-[11px] mt-2 text-slate-500">{sub}</p>}
     </div>
   );
@@ -274,7 +275,7 @@ const PilotageTab: React.FC<{ visits: VisitStats }> = ({ visits }) => {
 
   if (loading && !stats) {
     return (
-      <div className="flex items-center gap-2 text-white/50 text-sm py-10">
+      <div className="flex items-center gap-2 text-slate-400 text-sm py-10">
         <RefreshCw size={16} className="animate-spin" /> Chargement des stats app…
       </div>
     );

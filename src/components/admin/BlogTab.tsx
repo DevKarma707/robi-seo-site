@@ -127,7 +127,7 @@ const BlogTab: React.FC<{ articles: Article[] }> = ({ articles }) => {
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-white/5">
+          <div className="divide-y divide-slate-100">
             {filtered.map((a) => (
               <div key={a.id} className="px-5 py-3.5 flex items-center gap-4 hover:bg-slate-50 transition-colors">
                 <div className="w-12 h-12 rounded-lg flex-shrink-0 overflow-hidden flex items-center justify-center bg-slate-100">

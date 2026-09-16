@@ -15,6 +15,7 @@ import {
 import { checkReplies, fetchOutreachStatus, sendOutreachEmail, type OutreachStatus } from "@/lib/adminApi";
 import { addInfluencer, suggestPromoCode } from "@/lib/influencers";
 import { ACCENT, ACCENT_INK, btnGhost, btnPill, btnPrimary, card, input, select } from "./ui";
+import { toast } from "./toast";
 
 const EXAMPLE_JSON = `[
   {
@@ -39,21 +40,17 @@ const AcquisitionTab: React.FC = () => {
   const [search, setSearch] = useState("");
   const [smtp, setSmtp] = useState<OutreachStatus | null>(null);
   const [busy, setBusy] = useState(false);
-  const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [showImport, setShowImport] = useState(false);
   const [importText, setImportText] = useState("");
 
   useEffect(() => {
-    const a = subscribeToProspects(setRows, (e) => setFlash({ kind: "err", text: String(e) }));
+    const a = subscribeToProspects(setRows, (e) => toast("err", String(e)));
     const b = subscribeToUnsubscribes(setOptedOut);
     fetchOutreachStatus().then(setSmtp).catch(() => setSmtp({ configured: false, from: null, host: null }));
     return () => { a(); b(); };
   }, []);
 
-  const say = (kind: "ok" | "err", text: string) => {
-    setFlash({ kind, text });
-    setTimeout(() => setFlash(null), 5000);
-  };
+  const say = toast;
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -469,7 +466,7 @@ const AcquisitionTab: React.FC = () => {
                         <div className="flex items-center justify-between gap-2">
                           <span className="text-[11px] font-bold">Variante {v.key}</span>
                           {reco && (
-                            <span className={`text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-full ${active ? "bg-black/10" : "bg-slate-900 text-white"}`}>
+                            <span className={`text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-full ${active ? "bg-black/10" : "bg-slate-900 text-[var(--a-bg)]"}`}>
                               Recommandé
                             </span>
                           )}
@@ -552,7 +549,7 @@ const AcquisitionTab: React.FC = () => {
                       {t.body && (
                         <details className="mt-1 ml-2">
                           <summary className="cursor-pointer text-slate-500 hover:text-slate-300">Voir le mail envoyé</summary>
-                          <div className="mt-1.5 rounded-lg border border-white/10 bg-black/20 p-2.5">
+                          <div className="mt-1.5 rounded-lg border border-slate-200 bg-slate-50 p-2.5">
                             {t.subject && <p className="text-slate-300 font-medium mb-1.5">{t.subject}</p>}
                             <pre className="whitespace-pre-wrap font-sans text-slate-400 leading-relaxed">{t.body}</pre>
                           </div>
@@ -577,18 +574,6 @@ const AcquisitionTab: React.FC = () => {
           </div>
         )}
       </div>
-
-      {flash && (
-        <div
-          className="fixed bottom-6 right-6 px-4 py-3 rounded-xl shadow-2xl text-[12px] font-bold z-50"
-          style={{
-            backgroundColor: flash.kind === "ok" ? ACCENT : "#f87171",
-            color: flash.kind === "ok" ? "#000" : "#fff",
-          }}
-        >
-          {flash.text}
-        </div>
-      )}
     </div>
   );
 };
