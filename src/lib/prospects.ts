@@ -85,6 +85,11 @@ export interface Prospect {
   drafts?: ProspectDrafts;
   /** Variante retenue (A ou B). Sans choix, la recommandation s'applique. */
   chosenDraft?: "A" | "B";
+  /**
+   * Retouches faites à la main dans le panneau, non encore envoyées, par
+   * clé `variante:étape`. Sans ça, changer de fiche perdait la retouche.
+   */
+  edits?: Record<string, { subject: string; body: string }>;
   /** Jeton du lien de désinscription, généré au premier envoi. */
   unsubToken?: string;
   unsubscribedAt?: string;
@@ -519,6 +524,42 @@ export const updateProspect = async (id: string, patch: Partial<Prospect>, curre
 };
 
 export const deleteProspect = (id: string) => deleteDoc(doc(db, "prospects", id));
+
+/**
+ * Résultats par angle, calculés depuis les fiches : chaque envoi trace
+ * `angle:<id>` dans une touche, et l'issue se lit sur la fiche (livraison,
+ * réponse, palier atteint). C'est ce qui permet à la recommandation de
+ * s'appuyer sur les chiffres plutôt que sur une intuition.
+ */
+export interface AngleStat {
+  angle: string;
+  sent: number;
+  opened: number;
+  replied: number;
+  interested: number;
+  signup: number;
+}
+
+const ANGLE_RE = /angle:([a-z0-9-]+)/i;
+
+export const angleStats = (rows: Prospect[]): AngleStat[] => {
+  const by = new Map<string, AngleStat>();
+  const get = (a: string) => by.get(a) || by.set(a, { angle: a, sent: 0, opened: 0, replied: 0, interested: 0, signup: 0 }).get(a)!;
+  for (const p of rows) {
+    const angles = (p.touches || []).map((t) => t.note?.match(ANGLE_RE)?.[1]).filter((a): a is string => !!a);
+    if (!angles.length) continue;
+    // L'issue est attribuée au dernier angle envoyé : c'est lui qui a
+    // déclenché la réponse, ou qui n'a pas su la déclencher.
+    const last = angles[angles.length - 1];
+    for (const a of angles) get(a).sent++;
+    const st = get(last);
+    if (p.delivery && ["opened", "clicked", "replied"].includes(p.delivery.status)) st.opened++;
+    if (p.delivery?.status === "replied" || (p.touches || []).some((t) => t.note?.startsWith("Réponse reçue"))) st.replied++;
+    if (rank(p.maxStage ?? p.status) >= rank("interested")) st.interested++;
+    if (rank(p.maxStage ?? p.status) >= rank("signup")) st.signup++;
+  }
+  return [...by.values()].sort((a, b) => b.sent - a.sent);
+};
 
 /** Efface les brouillons consommés — `undefined` n'est pas accepté par Firestore. */
 export const clearDrafts = (id: string) =>

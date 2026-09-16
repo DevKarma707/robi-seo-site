@@ -4,10 +4,10 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Target, Send, Copy, Mail, Check, AlertTriangle, Upload, Search,
   ArrowRight, Ban, ExternalLink, Trash2, RefreshCw, Megaphone,
- BookOpen } from "lucide-react";
+ BookOpen, Zap, BarChart3 } from "lucide-react";
 import {
   subscribeToProspects, subscribeToUnsubscribes, updateProspect, deleteProspect,
-  advanceProspect, clearDrafts, DELIVERY_META, importProspectsFromJson, makeUnsubToken, resolveTemplate,
+  advanceProspect, angleStats, clearDrafts, DELIVERY_META, importProspectsFromJson, makeUnsubToken, resolveTemplate,
   renderTemplate, stepOf, relativeDay, todayStr, statusLabel, sequenceFor,
   SEGMENT_META, SEGMENTS, STATUS_META, PIPELINE,
   type Prospect, type ProspectSegment, type ProspectStatus,
@@ -76,6 +76,7 @@ const AcquisitionTab: React.FC = () => {
   }, [rows]);
 
   const selected = rows.find((p) => p.id === selectedId) || null;
+  const angles = useMemo(() => angleStats(rows), [rows]);
 
   // ── Message courant du prospect sélectionné ──
   const message = useMemo(() => {
@@ -102,18 +103,73 @@ const AcquisitionTab: React.FC = () => {
   // Retouches faites à la main dans le panneau, avant envoi. Liées à la fiche
   // ET à la variante : changer de fiche ou de brouillon repart du texte
   // proposé, une retouche ne se retrouve jamais sur le mauvais prospect.
-  const editKey = selected && message ? `${selected.id}:${message.draft?.key ?? message.step.templateKey}:${selected.seqStep ?? 0}` : "";
-  const [edit, setEdit] = useState<{ key: string; subject: string; body: string } | null>(null);
+  // La clé ne contient pas l'id de fiche : les retouches sont rangées sur la
+  // fiche elle-même (`edits`), et survivent au changement de fiche ou à un
+  // rechargement.
+  const editKey = message ? `${message.draft?.key ?? message.step.templateKey}:${selected?.seqStep ?? 0}` : "";
+  const [edit, setEdit] = useState<{ id: string; key: string; subject: string; body: string } | null>(null);
+  const saved = selected?.edits?.[editKey];
   const final = message
-    ? edit?.key === editKey
+    ? edit && edit.id === selected?.id && edit.key === editKey
       ? { ...message, subject: edit.subject, body: edit.body }
-      : message
+      : saved
+        ? { ...message, subject: saved.subject, body: saved.body }
+        : message
     : null;
   const edited = !!final && !!message && (final.subject !== message.subject || final.body !== message.body);
   const setField = (field: "subject" | "body", value: string) =>
-    message && setEdit({ key: editKey, subject: final?.subject ?? message.subject, body: final?.body ?? message.body, [field]: value });
+    message && selected?.id &&
+    setEdit({ id: selected.id, key: editKey, subject: final?.subject ?? message.subject, body: final?.body ?? message.body, [field]: value });
+
+  // Sauvegarde différée de la retouche sur la fiche (800 ms après la
+  // dernière frappe) — sans ça une retouche non envoyée se perdait.
+  useEffect(() => {
+    if (!edit || !message) return;
+    const p = rows.find((r) => r.id === edit.id);
+    if (!p) return;
+    const t = setTimeout(() => {
+      const untouched = edit.subject === message.subject && edit.body === message.body;
+      const next = { ...(p.edits || {}) };
+      if (untouched) delete next[edit.key];
+      else next[edit.key] = { subject: edit.subject, body: edit.body };
+      updateProspect(edit.id, { edits: next }, p).catch(() => {});
+    }, 800);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [edit]);
+
+  const resetEdit = () => {
+    if (!selected?.id) return;
+    setEdit(null);
+    if (selected.edits?.[editKey]) {
+      const next = { ...selected.edits };
+      delete next[editKey];
+      updateProspect(selected.id, { edits: next }, selected);
+    }
+  };
 
   const isOptedOut = (p: Prospect) => !!p.unsubToken && optedOut.has(p.unsubToken);
+
+  // ── Mode Revue : enchaîner les fiches prêtes (brouillons A/B) au clavier ──
+  const [review, setReview] = useState(false);
+  const queue = useMemo(
+    () => rows.filter((p) => p.drafts?.variants?.length && p.email && STATUS_META[p.status].open && !isOptedOut(p))
+      .sort((a, b) => (a.priority ?? 2) - (b.priority ?? 2)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [rows, optedOut]
+  );
+  const queuePos = queue.findIndex((p) => p.id === selectedId);
+  const goNext = () => {
+    const next = queue.find((p, i) => i > queuePos) || queue.find((p) => p.id !== selectedId);
+    if (next) setSelectedId(next.id!);
+    else { setReview(false); say("ok", "Revue terminée — plus de fiche prête."); }
+  };
+  const goPrev = () => { if (queuePos > 0) setSelectedId(queue[queuePos - 1].id!); };
+  const startReview = () => {
+    if (!queue.length) return say("err", "Aucune fiche prête. Lance /robi-outreach <segment> d'abord.");
+    setReview(true);
+    setSelectedId(queue[0].id!);
+  };
 
   const copy = async (text: string) => {
     try {
@@ -158,14 +214,38 @@ const AcquisitionTab: React.FC = () => {
         body: message.body,
       });
       if (message.draft) await clearDrafts(selected.id);
+      if (selected.edits && Object.keys(selected.edits).length) await updateProspect(selected.id, { edits: {} }, selected);
       setEdit(null);
       say("ok", `Envoyé à ${selected.email}.`);
+      // En mode Revue, on enchaîne sur la fiche suivante sans un clic.
+      if (review) goNext();
     } catch (e) {
       say("err", (e as Error).message);
     } finally {
       setBusy(false);
     }
-  }, [selected, final, optedOut]);
+  }, [selected, final, optedOut, review, queuePos, queue]);
+
+  // Raccourcis du mode Revue. Ignorés quand on tape dans un champ, sauf
+  // ⌘/Ctrl+Entrée qui envoie depuis n'importe où.
+  useEffect(() => {
+    if (!review) return;
+    const onKey = (e: KeyboardEvent) => {
+      const typing = ["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement)?.tagName);
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); if (!busy) send(); return; }
+      if (typing) return;
+      if (!selected?.id) return;
+      const k = e.key.toLowerCase();
+      if (k === "a" || k === "b") { e.preventDefault(); if (selected.drafts) updateProspect(selected.id, { chosenDraft: k.toUpperCase() as "A" | "B" }, selected); }
+      else if (k === "arrowright" || k === "j" || k === "s") { e.preventDefault(); goNext(); }
+      else if (k === "arrowleft" || k === "k") { e.preventDefault(); goPrev(); }
+      else if (k === "escape") { setReview(false); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [review, selected, busy, send, queuePos, queue]);
+
 
   /**
    * Bascule une fiche prospect vers le programme influenceurs. Le prospect est
@@ -252,6 +332,47 @@ const AcquisitionTab: React.FC = () => {
         ))}
       </div>
 
+      {/* Résultats par angle */}
+      {angles.length > 0 && (
+        <details className={`${card} p-5`}>
+          <summary className="cursor-pointer flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-900">
+            <BarChart3 size={15} style={{ color: ACCENT_INK }} /> Résultats par angle
+            <span className="ml-auto text-[10px] font-normal normal-case tracking-normal text-slate-500">{angles.reduce((n, a) => n + a.sent, 0)} envois tracés</span>
+          </summary>
+          <div className="overflow-x-auto mt-4">
+            <table className="w-full text-[12px]" style={{ fontVariantNumeric: "tabular-nums" }}>
+              <thead>
+                <tr className="text-[10px] uppercase tracking-widest text-slate-500">
+                  <th className="text-left font-semibold pb-2">Angle</th>
+                  <th className="text-right font-semibold pb-2">Envoyés</th>
+                  <th className="text-right font-semibold pb-2">Ouverts</th>
+                  <th className="text-right font-semibold pb-2">Réponses</th>
+                  <th className="text-right font-semibold pb-2">Intéressés</th>
+                  <th className="text-right font-semibold pb-2">Inscrits</th>
+                  <th className="text-right font-semibold pb-2">Taux réponse</th>
+                </tr>
+              </thead>
+              <tbody>
+                {angles.map((a) => (
+                  <tr key={a.angle} className="border-t border-slate-100">
+                    <td className="py-1.5 font-mono font-semibold text-slate-900">{a.angle}</td>
+                    <td className="py-1.5 text-right text-slate-700">{a.sent}</td>
+                    <td className="py-1.5 text-right text-slate-700">{a.opened}</td>
+                    <td className="py-1.5 text-right text-slate-700">{a.replied}</td>
+                    <td className="py-1.5 text-right text-slate-700">{a.interested}</td>
+                    <td className="py-1.5 text-right text-slate-700">{a.signup}</td>
+                    <td className="py-1.5 text-right font-bold" style={{ color: a.sent >= 10 ? ACCENT_INK : "#94a3b8" }} title={a.sent < 10 ? "Moins de 10 envois : pas encore significatif" : undefined}>
+                      {a.sent ? `${Math.round((100 * a.replied) / a.sent)} %` : "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="text-[10px] text-slate-400 mt-2">L&apos;issue est attribuée au dernier angle envoyé. En dessous de 10 envois, le taux est indicatif.</p>
+          </div>
+        </details>
+      )}
+
       {/* Aujourd'hui */}
       <div className={`${card} p-5`}>
         <div className="flex items-center gap-2 mb-4">
@@ -304,6 +425,13 @@ const AcquisitionTab: React.FC = () => {
           <option value="open">En cours</option>
           {(Object.keys(STATUS_META) as ProspectStatus[]).map((s) => <option key={s} value={s}>{statusLabel(s, segment)}</option>)}
         </select>
+        <button
+          onClick={review ? () => setReview(false) : startReview}
+          className={review ? btnPrimary : btnGhost}
+          title="Enchaîner les fiches prêtes au clavier : A / B, ⌘+Entrée pour envoyer, → suivante"
+        >
+          <span className="flex items-center gap-1.5"><Zap size={12} /> {review ? `Revue ${queuePos + 1} / ${queue.length}` : `Revue A/B${queue.length ? ` (${queue.length})` : ""}`}</span>
+        </button>
         <a
           href="https://claude.ai/artifact/NkMT6tt4Det1LwVby5svii"
           target="_blank"
@@ -464,6 +592,16 @@ const AcquisitionTab: React.FC = () => {
               </div>
             </div>
 
+            {review && (
+              <div className="rounded-xl px-3 py-2 text-[11px] flex flex-wrap gap-x-4 gap-y-1" style={{ backgroundColor: `${ACCENT}22`, color: ACCENT_INK }}>
+                <span><kbd className="font-mono font-bold">A</kbd> / <kbd className="font-mono font-bold">B</kbd> variante</span>
+                <span><kbd className="font-mono font-bold">⌘⏎</kbd> envoyer</span>
+                <span><kbd className="font-mono font-bold">→</kbd> passer</span>
+                <span><kbd className="font-mono font-bold">←</kbd> précédente</span>
+                <span><kbd className="font-mono font-bold">Échap</kbd> quitter</span>
+              </div>
+            )}
+
             {/* Brouillons A / B rédigés par la skill */}
             {selected.drafts?.variants?.length ? (
               <div>
@@ -513,7 +651,7 @@ const AcquisitionTab: React.FC = () => {
                   <div className="flex items-center justify-between mb-1">
                     <p className="text-[10px] uppercase tracking-widest text-slate-500">Message</p>
                     {edited && (
-                      <button onClick={() => setEdit(null)} className="text-[10px] text-slate-500 hover:text-slate-900 underline">
+                      <button onClick={resetEdit} className="text-[10px] text-slate-500 hover:text-slate-900 underline">
                         Revenir au texte proposé
                       </button>
                     )}
