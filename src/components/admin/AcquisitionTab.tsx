@@ -99,6 +99,20 @@ const AcquisitionTab: React.FC = () => {
     };
   }, [selected]);
 
+  // Retouches faites à la main dans le panneau, avant envoi. Liées à la fiche
+  // ET à la variante : changer de fiche ou de brouillon repart du texte
+  // proposé, une retouche ne se retrouve jamais sur le mauvais prospect.
+  const editKey = selected && message ? `${selected.id}:${message.draft?.key ?? message.step.templateKey}:${selected.seqStep ?? 0}` : "";
+  const [edit, setEdit] = useState<{ key: string; subject: string; body: string } | null>(null);
+  const final = message
+    ? edit?.key === editKey
+      ? { ...message, subject: edit.subject, body: edit.body }
+      : message
+    : null;
+  const edited = !!final && !!message && (final.subject !== message.subject || final.body !== message.body);
+  const setField = (field: "subject" | "body", value: string) =>
+    message && setEdit({ key: editKey, subject: final?.subject ?? message.subject, body: final?.body ?? message.body, [field]: value });
+
   const isOptedOut = (p: Prospect) => !!p.unsubToken && optedOut.has(p.unsubToken);
 
   const copy = async (text: string) => {
@@ -111,6 +125,7 @@ const AcquisitionTab: React.FC = () => {
   };
 
   const send = useCallback(async () => {
+    const message = final;
     if (!selected?.id || !selected.email || !message) return;
     if (isOptedOut(selected)) return say("err", "Ce contact s'est désinscrit.");
 
@@ -143,13 +158,14 @@ const AcquisitionTab: React.FC = () => {
         body: message.body,
       });
       if (message.draft) await clearDrafts(selected.id);
+      setEdit(null);
       say("ok", `Envoyé à ${selected.email}.`);
     } catch (e) {
       say("err", (e as Error).message);
     } finally {
       setBusy(false);
     }
-  }, [selected, message, optedOut]);
+  }, [selected, final, optedOut]);
 
   /**
    * Bascule une fiche prospect vers le programme influenceurs. Le prospect est
@@ -481,32 +497,45 @@ const AcquisitionTab: React.FC = () => {
               </div>
             ) : null}
 
-            {/* Message */}
-            {message ? (
+            {/* Message — modifiable sur place, c'est ce texte qui part */}
+            {message && final ? (
               <div className="space-y-2">
-                {message.subject && (
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Objet</p>
-                    <p className="text-[13px] font-bold text-slate-900">{message.subject}</p>
-                  </div>
-                )}
                 <div>
-                  <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Message</p>
-                  <pre className="text-[12px] text-slate-700 whitespace-pre-wrap font-sans leading-relaxed max-h-64 overflow-y-auto bg-slate-50 rounded-xl p-3">
-                    {message.body}
-                  </pre>
+                  <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Objet</p>
+                  <input
+                    id="outreach-subject"
+                    className={`${input} font-bold`}
+                    value={final.subject}
+                    onChange={(e) => setField("subject", e.target.value)}
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-[10px] uppercase tracking-widest text-slate-500">Message</p>
+                    {edited && (
+                      <button onClick={() => setEdit(null)} className="text-[10px] text-slate-500 hover:text-slate-900 underline">
+                        Revenir au texte proposé
+                      </button>
+                    )}
+                  </div>
+                  <textarea
+                    id="outreach-body"
+                    className={`${input} text-[12px] leading-relaxed min-h-[16rem] resize-y font-sans`}
+                    value={final.body}
+                    onChange={(e) => setField("body", e.target.value)}
+                  />
                 </div>
                 <p className="text-[10px] text-slate-400">
                   Un lien de désinscription est ajouté automatiquement à l&apos;envoi.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <button onClick={() => copy(`${message.subject}\n\n${message.body}`)} className={btnGhost}>
+                  <button onClick={() => copy(`${final.subject}\n\n${final.body}`)} className={btnGhost}>
                     <span className="flex items-center gap-1.5"><Copy size={12} /> Copier</span>
                   </button>
                   {selected.email && (
                     <a
-                      href={`mailto:${selected.email}?subject=${encodeURIComponent(message.subject)}&body=${encodeURIComponent(message.body)}`}
+                      href={`mailto:${selected.email}?subject=${encodeURIComponent(final.subject)}&body=${encodeURIComponent(final.body)}`}
                       className={btnGhost}
                     >
                       <span className="flex items-center gap-1.5"><Mail size={12} /> Ouvrir dans le mail</span>
