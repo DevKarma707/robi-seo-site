@@ -347,7 +347,7 @@ const FichiersTab: React.FC = () => {
                   une barre à 0 % ferait croire à un blocage. On remplit alors
                   la piste plutôt que de mentir sur l'avancement. */}
               <div
-                className={`h-full rounded-full bg-[var(--color-primary)] ${progress ? "transition-[width] duration-200" : "animate-pulse"}`}
+                className={`h-full rounded-full bg-[var(--color-accent)] ${progress ? "transition-[width] duration-200" : "animate-pulse"}`}
                 style={{ width: progress ? `${Math.round((progress.fait / Math.max(progress.total, 1)) * 100)}%` : "100%" }}
               />
             </div>
