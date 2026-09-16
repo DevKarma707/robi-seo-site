@@ -45,6 +45,10 @@ const FichiersTab: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [hasRunner, setHasRunner] = useState(false);
   const [dragging, setDragging] = useState(false);
+  /** Les fichiers cochés, par chemin — le chemin est ce qui identifie un objet. */
+  const [coches, setCoches] = useState<Set<string>>(new Set());
+  /** Le vidage en lot s'arme avant de partir : il n'y a pas de corbeille. */
+  const [suppressionArmee, setSuppressionArmee] = useState(false);
   // Aucun dossier au départ : on attend de savoir lesquels existent pour en
   // ouvrir un. Charger « Tous » d'emblée est précisément ce qui faisait
   // attendre l'onglet plusieurs minutes.
@@ -166,6 +170,41 @@ const FichiersTab: React.FC = () => {
     } finally {
       setBusy(false);
     }
+  };
+
+  const selection = visible.filter((f) => coches.has(f.path));
+  const toutEstCoche = visible.length > 0 && selection.length === visible.length;
+
+  const basculerCoche = (chemin: string) =>
+    setCoches((s) => {
+      const n = new Set(s);
+      if (n.has(chemin)) n.delete(chemin); else n.add(chemin);
+      return n;
+    });
+
+  /**
+   * Supprime les fichiers cochés.
+   *
+   * Séquentiel et tolérant : un objet déjà disparu, ou refusé par les règles,
+   * ne doit pas arrêter le lot — et le compte rendu doit nommer ce qui reste,
+   * sinon on croit avoir nettoyé.
+   */
+  const supprimerSelection = async () => {
+    setBusy(true);
+    setSuppressionArmee(false);
+    let faits = 0;
+    const rates: string[] = [];
+    for (const f of selection) {
+      try { await deleteSharedFile(f.path); faits++; } catch { rates.push(f.name); }
+    }
+    if (preview && coches.has(preview.path)) setPreview(null);
+    setCoches(new Set());
+    setBusy(false);
+    if (rates.length) console.warn("[suppression] refusés :", rates);
+    say(rates.length ? "err" : "ok",
+      `${faits} fichier(s) supprimé(s)` +
+      (rates.length ? ` · ${rates.length} refusé(s) — règles Storage, voir la console` : ""));
+    await load();
   };
 
   const copyLink = async (f: SharedFile) => {
@@ -446,9 +485,64 @@ const FichiersTab: React.FC = () => {
       ) : visible.length === 0 ? (
         <p className="text-[12px] text-slate-400 px-1 py-6 text-center">Aucun fichier pour l&apos;instant.</p>
       ) : (
+        <>
+        {/* Cocher vingt visuels un par un pour faire le ménage après un lot
+            raté est exactement ce à quoi on renonce. */}
+        <div className="flex flex-wrap items-center gap-2 px-1">
+          <label className="flex items-center gap-2 text-[11px] font-bold text-slate-500 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={toutEstCoche}
+              onChange={() => setCoches(toutEstCoche ? new Set() : new Set(visible.map((f) => f.path)))}
+              className="h-3.5 w-3.5 accent-[var(--color-primary)]"
+            />
+            Tout sélectionner
+            <span className="font-medium text-slate-400">({visible.length} à l&rsquo;écran)</span>
+          </label>
+
+          {selection.length > 0 && (
+            <div className="flex items-center gap-1.5 ml-auto">
+              <span className="text-[11px] font-bold text-slate-500">
+                {selection.length} sélectionné{selection.length > 1 ? "s" : ""}
+              </span>
+              {suppressionArmee && (
+                <button onClick={() => setSuppressionArmee(false)} className={btnGhost}>Annuler</button>
+              )}
+              <button
+                onClick={() => (suppressionArmee ? supprimerSelection() : setSuppressionArmee(true))}
+                disabled={busy}
+                className={`${btn} ${
+                  suppressionArmee
+                    ? "bg-red-600 text-white hover:bg-red-700 border-red-600"
+                    : "text-red-600 border-red-200 hover:bg-red-50"
+                } disabled:opacity-40`}
+              >
+                <span className="flex items-center gap-1">
+                  <Trash2 size={11} />
+                  {suppressionArmee
+                    ? `Confirmer : supprimer ${selection.length} fichier${selection.length > 1 ? "s" : ""}`
+                    : "Supprimer"}
+                </span>
+              </button>
+            </div>
+          )}
+        </div>
+
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
           {visible.map((f) => (
-            <div key={f.path} className={`${card} overflow-hidden group`}>
+            <div key={f.path} className={`${card} overflow-hidden group relative`}>
+              <label
+                className="absolute top-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-md bg-white/90 border border-slate-200 cursor-pointer shadow-sm"
+                title="Sélectionner"
+              >
+                <input
+                  type="checkbox"
+                  checked={coches.has(f.path)}
+                  onChange={() => basculerCoche(f.path)}
+                  className="h-3.5 w-3.5 accent-[var(--color-primary)]"
+                  aria-label={`Sélectionner ${f.name}`}
+                />
+              </label>
               <button
                 onClick={() => (isImage(f) ? setPreview(f) : window.open(f.url, "_blank"))}
                 className={`block w-full aspect-square bg-slate-100 overflow-hidden ${focusRing}`}
@@ -485,6 +579,7 @@ const FichiersTab: React.FC = () => {
             </div>
           ))}
         </div>
+        </>
       )}
 
       {/* Aperçu plein écran */}

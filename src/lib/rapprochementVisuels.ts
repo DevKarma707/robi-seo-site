@@ -17,6 +17,8 @@ import type { SocialPost } from "./socialPosts";
 export interface FichierMediatheque {
   name: string;
   url: string;
+  /** Chemin complet dans le bucket. Sert à reconnaître une URL périmée. */
+  path?: string;
 }
 
 export interface Rapprochement {
@@ -29,6 +31,28 @@ export interface Rapprochement {
 }
 
 const EXTENSIONS = /\.(jpe?g|png|webp)$/i;
+
+/**
+ * Le chemin de l'objet dans le bucket, extrait d'une URL de téléchargement.
+ *
+ * Une URL Firebase Storage porte un jeton qui est REGÉNÉRÉ à chaque envoi :
+ * remplacer `robi_post_x.jpg` par une nouvelle version donne une nouvelle
+ * URL, et l'ancienne cesse de fonctionner. Un post qui garde l'ancienne
+ * affiche alors une vignette cassée, sans que rien ne l'explique.
+ *
+ * Comparer les chemins plutôt que les URL permet de distinguer deux cas que
+ * tout oppose : la même image ré-envoyée (on remet l'URL à jour, c'est une
+ * réparation) et une autre image choisie à la main (on n'y touche pas).
+ */
+export const cheminDepuisUrl = (url: string): string | null => {
+  try {
+    // .../o/partage%2Freseaux%2Frobi_post_x.jpg?alt=media&token=…
+    const m = new URL(url).pathname.match(/\/o\/(.+)$/);
+    return m ? decodeURIComponent(m[1]) : null;
+  } catch {
+    return null;
+  }
+};
 
 /**
  * `robi_post_2026-09-plombier-ig.jpg` → `2026-09-plombier-ig`
@@ -58,14 +82,14 @@ export const rapprocher = (
   remplacer = false
 ): Rapprochement => {
   /** externalId → visuels, la slide 1 (ou l'unique) en tête. */
-  const parId = new Map<string, { url: string; slide: number }[]>();
+  const parId = new Map<string, { url: string; slide: number; path: string }[]>();
   const utilises = new Set<string>();
 
   for (const f of fichiers) {
     const id = identifiantDepuisNom(f.name);
     if (!id) continue;
     const liste = parId.get(id.externalId) ?? [];
-    liste.push({ url: f.url, slide: id.slide ?? 1 });
+    liste.push({ url: f.url, slide: id.slide ?? 1, path: f.path ?? cheminDepuisUrl(f.url) ?? "" });
     parId.set(id.externalId, liste);
   }
   for (const liste of parId.values()) liste.sort((a, b) => a.slide - b.slide);
@@ -78,10 +102,17 @@ export const rapprocher = (
     const trouves = parId.get(post.externalId);
     if (!trouves?.length) { sansVisuel.push(post); continue; }
     utilises.add(post.externalId);
-    // Déjà attaché et on ne remplace pas : rien à faire, mais le visuel n'est
-    // pas orphelin pour autant.
-    if (post.imageUrl && !remplacer) continue;
-    attacher.push({ post, url: trouves[0].url });
+    const retenu = trouves[0];
+
+    if (post.imageUrl && !remplacer) {
+      // Même fichier, URL différente : le visuel a été ré-envoyé et le jeton
+      // a changé. On rafraîchit — sans quoi le post pointe vers une URL morte.
+      // Ce n'est pas écraser un choix, c'est le suivre.
+      const memeFichier =
+        retenu.path !== "" && cheminDepuisUrl(post.imageUrl) === retenu.path;
+      if (!memeFichier || post.imageUrl === retenu.url) continue;
+    }
+    attacher.push({ post, url: retenu.url });
   }
 
   const orphelins = [...parId.keys()]

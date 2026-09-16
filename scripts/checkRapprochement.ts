@@ -94,5 +94,47 @@ t("dix posts, dix visuels → dix attachements", (() => {
   return r.attacher.length === 10 && r.sansVisuel.length === 0 && r.orphelins.length === 0;
 })());
 
+// ── URL périmée après un ré-envoi ──────────────────────────────────────────
+// Firebase régénère le jeton de l'URL à chaque envoi : le même fichier
+// redéposé a une nouvelle URL, et l'ancienne cesse de répondre.
+const urlAvec = (chemin: string, jeton: string) =>
+  `https://firebasestorage.googleapis.com/v0/b/x.appspot.com/o/${encodeURIComponent(chemin)}?alt=media&token=${jeton}`;
+const fStock = (name: string, chemin: string, jeton: string) =>
+  ({ name, url: urlAvec(chemin, jeton), path: chemin });
+
+t("même fichier ré-envoyé → l'URL périmée est rafraîchie", (() => {
+  const chemin = "partage/reseaux/robi_post_a.jpg";
+  const r = rapprocher(
+    [post("a", { imageUrl: urlAvec(chemin, "ancien") })],
+    [fStock("robi_post_a.jpg", chemin, "nouveau")]
+  );
+  return r.attacher.length === 1 && r.attacher[0].url.includes("token=nouveau");
+})());
+
+t("URL inchangée → aucune écriture inutile", (() => {
+  const chemin = "partage/reseaux/robi_post_a.jpg";
+  const r = rapprocher(
+    [post("a", { imageUrl: urlAvec(chemin, "meme") })],
+    [fStock("robi_post_a.jpg", chemin, "meme")]
+  );
+  return r.attacher.length === 0;
+})());
+
+t("image choisie à la main ailleurs → jamais remplacée", (() => {
+  const r = rapprocher(
+    [post("a", { imageUrl: urlAvec("partage/reseaux/autre.jpg", "t") })],
+    [fStock("robi_post_a.jpg", "partage/reseaux/robi_post_a.jpg", "t")]
+  );
+  return r.attacher.length === 0;
+})());
+
+t("URL hors Firebase déjà posée → laissée telle quelle", (() => {
+  const r = rapprocher(
+    [post("a", { imageUrl: "https://cdn.externe.test/visuel.jpg" })],
+    [fStock("robi_post_a.jpg", "partage/reseaux/robi_post_a.jpg", "t")]
+  );
+  return r.attacher.length === 0;
+})());
+
 console.log(`\n${ko === 0 ? "✅ TOUT PASSE" : "❌ ÉCHECS"} — ${ok} ok, ${ko} ko\n`);
 process.exit(ko ? 1 : 0);

@@ -9,11 +9,17 @@ service firebase.storage {
 
     // Images de couverture des articles de blog :
     // lecture publique, écriture réservée à l'admin (max 10 Mo, images uniquement).
+    // NB : une suppression est une écriture où `request.resource` est NUL.
+    // Écrite en `allow write` avec une condition de taille, elle échouait
+    // toujours — et l'erreur renvoyée est un « unauthorized » opaque, qui
+    // laisse croire à un problème de compte. D'où create/update et delete
+    // séparés, ici comme sous partage/.
     match /blog/{file=**} {
       allow read: if true;
-      allow write: if isAdmin()
+      allow create, update: if isAdmin()
         && request.resource.size < 10 * 1024 * 1024
         && request.resource.contentType.matches('image/.*');
+      allow delete: if isAdmin();
     }
 
     // Dossier de travail partagé avec Claude (onglet Fichiers).
@@ -23,7 +29,8 @@ service firebase.storage {
     // par fichier pour ne pas transformer le bucket en disque dur.
     match /partage/{file=**} {
       allow read: if isAdmin();
-      allow write: if isAdmin() && request.resource.size < 50 * 1024 * 1024;
+      allow create, update: if isAdmin() && request.resource.size < 50 * 1024 * 1024;
+      allow delete: if isAdmin();
     }
   }
 }
