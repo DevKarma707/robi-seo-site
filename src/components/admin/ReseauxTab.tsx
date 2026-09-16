@@ -349,8 +349,25 @@ const ReseauxTab: React.FC = () => {
     return String(body.scheduledFor || "");
   };
 
+  /**
+   * Programme, sans faire attendre.
+   *
+   * L'écran de vérification se ferme au clic, avant la réponse de Blotato :
+   * l'aller-retour prend deux bonnes secondes, et programmer sept posts d'affilée
+   * revenait à passer un quart du temps à regarder un bouton tourner.
+   *
+   * On peut se le permettre parce que rien ne se perd si l'envoi échoue : le
+   * post repasse en brouillon avec son erreur, un bandeau le signale, et le
+   * filtre « à traiter » le remonte tous mois confondus. L'échec est donc
+   * rattrapé plus tard plutôt que constaté tout de suite — ce qui est le bon
+   * arbitrage quand l'échec est rare et l'attente systématique.
+   *
+   * `busy` reste volontairement libre : il verrouille des boutons devenus
+   * inaccessibles, et le bloquer empêcherait d'enchaîner le post suivant, ce
+   * qui annulerait tout le bénéfice.
+   */
   const programmer = async (posts: SocialPost[]) => {
-    setBusy(true);
+    setAVerifier(null);
     let faits = 0;
     const echecs: string[] = [];
     for (const post of posts) {
@@ -359,11 +376,16 @@ const ReseauxTab: React.FC = () => {
         await envoyerABlotato(post);
         faits++;
       } catch (e) {
-        echecs.push(`${post.date} · ${CHANNEL_META[post.channel].label} : ${(e as Error).message}`);
+        const motif = (e as Error).message;
+        echecs.push(`${post.date} · ${CHANNEL_META[post.channel].label} : ${motif}`);
+        // Repasser en brouillon : laissé en « prêt », le post paraîtrait
+        // programmé alors que Blotato ne l'a jamais reçu — et personne ne
+        // reviendrait dessus.
+        try {
+          await updatePost(post.id!, { status: "draft", publishError: motif });
+        } catch { /* le compte rendu porte déjà l'échec */ }
       }
     }
-    setBusy(false);
-    setAVerifier(null);
     if (echecs.length) say("err", `${faits} programmé(s) chez Blotato, ${echecs.length} en échec — ${echecs[0]}`);
     else say("ok", faits === 1 ? "Post programmé chez Blotato." : `${faits} posts programmés chez Blotato.`);
   };
