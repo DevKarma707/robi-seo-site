@@ -157,6 +157,14 @@ const ReseauxTab: React.FC = () => {
   // Le sélecteur s'ouvre pour un post donné : la médiathèque n'est chargée
   // qu'à ce moment-là, jamais à l'affichage du calendrier.
   const [picker, setPicker] = useState<boolean>(false);
+  /**
+   * Le visuel regardé en grand.
+   *
+   * La vignette du panneau fait 256 px de haut : on y voit qu'il y a une
+   * image, pas si le titre déborde ni si le voile tombe sur un visage. Or
+   * c'est le dernier écran avant de programmer.
+   */
+  const [apercu, setApercu] = useState<string | null>(null);
   const [importOpen, setImportOpen] = useState(false);
   const [importText, setImportText] = useState("");
   const [busy, setBusy] = useState(false);
@@ -1524,14 +1532,18 @@ const ReseauxTab: React.FC = () => {
                     {/* Un visuel choisi hors des propositions reste montré :
                         sinon on croirait n'avoir rien retenu. */}
                     {!!p.imageUrl && !p.imagePropositions!.includes(p.imageUrl) && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border-2 border-[var(--color-accent)]" />
+                      <button onClick={() => setApercu(p.imageUrl!)} className={focusRing} title="Voir en grand">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border-2 border-[var(--color-accent)] cursor-zoom-in" />
+                      </button>
                     )}
                   </div>
                 ) : (
                   p.imageUrl && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border border-slate-200" />
+                    <button onClick={() => setApercu(p.imageUrl!)} className={focusRing} title="Voir en grand">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={p.imageUrl} alt="" className="rounded-xl max-h-64 border border-slate-200 cursor-zoom-in" />
+                    </button>
                   )
                 )}
                 <SuiviPublication post={p} onRenvoyer={renvoyer} busy={busy} />
@@ -1605,6 +1617,24 @@ const ReseauxTab: React.FC = () => {
           onClose={() => setAVerifier(null)}
           onConfirm={programmer}
         />
+      )}
+      {apercu && (
+        <div
+          className="fixed inset-0 z-[70] bg-black/85 flex items-center justify-center p-6"
+          onClick={() => setApercu(null)}
+          role="dialog"
+          aria-label="Aperçu du visuel"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={apercu} alt="" className="max-w-full max-h-full rounded-xl shadow-2xl" />
+          <button
+            onClick={() => setApercu(null)}
+            className="absolute top-4 right-4 rounded-full bg-white/15 text-white p-2 hover:bg-white/25"
+            aria-label="Fermer"
+          >
+            <X size={16} />
+          </button>
+        </div>
       )}
       {picker && edit && (
         <Mediatheque
