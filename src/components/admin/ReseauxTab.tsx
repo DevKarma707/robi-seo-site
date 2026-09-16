@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   ChevronLeft, ChevronRight, FileJson, RefreshCw, AlertTriangle, Check, Trash2,
   Pencil, X, Copy, Sparkles, ClipboardCopy, ImagePlus, Loader2, Send, ShieldCheck,
-  CalendarDays, List, CircleAlert, BookOpen, Grid3x3, Plus,
+  CalendarDays, List, CircleAlert, BookOpen, Grid3x3, Plus, Clock,
 } from "lucide-react";
 import { listSharedFiles, isImage, type SharedFile } from "@/lib/sharedFiles";
 import { rapprocher } from "@/lib/rapprochementVisuels";
@@ -124,6 +124,29 @@ const ReseauxTab: React.FC = () => {
    * pour le travail, le calendrier pour le coup d'œil — d'où la bascule.
    */
   const [vue, setVue] = useState<"calendrier" | "liste" | "feed">("calendrier");
+  /**
+   * L'heure de publication, heure de Paris.
+   *
+   * Elle était fixée à 10 h côté serveur et rien ne le disait avant d'avoir
+   * programmé : on découvrait l'heure dans le récapitulatif, une fois le post
+   * parti chez Blotato. La route acceptait pourtant déjà une heure — il ne
+   * manquait que le réglage.
+   *
+   * Gardée dans le navigateur : c'est un confort de poste de travail, pas une
+   * donnée du calendrier. Un accès refusé au stockage ne doit rien casser,
+   * d'où le try/catch et la valeur de repli.
+   */
+  const [heure, setHeure] = useState("10:00");
+  useEffect(() => {
+    try {
+      const v = localStorage.getItem("robi.heurePublication");
+      if (v && /^\d{2}:\d{2}$/.test(v)) setHeure(v);
+    } catch { /* navigation privée, stockage bloqué : 10 h fera l'affaire */ }
+  }, []);
+  const changerHeure = (v: string) => {
+    setHeure(v);
+    try { localStorage.setItem("robi.heurePublication", v); } catch { /* sans conséquence */ }
+  };
   /**
    * « à-traiter » n'est pas un statut mais une question : qu'est-ce qui
    * m'empêche de programmer ? C'est la seule que Ralph se pose vraiment.
@@ -309,7 +332,7 @@ const ReseauxTab: React.FC = () => {
     const r = await fetch("/api/social/schedule", {
       method: "POST",
       headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-      body: JSON.stringify({ id: post.id }),
+      body: JSON.stringify({ id: post.id, heure }),
     });
     const body = await r.json().catch(() => ({}));
     if (!r.ok) {
@@ -898,6 +921,20 @@ const ReseauxTab: React.FC = () => {
           <option value="all">Tous les réseaux</option>
           {CHANNELS.map((c) => <option key={c} value={c}>{CHANNEL_META[c].label}</option>)}
         </select>
+
+        {/* L'heure décide de l'audience autant que le texte : la laisser
+            implicite côté serveur revenait à publier sans savoir quand. */}
+        <label className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
+          <Clock size={12} className="text-slate-400" />
+          Publier à
+          <input
+            type="time"
+            value={heure}
+            onChange={(e) => changerHeure(e.target.value)}
+            className={`${select} w-[92px] tabular-nums`}
+            title="Heure de publication, heure de Paris"
+          />
+        </label>
 
         {/* Calendrier pour voir, liste pour faire. */}
         <div className="flex rounded-xl border border-slate-200 overflow-hidden">
@@ -1540,6 +1577,7 @@ const ReseauxTab: React.FC = () => {
         <EcranVerification
           posts={aVerifier}
           voisins={rows}
+          heure={heure}
           jourDuJour={jourDuJour}
           busy={busy}
           onClose={() => setAVerifier(null)}
@@ -1893,10 +1931,11 @@ const LigneVerification = ({ post, verdict }: { post: SocialPost; verdict: Verdi
  * qu'ils sont programmés.
  */
 const EcranVerification = ({
-  posts, voisins, jourDuJour, busy, onClose, onConfirm,
+  posts, voisins, heure, jourDuJour, busy, onClose, onConfirm,
 }: {
   posts: SocialPost[];
   voisins: SocialPost[];
+  heure: string;
   jourDuJour: string;
   busy: boolean;
   onClose: () => void;
@@ -1924,6 +1963,8 @@ const EcranVerification = ({
         <p className="text-[11px] text-slate-500 mb-3 leading-relaxed">
           Une fois programmé, le post part tout seul à sa date, sans nouvelle relecture.
           C&apos;est le dernier écran où tu peux encore le retenir.
+          {" "}Publication à <b className="text-slate-700 tabular-nums">{heure}</b>, heure de Paris —
+          modifiable dans la barre du haut.
         </p>
 
         <ul className="space-y-2 overflow-auto flex-1 -mx-1 px-1">
