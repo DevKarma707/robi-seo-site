@@ -4,6 +4,7 @@ import createMDX from "@next/mdx";
 const nextConfig: NextConfig = {
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   images: {
+    qualities: [75, 90],
     remotePatterns: [
       {
         protocol: "https",

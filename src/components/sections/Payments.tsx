@@ -26,14 +26,12 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
   return (
     <section id="payments" className="hidden md:block py-8 md:py-14 lg:py-24 bg-gray-50 relative overflow-hidden">
       {/* Ambient glow */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#BEF221]/[0.06] rounded-full blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-16 lg:gap-24">
           {/* Payment Methods Visual */}
           <ScrollReveal className="flex-1 w-full max-w-xl">
             <div className="bg-white p-4 md:p-8 lg:p-12 rounded-xl md:rounded-3xl lg:rounded-[3.5rem] relative group border border-gray-200 hover:border-[#BEF221]/20 transition-all duration-500 shadow-xl">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#BEF221]/10 blur-3xl rounded-full" />
 
               <div className="relative text-center">
                 <h3 className="text-gray-400 text-xs md:text-sm font-black uppercase tracking-widest mb-4 md:mb-8 lg:mb-14">

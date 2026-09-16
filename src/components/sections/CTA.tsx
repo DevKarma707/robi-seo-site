@@ -34,20 +34,9 @@ export function CTA({
   ctaText = "Start with Robi AI",
   ctaHref = "https://go.robi-app.com",
   secondaryText = "No card • Cancel anytime",
-  fadeTop = true,
 }: CTAProps) {
   return (
     <section className="py-10 md:py-32 bg-[#0D0630] relative overflow-hidden">
-      {/* Smooth transition from the previous (light) section */}
-      {fadeTop ? (
-        <div className="absolute inset-x-0 top-0 h-16 md:h-24 bg-gradient-to-b from-white to-transparent pointer-events-none" />
-      ) : (
-        <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
-      )}
-
-      {/* Lime halo behind the CTA */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] md:w-[560px] md:h-[560px] bg-[#BEF221]/10 rounded-full blur-[100px] pointer-events-none" />
-
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

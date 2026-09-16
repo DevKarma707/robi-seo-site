@@ -13,7 +13,6 @@ export default function NotFound() {
       >
         <div className="min-h-screen bg-[#0D0630] flex items-center justify-center px-4 relative overflow-hidden">
           {/* Background effects matching Hero/CTA */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(190,242,33,0.08),transparent_50%)]" />
           <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#BEF221]/5 rounded-full blur-3xl" />
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#BEF221]/5 rounded-full blur-3xl" />
 

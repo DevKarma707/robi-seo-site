@@ -548,10 +548,10 @@ const AcquisitionTab: React.FC = () => {
                       </p>
                       {t.body && (
                         <details className="mt-1 ml-2">
-                          <summary className="cursor-pointer text-slate-500 hover:text-slate-300">Voir le mail envoyé</summary>
+                          <summary className="cursor-pointer text-slate-500 hover:text-slate-700">Voir le mail envoyé</summary>
                           <div className="mt-1.5 rounded-lg border border-slate-200 bg-slate-50 p-2.5">
-                            {t.subject && <p className="text-slate-300 font-medium mb-1.5">{t.subject}</p>}
-                            <pre className="whitespace-pre-wrap font-sans text-slate-400 leading-relaxed">{t.body}</pre>
+                            {t.subject && <p className="text-slate-700 font-medium mb-1.5">{t.subject}</p>}
+                            <pre className="whitespace-pre-wrap font-sans text-slate-600 leading-relaxed">{t.body}</pre>
                           </div>
                         </details>
                       )}

@@ -83,7 +83,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 
       {/* Author */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-[#BEF221] to-gray-300 border border-gray-200 flex-shrink-0" />
+        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#BEF221] border border-gray-200 flex-shrink-0" />
         <div>
           <p className="font-bold text-gray-900 text-sm">{testimonial.name}</p>
           <p className="text-xs text-gray-500">{testimonial.role}</p>

@@ -18,7 +18,6 @@ export function Pricing({
   subtitle,
   dict,
   locale = "fr",
-  fadeBottom = true,
 }: PricingProps) {
   const p = dict?.pricing || {};
   const prices = priceMap[locale] || priceMap["fr"];
@@ -55,17 +54,6 @@ export function Pricing({
 
   return (
     <section id="pricing" className="py-24 bg-[#0D0630] relative overflow-hidden">
-      {/* Background patterns */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#BEF221_1px,transparent_1px)] [background-size:40px_40px]" />
-      </div>
-
-      {/* Smooth transitions with adjacent light sections */}
-      <div className="absolute inset-x-0 top-0 h-16 md:h-24 bg-gradient-to-b from-gray-50 to-transparent pointer-events-none" />
-      {fadeBottom && (
-        <div className="absolute inset-x-0 bottom-0 h-16 md:h-24 bg-gradient-to-t from-gray-50 to-transparent pointer-events-none" />
-      )}
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <ScrollReveal className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">

@@ -56,16 +56,6 @@ export function Process({ dict = defaultDict }: ProcessProps) {
 
   return (
     <section id="process" className="py-8 md:py-14 lg:py-24 bg-white relative overflow-hidden">
-      {/* Subtle grid background */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal className="text-center mb-6 md:mb-10 lg:mb-16">
           <h2 className="text-lg md:text-2xl lg:text-3xl font-black text-gray-900 mb-2 md:mb-4">

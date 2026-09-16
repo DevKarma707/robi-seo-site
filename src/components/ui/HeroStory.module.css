@@ -11,7 +11,7 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(ellipse at 88% 25%, #18314f75, transparent 55%);
+  background: none;
 }
 
 .hero .layout { grid-template-columns: 1fr 1.05fr; gap: 36px; align-items: center; }
@@ -32,7 +32,7 @@
 .story { position: relative; width: 100%; height: 605px; }
 .photo { position: absolute; inset: 0 0 40px 76px; overflow: hidden; border-radius: 24px; transform: rotate(3deg); background: #111629; border: 1px solid #ffffff1c; box-shadow: 0 30px 85px #02000f40; }
 .portrait { object-fit: cover; object-position: center 74%; }
-.photoShade { position: absolute; inset: 0; background: linear-gradient(180deg, #0d063030 0%, transparent 45%, #0d0630c7 100%); }
+.photoShade { position: absolute; inset: 0; background: #0d063018; }
 .photoCaption { position: absolute; right: 25px; bottom: 28px; max-width: 175px; color: #f0edf6; font-size: 19px; line-height: 1.3; letter-spacing: -.035em; text-align: right; font-weight: 500; }
 .demo { position: absolute; left: -15px; bottom: -34px; width: 315px; z-index: 2; transform: rotate(-4deg); filter: drop-shadow(0 20px 35px #03000d60); }
 .voice { background: #201c3c; border: 1px solid #5a526f; border-radius: 18px 18px 0 0; padding: 16px 21px 21px; position: relative; }
@@ -43,9 +43,7 @@
 .wave i { width: 2px; max-height: 21px; border-radius: 2px; background: #bef221; transform: scaleY(.7); }
 .prompt { font-size: 16px; font-weight: 500; line-height: 1.5; color: #fff; letter-spacing: -.025em; margin-top: 10px; }
 .promptText { display: inline; }
-.demo[data-stage="voice"][data-playing="true"] .promptText {
-  animation: dictate 1.8s steps(34, end) both;
-}
+.promptText { overflow-wrap: break-word; }
 .transfer { position: absolute; bottom: -12px; left: 23px; display: grid; place-items: center; width: 24px; height: 24px; background: #bef221; border: 3px solid #f7f6f2; border-radius: 50%; color: #0d0630; z-index: 2; }
 .document { padding: 26px 23px 20px; background: #f7f6f2; color: #17102b; border-radius: 0 0 12px 12px; position: relative; overflow: hidden; }
 .documentTop { display: flex; justify-content: space-between; align-items: center; }
@@ -147,4 +145,117 @@
   .wave i, .statusText, .promptText, .documentTitle { animation: none !important; clip-path: none !important; }
   .document, .documentBottom, .progress i { transition: none; }
   .hero :global(.animate-slide-up-fade) { animation: none; }
+}
+
+/* Desktop companion card: invoice delivery and payment. */
+.tracking { display: none; }
+@media (min-width: 1024px) {
+  .tracking { display: block; position: absolute; z-index: 3; right: -5px; bottom: 40px; width: 230px; padding: 18px 15px 9px; border-radius: 17px; background: #f7f6f2; border: 1px solid #fff9; color: #17102b; transform: rotate(4deg); box-shadow: 0 22px 50px #03000d40; }
+  .trackingHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 17px; font-size: 24px; font-weight: 600; letter-spacing: -.06em; }
+  .trackingHeader > svg { color: #bef221; background: #0d0630; width: 30px; height: 30px; padding: 5px; border-radius: 8px; }
+  .trackingRows { display: grid; gap: 8px; }
+  .trackingRow { display: flex; align-items: center; gap: 9px; min-height: 56px; padding: 10px; border-radius: 10px; background: #ebe9ed; transition: background .6s ease, color .6s ease; }
+  .trackingRow[data-state="sent"] { background: #dce9f6; color: #183e67; }
+  .trackingRow[data-state="paid"] { background: #bef221; color: #0d0630; }
+  .trackingIcon { display: grid; place-items: center; width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; background: #ffffff65; }
+  .trackingRow small { display: block; font-size: 8px; opacity: .7; margin-bottom: 3px; letter-spacing: .03em; }
+  .trackingRow strong { display: block; font-size: 10px; font-weight: 600; }
+  .trackingDot { width: 5px; height: 5px; margin-left: auto; border-radius: 50%; background: currentColor; opacity: .5; }
+  .trackingFooter { display: flex; align-items: center; justify-content: space-between; min-height: 37px; font-size: 8px; color: #736e7f; }
+  .trackingFooter button { display: grid; place-items: center; width: 36px; height: 36px; cursor: pointer; }
+  .trackingFooter button:focus-visible { outline: 2px solid #18314f; border-radius: 6px; }
+  .photoCaption { top: 25px; bottom: auto; font-size: 16px; max-width: 155px; }
+}
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .tracking { width: 195px; right: -3px; bottom: 15px; padding: 14px 10px 6px; }
+  .trackingRow { gap: 6px; padding: 8px; }
+  .trackingRow strong { font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) { .trackingRow { transition: none; } }
+
+/* Miniature of the app's invoice list. */
+@media (min-width: 1024px) {
+  .tracking { width: 290px; right: -12px; bottom: 15px; padding: 0; overflow: hidden; background: #f5f6f7; border-color: #dedce6; transform: rotate(3deg); }
+  .trackingHeader { background: #0d0630; color: white; padding: 17px 13px 13px; margin: 0; font-size: 19px; letter-spacing: -.04em; }
+  .trackingHeader > span { display: flex; align-items: center; gap: 7px; }
+  .trackingHeader .trackingSearch { border: 1px solid #ffffff30; border-radius: 9px; padding: 9px 8px; font-size: 9px; letter-spacing: 0; font-weight: 400; color: #b9b2ca; }
+  .trackingCreate { display: flex; align-items: center; justify-content: center; gap: 7px; background: #bef221; color: #0d0630; height: 32px; border-radius: 10px; margin: 0 10px; font-size: 11px; font-weight: 650; text-transform: uppercase; letter-spacing: .08em; box-shadow: 0 0 0 11px #0d0630; position: relative; }
+  .trackingTabs { display: flex; justify-content: space-between; background: white; padding: 0 13px; margin-top: 11px; border-bottom: 1px solid #e3e7ef; font-size: 10px; color: #8794aa; }
+  .trackingTabs > span { padding: 14px 0; }
+  .trackingTabs > span:first-child { color: #0d0630; border-bottom: 2px solid #0d0630; }
+  .trackingTabs b { padding: 3px 5px; background: #f1f4f8; border-radius: 3px; margin-left: 3px; }
+  .trackingPeriod { display: flex; justify-content: space-between; padding: 13px 11px; color: #7f8da5; font-size: 9px; letter-spacing: .1em; }
+  .trackingPeriod strong { letter-spacing: 0; font-size: 11px; font-weight: 600; }
+  .trackingRows { padding: 0 7px; gap: 6px; }
+  .trackingRow, .trackingRow[data-state="sent"], .trackingRow[data-state="paid"] { background: white; color: #131c2c; border: 1px solid #e3e7ef; gap: 9px; min-height: 61px; padding: 9px; border-radius: 11px; }
+  .trackingAvatar { width: 31px; height: 34px; display: grid; place-items: center; background: #efeff3; color: #64647d; border-radius: 9px; font-size: 9px; font-weight: 600; flex-shrink: 0; }
+  .trackingClient { flex: 1; }
+  .trackingClient strong { font-size: 11px; letter-spacing: -.03em; }
+  .trackingClient small { font-size: 7px; letter-spacing: .05em; margin-top: 5px; margin-bottom: 0; color: #8290aa; opacity: 1; }
+  .trackingAmount { text-align: right; }
+  .trackingAmount > strong { font-size: 12px; font-variant-numeric: tabular-nums; letter-spacing: -.025em; }
+  .trackingBadge { display: flex; align-items: center; justify-content: center; gap: 3px; min-width: 66px; margin-top: 5px; padding: 3px 5px; border-radius: 20px; background: #eeedf1; color: #706d7d; font-size: 7px; font-weight: 650; text-transform: uppercase; letter-spacing: .035em; transition: background .6s ease, color .6s ease; }
+  .trackingRow[data-state="sent"] .trackingBadge { background: #d5e8fc; color: #225b92; }
+  .trackingRow[data-state="paid"] .trackingBadge { background: #bef221; color: #0d0630; }
+  .trackingFooter { padding: 0 12px; }
+  .demo { width: 285px; left: -32px; bottom: 8px; }
+}
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .tracking { width: 255px; right: -8px; bottom: -5px; }
+  .demo { width: 260px; left: -12px; bottom: 95px; }
+  .trackingHeader { font-size: 17px; }
+  .trackingClient strong { font-size: 10px; }
+  .trackingAmount > strong { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) { .trackingBadge { transition: none; } }
+
+/* Match the app typography and the original invoice card's palette. */
+@media (min-width: 1024px) {
+  .tracking { font-family: var(--font-inter), Inter, sans-serif; border: 1px solid #5a526f; background: #f7f6f2; }
+  .trackingHeader { background: #201c3c; font-weight: 700; letter-spacing: -.04em; }
+  .trackingCreate { box-shadow: 0 0 0 11px #201c3c; font-weight: 700; }
+  .trackingTabs { background: #f7f6f2; font-weight: 600; color: #8592a8; }
+  .trackingTabs b { display: inline-block; min-width: 17px; text-align: center; padding: 3px; margin-left: 2px; background: #ebe9ed; color: #736e7f; font-variant-numeric: tabular-nums; }
+  .trackingTabs > span:first-child b { color: #0d0630; }
+  .trackingRows { background: #f7f6f2; }
+  .trackingRow { border-color: #dedce1; }
+  .trackingClient strong { font-weight: 600; }
+  .trackingAmount > strong { font-weight: 700; }
+  .trackingRow[data-state="sent"] .trackingBadge { background: #e0e9f1; color: #18314f; }
+  .trackingRow[data-state="paid"] .trackingBadge { background: #bef221; color: #0d0630; }
+  .demo .documentBottom { margin-top: 12px; padding: 10px; min-height: 56px; border-radius: 10px; background: #ebe9ed; transition: background .45s ease; }
+  .demo[data-stage="sent"] .documentBottom { background: #e0e9f1; }
+  .demo[data-stage="paid"] .documentBottom { background: #bef221; }
+  .prompt { min-height: 72px; }
+}
+
+/* Independent translation keeps the cards' original tilt intact. */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .demo { animation: cardDrift 7s ease-in-out infinite; }
+  .tracking { animation: cardDrift 8.5s -3s ease-in-out infinite; }
+  .demo[data-playing="false"], .tracking[data-playing="false"] { animation-play-state: paused; }
+}
+@keyframes cardDrift {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -7px; }
+}
+
+/* Reveal the phone above the voice card on desktop. */
+@media (min-width: 1200px) {
+  .demo { bottom: -42px; }
+  .hero { padding-bottom: 105px; }
+}
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .demo { bottom: 45px; }
+  .hero { padding-bottom: 95px; }
+}
+
+@media (min-width: 1024px) {
+  .demoFooter, .trackingFooter { display: none; }
+  .trackingRows { padding-bottom: 10px; }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .demo { animation-duration: 7.7s; }
+  .tracking { animation-duration: 9.35s; }
+  .demo[data-stage="voice"] .wave i { animation-duration: .715s; }
 }
