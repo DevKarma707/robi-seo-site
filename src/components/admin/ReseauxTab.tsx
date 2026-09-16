@@ -156,6 +156,15 @@ const ReseauxTab: React.FC = () => {
   const [survol, setSurvol] = useState<string | null>(null);
   /** Posts cochés en vue liste, pour agir sur plusieurs d'un coup. */
   const [coches, setCoches] = useState<Set<string>>(new Set());
+  /**
+   * Le vidage complet se fait en deux temps.
+   *
+   * Un `confirm()` du navigateur se clique par réflexe, et celui-ci efface
+   * des mois de travail sans corbeille derrière. Le premier clic arme, le
+   * second exécute, et le bouton dit alors exactement combien de posts il
+   * s'apprête à détruire.
+   */
+  const [vidageArme, setVidageArme] = useState(false);
 
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
@@ -227,6 +236,12 @@ const ReseauxTab: React.FC = () => {
    * Sur le mois courant seulement, un échec du mois dernier resterait
    * invisible — et un post en échec ne se répare pas tout seul.
    */
+  /** Combien de posts déjà publiés le vidage emporterait avec lui. */
+  const publiesEnBase = useMemo(
+    () => rows.filter((p) => p.status === "published").length,
+    [rows]
+  );
+
   const aTraiter = useMemo(
     () => rows.filter((p) => p.status === "draft" || !!p.publishError).length,
     [rows]
@@ -512,6 +527,16 @@ const ReseauxTab: React.FC = () => {
       return n;
     });
 
+  /** Coche ou décoche d'un geste tout ce que la liste affiche. */
+  const toutCocher = () =>
+    setCoches((s) =>
+      listeDuMois.every((p) => s.has(p.id!)) && listeDuMois.length > 0
+        ? new Set()
+        : new Set(listeDuMois.map((p) => p.id!))
+    );
+
+  const toutEstCoche = listeDuMois.length > 0 && listeDuMois.every((p) => coches.has(p.id!));
+
   /** Les posts cochés qui sont encore à l'écran — cocher puis filtrer ne doit pas agir à l'aveugle. */
   const selection = useMemo(
     () => listeDuMois.filter((p) => coches.has(p.id!)),
@@ -554,6 +579,47 @@ const ReseauxTab: React.FC = () => {
     setOpenId(null);
     say("ok", `${faits} post(s) supprimé(s)`);
   };
+
+  /**
+   * Supprime TOUS les posts, tous mois confondus.
+   *
+   * Volontairement séparé de la suppression groupée : celle-ci agit sur ce
+   * qu'on voit, et n'a donc jamais de raison de dépasser le mois affiché.
+   * Confondre les deux ferait effacer un semestre en croyant nettoyer une
+   * semaine. Ici l'intitulé, le compte et le double clic disent la portée.
+   *
+   * Les publiés partent aussi : ce sont des posts « déjà présents » comme
+   * les autres, et les garder laisserait un calendrier à moitié vide qu'on
+   * croirait complet. Le bouton annonce combien ils sont avant d'armer.
+   */
+  const viderTout = async () => {
+    setBusy(true);
+    setVidageArme(false);
+    let faits = 0;
+    let rates = 0;
+    // Séquentiel : une erreur unitaire ne doit pas emporter le reste, et le
+    // compte rendu doit pouvoir dire ce qui est resté.
+    for (const post of rows) {
+      try { await deletePost(post.id!); faits++; } catch { rates++; }
+    }
+    setBusy(false);
+    setCoches(new Set());
+    setOpenId(null);
+    say(rates ? "err" : "ok",
+      `${faits} post(s) supprimé(s)` + (rates ? ` · ${rates} n'ont pas pu l'être` : " — le calendrier est vide."));
+  };
+
+  /**
+   * Désarme le vidage tout seul.
+   *
+   * Un bouton rouge qui reste armé pendant qu'on fait autre chose finit par
+   * être cliqué par accident, longtemps après qu'on ait changé d'avis.
+   */
+  useEffect(() => {
+    if (!vidageArme) return;
+    const t = setTimeout(() => setVidageArme(false), 6000);
+    return () => clearTimeout(t);
+  }, [vidageArme]);
 
   /**
    * Attache aux posts les visuels que la médiathèque contient déjà.
@@ -895,6 +961,41 @@ const ReseauxTab: React.FC = () => {
             </button>
           );
         })}
+
+        {/* Le vidage vit au bout de la rangée des filtres, loin des actions
+            courantes, et n'apparaît que s'il y a quelque chose à vider. */}
+        {rows.length > 0 && (
+          <div className="ml-auto flex items-center gap-1.5">
+            {vidageArme && (
+              <button onClick={() => setVidageArme(false)} className={`${btnPill} bg-slate-100 text-slate-600`}>
+                Annuler
+              </button>
+            )}
+            <button
+              onClick={() => (vidageArme ? viderTout() : setVidageArme(true))}
+              disabled={busy}
+              className={`${btnPill} ${
+                vidageArme
+                  ? "bg-red-600 text-white hover:bg-red-700"
+                  : "bg-white text-red-600 border border-red-200 hover:bg-red-50"
+              } disabled:opacity-40`}
+              title={
+                vidageArme
+                  ? "Second clic : la suppression est définitive"
+                  : "Supprimer tous les posts, tous mois confondus"
+              }
+            >
+              <span className="flex items-center gap-1">
+                <Trash2 size={11} />
+                {vidageArme
+                  ? `Confirmer : supprimer ${rows.length} post${rows.length > 1 ? "s" : ""}${
+                      publiesEnBase ? ` (dont ${publiesEnBase} publié${publiesEnBase > 1 ? "s" : ""})` : ""
+                    }`
+                  : "Tout supprimer"}
+              </span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Import */}
@@ -935,6 +1036,21 @@ const ReseauxTab: React.FC = () => {
             <EtatVide onBrief={copyBrief} onImporter={() => setImportOpen(true)} filtre={filtre} />
           ) : (
             <>
+              {/* Cocher vingt posts un par un pour les décaler d'un jour est
+                  le genre de corvée qui décourage de s'en servir. */}
+              <label className="flex items-center gap-2 px-1 pb-2 text-[11px] font-bold text-slate-500 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={toutEstCoche}
+                  onChange={toutCocher}
+                  className="h-3.5 w-3.5 accent-[var(--color-primary)]"
+                />
+                Tout sélectionner
+                <span className="font-medium text-slate-400">
+                  ({listeDuMois.length} à l’écran)
+                </span>
+              </label>
+
               {/* La barre n'apparaît qu'une fois quelque chose de coché :
                   affichée en permanence, elle occuperait de la place pour
                   une action qu'on ne fait pas à chaque visite. */}
