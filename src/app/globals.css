@@ -89,21 +89,10 @@ body {
   background: var(--lime-glow-strong);
 }
 
-/* === LIME GRADIENT TEXT === */
-.text-gradient {
-  background: linear-gradient(135deg, #BEF221 0%, #9FE000 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.text-gradient-animated {
-  background: linear-gradient(135deg, #BEF221 0%, #9FE000 50%, #BEF221 100%);
-  background-size: 200% 200%;
-  animation: gradient-shift 4s ease infinite;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* Solid brand accent for marketing text. */
+.text-gradient, .text-gradient-animated {
+  color: #BEF221;
+  -webkit-text-fill-color: #BEF221;
 }
 
 /* === GLOW SHADOWS (LIME) === */
@@ -402,7 +391,7 @@ body {
   height: 138px;
   top: 10px;
   left: 10px;
-  background: radial-gradient(218% 281% at 100% 100%, rgba(190, 242, 33, 0.6) 0%, rgba(13, 6, 48, 0.6) 45.83%, rgba(13, 6, 48, 0.6) 100%);
+  background: #0D0630;
 }
 
 .mockup1 img { animation-delay: 0.2s; }
@@ -413,7 +402,7 @@ body {
   height: 138px;
   top: 10px;
   left: 230px;
-  background: linear-gradient(192deg, #0D0630 12%, rgba(190, 242, 33, 0.4) 54%, #BEF221 100%);
+  background: #18314F;
 }
 
 .mockup2 img { animation-delay: 0.4s; }
@@ -513,7 +502,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.45) 50%, transparent 60%);
+  background: none;
   transform: translateX(-100%);
   pointer-events: none;
 }

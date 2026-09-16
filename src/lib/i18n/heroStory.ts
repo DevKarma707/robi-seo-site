@@ -5,6 +5,7 @@ export interface HeroStoryCopy {
   demoLabel: string;
   voiceLabel: string;
   prompt: string;
+  tracking: { title: string; search: string; create: string; all: string; sent: string; paid: string; draft: string };
   quoteLabel: string;
   invoiceLabel: string;
   service: string;
@@ -23,15 +24,16 @@ export interface HeroStoryCopy {
 
 const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
   fr: {
+    tracking: {"title": "Devis", "search": "Rechercher…", "create": "Créer", "all": "Tout", "sent": "Envoyé", "paid": "Accepté", "draft": "Brouillon"},
     eyebrow: "Assistant de facturation IA",
     photoAlt: "Un artisan dans son atelier dicte une demande à Robi",
     photoCaption: "Consacrez votre temps à ce que vous faites de mieux.",
     demoLabel: "Exemple illustratif",
     voiceLabel: "Vous dites",
-    prompt: "Prépare une facture pour la rénovation du salon.",
+    prompt: "Prépare une facture pour la création d’un meuble sur mesure.",
     quoteLabel: "Devis",
     invoiceLabel: "Facture",
-    service: "Rénovation du salon",
+    service: "Création d’un meuble sur mesure",
     draftLabel: "Brouillon créé",
     createdLabel: "Facture créée",
     creatingLabel: "Création en cours",
@@ -45,15 +47,16 @@ const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
     replayLabel: "Rejouer l’exemple",
   },
   en: {
+    tracking: {"title": "Quotes", "search": "Search…", "create": "Create", "all": "All", "sent": "Sent", "paid": "Accepted", "draft": "Draft"},
     eyebrow: "AI invoicing assistant",
     photoAlt: "A craftsperson in their workshop dictates a request to Robi",
     photoCaption: "Your work deserves your full attention.",
     demoLabel: "Illustrative example",
     voiceLabel: "You say",
-    prompt: "Prepare an invoice for the living room renovation.",
+    prompt: "Prepare an invoice for a custom furniture build.",
     quoteLabel: "Quote",
     invoiceLabel: "Invoice",
-    service: "Living room renovation",
+    service: "Custom furniture build",
     draftLabel: "Draft created",
     createdLabel: "Invoice created",
     creatingLabel: "Creating invoice",
@@ -67,15 +70,16 @@ const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
     replayLabel: "Replay the example",
   },
   es: {
+    tracking: {"title": "Presupuestos", "search": "Buscar…", "create": "Crear", "all": "Todo", "sent": "Enviado", "paid": "Aceptado", "draft": "Borrador"},
     eyebrow: "Asistente de facturación con IA",
     photoAlt: "Un artesano en su taller dicta una solicitud a Robi",
     photoCaption: "Tu trabajo merece toda tu atención.",
     demoLabel: "Ejemplo ilustrativo",
     voiceLabel: "Tú dices",
-    prompt: "Prepara una factura para la renovación del salón.",
+    prompt: "Prepara una factura para la creación de un mueble a medida.",
     quoteLabel: "Presupuesto",
     invoiceLabel: "Factura",
-    service: "Renovación del salón",
+    service: "Creación de un mueble a medida",
     draftLabel: "Borrador creado",
     createdLabel: "Factura creada",
     creatingLabel: "Creación en curso",
@@ -89,15 +93,16 @@ const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
     replayLabel: "Repetir el ejemplo",
   },
   pt: {
+    tracking: {"title": "Orçamentos", "search": "Pesquisar…", "create": "Criar", "all": "Tudo", "sent": "Enviado", "paid": "Aceite", "draft": "Rascunho"},
     eyebrow: "Assistente de faturação com IA",
     photoAlt: "Um artesão na sua oficina dita um pedido ao Robi",
     photoCaption: "O seu trabalho merece toda a sua atenção.",
     demoLabel: "Exemplo ilustrativo",
     voiceLabel: "Diz",
-    prompt: "Prepara uma fatura para a renovação da sala.",
+    prompt: "Prepara uma fatura para a criação de um móvel por medida.",
     quoteLabel: "Orçamento",
     invoiceLabel: "Fatura",
-    service: "Renovação da sala",
+    service: "Criação de um móvel por medida",
     draftLabel: "Rascunho criado",
     createdLabel: "Fatura criada",
     creatingLabel: "Criação em curso",

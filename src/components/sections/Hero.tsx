@@ -103,14 +103,6 @@ export function Hero({
 
   return (
     <section className={`relative overflow-hidden bg-[#0D0630] ${isEditorial ? storyStyles.hero : `pt-24 md:pt-32 ${ctaText ? "pb-14 md:pb-16" : "pb-10 md:pb-10"}`}`}>
-      {!isEditorial && <>
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(190,242,33,0.12),transparent_55%)]" />
-
-      {/* Subtle dot grid, fading toward the bottom */}
-      <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.07)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:linear-gradient(to_bottom,black_20%,transparent_85%)] pointer-events-none" />
-      </>}
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {isCenter ? (
           <div className="text-center max-w-4xl mx-auto">
@@ -171,8 +163,6 @@ export function Hero({
         )}
       </div>
 
-      {/* Smooth transition into the next (light) section */}
-      {!isEditorial && <div className="absolute bottom-0 inset-x-0 h-16 md:h-24 bg-gradient-to-b from-transparent to-white/95 pointer-events-none" />}
     </section>
   );
 }

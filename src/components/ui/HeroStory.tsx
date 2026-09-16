@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore, type CSSProperties } from "react";
 import Image from "next/image";
-import { ArrowDown, BadgeCheck, Bot, Check, Mic, Pause, Play, RotateCcw, Send } from "lucide-react";
+import { ArrowDown, BadgeCheck, Bot, Check, Mic, Pause, Play, RotateCcw, Send, FileText, Search, Plus } from "lucide-react";
 import type { HeroStoryCopy } from "@/lib/i18n/heroStory";
 import styles from "./HeroStory.module.css";
 
@@ -34,23 +34,30 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
   const [phase, setPhase] = useState(0);
   const [spokenText, setSpokenText] = useState("");
   const [paused, setPaused] = useState(false);
+  const [trackingStep, setTrackingStep] = useState(0);
   const reducedMotion = useSyncExternalStore(subscribeToMotion, getReducedMotion, getServerMotion);
   const mobile = useSyncExternalStore(subscribeToMobile, getMobile, getServerMobile);
-  // The full lifecycle is a mobile proposal; desktop art direction is deferred.
-  const stage = reducedMotion || !mobile ? 1 : phase;
-  const playing = !paused && !reducedMotion && mobile;
+  // Both cards loop; reduced motion keeps a static, readable example.
+  const stage = reducedMotion ? 1 : phase;
+  const playing = !paused && !reducedMotion;
+
+  useEffect(() => {
+    if (mobile || reducedMotion || paused) return;
+    const timer = setInterval(() => setTrackingStep((step) => (step + 1) % 8), 1870);
+    return () => clearInterval(timer);
+  }, [mobile, reducedMotion, paused]);
 
   useEffect(() => {
     if (!playing) return;
-    const timer = setTimeout(() => setPhase((current) => (current + 1) % phases.length), durations[phase]);
+    const timer = setTimeout(() => setPhase((current) => (current + 1) % phases.length), durations[phase] * (mobile ? 1 : 1.1) * (phase === 0 ? 1.16 : 1));
     return () => clearTimeout(timer);
-  }, [phase, playing, run]);
+  }, [phase, playing, run, mobile]);
 
   useEffect(() => {
     if (phase !== 0) { setSpokenText(copy.prompt); return; }
     if (!playing) return;
     setSpokenText("");
-    const step = Math.max(32, Math.round((durations[0] * 0.82) / copy.prompt.length));
+    const step = Math.max(32, Math.round((durations[0] * (mobile ? 1 : 1.1) * 1.16 * 0.82) / copy.prompt.length));
     let index = 0;
     const timer = setInterval(() => {
       index += 1;
@@ -58,17 +65,24 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
       if (index >= copy.prompt.length) clearInterval(timer);
     }, step);
     return () => clearInterval(timer);
-  }, [copy.prompt, phase, playing, run]);
+  }, [copy.prompt, phase, playing, run, mobile]);
 
   function replay() {
     setRun((current) => current + 1);
     setPhase(0);
+    setTrackingStep(0);
     setPaused(false);
   }
 
-  const status = mobile ? [copy.creatingLabel, copy.createdLabel, copy.sentLabel, copy.paidLabel][stage] : copy.draftLabel;
+  const status = [copy.creatingLabel, copy.createdLabel, copy.sentLabel, copy.paidLabel][stage];
   const detail = [copy.voiceLabel, copy.reviewLabel, copy.sentDetail, copy.paidDetail][stage];
   const StatusIcon = [Mic, Check, Send, BadgeCheck][stage];
+  const trackingStates = [0, 1, 2].map((row) => {
+    const step = reducedMotion ? 6 : trackingStep;
+    return step >= row + 4 ? "paid" : step >= row + 1 ? "sent" : "created";
+  });
+  const sentCount = trackingStates.filter((state) => state === "sent").length;
+  const paidCount = trackingStates.filter((state) => state === "paid").length;
 
   return (
     <div className={styles.story}>
@@ -78,7 +92,8 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
           alt={copy.photoAlt}
           fill
           priority
-          sizes="(min-width: 1280px) 465px, (min-width: 1024px) 40vw, (min-width: 640px) 480px, 85vw"
+          quality={90}
+          sizes="(min-width: 1280px) 560px, (min-width: 1024px) 48vw, (min-width: 640px) 520px, 90vw"
           className={styles.portrait}
         />
         <div className={styles.photoShade} aria-hidden="true" />
@@ -118,7 +133,7 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
         </div>
         <div className={styles.demoFooter}>
           <span>{copy.demoLabel}</span>
-          {!reducedMotion && mobile && <div className={styles.playback}>
+          {!reducedMotion && <div className={styles.playback}>
           <button type="button" onClick={() => setPaused((current) => !current)} aria-label={paused ? copy.resumeLabel : copy.pauseLabel} title={paused ? copy.resumeLabel : copy.pauseLabel}>
             {paused ? <Play size={13} aria-hidden="true" /> : <Pause size={13} aria-hidden="true" />}
           </button>
@@ -128,6 +143,34 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
           </div>}
         </div>
       </div>
+      <section className={styles.tracking} data-playing={playing} aria-label={copy.tracking.title}>
+        <div className={styles.trackingHeader}>
+          <span><FileText size={18} />{copy.tracking.title}</span>
+          <span className={styles.trackingSearch}><Search size={12} />{copy.tracking.search}</span>
+        </div>
+        <div className={styles.trackingCreate}><Plus size={14} />{copy.tracking.create}</div>
+        <div className={styles.trackingTabs}><span>{copy.tracking.all} <b>3</b></span><span>{copy.tracking.sent} <b>{sentCount}</b></span><span>{copy.tracking.paid} <b>{paidCount}</b></span></div>
+        <div className={styles.trackingPeriod}><span>2026</span><strong>3 994,00 €</strong></div>
+        <div className={styles.trackingRows}>
+          {[0, 1, 2].map((row) => {
+            const state = trackingStates[row];
+            const Icon = state === "paid" ? BadgeCheck : state === "sent" ? Send : Check;
+            return <div key={row} className={styles.trackingRow} data-state={state}>
+              <span className={styles.trackingAvatar}>{["ML", "AD", "SB"][row]}</span>
+              <div className={styles.trackingClient}><strong>{["Maison Laurent", "Atelier Dubois", "Studio Bernard"][row]}</strong><small>DEV-2026-00{row + 1}</small></div>
+              <div className={styles.trackingAmount}><strong>{["1 240,00", "2 274,00", "480,00"][row]} €</strong>
+                <span className={styles.trackingBadge}><Icon size={10} />{state === "paid" ? copy.tracking.paid : state === "sent" ? copy.tracking.sent : copy.tracking.draft}</span>
+              </div>
+            </div>;
+          })}
+        </div>
+        <div className={styles.trackingFooter}>
+          <span>{copy.demoLabel}</span>
+          {!reducedMotion && <button type="button" onClick={() => setPaused((value) => !value)} aria-label={paused ? copy.resumeLabel : copy.pauseLabel}>
+            {paused ? <Play size={13} /> : <Pause size={13} />}
+          </button>}
+        </div>
+      </section>
     </div>
   );
 }
