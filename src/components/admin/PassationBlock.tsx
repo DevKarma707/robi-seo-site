@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { BookOpen, Check, Pencil, X, ShieldAlert, AlertTriangle, Compass, Bot, User } from "lucide-react";
+import { BookOpen, Check, Pencil, X, ShieldAlert, AlertTriangle, Compass, Bot, User, ChevronDown } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import {
   subscribeToPassation, savePassation, addPassationNote,
@@ -21,6 +21,8 @@ const PassationBlock: React.FC = () => {
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [allJournal, setAllJournal] = useState(false);
+  /** Replié par défaut : c'est la mémoire des agents, Ralph n'en a besoin qu'à l'occasion. */
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const unsub = subscribeToPassation(
@@ -71,16 +73,38 @@ const PassationBlock: React.FC = () => {
 
   const journal = allJournal ? p.journal : p.journal.slice(0, 5);
 
+  const last = p.journal[0];
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className={`${card} w-full px-4 py-2.5 flex items-center justify-between gap-3 text-left`}
+      >
+        <span className="flex items-center gap-2 min-w-0">
+          <BookOpen size={13} style={{ color: ACCENT_INK }} />
+          <span className="text-[11px] font-black uppercase tracking-widest text-slate-900">Passation</span>
+          <span className="text-[11px] text-slate-400 truncate">
+            pour les agents · {last ? `dernière signature ${last.date.slice(0, 10)} (${last.agent})` : "vide"}
+          </span>
+        </span>
+        <ChevronDown size={14} className="text-slate-400 flex-shrink-0" />
+      </button>
+    );
+  }
+
   return (
     <div className={`${card} p-5`}>
       <div className="flex items-center justify-between gap-4 mb-3">
-        <div className="flex items-center gap-2">
+        <button type="button" onClick={() => { if (!edit) setOpen(false); }} className="flex items-center gap-2 text-left">
           <BookOpen size={15} style={{ color: ACCENT_INK }} />
           <p className="text-xs font-black uppercase tracking-widest text-slate-900">Passation</p>
           <span className="text-[11px] text-slate-400 hidden sm:inline">
             — lue par tout agent avant d&apos;agir · <code className="a-figure text-[10.5px]">npx tsx scripts/kanban.ts</code>
           </span>
-        </div>
+          {!edit && <ChevronDown size={14} className="text-slate-400 rotate-180" />}
+        </button>
         {edit ? (
           <div className="flex items-center gap-1.5">
             <button className={btnGhost} onClick={() => setEdit(null)} disabled={busy}><X size={12} /></button>
@@ -106,7 +130,7 @@ const PassationBlock: React.FC = () => {
                 onChange={(e) => setEdit({ ...edit, [s.key]: e.target.value })}
               />
             ) : (
-              <p className="text-[12.5px] leading-relaxed text-slate-700 whitespace-pre-wrap">
+              <p className="text-[12px] leading-relaxed text-slate-700 whitespace-pre-wrap max-h-48 overflow-y-auto pr-1">
                 {p[s.key] || <span className="text-slate-400">{s.empty}</span>}
               </p>
             )}

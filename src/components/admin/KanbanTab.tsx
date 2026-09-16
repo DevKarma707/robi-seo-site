@@ -295,8 +295,6 @@ const KanbanTab: React.FC = () => {
 
   return (
     <div className="space-y-5">
-      <PassationBlock />
-
       {/* Avancement */}
       <div className={`${card} p-5`}>
         <div className="flex items-center justify-between gap-4 mb-3">
@@ -673,6 +671,9 @@ const KanbanTab: React.FC = () => {
           );
         })}
       </div>
+
+      {/* Passation — surtout pour les agents ; replié par défaut, sous le tableau. */}
+      <PassationBlock />
     </div>
   );
 };
