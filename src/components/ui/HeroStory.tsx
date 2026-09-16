@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore, type CSSProperties } from "react";
 import Image from "next/image";
-import { ArrowDown, BadgeCheck, Bot, Check, Mic, Pause, Play, RotateCcw, Send, FileText, Search, Plus } from "lucide-react";
+import { ArrowDown, BadgeCheck, Bot, Check, Mic, Send, FileText, Search, Plus } from "lucide-react";
 import type { HeroStoryCopy } from "@/lib/i18n/heroStory";
 import styles from "./HeroStory.module.css";
 
@@ -30,28 +30,26 @@ function getMobile() { return window.matchMedia("(max-width: 1023px)").matches; 
 function getServerMobile() { return false; }
 
 export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
-  const [run, setRun] = useState(0);
   const [phase, setPhase] = useState(0);
   const [spokenText, setSpokenText] = useState("");
-  const [paused, setPaused] = useState(false);
   const [trackingStep, setTrackingStep] = useState(0);
   const reducedMotion = useSyncExternalStore(subscribeToMotion, getReducedMotion, getServerMotion);
   const mobile = useSyncExternalStore(subscribeToMobile, getMobile, getServerMobile);
   // Both cards loop; reduced motion keeps a static, readable example.
   const stage = reducedMotion ? 1 : phase;
-  const playing = !paused && !reducedMotion;
+  const playing = !reducedMotion;
 
   useEffect(() => {
-    if (mobile || reducedMotion || paused) return;
+    if (mobile || reducedMotion) return;
     const timer = setInterval(() => setTrackingStep((step) => (step + 1) % 8), 1870);
     return () => clearInterval(timer);
-  }, [mobile, reducedMotion, paused]);
+  }, [mobile, reducedMotion]);
 
   useEffect(() => {
     if (!playing) return;
     const timer = setTimeout(() => setPhase((current) => (current + 1) % phases.length), durations[phase] * (mobile ? 1 : 1.1) * (phase === 0 ? 1.16 : 1));
     return () => clearTimeout(timer);
-  }, [phase, playing, run, mobile]);
+  }, [phase, playing, mobile]);
 
   useEffect(() => {
     if (phase !== 0) { setSpokenText(copy.prompt); return; }
@@ -65,14 +63,9 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
       if (index >= copy.prompt.length) clearInterval(timer);
     }, step);
     return () => clearInterval(timer);
-  }, [copy.prompt, phase, playing, run, mobile]);
+  }, [copy.prompt, phase, playing, mobile]);
 
-  function replay() {
-    setRun((current) => current + 1);
-    setPhase(0);
-    setTrackingStep(0);
-    setPaused(false);
-  }
+  const invoiceSpoken = spokenText.toLocaleLowerCase().includes(copy.invoiceLabel.toLocaleLowerCase());
 
   const status = [copy.creatingLabel, copy.createdLabel, copy.sentLabel, copy.paidLabel][stage];
   const detail = [copy.voiceLabel, copy.reviewLabel, copy.sentDetail, copy.paidDetail][stage];
@@ -116,8 +109,8 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
 
         <div className={styles.document}>
           <div className={styles.documentTop}>
-            <span key={`document-title-${stage}-${spokenText.toLocaleLowerCase().includes("facture")}`} className={styles.documentTitle}>
-              {stage === 0 && !spokenText.toLocaleLowerCase().includes("facture") ? copy.quoteLabel : copy.invoiceLabel}<span className={styles.documentDot}>.</span>
+            <span key={`document-title-${stage}-${invoiceSpoken}`} className={styles.documentTitle}>
+              {stage === 0 && !invoiceSpoken ? copy.quoteLabel : copy.invoiceLabel}<span className={styles.documentDot}>.</span>
             </span>
             <Bot size={27} color="#BEF221" strokeWidth={2} aria-hidden="true" />
           </div>
@@ -129,17 +122,6 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
           </div>
           {mobile && <div className={styles.progress} aria-hidden="true">
             {[1, 2, 3].map((step) => <i key={step} data-complete={stage >= step} />)}
-          </div>}
-        </div>
-        <div className={styles.demoFooter}>
-          <span>{copy.demoLabel}</span>
-          {!reducedMotion && <div className={styles.playback}>
-          <button type="button" onClick={() => setPaused((current) => !current)} aria-label={paused ? copy.resumeLabel : copy.pauseLabel} title={paused ? copy.resumeLabel : copy.pauseLabel}>
-            {paused ? <Play size={13} aria-hidden="true" /> : <Pause size={13} aria-hidden="true" />}
-          </button>
-          <button type="button" onClick={replay} aria-label={copy.replayLabel} title={copy.replayLabel}>
-            <RotateCcw size={13} aria-hidden="true" /><span>{copy.replayLabel}</span>
-          </button>
           </div>}
         </div>
       </div>
@@ -163,12 +145,6 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
               </div>
             </div>;
           })}
-        </div>
-        <div className={styles.trackingFooter}>
-          <span>{copy.demoLabel}</span>
-          {!reducedMotion && <button type="button" onClick={() => setPaused((value) => !value)} aria-label={paused ? copy.resumeLabel : copy.pauseLabel}>
-            {paused ? <Play size={13} /> : <Pause size={13} />}
-          </button>}
         </div>
       </section>
     </div>

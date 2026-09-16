@@ -119,8 +119,5 @@ const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
 
 export function getHeroStoryCopy(locale: string): HeroStoryCopy {
   const language = locale.split("-")[0].toLowerCase();
-  if (language === "fr" || language === "en" || language === "es" || language === "pt") {
-    return heroStoryCopy[language];
-  }
-  return heroStoryCopy.en;
+  return language === "fr" ? heroStoryCopy.fr : heroStoryCopy.en;
 }
