@@ -43,9 +43,24 @@ const MAP: Record<string, Status> = {
   complaint: "spam",
 };
 
-/** Un statut plus avancé n'est jamais écrasé par un plus faible arrivé en retard. */
-const RANK: Record<Status, number> = {
-  delivered: 1, opened: 2, clicked: 3, soft_bounce: 4, blocked: 5, hard_bounce: 6, spam: 7,
+/**
+ * Un statut plus avancé n'est jamais écrasé par un plus faible arrivé en retard.
+ *
+ * Couvre aussi les deux statuts que Brevo n'émet pas mais qui vivent sur la
+ * fiche : `sent` (posé à l'envoi) et `replied` (posé par le cron IMAP). Sans
+ * eux la comparaison portait sur `undefined`, donc ne bloquait rien — et une
+ * réouverture du mail après une réponse effaçait « A répondu », le signal le
+ * plus fort du pipeline.
+ *
+ * `replied` passe devant l'engagement (livré, ouvert, cliqué) mais reste
+ * derrière les échecs : un signalement en spam après une réponse doit bien
+ * fermer la fiche.
+ */
+type Stored = Status | "sent" | "replied";
+
+const RANK: Record<Stored, number> = {
+  sent: 0, delivered: 1, opened: 2, clicked: 3, replied: 4,
+  soft_bounce: 5, blocked: 6, hard_bounce: 7, spam: 8,
 };
 
 /** Après ça, la séquence s'arrête : écrire encore serait inutile ou nuisible. */
@@ -75,7 +90,7 @@ export async function POST(req: NextRequest) {
   if (snap.empty) return NextResponse.json({ ok: true, unknown: email });
 
   const doc = snap.docs[0];
-  const current = doc.data() as { delivery?: { status?: Status }; touches?: unknown[]; status?: string };
+  const current = doc.data() as { delivery?: { status?: Stored }; touches?: unknown[]; status?: string };
   const prev = current.delivery?.status;
   if (prev && RANK[prev] >= RANK[status] && prev !== status) {
     return NextResponse.json({ ok: true, kept: prev });
@@ -88,17 +103,23 @@ export async function POST(req: NextRequest) {
   };
 
   if (STOP.includes(status)) {
-    // Une adresse morte ou un signalement : on ferme, avec la raison lisible
-    // dans l'historique, pour que personne ne relance à la main.
+    // Une adresse morte ou un signalement : la raison reste lisible dans
+    // l'historique, et plus rien n'est programmé — écrire encore serait
+    // inutile ou nuisible, quel que soit le stade de la fiche.
     const label = status === "spam" ? "Signalé comme spam" : status === "hard_bounce" ? "Adresse invalide (rebond dur)" : "Bloqué par Brevo";
-    patch.status = "lost";
-    patch.lostReason = label;
     patch.nextActionDate = null;
     patch.nextActionLabel = null;
     patch.touches = [
       ...((current.touches as unknown[]) || []),
       { date: at.slice(0, 10), channel: "other", note: `${label}${body.reason ? ` — ${body.reason}` : ""}` },
     ];
+    // En revanche on ne ferme que les fiches encore dans la mécanique
+    // d'envoi. Un intéressé, un inscrit ou un client qui signale un mail en
+    // spam ne redevient pas un prospect perdu : c'est Ralph qui décide au-delà.
+    if (["todo", "contacted", "followup"].includes(current.status || "")) {
+      patch.status = "lost";
+      patch.lostReason = label;
+    }
   }
 
   await doc.ref.update(patch);
