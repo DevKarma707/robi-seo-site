@@ -58,6 +58,29 @@ par Acquisition, segment `influenceur`.
 ⚠️ Un autre agent peut travailler dans ce dossier en même temps : jamais de
 `git stash`, `git add` uniquement ses propres fichiers.
 
+### Passation : à lire avant toute tâche de lancement, à signer après
+
+Le tableau de l'onglet Tâches et son bloc « Passation » (où on en est, ne
+pas toucher, attention, journal) sont la mémoire du lancement — pour Ralph
+et pour tout agent, quel qu'il soit. Avant de toucher au lancement :
+
+```bash
+npx tsx scripts/kanban.ts
+```
+
+Après ton intervention, signe le journal et bouge les cartes :
+
+```bash
+npx tsx scripts/kanban.ts note "ce que tu as fait, en une ligne"
+npx tsx scripts/kanban.ts done "début du titre de la tâche"
+```
+
+`set <etat|nePasToucher|attention> "…"` réécrit une section si tu as appris
+quelque chose que le suivant doit savoir ; `add "Titre" --cat seo` crée une
+carte. Il faut `FIREBASE_SERVICE_ACCOUNT` dans `.env.local` (clé du projet
+`robi-ai-website`, la même que sur Vercel). `KANBAN_AGENT=codex` pour signer
+sous un autre nom.
+
 - **Tâches** — kanban du lancement (`src/lib/launchTasks.ts`, collection
   Firestore `launchTasks`). Les tâches marquées automatisables peuvent
   lancer une session Claude Code, via l'URI

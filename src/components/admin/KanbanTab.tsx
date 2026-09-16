@@ -16,6 +16,7 @@ import {
 import { runnerAvailable, runTask, getToken, setToken } from "@/lib/taskRunner";
 import { ACCENT, ACCENT_INK, btnGhost, btnPill, btnPrimary, card, focusRing, input, select } from "./ui";
 import { toast } from "./toast";
+import PassationBlock from "./PassationBlock";
 
 const PRIORITY_COLOR: Record<number, string> = { 1: "#f87171", 2: "#fbbf24", 3: "#64748b" };
 
@@ -294,6 +295,8 @@ const KanbanTab: React.FC = () => {
 
   return (
     <div className="space-y-5">
+      <PassationBlock />
+
       {/* Avancement */}
       <div className={`${card} p-5`}>
         <div className="flex items-center justify-between gap-4 mb-3">
