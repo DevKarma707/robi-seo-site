@@ -85,6 +85,10 @@ export interface SocialPost {
   scheduledVia?: "blotato" | null;
   scheduledAt?: string | null;
   scheduledFor?: string | null;
+  /** Remontée de Blotato (`/api/social/blotato-status`) : ce qu'il a fait du post, et quand on a vérifié. */
+  blotatoSubmissionId?: string | null;
+  blotatoStatus?: "in-progress" | "scheduled" | "published" | "failed" | null;
+  blotatoCheckedAt?: string | null;
   publishError?: string | null;
   publishAttempts?: number | null;
   createdAt?: Timestamp;

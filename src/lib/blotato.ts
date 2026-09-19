@@ -186,3 +186,72 @@ export const publier = async (
   if (!r.ok) throw new Error(`Blotato publish ${r.status}: ${(await r.text()).slice(0, 300)}`);
   return (await r.json()) as { postSubmissionId: string; scheduledTime?: string };
 };
+
+// ─── Remontée de statut ────────────────────────────────────────────────
+
+/**
+ * Ce que Blotato répond sur GET /v2/posts/:postSubmissionId.
+ * `scheduled` et `in-progress` : rien à faire, on repassera.
+ * `published` et `failed` : terminaux — Blotato ne réessaie pas un échec.
+ */
+export interface StatutBlotato {
+  postSubmissionId: string;
+  status: "in-progress" | "scheduled" | "published" | "failed";
+  scheduledTime?: string;
+  publicUrl?: string;
+  errorMessage?: string;
+}
+
+/**
+ * L'identifiant de soumission, retrouvé depuis l'URL enregistrée à la
+ * programmation (`https://my.blotato.com/posts/<id>`). Les posts programmés
+ * avant l'ajout du champ `blotatoSubmissionId` n'ont que cette URL.
+ */
+export const submissionIdDepuisUrl = (url?: string | null): string | null => {
+  const m = /my\.blotato\.com\/posts\/([0-9a-f-]{36})/i.exec(url ?? "");
+  return m ? m[1] : null;
+};
+
+/**
+ * Ce qu'on écrit sur le post d'après la réponse de Blotato — ou `null` s'il
+ * n'y a rien à changer (encore en attente).
+ *
+ * Le problème que ça corrige : sans cette remontée, un post que Blotato
+ * n'a pas publié reste « prêt » dans l'admin, avec la ligne verte
+ * « Programmé chez Blotato ». On découvre l'échec en regardant le feed.
+ *
+ * En échec, le post garde `scheduledVia` : la file ne doit pas le
+ * reprendre (Blotato pourrait avoir partiellement publié), et c'est le
+ * bouton « Renvoyer à Blotato », après correction, qui le relance.
+ */
+export const patchDepuisStatut = (
+  statut: StatutBlotato,
+  maintenant: Date
+): Record<string, unknown> | null => {
+  const verifie = { blotatoStatus: statut.status, blotatoCheckedAt: maintenant.toISOString() };
+  switch (statut.status) {
+    case "published":
+      return {
+        ...verifie,
+        status: "published",
+        publishedAt: maintenant.toISOString(),
+        ...(statut.publicUrl ? { publishedUrl: statut.publicUrl } : {}),
+        publishError: null,
+        claimId: null,
+        claimedAt: null,
+      };
+    case "failed":
+      return {
+        ...verifie,
+        publishError: `Blotato : ${(statut.errorMessage || "échec sans message").slice(0, 480)}`,
+      };
+    default:
+      return verifie;
+  }
+};
+
+export const lireStatut = async (apiKey: string, submissionId: string): Promise<StatutBlotato> => {
+  const r = await fetch(`${BASE}/posts/${encodeURIComponent(submissionId)}`, { headers: headers(apiKey) });
+  if (!r.ok) throw new Error(`Blotato status ${r.status}: ${(await r.text()).slice(0, 200)}`);
+  return (await r.json()) as StatutBlotato;
+};

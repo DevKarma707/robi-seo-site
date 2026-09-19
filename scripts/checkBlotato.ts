@@ -6,7 +6,7 @@
  * Ce qui est testé ici part sur un compte public sans relecture : le texte
  * envoyé, le compte choisi, les options obligatoires par réseau.
  */
-import { texteFinal, compteFor, cibleFor, preparer, scheduledTimeParis, type CompteBlotato } from "../src/lib/blotato";
+import { texteFinal, compteFor, cibleFor, preparer, scheduledTimeParis, submissionIdDepuisUrl, patchDepuisStatut, type CompteBlotato } from "../src/lib/blotato";
 
 let ok = 0;
 let ko = 0;
@@ -56,6 +56,21 @@ t("texte vide → refusé", (preparer({ ...base, caption: "  ", hashtags: "" }, 
 t("été : 10h Paris = +02:00", scheduledTimeParis("2026-09-21") === "2026-09-21T10:00:00+02:00");
 t("hiver : 10h Paris = +01:00", scheduledTimeParis("2026-11-10") === "2026-11-10T10:00:00+01:00");
 t("heure personnalisée", scheduledTimeParis("2026-10-01", "18:30") === "2026-10-01T18:30:00+02:00");
+
+// Remontée de statut
+const NOW = new Date("2026-09-18T08:30:00.000Z");
+t("id de soumission retrouvé depuis l'URL enregistrée", submissionIdDepuisUrl("https://my.blotato.com/posts/d6cb135e-b289-4814-a2db-e20be2968299") === "d6cb135e-b289-4814-a2db-e20be2968299");
+t("URL publique Instagram → pas un id Blotato", submissionIdDepuisUrl("https://www.instagram.com/p/abc/") === null);
+t("URL absente → null", submissionIdDepuisUrl(null) === null);
+const pub = patchDepuisStatut({ postSubmissionId: "x", status: "published", publicUrl: "https://www.instagram.com/p/abc/" }, NOW)!;
+t("publié → statut publié, URL publique remplace celle de Blotato", pub.status === "published" && pub.publishedUrl === "https://www.instagram.com/p/abc/" && pub.publishError === null);
+const pubSansUrl = patchDepuisStatut({ postSubmissionId: "x", status: "published" }, NOW)!;
+t("publié sans URL → on garde celle qu'on avait", !("publishedUrl" in pubSansUrl) && pubSansUrl.status === "published");
+const fail = patchDepuisStatut({ postSubmissionId: "x", status: "failed", errorMessage: "Instagram account disconnected" }, NOW)!;
+t("échec → publishError explicite, statut inchangé (Renvoyer reste possible)", !("status" in fail) && fail.publishError === "Blotato : Instagram account disconnected" && fail.blotatoStatus === "failed");
+t("échec sans message → jamais vide", patchDepuisStatut({ postSubmissionId: "x", status: "failed" }, NOW)!.publishError === "Blotato : échec sans message");
+const sched = patchDepuisStatut({ postSubmissionId: "x", status: "scheduled", scheduledTime: "2026-09-19T08:00:00Z" }, NOW)!;
+t("encore programmé → seule la trace de vérification est écrite", Object.keys(sched).sort().join(",") === "blotatoCheckedAt,blotatoStatus" && sched.blotatoCheckedAt === NOW.toISOString());
 
 console.log(`\n${ok} ok, ${ko} ko`);
 process.exit(ko ? 1 : 0);

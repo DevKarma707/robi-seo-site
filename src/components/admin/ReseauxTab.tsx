@@ -412,6 +412,30 @@ const ReseauxTab: React.FC = () => {
   };
 
   /**
+   * Demande à Blotato ce qu'il a fait des posts qu'on lui a confiés. Le cron
+   * le fait chaque jour ; ici c'est pour ne pas attendre le lendemain.
+   */
+  const verifierBlotato = async () => {
+    const user = auth?.currentUser;
+    if (!user) return say("err", "Session expirée — reconnecte-toi.");
+    setBusy(true);
+    try {
+      const token = await user.getIdToken();
+      const r = await fetch("/api/social/blotato-status", { headers: { authorization: `Bearer ${token}` } });
+      const body = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(String(body.detail || body.error || r.status));
+      const { verifies = 0, publies = 0, echecs = 0 } = body as { verifies?: number; publies?: number; echecs?: number };
+      if (!verifies) say("ok", "Rien en attente chez Blotato.");
+      else if (echecs) say("err", `${verifies} vérifié(s) : ${publies} publié(s), ${echecs} en échec — ouvre le post pour voir pourquoi.`);
+      else say("ok", `${verifies} vérifié(s) : ${publies} publié(s), le reste toujours programmé.`);
+    } catch (e) {
+      say("err", `Blotato ne répond pas : ${(e as Error).message}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  /**
    * Raccourcis clavier.
    *
    * Jamais quand on écrit : sinon une flèche gauche dans le texte du post
@@ -1001,6 +1025,9 @@ const ReseauxTab: React.FC = () => {
           >
             <span className="flex items-center gap-1.5"><BookOpen size={12} /> Tuto</span>
           </a>
+          <button onClick={verifierBlotato} disabled={busy} className={btnGhost} title="Demander à Blotato ce qu'il a fait des posts programmés">
+            <span className="flex items-center gap-1.5"><RefreshCw size={12} /> Vérifier chez Blotato</span>
+          </button>
           <button onClick={copyBrief} className={btnGhost} title="Copier le brief du skill robi-social-media">
             <span className="flex items-center gap-1.5"><Sparkles size={12} /> Brief du mois</span>
           </button>
@@ -1880,14 +1907,25 @@ const SuiviPublication = ({ post, onRenvoyer, busy }: { post: SocialPost; onRenv
     const quand = post.scheduledFor ? `${post.scheduledFor.slice(0, 10)} à ${post.scheduledFor.slice(11, 16)}` : post.date;
     // Modifié après l'envoi : ce que Blotato publiera n'est plus ce qu'on voit ici.
     const modifieDepuis = !!(post.updatedAt && post.scheduledAt && post.updatedAt.toDate().toISOString() > post.scheduledAt);
+    const verifie = post.blotatoCheckedAt
+      ? ` · vérifié ${new Date(post.blotatoCheckedAt).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}`
+      : " · pas encore vérifié";
+    const lienBlotato = post.publishedUrl && (
+      <a href={post.publishedUrl} target="_blank" rel="noreferrer noopener" className="underline">Voir chez Blotato</a>
+    );
     return (
       <div className="text-[11px] space-y-1">
-        <p className="flex items-center gap-1.5" style={{ color: "#10B981" }}>
-          <Check size={12} /> Programmé chez Blotato — publication le {quand} (heure de Paris).
-          {post.publishedUrl && (
-            <a href={post.publishedUrl} target="_blank" rel="noreferrer noopener" className="underline">Voir chez Blotato</a>
-          )}
-        </p>
+        {post.publishError ? (
+          // Blotato l'a dit lui-même : le post n'est pas parti. La ligne verte
+          // mentirait — c'est exactement ce qu'on a découvert trop tard.
+          <p className="flex items-center gap-1.5" style={{ color: "#f87171" }}>
+            <CircleAlert size={12} /> Blotato n&apos;a pas publié (prévu le {quand}){verifie}. {lienBlotato}
+          </p>
+        ) : (
+          <p className="flex items-center gap-1.5" style={{ color: "#10B981" }}>
+            <Check size={12} /> Programmé chez Blotato — publication le {quand} (heure de Paris){verifie}. {lienBlotato}
+          </p>
+        )}
         {modifieDepuis && (
           <p style={{ color: "#fbbf24" }}>
             Modifié depuis l&apos;envoi : Blotato publiera l&apos;ancienne version tant que tu ne l&apos;as pas renvoyé.
@@ -1896,7 +1934,7 @@ const SuiviPublication = ({ post, onRenvoyer, busy }: { post: SocialPost; onRenv
         {onRenvoyer && (
           <button onClick={() => onRenvoyer(post)} disabled={busy} className={`${btnGhost} mt-1`}>Renvoyer à Blotato</button>
         )}
-        {post.publishError && <p style={{ color: "#f87171" }}>Dernier envoi en échec : {post.publishError}</p>}
+        {post.publishError && <p style={{ color: "#f87171" }}>{post.publishError}</p>}
       </div>
     );
   }
