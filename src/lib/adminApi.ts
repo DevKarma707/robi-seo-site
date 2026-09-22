@@ -114,6 +114,56 @@ export const fetchAppStats = (refresh = false) =>
 
 export const fetchLaunchConfig = () => authedFetch("/api/admin/launch") as Promise<LaunchConfig>;
 
+// ─── Dépenses ────────────────────────────────────────────────────────
+// La consommation IA est mesurée ; tout le reste est saisi à la main, aucune
+// de ces factures n'étant lisible par une API. Le rapport le dit lui-même,
+// pour qu'un total bas ne se lise pas comme une absence de dépenses.
+
+export interface DeclaredCost {
+  id?: string;
+  label: string;
+  amount: number;
+  currency: string;
+  kind: "monthly" | "oneoff";
+  /** Mois de début (récurrent) ou mois de la dépense (ponctuel), au format YYYY-MM. */
+  from: string;
+  /** Mois de fin inclus. Vide = toujours en cours. */
+  to?: string | null;
+  note?: string | null;
+}
+
+export interface CostMonth {
+  month: string;
+  ai: { tokens: number; calls: number; cost: number };
+  declared: { total: number; items: { label: string; amount: number; kind: string }[] };
+  total: number;
+  activeUsers: number;
+  costPerActiveUser: number | null;
+}
+
+export interface CostReport {
+  months: CostMonth[];
+  declared: DeclaredCost[];
+  pricePerMillionTokens: number;
+  note: string;
+  computedAt: string;
+}
+
+export const fetchCostReport = (months = 6) =>
+  authedFetch(`/api/admin/costs?months=${months}`) as Promise<CostReport>;
+
+export const saveCost = (cost: Partial<DeclaredCost> & { pricePerMillionTokens?: number }) =>
+  authedFetch("/api/admin/costs", {
+    method: "POST",
+    body: JSON.stringify(cost),
+  }) as Promise<DeclaredCost>;
+
+export const deleteCost = (id: string) =>
+  authedFetch(`/api/admin/costs?id=${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  }) as Promise<{ deleted: string }>;
+
+
 export const saveLaunchConfig = (patch: Partial<Omit<LaunchConfig, "realSold">>) =>
   authedFetch("/api/admin/launch", {
     method: "POST",

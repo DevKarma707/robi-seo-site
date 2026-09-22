@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks, FolderOpen, CalendarDays, Compass, TrendingDown, Search } from "lucide-react";
+import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks, FolderOpen, CalendarDays, Compass, TrendingDown, Search, Wallet } from "lucide-react";
 import {
   auth, onAuthStateChanged, signInWithGoogle, signOut, isAllowedEmail, firebaseReady,
   subscribeToArticles, subscribeToVisits, type Article, type VisitStats, type User,
@@ -16,6 +16,7 @@ import CockpitTab from "@/components/admin/CockpitTab";
 import PilotageTab from "@/components/admin/PilotageTab";
 import LancementTab from "@/components/admin/LancementTab";
 import SanteTab from "@/components/admin/SanteTab";
+import DepensesTab from "@/components/admin/DepensesTab";
 import ProduitTab from "@/components/admin/ProduitTab";
 import AcquisitionTab from "@/components/admin/AcquisitionTab";
 import InfluenceursTab from "@/components/admin/InfluenceursTab";
@@ -27,7 +28,7 @@ import ModeToggle from "@/components/admin/ModeToggle";
 import { Toaster } from "@/components/admin/toast";
 import { focusRing } from "@/components/admin/ui";
 
-type Tab = "cockpit" | "pilotage" | "kanban" | "reseaux" | "fichiers" | "sante" | "produit" | "acquisition" | "influenceurs" | "analytics" | "seo" | "blog" | "lancement";
+type Tab = "cockpit" | "pilotage" | "depenses" | "kanban" | "reseaux" | "fichiers" | "sante" | "produit" | "acquisition" | "influenceurs" | "analytics" | "seo" | "blog" | "lancement";
 
 const EMPTY_VISITS: VisitStats = {
   today: 0, week: 0, prevWeek: 0, month: 0, days: [], byPage: [], bySource: [],
@@ -150,6 +151,7 @@ export default function AdminPage() {
   const NAV: { id: Tab; label: string; icon: React.ReactNode; badge?: number }[] = [
     { id: "cockpit", label: "Cockpit", icon: <Compass {...ICON} /> },
     { id: "pilotage", label: "Pilotage", icon: <Gauge {...ICON} /> },
+    { id: "depenses", label: "Dépenses", icon: <Wallet {...ICON} /> },
     { id: "kanban", label: "Tâches", icon: <ListChecks {...ICON} /> },
     { id: "reseaux", label: "Réseaux", icon: <CalendarDays {...ICON} /> },
     { id: "fichiers", label: "Fichiers", icon: <FolderOpen {...ICON} /> },
@@ -166,6 +168,7 @@ export default function AdminPage() {
   const subtitle: Record<Tab, string> = {
     cockpit: "Ce qui brûle et ce qui arrive, toutes sections confondues",
     pilotage: "Inscriptions, activation, usage et funnel — agrégats uniquement",
+    depenses: "Ce que Robi coûte : consommation IA mesurée, factures saisies",
     kanban: "Le backlog du lancement, colonne par colonne",
     reseaux: "Calendrier éditorial : posts, visuels et statuts",
     fichiers: "Le dossier de travail partagé avec Claude",
@@ -246,6 +249,7 @@ export default function AdminPage() {
           <div key={tab} className="a-tab-enter">
             {tab === "cockpit" && <CockpitTab onNavigate={setTab} />}
             {tab === "pilotage" && <PilotageTab visits={visits} />}
+            {tab === "depenses" && <DepensesTab />}
             {tab === "kanban" && <KanbanTab />}
             {tab === "reseaux" && <ReseauxTab />}
             {tab === "fichiers" && <FichiersTab />}
