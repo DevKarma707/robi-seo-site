@@ -18,7 +18,12 @@
     "badge": "Nuevo: Seguimiento de facturas con IA",
     "title": "Habla",
     "titleAccent": "Cobra",
-    "rotatingWords": ["Factura", "Envía", "Reclama", "Notifica"],
+    "rotatingWords": [
+      "Factura",
+      "Envía",
+      "Reclama",
+      "Notifica"
+    ],
     "subtitle": "Deja que la IA se encargue de todo.\nSimplifica tus facturas y cobra más rápido.",
     "cta": "Empezar Gratis",
     "secondaryCta": "Ver Demo",
@@ -88,12 +93,36 @@
     "title": "Lo que dicen de",
     "titleAccent": "Robi",
     "items": [
-      { "name": "Marie Dupont", "role": "Disenadora Freelance", "content": "Robi me ahorra 5 horas a la semana. Hablo, el factura. Es magico!" },
-      { "name": "Thomas Bernard", "role": "Desarrollador Web", "content": "Se acabaron las hojas de calculo! Robi gestiona mis facturas y hace seguimiento a mis clientes automaticamente." },
-      { "name": "Sophie Martin", "role": "Consultora de RRHH", "content": "La integracion con Stripe es perfecta. Mis clientes pagan en un clic, cobro al dia siguiente." },
-      { "name": "Lucas Petit", "role": "Fotografo", "content": "Las plantillas de presupuestos son geniales. Mis clientes quedan impresionados por el profesionalismo." },
-      { "name": "Emma Garcia", "role": "Coach de Negocios", "content": "El seguimiento automatico me cambio la vida. Ya no tengo que perseguir a mis clientes." },
-      { "name": "Antoine Moreau", "role": "Fontanero", "content": "Facturo directamente desde mi furgoneta despues de cada trabajo. Simple y rapido." }
+      {
+        "name": "Marie Dupont",
+        "role": "Disenadora Freelance",
+        "content": "Robi me ahorra 5 horas a la semana. Hablo, el factura. Es magico!"
+      },
+      {
+        "name": "Thomas Bernard",
+        "role": "Desarrollador Web",
+        "content": "Se acabaron las hojas de calculo! Robi gestiona mis facturas y hace seguimiento a mis clientes automaticamente."
+      },
+      {
+        "name": "Sophie Martin",
+        "role": "Consultora de RRHH",
+        "content": "La integracion con Stripe es perfecta. Mis clientes pagan en un clic, cobro al dia siguiente."
+      },
+      {
+        "name": "Lucas Petit",
+        "role": "Fotografo",
+        "content": "Las plantillas de presupuestos son geniales. Mis clientes quedan impresionados por el profesionalismo."
+      },
+      {
+        "name": "Emma Garcia",
+        "role": "Coach de Negocios",
+        "content": "El seguimiento automatico me cambio la vida. Ya no tengo que perseguir a mis clientes."
+      },
+      {
+        "name": "Antoine Moreau",
+        "role": "Fontanero",
+        "content": "Facturo directamente desde mi furgoneta despues de cada trabajo. Simple y rapido."
+      }
     ]
   },
   "pricing": {
@@ -619,6 +648,24 @@
         "support": "Soporte",
         "partnership": "Asociación"
       }
+    },
+    "deleteAccount": {
+      "title": "Eliminar mi cuenta Robi",
+      "description": "Cómo eliminar su cuenta de Robi AI y sus datos.",
+      "badge": "Cuenta",
+      "heroTitle": "Eliminar su",
+      "heroTitleAccent": "cuenta Robi",
+      "lastUpdated": "Última actualización: 23 de septiembre de 2026",
+      "inApp": "Desde la aplicación",
+      "inAppContent": "La eliminación se hace directamente en la aplicación Robi AI (iOS, Android o web):\n\n1. Abra **Ajustes**\n2. Vaya a la pestaña **Cuenta**\n3. Elija **Eliminar mi cuenta** y confirme\n\nLa eliminación es inmediata: se cierra la sesión y la cuenta deja de ser accesible.",
+      "byEmail": "Por correo",
+      "byEmailContent": "Si ya no tiene acceso a la aplicación, escriba a **support@robi-app.com** desde la dirección de su cuenta con el asunto «Eliminación de cuenta». Tramitamos la solicitud en un plazo de 30 días y confirmamos por correo.",
+      "deleted": "Qué se elimina",
+      "deletedContent": "- Su cuenta y sus identidades de acceso (correo, Google, Apple)\n- Los ajustes de su empresa, su logotipo y sus preferencias\n- Sus clientes, productos y borradores\n- Sus notas de gastos y justificantes\n- El historial de conversaciones con el asistente",
+      "kept": "Qué se conserva y por qué",
+      "keptContent": "Las facturas emitidas son documentos contables: la ley francesa exige conservarlas **10 años** (Código de comercio, artículo L123-22). Se archivan fuera de su cuenta, sin ningún identificador de acceso, y solo sirven para esa obligación legal. Los datos de pago los custodian Polar y Stripe según sus propias políticas.",
+      "delay": "Plazos",
+      "delayContent": "Eliminación de la cuenta: inmediata. Copias de seguridad técnicas: borradas en 30 días como máximo. Archivos legales de facturación: 10 años."
     }
   }
 }

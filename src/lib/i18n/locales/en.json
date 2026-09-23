@@ -18,7 +18,12 @@
     "badge": "New: AI Invoice Chasing",
     "title": "Talk",
     "titleAccent": "Cash in",
-    "rotatingWords": ["Invoice", "Send", "Follow-up", "Notify"],
+    "rotatingWords": [
+      "Invoice",
+      "Send",
+      "Follow-up",
+      "Notify"
+    ],
     "subtitle": "Let AI handle everything.\nSimplify your invoices and get paid faster.",
     "cta": "Start for Free",
     "secondaryCta": "Watch Demo",
@@ -88,12 +93,36 @@
     "title": "What they say about",
     "titleAccent": "Robi",
     "items": [
-      { "name": "Marie Dupont", "role": "Freelance Designer", "content": "Robi saves me 5 hours a week. I speak, it invoices. It's magic!" },
-      { "name": "Thomas Bernard", "role": "Web Developer", "content": "No more Excel spreadsheets! Robi manages my invoices and follows up with clients automatically." },
-      { "name": "Sophie Martin", "role": "HR Consultant", "content": "The Stripe integration is perfect. My clients pay in one click, I get paid the next day." },
-      { "name": "Lucas Petit", "role": "Photographer", "content": "The quote templates are gorgeous. My clients are impressed by the professionalism." },
-      { "name": "Emma Garcia", "role": "Business Coach", "content": "Automatic follow-ups changed my life. No more chasing after clients." },
-      { "name": "Antoine Moreau", "role": "Plumber", "content": "I invoice right from my van after every job. Simple and fast." }
+      {
+        "name": "Marie Dupont",
+        "role": "Freelance Designer",
+        "content": "Robi saves me 5 hours a week. I speak, it invoices. It's magic!"
+      },
+      {
+        "name": "Thomas Bernard",
+        "role": "Web Developer",
+        "content": "No more Excel spreadsheets! Robi manages my invoices and follows up with clients automatically."
+      },
+      {
+        "name": "Sophie Martin",
+        "role": "HR Consultant",
+        "content": "The Stripe integration is perfect. My clients pay in one click, I get paid the next day."
+      },
+      {
+        "name": "Lucas Petit",
+        "role": "Photographer",
+        "content": "The quote templates are gorgeous. My clients are impressed by the professionalism."
+      },
+      {
+        "name": "Emma Garcia",
+        "role": "Business Coach",
+        "content": "Automatic follow-ups changed my life. No more chasing after clients."
+      },
+      {
+        "name": "Antoine Moreau",
+        "role": "Plumber",
+        "content": "I invoice right from my van after every job. Simple and fast."
+      }
     ]
   },
   "pricing": {
@@ -622,6 +651,24 @@
         "support": "Support",
         "partnership": "Partnership"
       }
+    },
+    "deleteAccount": {
+      "title": "Delete my Robi account",
+      "description": "How to delete your Robi AI account and your data.",
+      "badge": "Account",
+      "heroTitle": "Delete your",
+      "heroTitleAccent": "Robi account",
+      "lastUpdated": "Last updated: 23 September 2026",
+      "inApp": "From the app",
+      "inAppContent": "Deletion happens directly in the Robi AI app (iOS, Android or web):\n\n1. Open **Settings**\n2. Go to the **Account** tab\n3. Choose **Delete my account** and confirm\n\nDeletion is immediate: you are signed out and the account can no longer be accessed.",
+      "byEmail": "By email",
+      "byEmailContent": "If you no longer have access to the app, write to **support@robi-app.com** from your account's email address with the subject \"Account deletion\". We process the request within 30 days and confirm by email.",
+      "deleted": "What is deleted",
+      "deletedContent": "- Your account and sign-in identities (email, Google, Apple)\n- Your company settings, logo and preferences\n- Your clients, products and drafts\n- Your expense reports and receipts\n- Your conversation history with the assistant",
+      "kept": "What is kept, and why",
+      "keptContent": "Issued invoices are accounting records: French law requires keeping them for **10 years** (Commercial Code, article L123-22). They are archived outside your account, stripped of any sign-in identifier, and used only to meet that legal obligation. Payment data is held by Polar and Stripe under their own policies.",
+      "delay": "Timelines",
+      "delayContent": "Account deletion: immediate. Technical backups: erased within 30 days. Legal invoice archives: 10 years."
     }
   }
 }

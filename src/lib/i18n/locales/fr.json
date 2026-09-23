@@ -18,7 +18,12 @@
     "badge": "Nouveau : Relance facture par IA",
     "title": "Parlez",
     "titleAccent": "Encaissez",
-    "rotatingWords": ["Facture", "Envoi", "Relance", "Notifie"],
+    "rotatingWords": [
+      "Facture",
+      "Envoi",
+      "Relance",
+      "Notifie"
+    ],
     "subtitle": "Laissez l'IA s'occuper de tout.\nSimplifiez vos factures et encaissez plus vite.",
     "cta": "Démarrer Gratuitement",
     "secondaryCta": "Voir la démo",
@@ -88,12 +93,36 @@
     "title": "Ce qu'ils disent de",
     "titleAccent": "Robi",
     "items": [
-      { "name": "Marie Dupont", "role": "Designer Freelance", "content": "Robi m'a fait gagner 5 heures par semaine. Je parle, il facture. C'est magique !" },
-      { "name": "Thomas Bernard", "role": "Développeur Web", "content": "Fini les tableurs Excel ! Robi gère mes factures et relance mes clients automatiquement." },
-      { "name": "Sophie Martin", "role": "Consultante RH", "content": "L'intégration Stripe est parfaite. Mes clients paient en un clic, je suis payée le lendemain." },
-      { "name": "Lucas Petit", "role": "Photographe", "content": "Les templates de devis sont superbes. Mes clients sont impressionnés par le professionnalisme." },
-      { "name": "Emma Garcia", "role": "Coach Business", "content": "La relance automatique a changé ma vie. Plus besoin de courir après mes clients." },
-      { "name": "Antoine Moreau", "role": "Plombier", "content": "Je facture directement depuis mon van après chaque intervention. Simple et rapide." }
+      {
+        "name": "Marie Dupont",
+        "role": "Designer Freelance",
+        "content": "Robi m'a fait gagner 5 heures par semaine. Je parle, il facture. C'est magique !"
+      },
+      {
+        "name": "Thomas Bernard",
+        "role": "Développeur Web",
+        "content": "Fini les tableurs Excel ! Robi gère mes factures et relance mes clients automatiquement."
+      },
+      {
+        "name": "Sophie Martin",
+        "role": "Consultante RH",
+        "content": "L'intégration Stripe est parfaite. Mes clients paient en un clic, je suis payée le lendemain."
+      },
+      {
+        "name": "Lucas Petit",
+        "role": "Photographe",
+        "content": "Les templates de devis sont superbes. Mes clients sont impressionnés par le professionnalisme."
+      },
+      {
+        "name": "Emma Garcia",
+        "role": "Coach Business",
+        "content": "La relance automatique a changé ma vie. Plus besoin de courir après mes clients."
+      },
+      {
+        "name": "Antoine Moreau",
+        "role": "Plombier",
+        "content": "Je facture directement depuis mon van après chaque intervention. Simple et rapide."
+      }
     ]
   },
   "pricing": {
@@ -681,6 +710,24 @@
         "support": "Support",
         "partnership": "Partenariat"
       }
+    },
+    "deleteAccount": {
+      "title": "Supprimer mon compte Robi",
+      "description": "Comment supprimer votre compte Robi AI et vos données.",
+      "badge": "Compte",
+      "heroTitle": "Supprimer votre",
+      "heroTitleAccent": "compte Robi",
+      "lastUpdated": "Dernière mise à jour : 23 septembre 2026",
+      "inApp": "Depuis l'application",
+      "inAppContent": "La suppression se fait directement dans l'application Robi AI (iOS, Android ou web) :\n\n1. Ouvrez **Paramètres**\n2. Allez dans l'onglet **Compte**\n3. Choisissez **Supprimer mon compte** et confirmez\n\nLa suppression est immédiate : vous êtes déconnecté et votre compte n'est plus accessible.",
+      "byEmail": "Par email",
+      "byEmailContent": "Si vous n'avez plus accès à l'application, écrivez à **support@robi-app.com** depuis l'adresse email de votre compte, avec pour objet « Suppression de compte ». Nous traitons la demande sous 30 jours et vous confirmons par retour de mail.",
+      "deleted": "Ce qui est supprimé",
+      "deletedContent": "- Votre compte et vos identifiants (email, Google, Apple)\n- Vos paramètres d'entreprise, votre logo et vos préférences\n- Vos clients, produits et brouillons\n- Vos notes de frais et justificatifs\n- L'historique de vos conversations avec l'assistant",
+      "kept": "Ce qui est conservé, et pourquoi",
+      "keptContent": "Les factures émises sont des documents comptables : la loi française impose de les conserver **10 ans** (article L123-22 du Code de commerce). Elles sont archivées hors de votre compte, anonymisées de tout identifiant de connexion, et ne servent qu'à cette obligation légale. Les données de paiement sont détenues par Polar et Stripe selon leurs propres politiques.",
+      "delay": "Délais",
+      "delayContent": "Suppression du compte : immédiate. Effacement des sauvegardes techniques : 30 jours maximum. Archives légales de facturation : 10 ans."
     }
   }
 }

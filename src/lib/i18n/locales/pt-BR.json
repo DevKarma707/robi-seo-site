@@ -18,7 +18,12 @@
     "badge": "Novo: Lembretes Inteligentes via IA",
     "title": "Fale",
     "titleAccent": "Receba",
-    "rotatingWords": ["Fature", "Envie", "Cobre", "Notifique"],
+    "rotatingWords": [
+      "Fature",
+      "Envie",
+      "Cobre",
+      "Notifique"
+    ],
     "subtitle": "Deixe a IA cuidar de tudo.\nSimplifique suas faturas e receba mais rápido.",
     "cta": "Comece Grátis",
     "secondaryCta": "Ver Demonstração",
@@ -88,12 +93,36 @@
     "title": "O que eles dizem sobre o",
     "titleAccent": "Robi",
     "items": [
-      { "name": "Maria Fontes", "role": "Designer Freelancer", "content": "O Robi me economiza 5 horas toda semana. Eu falo, ele fatura. Simples assim!" },
-      { "name": "Tiago Bernardi", "role": "Desenvolvedor Web", "content": "Sem mais dores de cabeça com planilhas. O Robi gerencia tudo e cobra para mim automaticamente." },
-      { "name": "Sofia Mendes", "role": "Consultora de RH", "content": "A integração com o Stripe funciona perfeitamente. Meus clientes pagam em dois cliques." },
-      { "name": "Lucas Perto", "role": "Fotógrafo Automotivo", "content": "A beleza estética e profissionalismo dos meus orçamentos melhoraram em 100%." },
-      { "name": "Emma Cunha", "role": "Business Coach", "content": "Robi mudou completamente meu trabalho. Chega de correr implorando por pagamentos." },
-      { "name": "Antônio Salles", "role": "Encanador Autônomo", "content": "Faço minhas notas direto da caminhonete com um simples áudio enviado pro Robi." }
+      {
+        "name": "Maria Fontes",
+        "role": "Designer Freelancer",
+        "content": "O Robi me economiza 5 horas toda semana. Eu falo, ele fatura. Simples assim!"
+      },
+      {
+        "name": "Tiago Bernardi",
+        "role": "Desenvolvedor Web",
+        "content": "Sem mais dores de cabeça com planilhas. O Robi gerencia tudo e cobra para mim automaticamente."
+      },
+      {
+        "name": "Sofia Mendes",
+        "role": "Consultora de RH",
+        "content": "A integração com o Stripe funciona perfeitamente. Meus clientes pagam em dois cliques."
+      },
+      {
+        "name": "Lucas Perto",
+        "role": "Fotógrafo Automotivo",
+        "content": "A beleza estética e profissionalismo dos meus orçamentos melhoraram em 100%."
+      },
+      {
+        "name": "Emma Cunha",
+        "role": "Business Coach",
+        "content": "Robi mudou completamente meu trabalho. Chega de correr implorando por pagamentos."
+      },
+      {
+        "name": "Antônio Salles",
+        "role": "Encanador Autônomo",
+        "content": "Faço minhas notas direto da caminhonete com um simples áudio enviado pro Robi."
+      }
     ]
   },
   "pricing": {
@@ -326,6 +355,24 @@
       "heroTitle": "Brinquedos Financeiros Pro+",
       "heroTitleAccent": "Livres pra Uso",
       "freeTool": "Módulo Calculadora Desbloqueado"
+    },
+    "deleteAccount": {
+      "title": "Excluir minha conta Robi",
+      "description": "Como excluir sua conta Robi AI e seus dados.",
+      "badge": "Conta",
+      "heroTitle": "Excluir sua",
+      "heroTitleAccent": "conta Robi",
+      "lastUpdated": "Última atualização: 23 de setembro de 2026",
+      "inApp": "No aplicativo",
+      "inAppContent": "A exclusão é feita diretamente no aplicativo Robi AI (iOS, Android ou web):\n\n1. Abra **Configurações**\n2. Vá à aba **Conta**\n3. Escolha **Excluir minha conta** e confirme\n\nA exclusão é imediata: você é desconectado e a conta deixa de ser acessível.",
+      "byEmail": "Por e-mail",
+      "byEmailContent": "Se você não tem mais acesso ao aplicativo, escreva para **support@robi-app.com** a partir do e-mail da sua conta, com o assunto \"Exclusão de conta\". Tratamos o pedido em até 30 dias e confirmamos por e-mail.",
+      "deleted": "O que é excluído",
+      "deletedContent": "- Sua conta e suas identidades de acesso (e-mail, Google, Apple)\n- As configurações da sua empresa, seu logotipo e suas preferências\n- Seus clientes, produtos e rascunhos\n- Suas notas de despesas e comprovantes\n- O histórico de conversas com o assistente",
+      "kept": "O que é mantido, e por quê",
+      "keptContent": "As faturas emitidas são documentos contábeis: a lei francesa exige conservá-las por **10 anos** (Código de Comércio, artigo L123-22). Elas são arquivadas fora da sua conta, sem qualquer identificador de acesso, e servem apenas a essa obrigação legal. Os dados de pagamento ficam com a Polar e a Stripe, conforme suas próprias políticas.",
+      "delay": "Prazos",
+      "delayContent": "Exclusão da conta: imediata. Backups técnicos: apagados em até 30 dias. Arquivos legais de faturamento: 10 anos."
     }
   }
 }
