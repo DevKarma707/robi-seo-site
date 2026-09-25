@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Rocket, RefreshCw, AlertTriangle, Save, Check, ShieldAlert } from "lucide-react";
+import { Rocket, RefreshCw, AlertTriangle, Save, Check, ShieldAlert, Plus, Trash2, Layers } from "lucide-react";
 import {
-  fetchLaunchConfig, saveLaunchConfig, computeDisplayedSold, type LaunchConfig,
+  fetchLaunchConfig, saveLaunchConfig, computeDisplayedSold, type LaunchConfig, type LaunchTranche,
 } from "@/lib/adminApi";
 import { ACCENT, ACCENT_INK, btn, card, input as inputBase } from "./ui";
 
@@ -19,6 +19,12 @@ const LancementTab: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
 
+  // Brouillon des tranches, édité à part : une ligne par tranche, la
+  // dernière peut être « ouverte » (places vides = sans limite).
+  const [tranchesDraft, setTranchesDraft] = useState<{ seats: string; productId: string }[]>([]);
+  const syncTranches = (c: LaunchConfig) =>
+    setTranchesDraft((c.tranches || []).map((t) => ({ seats: t.seats === null ? "" : String(t.seats), productId: t.productId || "" })));
+
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -26,6 +32,7 @@ const LancementTab: React.FC = () => {
       const c = await fetchLaunchConfig();
       setConfig(c);
       setDraft(c);
+      syncTranches(c);
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -43,6 +50,7 @@ const LancementTab: React.FC = () => {
       const c = await saveLaunchConfig(patch);
       setConfig(c);
       setDraft(c);
+      syncTranches(c);
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch (e) {
@@ -132,8 +140,12 @@ const LancementTab: React.FC = () => {
             <label className="text-[11px] font-bold text-slate-600 block mb-1.5">Nombre total de places</label>
             <input
               type="number" min={1} className={input} value={draft.totalSeats}
+              readOnly={(config.tranches?.length ?? 0) > 1}
               onChange={(e) => setDraft({ ...draft, totalSeats: Number(e.target.value) })}
             />
+            {(config.tranches?.length ?? 0) > 1 && (
+              <p className="text-[10px] text-slate-400 mt-1.5">Calculé depuis les tranches ci-dessous.</p>
+            )}
           </div>
 
           <div>
@@ -196,6 +208,90 @@ const LancementTab: React.FC = () => {
             </span>
           )}
           {error && <span className="text-[11px] text-red-600">{error}</span>}
+        </div>
+      </div>
+
+      {/* Tranches */}
+      <div className={`${card} p-5 space-y-4`}>
+        <div className="flex items-center gap-2">
+          <Layers size={15} style={{ color: ACCENT_INK }} />
+          <p className="text-xs font-black uppercase tracking-widest text-slate-900">Tranches de prix</p>
+        </div>
+        <p className="text-[11px] text-slate-500 leading-relaxed max-w-[70ch]">
+          Le Lifetime se vend par tranches : quand les places d&apos;une tranche sont vendues, la
+          suivante devient courante et son prix s&apos;affiche partout (site, app). Chaque tranche
+          est un <b>produit Polar</b> : crée-le dans Polar au bon prix, colle son identifiant ici.
+          Une tranche sans produit n&apos;est pas vendable. Laisse les places vides sur la
+          dernière pour qu&apos;elle reste ouverte ; sinon l&apos;offre s&apos;arrête quand tout est vendu.
+        </p>
+
+        <div className="space-y-2">
+          {tranchesDraft.map((t, i) => {
+            const courante = config.tranche?.index === i;
+            const prix = t.productId && config.tranchePrices ? config.tranchePrices[t.productId] : null;
+            const derniere = i === tranchesDraft.length - 1;
+            return (
+              <div key={i} className={`grid grid-cols-[auto_1fr_2fr_auto_auto] items-center gap-2 rounded-xl border p-2 ${courante ? "border-[var(--color-accent)]" : "border-slate-200"}`}>
+                <span className="text-[11px] font-black text-slate-500 w-14">
+                  {courante ? "▶ " : ""}T{i + 1}
+                </span>
+                <input
+                  id={`tranche-seats-${i}`}
+                  type="number" min={1} className={input}
+                  placeholder={derniere ? "ouverte" : "places"}
+                  value={t.seats}
+                  onChange={(e) => setTranchesDraft(tranchesDraft.map((x, j) => j === i ? { ...x, seats: e.target.value } : x))}
+                />
+                <input
+                  id={`tranche-product-${i}`}
+                  className={`${input} font-mono text-[11px]`}
+                  placeholder="id produit Polar"
+                  value={t.productId}
+                  onChange={(e) => setTranchesDraft(tranchesDraft.map((x, j) => j === i ? { ...x, productId: e.target.value } : x))}
+                />
+                <span className="text-xs font-black text-slate-900 tabular-nums w-16 text-right">
+                  {prix ? `${prix.amount} ${prix.currency === "EUR" ? "€" : prix.currency}` : t.productId ? "?" : "—"}
+                </span>
+                <button
+                  onClick={() => setTranchesDraft(tranchesDraft.filter((_, j) => j !== i))}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-red-600" title="Retirer la tranche"
+                >
+                  <Trash2 size={13} />
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        {config.tranche && (
+          <p className="text-[11px] text-slate-600">
+            Tranche courante : <b>T{config.tranche.index + 1}</b> —{" "}
+            {config.tranche.remaining === null ? "ouverte" : `${config.tranche.remaining} place(s) restante(s)`}
+            {!config.tranche.purchasable && <span className="text-red-600 font-bold"> · non vendable ({config.tranche.soldOut ? "épuisée" : "produit Polar manquant"})</span>}
+          </p>
+        )}
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setTranchesDraft([...tranchesDraft, { seats: "", productId: "" }])}
+            className={`${btn} flex items-center gap-1.5`}
+          >
+            <Plus size={13} /> Ajouter une tranche
+          </button>
+          <button
+            onClick={() => {
+              const tranches: LaunchTranche[] = tranchesDraft.map((t) => ({
+                seats: t.seats.trim() === "" ? null : Number(t.seats),
+                productId: t.productId.trim() || null,
+              }));
+              save({ tranches });
+            }}
+            disabled={saving || tranchesDraft.length === 0}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--color-accent)] text-[var(--color-text-on-accent)] text-xs font-black uppercase tracking-wider hover:opacity-90 disabled:opacity-40"
+          >
+            {saving ? <RefreshCw size={13} className="animate-spin" /> : <Save size={13} />}
+            Enregistrer les tranches
+          </button>
         </div>
       </div>
 

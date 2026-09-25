@@ -3,7 +3,7 @@
 import { Check, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { LaunchSeats } from "@/components/ui/LaunchSeats";
+import { LaunchSeats, useLaunchOffer, formatLaunchPrice } from "@/components/ui/LaunchSeats";
 import { Locale, localeCurrencies, priceMap } from "@/lib/i18n/config";
 
 interface PricingProps {
@@ -49,6 +49,17 @@ export function Pricing({
     p.features?.oneClickPayment || "Paiement en un clic",
   ];
 
+  // Offre de lancement par tranches (59 € → 79 € → 99 €) : le prix affiché
+  // est celui de la tranche courante, lu en direct. Tant qu'il n'est pas
+  // connu (chargement, fonction pas encore redéployée), on garde le prix de
+  // la grille — jamais un chiffre inventé.
+  const offre = useLaunchOffer();
+  const tranche = offre?.tranche;
+  const launchLabel = formatLaunchPrice(tranche?.price, locale) ?? formatPrice(prices.launch);
+  const lowest30d = tranche && tranche.index > 0 ? formatLaunchPrice(offre?.lowestPrice30d, locale) : null;
+  const launchSoldOut = !!tranche && !tranche.purchasable;
+  const fillPrice = (tpl: string, price: string) => tpl.replace("{price}", price);
+
   const yearlyPerMonth = formatCurrency(prices.yearly / 12);
   const biYearlyPerMonth = formatCurrency(prices.biYearly / 24);
   const biYearlySavings = formatPrice(Math.round(prices.monthly * 24 - prices.biYearly));
@@ -84,11 +95,13 @@ export function Pricing({
               <LaunchSeats
                 locale={locale}
                 remainingText={p.launchOfferRemaining || "{remaining} places restantes sur {total}"}
+                trancheText={p.launchOfferTranche || "{remaining} places restantes à {price}"}
+                nextText={p.launchOfferNext || "ensuite {price}"}
                 deadlineText={p.launchOfferDeadline || "jusqu'au {date}"}
                 className="mb-8"
               />
               <div className="flex items-center justify-center gap-3 md:gap-4 mb-3 md:mb-6">
-                <span className="text-4xl md:text-6xl font-black text-white">{formatPrice(prices.launch)}</span>
+                <span className="text-4xl md:text-6xl font-black text-white">{launchLabel}</span>
                 <div className="text-left">
                   <p className="text-white/40 line-through text-xs md:text-sm">
                     {p.launchOfferNormalPrice || "Prix normal"} : {formatPrice(prices.normal)}
@@ -98,13 +111,25 @@ export function Pricing({
                   </p>
                 </div>
               </div>
-              <Button
-                href="https://go.robi-app.com"
-                variant="primary"
-                className="w-full max-w-md font-black tracking-wider !text-xs md:!text-base"
-              >
-                {p.launchOfferCta ? `${p.launchOfferCta} (${formatPrice(prices.launch)})` : `PROFITER DE L'OFFRE (${formatPrice(prices.launch)})`}
-              </Button>
+              {lowest30d && (
+                // Obligation Omnibus dès qu'un prix a monté : le plus bas des 30 derniers jours.
+                <p className="text-white/40 text-[11px] mb-4">
+                  {fillPrice(p.launchOfferLowest || "Prix le plus bas pratiqué ces 30 derniers jours : {price}", lowest30d)}
+                </p>
+              )}
+              {launchSoldOut ? (
+                <p className="text-white/70 font-bold">
+                  {p.launchOfferSoldOut || "Toutes les places à ce prix sont parties."}
+                </p>
+              ) : (
+                <Button
+                  href="https://go.robi-app.com"
+                  variant="primary"
+                  className="w-full max-w-md font-black tracking-wider !text-xs md:!text-base"
+                >
+                  {p.launchOfferCta ? `${p.launchOfferCta} (${launchLabel})` : `PROFITER DE L'OFFRE (${launchLabel})`}
+                </Button>
+              )}
             </div>
           </div>
         </ScrollReveal>

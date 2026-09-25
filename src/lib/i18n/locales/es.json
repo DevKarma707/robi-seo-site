@@ -152,6 +152,10 @@
     "launchOfferCta": "APROVECHAR LA OFERTA",
     "launchOfferRemaining": "Quedan {remaining} plazas de {total}",
     "launchOfferDeadline": "hasta el {date}",
+    "launchOfferTranche": "Quedan {remaining} plazas a {price}",
+    "launchOfferNext": "después {price}",
+    "launchOfferLowest": "Precio más bajo aplicado en los últimos 30 días: {price}",
+    "launchOfferSoldOut": "Todas las plazas a este precio se han agotado.",
     "features": {
       "unlimitedInvoices": "Facturas y presupuestos ilimitados",
       "autoReminders": "Recordatorios y notificaciones automáticos",

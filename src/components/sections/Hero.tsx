@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { LaunchSeats } from "@/components/ui/LaunchSeats";
+import { LaunchSeats, useLaunchOffer, formatLaunchPrice } from "@/components/ui/LaunchSeats";
 import { HeroMockups } from "@/components/ui/HeroMockups";
 import { HeroStory } from "@/components/ui/HeroStory";
 import type { HeroStoryCopy } from "@/lib/i18n/heroStory";
@@ -28,7 +28,13 @@ interface HeroProps {
     text: string;
     highlight: string;
     /** Compteur de places live (LaunchSeats), affiché après le prix. */
-    seats?: { locale: string; remainingText: string; deadlineText?: string };
+    seats?: { locale: string; remainingText: string; trancheText?: string; nextText?: string; deadlineText?: string };
+    /**
+     * « Accès à vie » : quand le prix de la tranche courante est connu, le
+     * hero affiche « <prix live> — <lifetimeLabel> » au lieu du prix figé du
+     * rendu serveur, pour ne jamais annoncer 59 € quand la tranche est à 79 €.
+     */
+    lifetimeLabel?: string;
   };
   rotatingWords?: string[];
   visual?: "mockups" | "editorial";
@@ -85,6 +91,14 @@ export function Hero({
   const isCenter = variant === "centered";
   const isEditorial = !isCenter && visual === "editorial" && !!story;
 
+  const offreLive = useLaunchOffer();
+  const prixLive = launchOffer?.seats
+    ? formatLaunchPrice(offreLive?.tranche?.price, launchOffer.seats.locale)
+    : null;
+  const offerHighlight = launchOffer
+    ? (prixLive && launchOffer.lifetimeLabel ? `${prixLive} — ${launchOffer.lifetimeLabel}` : launchOffer.highlight)
+    : "";
+
   const ctaBlock = ctaText && (
     <div className={`flex flex-col gap-3 items-center lg:items-start w-full ${isEditorial ? storyStyles.actions : ""}`}>
       <Button href={ctaHref} size="sm" className={`w-full lg:w-auto !text-sm !px-5 !py-3 md:!px-8 md:!py-4 md:!text-base ${isEditorial ? storyStyles.cta : ""}`}>
@@ -97,7 +111,7 @@ export function Hero({
           <Zap className="w-3.5 h-3.5 text-[#BEF221] shrink-0" />
           <span className="text-white/70 text-xs">
             {launchOffer.text}{" "}
-            <span className="text-[#BEF221] font-bold">{launchOffer.highlight}</span>
+            <span className="text-[#BEF221] font-bold">{offerHighlight}</span>
             {launchOffer.seats && (
               <LaunchSeats compact className="text-white/50" {...launchOffer.seats} />
             )}
@@ -135,7 +149,7 @@ export function Hero({
                     <Zap className="w-3.5 h-3.5 text-[#BEF221]" />
                     <span className="text-white/70 text-xs">
                       {launchOffer.text}{" "}
-                      <span className="text-[#BEF221] font-bold">{launchOffer.highlight}</span>
+                      <span className="text-[#BEF221] font-bold">{offerHighlight}</span>
                     </span>
                   </div>
                 )}

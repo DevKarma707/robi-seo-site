@@ -180,8 +180,11 @@ export default async function Home({
           seats: {
             locale,
             remainingText: dict.pricing?.launchOfferRemaining || "{remaining} places restantes sur {total}",
+            trancheText: dict.pricing?.launchOfferTranche,
+            nextText: dict.pricing?.launchOfferNext,
             deadlineText: dict.pricing?.launchOfferDeadline || "jusqu'au {date}",
           },
+          lifetimeLabel: dict.pricing?.launchOfferLifetime || "Accès à vie",
         }}
       />
 

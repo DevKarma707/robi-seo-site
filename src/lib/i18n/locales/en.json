@@ -152,6 +152,10 @@
     "launchOfferCta": "CLAIM THE OFFER",
     "launchOfferRemaining": "{remaining} of {total} seats left",
     "launchOfferDeadline": "until {date}",
+    "launchOfferTranche": "{remaining} seats left at {price}",
+    "launchOfferNext": "then {price}",
+    "launchOfferLowest": "Lowest price charged in the last 30 days: {price}",
+    "launchOfferSoldOut": "All seats at this price are gone.",
     "features": {
       "unlimitedInvoices": "Unlimited invoices & quotes",
       "autoReminders": "Automatic reminders & notifications",

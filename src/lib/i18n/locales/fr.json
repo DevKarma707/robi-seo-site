@@ -152,6 +152,10 @@
     "launchOfferCta": "PROFITER DE L'OFFRE",
     "launchOfferRemaining": "{remaining} places restantes sur {total}",
     "launchOfferDeadline": "jusqu'au {date}",
+    "launchOfferTranche": "{remaining} places restantes à {price}",
+    "launchOfferNext": "ensuite {price}",
+    "launchOfferLowest": "Prix le plus bas pratiqué ces 30 derniers jours : {price}",
+    "launchOfferSoldOut": "Toutes les places à ce prix sont parties.",
     "features": {
       "unlimitedInvoices": "Factures et devis illimités",
       "autoReminders": "Relances et notifications automatiques",

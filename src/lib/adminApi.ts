@@ -26,6 +26,15 @@ export interface AppStats {
   cached?: boolean;
 }
 
+export interface LaunchTranche {
+  /** Places de la tranche ; `null` = ouverte (dernière seulement). */
+  seats: number | null;
+  /** Produit Polar qui facture cette tranche ; `null` = pas encore créé. */
+  productId: string | null;
+}
+
+export interface LaunchPrice { amount: number; currency: string }
+
 export interface LaunchConfig {
   enabled: boolean;
   totalSeats: number;
@@ -33,6 +42,16 @@ export interface LaunchConfig {
   manualOverride: number | null;
   deadline: string | null;
   realSold: number;
+  /** Les tranches en vigueur (l'offre historique en une tranche si rien n'est configuré). */
+  tranches?: LaunchTranche[];
+  /** Où on en est : tranche courante, vendable ou non. */
+  tranche?: {
+    index: number; seats: number | null; sold: number; remaining: number | null;
+    productId: string | null; isLast: boolean; purchasable: boolean; soldOut: boolean;
+  };
+  /** Prix lus chez Polar, par produit ; `null` si Polar est muet. */
+  tranchePrices?: Record<string, LaunchPrice | null>;
+  trancheHistory?: { index: number; at: string }[];
 }
 
 const authedFetch = async (url: string, init?: RequestInit) => {
