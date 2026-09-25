@@ -167,6 +167,7 @@
       "badge": "Launch",
       "lifetime": "{price} for life",
       "seats": "only {remaining} seats left at this price",
+      "seatsShort": "{remaining} seats",
       "next": "then {price}",
       "endsIn": "ends in",
       "cta": "Claim it",

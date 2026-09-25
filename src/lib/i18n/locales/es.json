@@ -167,6 +167,7 @@
       "badge": "Lanzamiento",
       "lifetime": "{price} de por vida",
       "seats": "solo quedan {remaining} plazas a este precio",
+      "seatsShort": "{remaining} plazas",
       "next": "después {price}",
       "endsIn": "termina en",
       "cta": "Lo quiero",

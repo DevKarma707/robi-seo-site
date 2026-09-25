@@ -22,6 +22,8 @@ export interface LaunchBarCopy {
   lifetime: string;
   /** « plus que {remaining} places à ce prix » */
   seats: string;
+  /** « {remaining} places » — version courte pour mobile */
+  seatsShort?: string;
   /** « puis {price} » */
   next: string;
   /** « fin dans » */
@@ -81,7 +83,10 @@ export function LaunchBar({ locale, copy, normalPrice }: { locale: string; copy:
           <b className="text-[#BEF221]">{fill(copy.lifetime, { price: prix })}</b>{" "}
           <s className="text-white/40 hidden sm:inline">{normalPrice}</s>
           {tranche.remaining !== null && (
-            <span className="text-white/80"> · {fill(copy.seats, { remaining: nf.format(tranche.remaining) })}</span>
+            <>
+              <span className="text-white/80 hidden sm:inline"> · {fill(copy.seats, { remaining: nf.format(tranche.remaining) })}</span>
+              <span className="text-white/80 sm:hidden"> · {fill(copy.seatsShort || "{remaining}", { remaining: nf.format(tranche.remaining) })}</span>
+            </>
           )}
           {suivant && <span className="text-white/60 hidden md:inline"> · {fill(copy.next, { price: suivant })}</span>}
         </span>
