@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { X } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { useLaunchOffer, formatLaunchPrice } from "@/components/ui/LaunchSeats";
 
 /**
@@ -75,8 +75,11 @@ export function LaunchBar({ locale, copy, normalPrice }: { locale: string; copy:
 
   return (
     <div className="relative border-b border-[#BEF221]/30 bg-[linear-gradient(90deg,#0D0630_0%,#1a1150_50%,#0D0630_100%)]">
-      <div className="max-w-7xl mx-auto h-9 px-10 flex items-center justify-center gap-3 text-[12.5px] text-white whitespace-nowrap overflow-hidden">
-        <span className="hidden sm:inline-block rounded-full bg-[#BEF221] text-[#0D0630] font-black text-[10px] tracking-wider uppercase px-2 py-0.5">
+      {/* Même gabarit que le header juste en dessous : pastille = celle de la
+          langue, bouton = « Connexion » (Button size="sm"), mêmes tailles
+          sur mobile. */}
+      <div className="max-w-7xl mx-auto h-9 lg:h-12 px-10 flex items-center justify-center gap-3 lg:gap-4 text-[12.5px] lg:text-sm text-white whitespace-nowrap overflow-hidden">
+        <span className="hidden sm:inline-flex items-center px-3 py-1 lg:py-2 rounded-full bg-white/10 border border-white/20 text-[#BEF221] font-bold text-[11px] lg:text-sm tracking-wide uppercase">
           {copy.badge}
         </span>
         <span className="truncate">
@@ -91,14 +94,18 @@ export function LaunchBar({ locale, copy, normalPrice }: { locale: string; copy:
           {suivant && <span className="text-white/60 hidden md:inline"> · {fill(copy.next, { price: suivant })}</span>}
         </span>
         {chrono && (
-          <span className="hidden md:inline-flex items-center gap-1.5 text-white/60">
+          <span className="hidden md:inline-flex items-center gap-2 text-white/60">
             {copy.endsIn}
-            <span className="font-mono tabular-nums text-white bg-black/30 border border-white/10 rounded-md px-1.5 py-0.5">{chrono}</span>
+            <span className="font-mono tabular-nums text-white bg-white/10 border border-white/20 rounded-full px-3 py-1 lg:py-2 text-[12.5px] lg:text-sm">{chrono}</span>
           </span>
         )}
-        <Link href={`/${locale}/#pricing`} className="rounded-full bg-[#BEF221] text-[#0D0630] font-black text-[11.5px] px-3 py-1 hover:opacity-90">
+        <Button
+          href={`/${locale}/#pricing`}
+          size="sm"
+          className="!text-xs !px-3 !py-1 lg:!text-sm lg:!px-4 lg:!py-2 flex-none"
+        >
           {copy.cta}
-        </Link>
+        </Button>
       </div>
       <button onClick={fermer} className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-white/40 hover:text-white" aria-label={copy.close}>
         <X className="w-3.5 h-3.5" />
