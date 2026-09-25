@@ -166,6 +166,8 @@
     "launchBar": {
       "badge": "Oferta de lanzamiento",
       "lifetime": "{price} de por vida",
+      "lifetimeWord": "de por vida",
+      "days": "{d} d",
       "seats": "quedan {remaining} plazas a este precio",
       "seatsShort": "{remaining} plazas",
       "next": "después {price}",

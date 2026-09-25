@@ -30,11 +30,10 @@ export function Header({ locale, dict }: HeaderProps) {
         <LaunchBar
           locale={locale}
           copy={dict.pricing.launchBar}
-          normalPrice={new Intl.NumberFormat(locale, {
-            style: "currency",
+          normal={{
+            amount: (priceMap[locale] || priceMap["fr"]).normal,
             currency: (localeCurrencies[locale] || localeCurrencies["fr"]).currency,
-            maximumFractionDigits: 0,
-          }).format((priceMap[locale] || priceMap["fr"]).normal)}
+          }}
         />
       )}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -166,6 +166,8 @@
     "launchBar": {
       "badge": "Offre de lancement",
       "lifetime": "{price} à vie",
+      "lifetimeWord": "à vie",
+      "days": "{d} j",
       "seats": "{remaining} places restantes à ce prix",
       "seatsShort": "{remaining} places",
       "next": "puis {price}",
