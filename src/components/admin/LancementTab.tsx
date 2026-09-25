@@ -299,6 +299,46 @@ const LancementTab: React.FC = () => {
         </div>
       </div>
 
+      {/* Offre de bienvenue */}
+      <div className={`${card} p-5 space-y-3`}>
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-1">
+            <p className="text-xs font-black uppercase tracking-widest text-slate-900">Offre de bienvenue (paywall de l&apos;app)</p>
+            <p className="text-[11px] text-slate-500 leading-relaxed max-w-[70ch]">
+              Pendant la fenêtre qui suit l&apos;inscription, l&apos;app affiche le paywall avec un chrono et
+              l&apos;accès à vie au prix du palier du jour (verrouillé même si le palier monte).
+              <b> Ensuite, l&apos;accès à vie n&apos;est plus proposé à ce compte</b> — le serveur refuse le
+              paiement. Ne concerne que les comptes créés après l&apos;activation.
+            </p>
+            {config.welcome?.since && (
+              <p className="text-[10px] text-slate-400">
+                Active pour les inscrits depuis le {new Date(config.welcome.since).toLocaleString("fr-FR")}.
+              </p>
+            )}
+          </div>
+          <button
+            onClick={() => save({ welcome: { enabled: !config.welcome?.enabled, hours: config.welcome?.hours ?? 48, since: config.welcome?.since ?? null } })}
+            disabled={saving}
+            className={`px-3 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all disabled:opacity-40 flex-none ${
+              config.welcome?.enabled ? "bg-[var(--color-accent)] text-[var(--color-text-on-accent)]" : "bg-slate-100 text-slate-600"
+            }`}
+          >
+            {config.welcome?.enabled ? "Active" : "Désactivée"}
+          </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <label htmlFor="welcome-hours" className="text-[11px] font-bold text-slate-600">Durée de la fenêtre</label>
+          <select
+            id="welcome-hours"
+            className={`${input} !w-auto`}
+            value={config.welcome?.hours ?? 48}
+            onChange={(e) => save({ welcome: { enabled: !!config.welcome?.enabled, hours: Number(e.target.value), since: config.welcome?.since ?? null } })}
+          >
+            {[24, 48, 72].map((h) => <option key={h} value={h}>{h} h</option>)}
+          </select>
+        </div>
+      </div>
+
       {/* Garde-fou légal */}
       {padded && (
         <div className="rounded-2xl border border-amber-300 bg-amber-50 p-5">

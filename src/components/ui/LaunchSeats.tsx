@@ -30,6 +30,14 @@ export interface LaunchTranche {
   soldOut: boolean;
 }
 
+export interface LaunchPalier {
+  index: number;
+  seats: number | null;
+  sold: number;
+  remaining: number | null;
+  price: LaunchPrice | null;
+}
+
 export interface LaunchOffer {
   enabled: boolean;
   totalSeats: number;
@@ -38,6 +46,8 @@ export interface LaunchOffer {
   deadline: string | null;
   tranche?: LaunchTranche;
   lowestPrice30d?: LaunchPrice | null;
+  paliers?: LaunchPalier[];
+  welcome?: { enabled: boolean; hours: number; since: string | null };
 }
 
 let cache: Promise<LaunchOffer | null> | null = null;

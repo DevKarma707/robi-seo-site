@@ -162,7 +162,28 @@
       "voiceCreation": "Création par la voix grâce à l'IA",
       "designCustomization": "Personnalisation design avancée",
       "oneClickPayment": "Paiement en un clic"
-    }
+    },
+    "launchBar": {
+      "badge": "Lancement",
+      "lifetime": "{price} à vie",
+      "seats": "plus que {remaining} places à ce prix",
+      "next": "puis {price}",
+      "endsIn": "fin dans",
+      "cta": "J'en profite",
+      "close": "Masquer l'annonce"
+    },
+    "launchTiersTitle": "Accès à vie. Le prix monte à chaque palier.",
+    "launchTierNow": "En cours",
+    "launchTierSeats": "{seats} places",
+    "launchTierLast": "Puis fin du Lifetime",
+    "launchTierOpen": "Dernier palier",
+    "launchOnce": "Une fois. Pour toujours.",
+    "launchEndsIn": "L'offre se termine dans",
+    "launchFine": "Paiement unique · sans abonnement caché",
+    "launchUnitD": "jours",
+    "launchUnitH": "heures",
+    "launchUnitM": "min",
+    "launchUnitS": "sec"
   },
   "faq": {
     "title": "Questions & réponses",

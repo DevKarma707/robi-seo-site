@@ -6,6 +6,8 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { Locale } from "@/lib/i18n/config";
+import { LaunchBar } from "@/components/ui/LaunchBar";
+import { localeCurrencies, priceMap } from "@/lib/i18n/config";
 
 interface HeaderProps {
   locale: Locale;
@@ -24,6 +26,17 @@ export function Header({ locale, dict }: HeaderProps) {
 
   return (
     <header className="fixed w-full z-50 bg-[#0D0630]/70 backdrop-blur-xl border-b border-white/[0.08] supports-[backdrop-filter]:bg-[#0D0630]/60">
+      {dict.pricing?.launchBar && (
+        <LaunchBar
+          locale={locale}
+          copy={dict.pricing.launchBar}
+          normalPrice={new Intl.NumberFormat(locale, {
+            style: "currency",
+            currency: (localeCurrencies[locale] || localeCurrencies["fr"]).currency,
+            maximumFractionDigits: 0,
+          }).format((priceMap[locale] || priceMap["fr"]).normal)}
+        />
+      )}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-14 gap-8">
 

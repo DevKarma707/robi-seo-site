@@ -52,6 +52,8 @@ export interface LaunchConfig {
   /** Prix lus chez Polar, par produit ; `null` si Polar est muet. */
   tranchePrices?: Record<string, LaunchPrice | null>;
   trancheHistory?: { index: number; at: string }[];
+  /** Offre de bienvenue : fenêtre après l'inscription pendant laquelle l'accès à vie est proposé. */
+  welcome?: { enabled: boolean; hours: number; since: string | null };
 }
 
 const authedFetch = async (url: string, init?: RequestInit) => {

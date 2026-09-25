@@ -1,6 +1,7 @@
 "use client";
 
-import { Check, TrendingUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { LaunchSeats, useLaunchOffer, formatLaunchPrice } from "@/components/ui/LaunchSeats";
@@ -59,6 +60,30 @@ export function Pricing({
   const lowest30d = tranche && tranche.index > 0 ? formatLaunchPrice(offre?.lowestPrice30d, locale) : null;
   const launchSoldOut = !!tranche && !tranche.purchasable;
   const fillPrice = (tpl: string, price: string) => tpl.replace("{price}", price);
+  const nfSeats = new Intl.NumberFormat(locale);
+  const fillSeats = (tpl: string, n: number) => tpl.replace("{seats}", nfSeats.format(n));
+  const paliers = (offre?.paliers || []).filter((x) => x.price);
+
+  // Chrono vers la VRAIE date limite de l'offre (Admin › Lancement), s'il y en a une.
+  const [now, setNow] = useState(() => Date.now());
+  const fin = offre?.deadline ? Date.parse(offre.deadline) : NaN;
+  const chronoActif = Number.isFinite(fin) && fin > now;
+  useEffect(() => {
+    if (!chronoActif) return;
+    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, [chronoActif]);
+  const chrono = chronoActif ? (() => {
+    const s = Math.floor((fin - now) / 1000);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const j = Math.floor(s / 86400);
+    const u = [
+      { v: pad(Math.floor((s % 86400) / 3600)), l: p.launchUnitH || "h" },
+      { v: pad(Math.floor((s % 3600) / 60)), l: p.launchUnitM || "min" },
+      { v: pad(s % 60), l: p.launchUnitS || "s" },
+    ];
+    return j > 0 ? [{ v: String(j), l: p.launchUnitD || "j" }, ...u] : u;
+  })() : null;
 
   const yearlyPerMonth = formatCurrency(prices.yearly / 12);
   const biYearlyPerMonth = formatCurrency(prices.biYearly / 24);
@@ -76,44 +101,82 @@ export function Pricing({
           </p>
         </ScrollReveal>
 
-        {/* Launch Offer Banner */}
+        {/* Offre de lancement — carte à paliers (version B). Prix, places et
+            paliers lus en direct ; chrono seulement si une vraie date limite
+            est fixée dans Admin › Lancement. */}
         <ScrollReveal className="mb-12 max-w-4xl mx-auto">
-          <div className="bg-[#BEF221] rounded-3xl p-1 relative overflow-hidden">
-            <div className="bg-[#0D0630] rounded-[calc(1.5rem-4px)] p-6 md:p-10 text-center relative">
-              <div className="absolute top-0 right-0 p-4">
-                <TrendingUp className="text-[#BEF221] w-8 h-8 opacity-20" />
-              </div>
-              <span className="inline-block px-4 py-1.5 rounded-full bg-[#BEF221] text-[#0D0630] text-xs font-black uppercase tracking-wider mb-6">
+          <div className="rounded-[26px] p-[2px] bg-[linear-gradient(135deg,#BEF221_0%,rgba(190,242,33,.25)_40%,rgba(190,242,33,.05)_70%,#BEF221_100%)]">
+            <div className="relative overflow-hidden rounded-[24px] bg-[linear-gradient(170deg,#150c44_0%,#0D0630_60%)] px-5 py-8 md:px-10 md:py-10 text-center flex flex-col gap-6">
+              <div aria-hidden="true" className="pointer-events-none absolute -top-1/3 -right-1/4 w-2/3 h-[90%] bg-[radial-gradient(closest-side,rgba(190,242,33,.16),transparent)]" />
+              <span className="self-center inline-block px-4 py-1.5 rounded-full bg-[#BEF221] text-[#0D0630] text-xs font-black uppercase tracking-wider">
                 {p.launchOfferBadge || "OFFRE LIMITÉE"}
               </span>
-              <h3 className="text-2xl md:text-3xl font-black text-white mb-4">
-                {p.launchOfferTitle || "Accès à Vie - Robi Pro"}
+              <h3 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-tight">
+                {p.launchTiersTitle || "Accès à vie. Le prix monte à chaque palier."}
               </h3>
-              <p className="text-white/60 mb-4 max-w-lg mx-auto">
-                {p.launchOfferSubtitle || "Pour les 1000 premiers utilisateurs uniquement"}
-              </p>
-              <LaunchSeats
-                locale={locale}
-                remainingText={p.launchOfferRemaining || "{remaining} places restantes sur {total}"}
-                trancheText={p.launchOfferTranche || "{remaining} places restantes à {price}"}
-                nextText={p.launchOfferNext || "ensuite {price}"}
-                deadlineText={p.launchOfferDeadline || "jusqu'au {date}"}
-                className="mb-8"
-              />
-              <div className="flex items-center justify-center gap-3 md:gap-4 mb-3 md:mb-6">
-                <span className="text-4xl md:text-6xl font-black text-white">{launchLabel}</span>
-                <div className="text-left">
+
+              {paliers.length > 1 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-left">
+                  {paliers.map((pa) => {
+                    const courant = pa.index === tranche?.index;
+                    const passe = tranche ? pa.index < tranche.index : false;
+                    const pct = pa.seats ? Math.min(100, Math.round((pa.sold / pa.seats) * 100)) : 0;
+                    return (
+                      <div key={pa.index} className={`rounded-xl border px-3.5 py-3 flex flex-col gap-2 ${courant ? "border-[#BEF221] bg-[#BEF221]/10" : "border-white/10 bg-black/20"} ${!courant ? "opacity-55" : ""}`}>
+                        <span className={`text-xl font-black ${passe ? "line-through text-white/50" : "text-white"}`}>{formatLaunchPrice(pa.price, locale)}</span>
+                        <span className="h-1.5 rounded-full bg-white/10 overflow-hidden"><span className="block h-full rounded-full bg-[#BEF221]" style={{ width: `${passe ? 100 : pct}%` }} /></span>
+                        <span className={`text-[11.5px] ${courant ? "text-[#BEF221] font-bold" : "text-white/50"}`}>
+                          {courant
+                            ? `${p.launchTierNow || "En cours"}${pa.remaining !== null ? ` · ${fillSeats(p.launchTierSeats || "{seats} places", pa.remaining)}` : ""}`
+                            : pa.seats === null
+                              ? (p.launchTierOpen || "Dernier palier")
+                              : fillSeats(p.launchTierSeats || "{seats} places", pa.seats)}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <LaunchSeats
+                  locale={locale}
+                  remainingText={p.launchOfferRemaining || "{remaining} places restantes sur {total}"}
+                  trancheText={p.launchOfferTranche || "{remaining} places restantes à {price}"}
+                  nextText={p.launchOfferNext || "ensuite {price}"}
+                  deadlineText={p.launchOfferDeadline || "jusqu'au {date}"}
+                />
+              )}
+
+              <div className="flex items-center justify-center gap-4 md:gap-5 flex-wrap">
+                <span className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none">{launchLabel}</span>
+                <div className="text-left flex flex-col gap-0.5">
                   <p className="text-white/40 line-through text-xs md:text-sm">
                     {p.launchOfferNormalPrice || "Prix normal"} : {formatPrice(prices.normal)}
                   </p>
-                  <p className="text-[#BEF221] font-bold text-xs md:text-sm">
-                    {p.launchOfferLifetime || "Accès à vie • Robi Pro"}
-                  </p>
+                  <p className="text-[#BEF221] font-bold text-sm md:text-base">{p.launchOnce || "Une fois. Pour toujours."}</p>
+                  <p className="text-white/50 text-xs">{p.launchOfferLifetime || "Accès à vie • Robi Pro"}</p>
                 </div>
               </div>
+
+              {chrono && (
+                <div className="flex flex-col items-center gap-2">
+                  <span className="text-white/70 text-[13px]">{p.launchEndsIn || "L'offre se termine dans"}</span>
+                  <div className="flex items-start gap-1.5 font-mono font-bold tabular-nums">
+                    {chrono.map((u, i) => (
+                      <div key={u.l} className="flex items-start gap-1.5">
+                        {i > 0 && <span className="text-white/40 text-xl pt-1.5">:</span>}
+                        <div className="flex flex-col items-center">
+                          <span className="text-2xl text-white bg-black/35 border border-[#BEF221]/45 rounded-lg px-2.5 py-1 min-w-[2.6em] text-center">{u.v}</span>
+                          <span className="font-sans text-[9.5px] tracking-widest uppercase text-white/45 mt-1">{u.l}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {lowest30d && (
                 // Obligation Omnibus dès qu'un prix a monté : le plus bas des 30 derniers jours.
-                <p className="text-white/40 text-[11px] mb-4">
+                <p className="text-white/40 text-[11px] -mb-2">
                   {fillPrice(p.launchOfferLowest || "Prix le plus bas pratiqué ces 30 derniers jours : {price}", lowest30d)}
                 </p>
               )}
@@ -125,11 +188,12 @@ export function Pricing({
                 <Button
                   href="https://go.robi-app.com"
                   variant="primary"
-                  className="w-full max-w-md font-black tracking-wider !text-xs md:!text-base"
+                  className="w-full max-w-md self-center font-black tracking-wider !text-sm md:!text-base shadow-[0_18px_50px_-18px_rgba(190,242,33,.6)]"
                 >
                   {p.launchOfferCta ? `${p.launchOfferCta} (${launchLabel})` : `PROFITER DE L'OFFRE (${launchLabel})`}
                 </Button>
               )}
+              <p className="text-white/40 text-[11.5px] -mt-2">{p.launchFine || "Paiement unique · sans abonnement caché"}</p>
             </div>
           </div>
         </ScrollReveal>

@@ -162,7 +162,28 @@
       "voiceCreation": "Voice creation with AI",
       "designCustomization": "Advanced design customization",
       "oneClickPayment": "One-click payment"
-    }
+    },
+    "launchBar": {
+      "badge": "Launch",
+      "lifetime": "{price} for life",
+      "seats": "only {remaining} seats left at this price",
+      "next": "then {price}",
+      "endsIn": "ends in",
+      "cta": "Claim it",
+      "close": "Hide announcement"
+    },
+    "launchTiersTitle": "Lifetime access. The price rises at every tier.",
+    "launchTierNow": "Current",
+    "launchTierSeats": "{seats} seats",
+    "launchTierLast": "Then Lifetime ends",
+    "launchTierOpen": "Last tier",
+    "launchOnce": "Once. Forever.",
+    "launchEndsIn": "The offer ends in",
+    "launchFine": "One-time payment · no hidden subscription",
+    "launchUnitD": "days",
+    "launchUnitH": "hours",
+    "launchUnitM": "min",
+    "launchUnitS": "sec"
   },
   "faq": {
     "title": "Questions & Answers",
