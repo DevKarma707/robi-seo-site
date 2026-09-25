@@ -224,6 +224,10 @@ const LancementTab: React.FC = () => {
           Une tranche sans produit n&apos;est pas vendable. Laisse les places vides sur la
           dernière pour qu&apos;elle reste ouverte ; sinon l&apos;offre s&apos;arrête quand tout est vendu.
         </p>
+        <p className="text-[11px] text-slate-500 leading-relaxed max-w-[70ch]">
+          Avec des tranches, le compteur suit <b>uniquement les ventes réelles</b> : le chiffre de
+          départ et le forçage manuel sont ignorés. Un prix ne monte que sur de vraies ventes.
+        </p>
 
         <div className="space-y-2">
           {tranchesDraft.map((t, i) => {
