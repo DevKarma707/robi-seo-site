@@ -20,6 +20,22 @@ export interface HeroStoryCopy {
   resumeLabel: string;
   reviewLabel: string;
   replayLabel: string;
+  /**
+   * Les scénarios que la carte enchaîne en boucle : un devis, puis une
+   * facture pour une autre prestation. Chaque scénario a sa phrase dictée,
+   * sa ligne de prestation et ses quatre états (création, créé, envoyé, fin).
+   */
+  scenarios?: HeroScenario[];
+}
+
+export interface HeroScenario {
+  kind: "quote" | "invoice";
+  prompt: string;
+  service: string;
+  /** [en cours, créé, envoyé, final] */
+  statuses: [string, string, string, string];
+  /** [détail en cours, créé, envoyé, final] */
+  details: [string, string, string, string];
 }
 
 const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
@@ -45,6 +61,14 @@ const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
     resumeLabel: "Reprendre",
     reviewLabel: "À vérifier avant l’envoi",
     replayLabel: "Rejouer l’exemple",
+    scenarios: [
+      { kind: "quote", prompt: "Crée-moi un devis pour un meuble sur mesure en chêne.", service: "Meuble sur mesure en chêne massif",
+        statuses: ["Création du devis", "Devis créé", "Devis envoyé", "Devis signé"],
+        details: ["Vous dites", "À vérifier avant l’envoi", "Transmis au client", "Signé par le client"] },
+      { kind: "invoice", prompt: "Maintenant, une facture pour la pose de la cuisine.", service: "Pose d’une cuisine équipée",
+        statuses: ["Création de la facture", "Facture créée", "Facture envoyée", "Facture payée"],
+        details: ["Vous dites", "À vérifier avant l’envoi", "Transmise au client", "Paiement reçu"] },
+    ],
   },
   en: {
     tracking: {"title": "Quotes", "search": "Search…", "create": "Create", "all": "All", "sent": "Sent", "paid": "Accepted", "draft": "Draft"},
@@ -68,6 +92,14 @@ const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
     resumeLabel: "Resume",
     reviewLabel: "Review before sending",
     replayLabel: "Replay the example",
+    scenarios: [
+      { kind: "quote", prompt: "Make me a quote for a custom solid oak cabinet.", service: "Custom solid oak cabinet",
+        statuses: ["Creating quote", "Quote created", "Quote sent", "Quote signed"],
+        details: ["You say", "Review before sending", "Delivered to the client", "Signed by the client"] },
+      { kind: "invoice", prompt: "Now an invoice for the kitchen installation.", service: "Fitted kitchen installation",
+        statuses: ["Creating invoice", "Invoice created", "Invoice sent", "Invoice paid"],
+        details: ["You say", "Review before sending", "Delivered to the client", "Payment received"] },
+    ],
   },
   es: {
     tracking: {"title": "Presupuestos", "search": "Buscar…", "create": "Crear", "all": "Todo", "sent": "Enviado", "paid": "Aceptado", "draft": "Borrador"},
@@ -91,6 +123,14 @@ const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
     resumeLabel: "Reanudar",
     reviewLabel: "Revisar antes de enviar",
     replayLabel: "Repetir el ejemplo",
+    scenarios: [
+      { kind: "quote", prompt: "Hazme un presupuesto para un mueble a medida de roble.", service: "Mueble a medida de roble macizo",
+        statuses: ["Creando presupuesto", "Presupuesto creado", "Presupuesto enviado", "Presupuesto firmado"],
+        details: ["Tú dices", "Revisar antes de enviar", "Enviado al cliente", "Firmado por el cliente"] },
+      { kind: "invoice", prompt: "Ahora una factura por la instalación de la cocina.", service: "Instalación de una cocina equipada",
+        statuses: ["Creando factura", "Factura creada", "Factura enviada", "Factura pagada"],
+        details: ["Tú dices", "Revisar antes de enviar", "Enviada al cliente", "Pago recibido"] },
+    ],
   },
   pt: {
     tracking: {"title": "Orçamentos", "search": "Pesquisar…", "create": "Criar", "all": "Tudo", "sent": "Enviado", "paid": "Aceite", "draft": "Rascunho"},
@@ -114,6 +154,14 @@ const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
     resumeLabel: "Retomar",
     reviewLabel: "Rever antes de enviar",
     replayLabel: "Repetir o exemplo",
+    scenarios: [
+      { kind: "quote", prompt: "Faz-me um orçamento para um móvel por medida em carvalho.", service: "Móvel por medida em carvalho maciço",
+        statuses: ["A criar orçamento", "Orçamento criado", "Orçamento enviado", "Orçamento assinado"],
+        details: ["Diz", "Rever antes de enviar", "Enviado ao cliente", "Assinado pelo cliente"] },
+      { kind: "invoice", prompt: "Agora uma fatura pela instalação da cozinha.", service: "Instalação de uma cozinha equipada",
+        statuses: ["A criar fatura", "Fatura criada", "Fatura enviada", "Fatura paga"],
+        details: ["Diz", "Rever antes de enviar", "Enviada ao cliente", "Pagamento recebido"] },
+    ],
   },
 };
 

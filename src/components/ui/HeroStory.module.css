@@ -235,10 +235,19 @@
   .tracking { animation: cardDrift 8.5s -3s ease-in-out infinite; }
   .demo[data-playing="false"], .tracking[data-playing="false"] { animation-play-state: paused; }
 }
+/* Amplitude +15 % (7 → 8 px) à la demande de Ralph, 25/09/2026. */
 @keyframes cardDrift {
   0%, 100% { translate: 0 0; }
-  50% { translate: 0 -7px; }
+  50% { translate: 0 -8px; }
 }
+
+/* Nouveau scénario : la carte document s'ouvre (dépli + fondu). */
+.document { animation: cardOpen .6s cubic-bezier(.2,.8,.2,1) backwards; transform-origin: top center; }
+@keyframes cardOpen {
+  from { opacity: 0; transform: translateY(-10px) scaleY(.92); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .document { animation: none; } }
 
 /* Reveal the phone above the voice card on desktop. */
 @media (min-width: 1200px) {

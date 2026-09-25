@@ -6,6 +6,10 @@ import { Button } from "@/components/ui/Button";
 import { LaunchSeats, useLaunchOffer, formatLaunchPrice } from "@/components/ui/LaunchSeats";
 import { HeroMockups } from "@/components/ui/HeroMockups";
 import { HeroStory } from "@/components/ui/HeroStory";
+import dynamic from "next/dynamic";
+
+// Fond WebGL chargé à part, sans rendu serveur : le héro s'affiche d'abord sur l'Amethyst.
+const HeroShaderBackground = dynamic(() => import("@/components/ui/HeroShaderBackground"), { ssr: false });
 import type { HeroStoryCopy } from "@/lib/i18n/heroStory";
 import storyStyles from "@/components/ui/HeroStory.module.css";
 
@@ -123,6 +127,7 @@ export function Hero({
 
   return (
     <section className={`relative overflow-hidden bg-[#0D0630] ${isEditorial ? storyStyles.hero : `pt-24 md:pt-32 ${ctaText ? "pb-14 md:pb-16" : "pb-10 md:pb-10"}`}`}>
+      {isEditorial && <HeroShaderBackground />}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {isCenter ? (
           <div className="text-center max-w-4xl mx-auto">

@@ -3,7 +3,7 @@
 import { useEffect, useState, useSyncExternalStore, type CSSProperties } from "react";
 import Image from "next/image";
 import { ArrowDown, BadgeCheck, Bot, Check, Mic, Send, FileText, Search, Plus } from "lucide-react";
-import type { HeroStoryCopy } from "@/lib/i18n/heroStory";
+import type { HeroScenario, HeroStoryCopy } from "@/lib/i18n/heroStory";
 import styles from "./HeroStory.module.css";
 
 const waveHeights = [8, 14, 23, 12, 30, 20, 36, 17, 26, 40, 22, 32, 16, 28, 35, 18, 25, 12, 21, 9];
@@ -30,6 +30,15 @@ function getMobile() { return window.matchMedia("(max-width: 1023px)").matches; 
 function getServerMobile() { return false; }
 
 export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
+  // Les scénarios enchaînés (devis, puis facture). Sans scénarios dans la
+  // copie, on retombe sur l'exemple historique unique.
+  const scenarios: HeroScenario[] = copy.scenarios?.length ? copy.scenarios : [{
+    kind: "invoice", prompt: copy.prompt, service: copy.service,
+    statuses: [copy.creatingLabel, copy.createdLabel, copy.sentLabel, copy.paidLabel],
+    details: [copy.voiceLabel, copy.reviewLabel, copy.sentDetail, copy.paidDetail],
+  }];
+  const [scenarioIndex, setScenarioIndex] = useState(0);
+  const scenario = scenarios[scenarioIndex % scenarios.length];
   const [phase, setPhase] = useState(0);
   const [spokenText, setSpokenText] = useState("");
   const [trackingStep, setTrackingStep] = useState(0);
@@ -47,28 +56,31 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
 
   useEffect(() => {
     if (!playing) return;
-    const timer = setTimeout(() => setPhase((current) => (current + 1) % phases.length), durations[phase] * (mobile ? 1 : 1.1) * (phase === 0 ? 1.16 : 1));
+    const timer = setTimeout(() => {
+      // Fin d'un scénario : la carte suivante s'ouvre avec le scénario d'après.
+      if (phase === phases.length - 1) setScenarioIndex((i) => (i + 1) % scenarios.length);
+      setPhase((current) => (current + 1) % phases.length);
+    }, durations[phase] * (mobile ? 1 : 1.1) * (phase === 0 ? 1.16 : 1));
     return () => clearTimeout(timer);
-  }, [phase, playing, mobile]);
+  }, [phase, playing, mobile, scenarios.length]);
 
   useEffect(() => {
-    if (phase !== 0) { setSpokenText(copy.prompt); return; }
+    if (phase !== 0) { setSpokenText(scenario.prompt); return; }
     if (!playing) return;
     setSpokenText("");
-    const step = Math.max(32, Math.round((durations[0] * (mobile ? 1 : 1.1) * 1.16 * 0.82) / copy.prompt.length));
+    const step = Math.max(32, Math.round((durations[0] * (mobile ? 1 : 1.1) * 1.16 * 0.82) / scenario.prompt.length));
     let index = 0;
     const timer = setInterval(() => {
       index += 1;
-      setSpokenText(copy.prompt.slice(0, index));
-      if (index >= copy.prompt.length) clearInterval(timer);
+      setSpokenText(scenario.prompt.slice(0, index));
+      if (index >= scenario.prompt.length) clearInterval(timer);
     }, step);
     return () => clearInterval(timer);
-  }, [copy.prompt, phase, playing, mobile]);
+  }, [scenario.prompt, phase, playing, mobile]);
 
-  const invoiceSpoken = spokenText.toLocaleLowerCase().includes(copy.invoiceLabel.toLocaleLowerCase());
-
-  const status = [copy.creatingLabel, copy.createdLabel, copy.sentLabel, copy.paidLabel][stage];
-  const detail = [copy.voiceLabel, copy.reviewLabel, copy.sentDetail, copy.paidDetail][stage];
+  const docLabel = scenario.kind === "quote" ? copy.quoteLabel : copy.invoiceLabel;
+  const status = scenario.statuses[stage];
+  const detail = scenario.details[stage];
   const StatusIcon = [Mic, Check, Send, BadgeCheck][stage];
   const trackingStates = [0, 1, 2].map((row) => {
     const step = reducedMotion ? 6 : trackingStep;
@@ -81,7 +93,7 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
     <div className={styles.story}>
       <figure className={styles.photo}>
         <Image
-          src="/images/hero-atelier.jpg"
+          src="/images/hero-atelier-4k.jpg"
           alt={copy.photoAlt}
           fill
           priority
@@ -102,20 +114,21 @@ export function HeroStory({ copy }: { copy: HeroStoryCopy }) {
             </div>
           </div>
           <p className={styles.prompt}>
-            « <span className={styles.promptText}>{stage === 0 ? spokenText : copy.prompt}</span> »
+            « <span className={styles.promptText}>{stage === 0 ? spokenText : scenario.prompt}</span> »
           </p>
           <span className={styles.transfer} aria-hidden="true"><ArrowDown size={15} /></span>
         </div>
 
-        <div className={styles.document}>
+        {/* key = scénario : à chaque nouveau scénario, une nouvelle carte s'ouvre. */}
+        <div key={`doc-${scenarioIndex}`} className={styles.document} data-kind={scenario.kind}>
           <div className={styles.documentTop}>
-            <span key={`document-title-${stage}-${invoiceSpoken}`} className={styles.documentTitle}>
-              {stage === 0 && !invoiceSpoken ? copy.quoteLabel : copy.invoiceLabel}<span className={styles.documentDot}>.</span>
+            <span className={styles.documentTitle}>
+              {docLabel}<span className={styles.documentDot}>.</span>
             </span>
             <Bot size={27} color="#BEF221" strokeWidth={2} aria-hidden="true" />
           </div>
           <div className={styles.documentLines} aria-hidden="true"><i /><i /><i /></div>
-          <div className={styles.service}><span>{copy.service}</span><Check size={15} aria-hidden="true" /></div>
+          <div className={styles.service}><span>{scenario.service}</span><Check size={15} aria-hidden="true" /></div>
           <div className={styles.documentBottom}>
             <span className={styles.check}><StatusIcon size={17} strokeWidth={2.2} aria-hidden="true" /></span>
             <span key={stage} className={styles.statusText}><strong>{status}</strong><small>{detail}</small></span>
