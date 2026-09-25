@@ -10,7 +10,7 @@ interface StickyMobileCTAProps {
 
 export function StickyMobileCTA({
   text = "Essayer gratuitement",
-  href = "https://go.robi-app.com",
+  href = "https://go.robi-app.com/?signup",
 }: StickyMobileCTAProps) {
   const [visible, setVisible] = useState(false);
 

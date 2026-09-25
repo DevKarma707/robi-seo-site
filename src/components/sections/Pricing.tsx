@@ -186,7 +186,7 @@ export function Pricing({
                 </p>
               ) : (
                 <Button
-                  href="https://go.robi-app.com"
+                  href="https://go.robi-app.com/?signup"
                   variant="primary"
                   className="w-full max-w-md self-center font-black tracking-wider !text-sm md:!text-base shadow-[0_18px_50px_-18px_rgba(190,242,33,.6)]"
                 >
@@ -225,7 +225,7 @@ export function Pricing({
                 ))}
               </ul>
               <Button
-                href="https://go.robi-app.com"
+                href="https://go.robi-app.com/?signup"
                 variant="outline"
                 className="w-full font-black tracking-wider text-sm !border-white/40 !text-white hover:!bg-white hover:!text-[#0D0630]"
               >
@@ -268,7 +268,7 @@ export function Pricing({
                 ))}
               </ul>
               <Button
-                href="https://go.robi-app.com"
+                href="https://go.robi-app.com/?signup"
                 variant="primary"
                 className="w-full font-black tracking-wider text-sm"
               >
@@ -313,7 +313,7 @@ export function Pricing({
                 ))}
               </ul>
               <Button
-                href="https://go.robi-app.com"
+                href="https://go.robi-app.com/?signup"
                 variant="outline"
                 className="w-full font-black tracking-wider text-sm !border-white/40 !text-white hover:!bg-white hover:!text-[#0D0630]"
               >

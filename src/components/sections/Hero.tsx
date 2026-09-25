@@ -85,7 +85,7 @@ export function Hero({
   titleAccent,
   subtitle,
   ctaText = "",
-  ctaHref = "https://go.robi-app.com",
+  ctaHref = "https://go.robi-app.com/?signup",
   variant = "default",
   launchOffer,
   rotatingWords = ["Facture", "Envoi", "Relance", "Notifie"],

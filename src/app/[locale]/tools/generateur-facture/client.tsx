@@ -532,7 +532,7 @@ export function GenerateurFactureClient({ locale, lang, ctaDict, toolsLabel, faq
           <h2 className="text-2xl md:text-3xl font-black text-white mb-4">{T.ctaBlockTitle}</h2>
           <p className="text-white/70 max-w-2xl mx-auto mb-8">{T.ctaBlockText}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-            <a href="https://go.robi-app.com" className="btn-slide inline-flex items-center gap-2 px-7 py-3.5 font-bold rounded-full bg-[#BEF221] text-[#0D0630] hover:shadow-[0_0_30px_rgba(190,242,33,0.4)]">
+            <a href="https://go.robi-app.com/?signup" className="btn-slide inline-flex items-center gap-2 px-7 py-3.5 font-bold rounded-full bg-[#BEF221] text-[#0D0630] hover:shadow-[0_0_30px_rgba(190,242,33,0.4)]">
               <Mic className="w-5 h-5" /> {T.ctaBlockButton}
             </a>
             <a href={`/${locale}/facture-ai`} className="text-white/70 hover:text-[#BEF221] font-medium underline underline-offset-4">

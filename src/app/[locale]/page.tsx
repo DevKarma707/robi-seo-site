@@ -158,9 +158,9 @@ export default async function Home({
         rotatingWords={dict.hero.rotatingWords}
         subtitle={dict.hero.subtitle}
         ctaText={dict.hero.cta}
-        ctaHref="https://go.robi-app.com"
+        ctaHref="https://go.robi-app.com/?signup"
         secondaryCtaText={dict.hero.secondaryCta}
-        secondaryCtaHref="https://go.robi-app.com"
+        secondaryCtaHref="https://go.robi-app.com/?demo"
         variant="default"
         visual="editorial"
         story={getHeroStoryCopy(locale)}

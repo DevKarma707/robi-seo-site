@@ -2064,7 +2064,7 @@ export default async function BlogPostPage({
             <p className="text-gray-500 mb-6">
               {dict.pages.blog.putInPracticeDesc}
             </p>
-            <Button href="https://go.robi-app.com">{dict.pages.industries.tryFree}</Button>
+            <Button href="https://go.robi-app.com/?signup">{dict.pages.industries.tryFree}</Button>
           </Card>
         </div>
       </article>
