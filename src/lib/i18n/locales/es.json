@@ -164,9 +164,9 @@
       "oneClickPayment": "Pago en un clic"
     },
     "launchBar": {
-      "badge": "Lanzamiento",
+      "badge": "Oferta de lanzamiento",
       "lifetime": "{price} de por vida",
-      "seats": "solo quedan {remaining} plazas a este precio",
+      "seats": "quedan {remaining} plazas a este precio",
       "seatsShort": "{remaining} plazas",
       "next": "después {price}",
       "endsIn": "termina en",

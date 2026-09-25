@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { ArrowRight, Bot, X } from "lucide-react";
 import { useLaunchOffer, formatLaunchPrice } from "@/components/ui/LaunchSeats";
 
 /**
@@ -65,7 +64,7 @@ export function LaunchBar({ locale, copy, normalPrice }: { locale: string; copy:
     const s = Math.floor((deadline - now) / 1000);
     const j = Math.floor(s / 86400);
     const h = Math.floor((s % 86400) / 3600);
-    chrono = `${j > 0 ? `${j}j ` : ""}${pad(h)}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
+    chrono = `${j > 0 ? `${j} j ` : ""}${pad(h)}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
   }
 
   const fermer = () => {
@@ -74,41 +73,43 @@ export function LaunchBar({ locale, copy, normalPrice }: { locale: string; copy:
   };
 
   return (
-    <div className="relative border-b border-[#BEF221]/30 bg-[linear-gradient(90deg,#0D0630_0%,#1a1150_50%,#0D0630_100%)]">
-      {/* Même gabarit que le header juste en dessous : pastille = celle de la
-          langue, bouton = « Connexion » (Button size="sm"), mêmes tailles
-          sur mobile. */}
-      <div className="max-w-7xl mx-auto h-9 lg:h-12 px-10 flex items-center justify-center gap-3 lg:gap-4 text-[12.5px] lg:text-sm text-white whitespace-nowrap overflow-hidden">
-        <span className="hidden sm:inline-flex items-center px-3 py-1 lg:py-2 rounded-full bg-white/10 border border-white/20 text-[#BEF221] font-bold text-[11px] lg:text-sm tracking-wide uppercase">
+    <div className="relative bg-[#BEF221] text-[#0D0630]">
+      {/* Barre lime, texte Amethyst : l'offre se lit d'un coup d'œil au-dessus
+          du header sombre. Bouton à la même taille que « Connexion »
+          (px-4 py-2 text-sm, rond), en négatif : Amethyst sur lime. */}
+      <div className="max-w-7xl mx-auto h-10 lg:h-12 pl-4 pr-10 flex items-center justify-center gap-3 lg:gap-5 text-[13px] lg:text-[14.5px] whitespace-nowrap overflow-hidden">
+        <span className="hidden md:inline-flex items-center gap-2 font-semibold">
+          <Bot className="w-[18px] h-[18px]" strokeWidth={2.2} aria-hidden="true" />
           {copy.badge}
         </span>
+        <span className="hidden md:block w-px h-4 bg-[#0D0630]/25" aria-hidden="true" />
         <span className="truncate">
-          <b className="text-[#BEF221]">{fill(copy.lifetime, { price: prix })}</b>{" "}
-          <s className="text-white/40 hidden sm:inline">{normalPrice}</s>
+          <b className="font-extrabold tracking-tight">{fill(copy.lifetime, { price: prix })}</b>{" "}
+          <s className="opacity-50 font-medium hidden sm:inline">{normalPrice}</s>
           {tranche.remaining !== null && (
             <>
-              <span className="text-white/80 hidden sm:inline"> · {fill(copy.seats, { remaining: nf.format(tranche.remaining) })}</span>
-              <span className="text-white/80 sm:hidden"> · {fill(copy.seatsShort || "{remaining}", { remaining: nf.format(tranche.remaining) })}</span>
+              <span className="font-medium hidden sm:inline"> · {fill(copy.seats, { remaining: nf.format(tranche.remaining) })}</span>
+              <span className="font-medium sm:hidden"> · {fill(copy.seatsShort || "{remaining}", { remaining: nf.format(tranche.remaining) })}</span>
             </>
           )}
-          {suivant && <span className="text-white/60 hidden md:inline"> · {fill(copy.next, { price: suivant })}</span>}
+          {suivant && <span className="font-medium opacity-70 hidden lg:inline"> · {fill(copy.next, { price: suivant })}</span>}
         </span>
         {chrono && (
-          <span className="hidden md:inline-flex items-center gap-2 text-white/60">
+          <span className="hidden md:inline-flex items-center gap-2 font-medium">
             {copy.endsIn}
-            <span className="font-mono tabular-nums text-white bg-white/10 border border-white/20 rounded-full px-3 py-1 lg:py-2 text-[12.5px] lg:text-sm">{chrono}</span>
+            <span className="tabular-nums font-bold tracking-tight">{chrono}</span>
           </span>
         )}
-        <Button
+        <a
           href={`/${locale}/#pricing`}
-          size="sm"
-          className="!text-xs !px-3 !py-1 lg:!text-sm lg:!px-4 lg:!py-2 flex-none"
+          className="group inline-flex items-center gap-1.5 flex-none rounded-full bg-[#0D0630] text-[#BEF221] font-bold text-xs px-3 py-1.5 lg:text-sm lg:px-4 lg:py-2 hover:bg-[#1a1150] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0D0630]"
         >
           {copy.cta}
-        </Button>
+          <ArrowRight className="w-3.5 h-3.5 lg:w-4 lg:h-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+        </a>
       </div>
-      <button onClick={fermer} className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-white/40 hover:text-white" aria-label={copy.close}>
-        <X className="w-3.5 h-3.5" />
+      <button onClick={fermer} className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-[#0D0630]/50 hover:text-[#0D0630]" aria-label={copy.close}>
+        <X className="w-4 h-4" />
       </button>
     </div>
   );
