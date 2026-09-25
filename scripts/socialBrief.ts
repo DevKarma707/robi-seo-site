@@ -23,8 +23,20 @@ import {
   ANGLES, PERSONAS, PILIERS, ECART_ANGLE, ECART_PERSONA,
   diagnostiquer, proposerCases, libelleAngle, libellePersona, libellePilier,
 } from "../src/lib/editorialGrid";
-import { MARKET_META, marketOf, type MarketId } from "../src/lib/markets";
-import type { SocialPost } from "../src/lib/socialPosts";
+// Copie locale des marchés (src/lib/markets.ts n'est pas encore commité : un
+// import ici cassait le build Vercel du 25/09). À remplacer par l'import quand
+// le chantier multi-marchés sera livré.
+type MarketId = "fr" | "en" | "es" | "pt";
+const MARKET_META: Record<MarketId, { label: string; langue: string; drapeau: string; adresse: string; devise: string; pays: string[] }> = {
+  fr: { label: "France", langue: "français", drapeau: "🇫🇷", adresse: "tu", devise: "€", pays: ["FR", "BE", "CH", "MA"] },
+  en: { label: "Anglophone", langue: "anglais", drapeau: "🇬🇧", adresse: "you (direct, casual)", devise: "€ / £ / $ selon le pays", pays: ["GB", "IE", "US", "CA", "AU"] },
+  es: { label: "Espagne", langue: "espagnol", drapeau: "🇪🇸", adresse: "tú", devise: "€", pays: ["ES", "MX", "AR", "CO"] },
+  pt: { label: "Portugal / Brésil", langue: "portugais", drapeau: "🇵🇹", adresse: "você", devise: "€ / R$", pays: ["PT", "BR"] },
+};
+const marketOf = (p: { market?: string | null }): MarketId =>
+  p.market && p.market in MARKET_META ? (p.market as MarketId) : "fr";
+import type { SocialPost as SocialPostBase } from "../src/lib/socialPosts";
+type SocialPost = SocialPostBase & { market?: string; pilier?: string; persona?: string; angle?: string };
 
 const loadEnv = () => {
   const f = path.join(process.cwd(), ".env.local");

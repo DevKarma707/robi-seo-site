@@ -74,8 +74,11 @@ const main = async () => {
       resultats.push({ externalId: ligne.externalId, scheduledFor: scheduledTime, caption: String(p.caption).split("\n")[0], dryRun: true });
       continue;
     }
+    // `market` n'existe dans PostAPublier qu'avec le chantier multi-marchés
+    // (pas encore commité) : passé par une variable pour compiler dans les deux cas.
+    const aPublier = { id: snap.id, channel: String(p.channel), market: typeof p.market === "string" ? p.market : null, caption: String(p.caption ?? ""), hashtags: (p.hashtags as string) ?? null, imageUrl: p.imageUrl as string };
     const prep = preparer(
-      { id: snap.id, channel: String(p.channel), market: typeof p.market === "string" ? p.market : null, caption: String(p.caption ?? ""), hashtags: (p.hashtags as string) ?? null, imageUrl: p.imageUrl as string },
+      aPublier as Parameters<typeof preparer>[0],
       comptes,
       { forces: lireForces(), facebookPageId: process.env.BLOTATO_FACEBOOK_PAGE_ID }
     );
