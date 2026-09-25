@@ -31,6 +31,8 @@ export interface Rapprochement {
 }
 
 const EXTENSIONS = /\.(jpe?g|png|webp)$/i;
+/** `2026-10-01-plombier-ig-a`, `…-ig-b-v2` → le post `2026-10-01-plombier-ig`. */
+const VARIANTE = /^(.+)-[ab](?:-v\d+)?$/;
 
 /**
  * Le chemin de l'objet dans le bucket, extrait d'une URL de téléchargement.
@@ -84,10 +86,17 @@ export const rapprocher = (
   /** externalId → visuels, la slide 1 (ou l'unique) en tête. */
   const parId = new Map<string, { url: string; slide: number; path: string }[]>();
   const utilises = new Set<string>();
+  /** Versions A/B (`…-ig-a.jpg`, `…-ig-b-v2.jpg`) : rattachées par le JSON d'import. */
+  const variantes = new Set<string>();
 
   for (const f of fichiers) {
     const id = identifiantDepuisNom(f.name);
     if (!id) continue;
+    // Une version A/B ne s'attache pas par son nom — c'est l'`imageUrl` du
+    // JSON qui la rattache. La compter comme orpheline affichait « 26 visuels
+    // sans post » juste après un import parfaitement rattaché.
+    const v = id.externalId.match(VARIANTE);
+    if (v) { variantes.add(v[1]); continue; }
     const liste = parId.get(id.externalId) ?? [];
     liste.push({ url: f.url, slide: id.slide ?? 1, path: f.path ?? cheminDepuisUrl(f.url) ?? "" });
     parId.set(id.externalId, liste);
@@ -115,9 +124,11 @@ export const rapprocher = (
     attacher.push({ post, url: retenu.url });
   }
 
-  const orphelins = [...parId.keys()]
-    .filter((id) => !utilises.has(id))
-    .sort();
+  const connus = new Set(posts.map((p) => p.externalId).filter(Boolean));
+  const orphelins = [
+    ...[...parId.keys()].filter((id) => !utilises.has(id)),
+    ...[...variantes].filter((id) => !connus.has(id)),
+  ].sort();
 
   return { attacher, sansVisuel, orphelins };
 };
