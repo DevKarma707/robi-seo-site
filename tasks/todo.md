@@ -57,3 +57,9 @@
     - [x] Remove trailing dots from titles for a cleaner look
     - [x] Implement multi-line bold subtitle ("Laissez l'IA s'occuper de tout")
     - [x] Synchronize all 8 locales (FR, EN, ES, PT) with the new structure
+
+## Nouvelles tâches
+- [x] Recherche et recommandation de plateformes d'influenceurs/affiliation internationales
+    - [x] Identifier les besoins (liens, tracking com, multi-pays)
+    - [x] Comparer Rewardful, PartnerStack, Impact, etc.
+    - [x] Proposer la solution la mieux adaptée à Polar.sh/Stripe

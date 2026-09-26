@@ -45,3 +45,5 @@ next-env.d.ts
 .claude/launch.json
 .claude/HANDOVER.md
 .claude/worktrees/
+scratch/
+output/

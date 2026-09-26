@@ -1,5 +1,10 @@
 # Robi AI - SEO Landing Page Site
 
+## Instructions Claude
+
+- **Ne jamais démarrer le serveur preview automatiquement** après une modification de code. Lancer `preview_start` uniquement si Ralph demande explicitement de vérifier visuellement.
+
+
 ## Project Overview
 
 Production-ready multilingual SEO landing page for **Robi AI** — an AI-powered invoicing software for freelancers.

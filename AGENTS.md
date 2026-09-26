@@ -1,0 +1,119 @@
+# ROBI SEO Site — Project Rules
+
+## Deployment workflow
+
+**Always deploy via `git push origin main`. Never use `vercel deploy --prod`.**
+
+The repo `DevKarma707/robi-seo-site` is connected to Vercel project
+`robi-seo-site` (team `quoteless-ai`, production domain `robi-app.com`).
+Every push to `main` triggers an automatic build + production deploy.
+
+Running `vercel deploy --prod` from CLI is redundant — it duplicates work
+the GitHub integration already does, wastes tokens streaming build logs,
+and produces orphan deployments.
+
+The correct flow is:
+1. Make changes
+2. `git add` + `git commit`
+3. `git push origin main`
+4. Done — Vercel auto-deploys
+
+If a build fails, check Vercel dashboard or use `vercel inspect <url>` to
+read logs. Do not retry by manually deploying.
+
+## Project domain map
+
+- `robi-app.com` → this repo (marketing/SEO site **and the admin**)
+- `go.robi-app.com` → the app, in `~/Desktop/ROBI_V1_READY` (separate repo,
+  `DevKarma707/ROBI_AI`)
+
+Don't confuse the two — they're different Vercel projects with different
+codebases. Certains sujets sont à cheval : Polar a son webhook ici
+(`/api/webhooks/polar`) et son service côté app
+(`functions/src/polarService.ts`).
+
+## L'admin (`/admin`)
+
+Tableau de bord privé (Google sign-in, emails en dur dans `src/lib/firebase.ts`).
+Onglets : Cockpit, Pilotage, Tâches, Réseaux, Fichiers, Santé, Acquisition,
+Influenceurs, Analytics, SEO, Blog, Lancement.
+
+### Imports JSON : un bouton = un skill
+
+Chaque bouton « Importer JSON » de l'admin a son skill dans `~/.Codex/skills/`,
+qui connaît le schéma exact et les règles (ne rien inventer). Toujours passer
+par le skill pour préparer un JSON, et **mettre le skill à jour dès qu'on
+modifie un schéma d'import** (champ ajouté, règle de dédoublonnage…).
+
+| Onglet | Skill | Fonction d'import |
+|---|---|---|
+| Blog | `robi-blog` | `importArticlesFromJson` (`src/lib/firebase.ts`) |
+| SEO | `robi-seo` | `importSeoKeywordsFromJson` (`src/lib/seoKeywords.ts`) |
+| Acquisition (prospects, backlinks, influenceurs à recruter) | `robi-acquisition` | `importProspectsFromJson` (`src/lib/prospects.ts`) |
+| Réseaux | `robi-social-media` | `importPostsFromJson` (`src/lib/socialPosts.ts`) |
+
+L'onglet Influenceurs n'a pas d'import JSON : les créateurs à recruter passent
+par Acquisition, segment `influenceur`.
+
+⚠️ Un autre agent peut travailler dans ce dossier en même temps : jamais de
+`git stash`, `git add` uniquement ses propres fichiers.
+
+### Passation : à lire avant toute tâche de lancement, à signer après
+
+Le tableau de l'onglet Tâches et son bloc « Passation » (où on en est, ne
+pas toucher, attention, journal) sont la mémoire du lancement — pour Ralph
+et pour tout agent, quel qu'il soit. Avant de toucher au lancement :
+
+```bash
+npx tsx scripts/kanban.ts
+```
+
+Après ton intervention, signe le journal et bouge les cartes :
+
+```bash
+npx tsx scripts/kanban.ts note "ce que tu as fait, en une ligne"
+npx tsx scripts/kanban.ts done "début du titre de la tâche"
+```
+
+`set <etat|nePasToucher|attention> "…"` réécrit une section si tu as appris
+quelque chose que le suivant doit savoir ; `add "Titre" --cat seo` crée une
+carte. Il faut `FIREBASE_SERVICE_ACCOUNT` dans `.env.local` (clé du projet
+`robi-ai-website`, la même que sur Vercel). `KANBAN_AGENT=codex` pour signer
+sous un autre nom.
+
+- **Tâches** — kanban du lancement (`src/lib/launchTasks.ts`, collection
+  Firestore `launchTasks`). Les tâches marquées automatisables peuvent
+  lancer une session Codex, via l'URI
+  `vscode://anthropic.Codex/open?prompt=…` ou le runner local.
+- **Runner local** — `npm run runner` (`scripts/robi-task-runner.mjs`).
+  Écoute sur `127.0.0.1:4599`, ouvre une fenêtre VS Code par tâche et
+  synchronise le dossier partagé dans `~/Desktop/ROBI_PARTAGE`. Jamais
+  déployé : il ne tourne que sur le Mac de Ralph.
+- **Fichiers** — dépôt dans Firebase Storage sous `partage/`, en lecture
+  réservée à l'admin (contrairement à `blog/`, public). Nécessite que
+  Storage soit provisionné sur le projet `robi-ai-website`.
+
+Primitives visuelles communes dans `src/components/admin/ui.ts` — s'en
+servir plutôt que de recopier des classes : surfaces `rounded-2xl`,
+contrôles `rounded-xl`, marqueurs `rounded-full`.
+
+## Contexte produit (à connaître avant d'écrire)
+
+- **Prix** (France, cf. page pricing live) : **gratuit** = 2 factures/devis ·
+  **14 €/mois** (sans engagement) · **89 €/an** (2 mois offerts) · **149 €/2 ans**
+  (meilleure offre, paiement unique) · **offre de lancement Lifetime 59 €** (au
+  lieu de 149 €, réservée aux 1 000 premiers). Les mentions à 49 € sont périmées.
+  ⚠️ Il y a bien des abonnements — ne jamais dire « pas d'abonnement ».
+- **Priorité n°1 : Factur-X.** Facture électronique obligatoire en France
+  au **1er septembre 2026** (EN 16931). Robi la génère nativement — c'est
+  l'angle SEO principal du site.
+- Palette : Amethyst `#0D0630`, SpaceBlue `#18314F`, Lime `#BEF221`, Inter.
+  Baseline : « Parlez. Facturez. Encaissez. »
+
+## Mascot
+
+**NEVER redraw the Robi mascot.** It is the Lucide `Bot` icon in Lime
+`#BEF221` — antenna, rounded head, two ears, two vertical pill eyes,
+**no mouth, no body**. Reuse the canonical files (`public/robot-mark.svg`,
+`public/favicon.svg`, `public/logo.svg`) or `import { Bot } from
+"lucide-react"`. Full spec: `~/Desktop/ROBI_V1_READY/branding/MASCOT.md`.

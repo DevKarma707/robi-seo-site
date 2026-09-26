@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowRight, Bot, X } from "lucide-react";
-import { useLaunchOffer, formatLaunchPrice } from "@/components/ui/LaunchSeats";
+import { useLaunchOffer, formatLaunchPrice, formatCurrentLaunchPrice } from "@/components/ui/LaunchSeats";
 import styles from "./LaunchBar.module.css";
 
 /**
@@ -83,8 +83,7 @@ export function LaunchBar({ locale, copy, normal }: { locale: string; copy: Laun
 
   const tranche = offer?.tranche;
   if (hidden || !offer || !offer.enabled || !tranche || !tranche.purchasable) return null;
-  const prix = formatLaunchPrice(tranche.price, locale);
-  if (!prix) return null;
+  const prix = formatCurrentLaunchPrice(tranche.price, locale);
   const suivant = formatLaunchPrice(tranche.nextPrice, locale);
   // Le prix barré n'a de sens que dans la même devise que le prix Polar :
   // « 59 € » à côté de « 129 £ » serait une comparaison fausse.

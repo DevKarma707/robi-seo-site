@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { localeCurrencies, priceMap } from "@/lib/i18n/config";
 
 /**
  * Compteur de places de l'offre de lancement, lu sur la fonction publique
@@ -71,15 +72,36 @@ export const useLaunchOffer = (): LaunchOffer | null => {
   return offer;
 };
 
-/** « 79 € » — sans décimales quand le montant est rond. */
+/**
+ * « 79 € » — sans décimales quand le montant est rond. `null` si le prix live
+ * n'est pas dans la devise du marché : Polar ne vend l'offre qu'en EUR, et
+ * « EUR 59 » à côté de « Prix normal : 249 $ » (en-AU) mélangeait deux devises.
+ */
 export const formatLaunchPrice = (p: LaunchPrice | null | undefined, locale: string): string | null => {
   if (!p) return null;
+  const devise = (localeCurrencies[locale] || localeCurrencies.fr).currency;
+  if (p.currency.toUpperCase() !== devise) return null;
+  return formatMontant(p.amount, devise, locale);
+};
+
+/**
+ * Le prix courant de l'offre pour ce marché : le live s'il est dans la bonne
+ * devise, sinon le prix de lancement de la grille du pays (`priceMap`).
+ */
+export const formatCurrentLaunchPrice = (p: LaunchPrice | null | undefined, locale: string): string => {
+  const live = formatLaunchPrice(p, locale);
+  if (live) return live;
+  const devise = (localeCurrencies[locale] || localeCurrencies.fr).currency;
+  return formatMontant((priceMap[locale] || priceMap.fr).launch, devise, locale);
+};
+
+const formatMontant = (amount: number, currency: string, locale: string): string => {
   try {
     return new Intl.NumberFormat(locale, {
-      style: "currency", currency: p.currency, maximumFractionDigits: Number.isInteger(p.amount) ? 0 : 2,
-    }).format(p.amount);
+      style: "currency", currency, maximumFractionDigits: Number.isInteger(amount) ? 0 : 2,
+    }).format(amount);
   } catch {
-    return `${p.amount} ${p.currency}`;
+    return `${amount} ${currency}`;
   }
 };
 
@@ -108,7 +130,7 @@ export function LaunchSeats({ locale, remainingText, trancheText, nextText, dead
 
   const nf = new Intl.NumberFormat(locale);
   const tranche = offer.tranche;
-  const prix = formatLaunchPrice(tranche?.price, locale);
+  const prix = tranche ? formatCurrentLaunchPrice(tranche.price, locale) : null;
   const suivant = formatLaunchPrice(tranche?.nextPrice, locale);
 
   // Avec des tranches, le chiffre qui compte est celui de la tranche : « il

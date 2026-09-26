@@ -1,5 +1,6 @@
 import { CHANNELS, TYPES, STATUTS_MANUELS, type PostChannel, type PostStatus, type PostType } from "./socialPosts";
 import { PERSONAS, PILIERS, ANGLES } from "./editorialGrid";
+import { MARKET_IDS, estMarket, type MarketId } from "./markets";
 
 /**
  * Décider ce qu'un import doit faire, sans toucher à Firestore.
@@ -22,6 +23,8 @@ export interface ImportPost {
   statusIgnored?: PostStatus;
   date: string;
   channel: PostChannel;
+  /** Le marché (langue + compte). Absent = français, voir `markets.ts`. */
+  market?: MarketId;
   type: PostType;
   caption: string;
   captionPropositions?: string[];
@@ -48,6 +51,7 @@ export interface ExistingPost {
   externalId?: string;
   date: string;
   channel: PostChannel;
+  market?: MarketId;
   type?: PostType;
   caption: string;
   captionPropositions?: string[];
@@ -141,6 +145,13 @@ export const validateImportPost = (
     return { ok: false, error: `#${n} : réseau inconnu ${JSON.stringify(o.channel)} — attendu ${CHANNELS.join(", ")}.` };
   }
 
+  // Un marché inconnu est refusé, pas remplacé : « fr » posé en silence
+  // publierait un texte anglais sur le compte français.
+  const market = str(o.market);
+  if (market && !estMarket(market)) {
+    return { ok: false, error: `#${n} : marché inconnu ${JSON.stringify(o.market)} — attendu ${MARKET_IDS.join(", ")}.` };
+  }
+
   const type = str(o.type);
   if (!(TYPES as readonly string[]).includes(type)) {
     return { ok: false, error: `#${n} : type inconnu ${JSON.stringify(o.type)} — attendu ${TYPES.join(", ")}.` };
@@ -169,6 +180,7 @@ export const validateImportPost = (
   if (status && status !== "draft") {
     post.statusIgnored = status as PostStatus;
   }
+  if (market) post.market = market as MarketId;
   // La case éditoriale. Un identifiant inconnu est refusé plutôt qu'ignoré :
   // silencieusement accepté, il ne compterait dans aucune statistique, et la
   // grille se croirait à jour en laissant un angle se répéter.
@@ -317,7 +329,7 @@ export const planSocialImport = (
     const patch: Partial<ImportPost> = {};
     // Seulement ce qui CHANGE : recopier à l'identique ferait une écriture
     // et un updatedAt à chaque réimport, pour rien.
-    for (const champ of ["caption", "hashtags", "visual", "imageUrl", "date", "type", "persona", "pilier", "angle"] as const) {
+    for (const champ of ["caption", "hashtags", "visual", "imageUrl", "date", "type", "market", "persona", "pilier", "angle"] as const) {
       const v = p[champ];
       if (v !== undefined && v !== "" && v !== found[champ]) patch[champ] = v as never;
     }

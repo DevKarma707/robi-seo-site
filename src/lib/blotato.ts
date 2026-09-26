@@ -30,6 +30,8 @@ export interface CompteBlotato {
 export interface PostAPublier {
   id: string;
   channel: string;
+  /** Le marché du post : décide du compte quand il y en a un par langue. */
+  market?: string | null;
   caption: string;
   hashtags?: string | null;
   imageUrl?: string | null;
@@ -53,23 +55,43 @@ export const texteFinal = (caption: string, hashtags?: string | null): string =>
   [caption.trim(), (hashtags ?? "").trim()].filter(Boolean).join("\n\n");
 
 /**
- * Le compte à utiliser pour un réseau.
+ * Le compte à utiliser pour un réseau — et un marché.
  *
- * `forces` (BLOTATO_ACCOUNTS, JSON {"instagram":"123"}) l'emporte : un
- * utilisateur avec deux comptes Instagram connectés (perso + Robi) ne doit
- * pas dépendre de l'ordre de la liste. Sans forçage, le premier compte du
- * réseau fait l'affaire.
+ * `forces` (BLOTATO_ACCOUNTS, JSON {"instagram":"123","instagram:en":"456"})
+ * l'emporte : un utilisateur avec deux comptes Instagram connectés (perso +
+ * Robi) ne doit pas dépendre de l'ordre de la liste. La clé `réseau:marché`
+ * passe avant la clé `réseau` : c'est ce qui permet un compte par langue
+ * (EDITORIAL_LINE.md §7) sans toucher au code quand on ouvre un pays.
+ *
+ * Un marché SANS forçage dédié retombe sur le compte du réseau. C'est voulu
+ * pour le français (compte principal) — et c'est un piège pour les autres :
+ * un post anglais partirait sur le compte français. D'où `compteDedie`,
+ * que la préparation vérifie avant d'envoyer.
  */
 export const compteFor = (
   channel: string,
   comptes: CompteBlotato[],
-  forces: Record<string, string> = {}
+  forces: Record<string, string> = {},
+  market?: string | null
 ): CompteBlotato | null => {
-  if (forces[channel]) {
-    return comptes.find((c) => c.id === forces[channel]) ?? { id: forces[channel], platform: channel };
+  const cle = market ? `${channel}:${market}` : "";
+  const force = (cle && forces[cle]) || forces[channel];
+  if (force) {
+    return comptes.find((c) => c.id === force) ?? { id: force, platform: channel };
   }
   return comptes.find((c) => c.platform === channel) ?? null;
 };
+
+/** Le marché historique, seul autorisé à partir sur le compte « par défaut » du réseau. */
+const MARCHE_PRINCIPAL = "fr";
+
+/**
+ * Un marché autre que le principal a-t-il son propre compte ?
+ * Sans ça, la ligne éditoriale (un compte par langue) serait contournée
+ * par le premier post importé avec `market: "en"`.
+ */
+export const compteDedie = (channel: string, market: string | null | undefined, forces: Record<string, string>): boolean =>
+  !market || market === MARCHE_PRINCIPAL || Boolean(forces[`${channel}:${market}`]);
 
 /**
  * Cible par réseau, avec ce que Blotato exige en plus du type.
@@ -122,7 +144,10 @@ export const preparer = (
   options: { forces?: Record<string, string>; facebookPageId?: string } = {}
 ): Preparation => {
   if (!post.imageUrl) return { ok: false, motif: "visuel_manquant" };
-  const compte = compteFor(post.channel, comptes, options.forces);
+  if (!compteDedie(post.channel, post.market, options.forces ?? {})) {
+    return { ok: false, motif: `aucun_compte_${post.channel}_${post.market}` };
+  }
+  const compte = compteFor(post.channel, comptes, options.forces, post.market);
   if (!compte) return { ok: false, motif: `aucun_compte_${post.channel}` };
   const target = cibleFor(post.channel, options);
   if (!target) return { ok: false, motif: `cible_non_configuree_${post.channel}` };

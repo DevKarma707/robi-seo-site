@@ -150,6 +150,7 @@ export async function GET(req: Request) {
           claimId,
           date: p.date,
           channel: brut.channel,
+          market: brut.market ?? "fr",
           type: brut.type,
           caption: brut.caption,
           hashtags: brut.hashtags ?? null,

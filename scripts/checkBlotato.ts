@@ -6,7 +6,7 @@
  * Ce qui est testé ici part sur un compte public sans relecture : le texte
  * envoyé, le compte choisi, les options obligatoires par réseau.
  */
-import { texteFinal, compteFor, cibleFor, preparer, scheduledTimeParis, submissionIdDepuisUrl, patchDepuisStatut, type CompteBlotato } from "../src/lib/blotato";
+import { texteFinal, compteFor, compteDedie, cibleFor, preparer, scheduledTimeParis, submissionIdDepuisUrl, patchDepuisStatut, type CompteBlotato } from "../src/lib/blotato";
 
 let ok = 0;
 let ko = 0;
@@ -33,6 +33,15 @@ t("premier compte du réseau par défaut", compteFor("instagram", comptes)?.id =
 t("forçage BLOTATO_ACCOUNTS respecté", compteFor("instagram", comptes, { instagram: "22" })?.id === "22");
 t("forçage inconnu de la liste : on fait confiance à l'id", compteFor("instagram", comptes, { instagram: "99" })?.id === "99");
 t("réseau sans compte → null", compteFor("facebook", comptes) === null);
+
+// Marchés : un compte par langue
+t("marché avec forçage dédié → son compte", compteFor("instagram", comptes, { instagram: "22", "instagram:en": "11" }, "en")?.id === "11");
+t("marché sans forçage dédié → compte du réseau", compteFor("instagram", comptes, { instagram: "22" }, "fr")?.id === "22");
+t("français : jamais bloqué", compteDedie("instagram", "fr", {}) && compteDedie("instagram", null, {}));
+t("anglais sans compte dédié → bloqué", !compteDedie("instagram", "en", { instagram: "22" }));
+t("anglais avec compte dédié → passe", compteDedie("instagram", "en", { "instagram:en": "11" }));
+t("post anglais sans compte anglais → refusé avant envoi", (preparer({ id: "x", channel: "instagram", market: "en", caption: "Say it.", imageUrl: "https://s/i.jpg" }, comptes, { forces: { instagram: "22" } }) as { motif: string }).motif === "aucun_compte_instagram_en");
+t("post anglais avec compte anglais → part sur le bon compte", (() => { const p = preparer({ id: "x", channel: "instagram", market: "en", caption: "Say it.", imageUrl: "https://s/i.jpg" }, comptes, { forces: { instagram: "22", "instagram:en": "11" } }); return p.ok && p.corps.post.accountId === "11"; })());
 
 // Cible
 t("instagram : type seul", JSON.stringify(cibleFor("instagram")) === JSON.stringify({ targetType: "instagram" }));

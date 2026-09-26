@@ -16,6 +16,7 @@ import {
   parseSocialImport, validateImportPost, planSocialImport,
   type ExistingPost, type ImportPost,
 } from "./socialImport";
+import type { MarketId } from "./markets";
 
 export type PostChannel = "instagram" | "linkedin" | "tiktok";
 /**
@@ -37,6 +38,12 @@ export interface SocialPost {
   /** Date de publication prévue, en AAAA-MM-JJ. Sert de clé de calendrier. */
   date: string;
   channel: PostChannel;
+  /**
+   * Le marché (= la langue, = le compte) du post. Voir `markets.ts`.
+   * Absent sur les posts antérieurs au 24/09/2026 : ils sont français,
+   * `marketOf()` le lit ainsi — ne pas réécrire l'historique.
+   */
+  market?: MarketId;
   type: PostType;
   /** Le texte du post, prêt à coller. */
   caption: string;

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { LaunchSeats, useLaunchOffer, formatLaunchPrice } from "@/components/ui/LaunchSeats";
+import { LaunchSeats, useLaunchOffer, formatCurrentLaunchPrice } from "@/components/ui/LaunchSeats";
 import { HeroMockups } from "@/components/ui/HeroMockups";
 import { HeroStory } from "@/components/ui/HeroStory";
 import dynamic from "next/dynamic";
@@ -96,8 +96,8 @@ export function Hero({
   const isEditorial = !isCenter && visual === "editorial" && !!story;
 
   const offreLive = useLaunchOffer();
-  const prixLive = launchOffer?.seats
-    ? formatLaunchPrice(offreLive?.tranche?.price, launchOffer.seats.locale)
+  const prixLive = launchOffer?.seats && offreLive?.tranche
+    ? formatCurrentLaunchPrice(offreLive.tranche.price, launchOffer.seats.locale)
     : null;
   const offerHighlight = launchOffer
     ? (prixLive && launchOffer.lifetimeLabel ? `${prixLive} — ${launchOffer.lifetimeLabel}` : launchOffer.highlight)

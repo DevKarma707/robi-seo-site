@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   ChevronLeft, ChevronRight, FileJson, RefreshCw, AlertTriangle, Check, Trash2,
   Pencil, X, Copy, Sparkles, ClipboardCopy, ImagePlus, Loader2, Send, ShieldCheck,
-  CalendarDays, List, CircleAlert, BookOpen, Grid3x3, Plus, Clock,
+  CalendarDays, List, CircleAlert, BookOpen, Grid3x3, Plus, Clock, Megaphone,
 } from "lucide-react";
 import { listSharedFiles, isImage, type SharedFile } from "@/lib/sharedFiles";
 import { rapprocher } from "@/lib/rapprochementVisuels";
@@ -19,6 +19,8 @@ import {
   PERSONAS, PILIERS, ANGLES, ECART_PERSONA, ECART_ANGLE,
 } from "@/lib/editorialGrid";
 import { auth } from "@/lib/firebase";
+import { MARKETS, MARKET_META, marketOf, type MarketId } from "@/lib/markets";
+import CampagnesBlock from "./CampagnesBlock";
 import { btnGhost, btnPill, btnPrimary, card, focusRing, input, select, sectionTitle } from "./ui";
 import { toast } from "./toast";
 
@@ -31,9 +33,13 @@ import { toast } from "./toast";
  * vit dans le dépôt de l'app (branding/EDITORIAL_LINE.md) : c'est le skill
  * qui la lit, le brief se contente de la rappeler.
  */
-const skillBrief = (year: number, month: number, history: SocialPost[]) => {
+const skillBrief = (year: number, month: number, history: SocialPost[], market: MarketId) => {
+  const m = MARKET_META[market];
+  // L'historique d'un marché seulement : un angle déjà publié en français
+  // est neuf pour le compte anglais — c'est même le but, mêmes visuels,
+  // texte traduit. Mélanger les marchés ferait interdire des cases libres.
   const passe = history.filter(
-    (p) => p.status !== "draft" || p.date < `${year}-${String(month + 1).padStart(2, "0")}`
+    (p) => marketOf(p) === market && (p.status !== "draft" || p.date < `${year}-${String(month + 1).padStart(2, "0")}`)
   );
 
   // L'accroche seule ne suffit pas à éviter la redondance : deux posts très
@@ -49,14 +55,24 @@ const skillBrief = (year: number, month: number, history: SocialPost[]) => {
   const cases = proposerCases(passe, 12);
 
   return [
-    `/robi-social-media ${MONTH_NAMES[month]} ${year}`,
+    `/robi-social-media ${MONTH_NAMES[month]} ${year} --marche ${market}`,
     "",
-    `Génère le calendrier éditorial de ${MONTH_NAMES[month]} ${year} pour Robi.`,
-    "Lis d'abord branding/EDITORIAL_LINE.md (ligne éditoriale) et branding/BRAND_KIT.md dans ~/Desktop/ROBI_V1_READY.",
+    `Génère le calendrier éditorial de ${MONTH_NAMES[month]} ${year} pour Robi — marché ${m.drapeau} ${m.label}.`,
+    "Lis d'abord branding/EDITORIAL_LINE.md (ligne éditoriale) et branding/BRAND_KIT.md dans ~/Desktop/ROBI_APP.",
     "Sors un tableau JSON prêt à importer dans l'onglet Réseaux de l'admin.",
     "",
+    "── LE MARCHÉ ──",
+    "",
+    `Tous les textes ET les textes cuits dans les visuels sont en ${m.langue}.`,
+    `Adresse au lecteur : « ${m.adresse} ». Devise affichée : ${m.devise}.`,
+    `Pays visés : ${m.pays.join(", ")}.`,
+    market === "fr"
+      ? "Factur-X et l'obligation du 1er septembre 2026 sont des arguments FRANÇAIS : à garder."
+      : "Factur-X et l'obligation française du 1er septembre 2026 ne concernent PAS ce marché : ne les cite pas. Remplace le pilier pédagogie par la facture électronique locale seulement si tu peux la sourcer, sinon par la trésorerie et les relances.",
+    `Chaque post porte "market": "${market}" dans son JSON — sans ce champ il serait rangé en français.`,
+    "",
     "Champs OBLIGATOIRES par post : externalId, date (AAAA-MM-JJ),",
-    "channel (instagram|linkedin|tiktok),",
+    "channel (instagram|linkedin|tiktok), market (fr|en|es|pt),",
     "type (bold|feature|stats|testimonial|carrousel|mockup), caption.",
     "Facultatifs : hashtags, visual, imageUrl (en https:// uniquement).",
     "",
@@ -64,7 +80,7 @@ const skillBrief = (year: number, month: number, history: SocialPost[]) => {
     "120 caractères maximum. Il doit rester IDENTIQUE si tu réémets le même",
     "post plus tard — c'est lui qui permet d'y rattacher le visuel une fois",
     "produit, au lieu d'en créer un second. Convention : AAAA-MM-sujet-reseau,",
-    "par exemple 2026-09-facturx-obligatoire-ig.",
+    `par exemple 2026-09-facturx-obligatoire-ig${market === "fr" ? "" : `-${market}`}.`,
     "",
     "N'émets pas de statut : un import crée toujours un brouillon, le passage",
     "en « prêt » se fait après relecture dans l'admin.",
@@ -119,11 +135,19 @@ const ReseauxTab: React.FC = () => {
   const [ready, setReady] = useState(false);
   const [channel, setChannel] = useState<PostChannel | "all">("all");
   /**
+   * Le marché affiché. « Tous » garde la vue d'ensemble ; un marché seul est
+   * ce qu'on veut dès qu'on écrit un brief ou qu'on programme : un post
+   * anglais glissé dans un lot français partirait sur le mauvais compte.
+   */
+  const [marche, setMarche] = useState<MarketId | "all">("all");
+  /** Le marché qu'un geste de création prend, faute de mieux : le principal. */
+  const marcheCourant: MarketId = marche === "all" ? "fr" : marche;
+  /**
    * Le calendrier montre la répartition ; il est mauvais pour traiter douze
    * brouillons à la suite, éparpillés dans douze cases. La liste est faite
    * pour le travail, le calendrier pour le coup d'œil — d'où la bascule.
    */
-  const [vue, setVue] = useState<"calendrier" | "liste" | "feed">("calendrier");
+  const [vue, setVue] = useState<"calendrier" | "liste" | "feed" | "campagnes">("calendrier");
   /**
    * L'heure de publication, heure de Paris.
    *
@@ -216,13 +240,14 @@ const ReseauxTab: React.FC = () => {
   const retenu = useCallback(
     (p: SocialPost) => {
       if (channel !== "all" && p.channel !== channel) return false;
+      if (marche !== "all" && marketOf(p) !== marche) return false;
       if (filtre === "tous") return true;
       // À traiter : tout ce qui demande une main humaine — un brouillon, ou
       // un envoi qui a échoué. Un post prêt ou publié n'attend personne.
       if (filtre === "a-traiter") return p.status === "draft" || !!p.publishError;
       return p.status === filtre;
     },
-    [channel, filtre]
+    [channel, marche, filtre]
   );
 
   const byDate = useMemo(() => {
@@ -315,10 +340,10 @@ const ReseauxTab: React.FC = () => {
    */
   const feedPosts = useMemo(
     () => rows
-      .filter((p) => p.channel === canalDuFeed)
+      .filter((p) => p.channel === canalDuFeed && marketOf(p) === marcheCourant)
       .sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0))
       .slice(0, 30),
-    [rows, canalDuFeed]
+    [rows, canalDuFeed, marcheCourant]
   );
 
   /**
@@ -825,6 +850,7 @@ const ReseauxTab: React.FC = () => {
       const ref = await addPost({
         date,
         channel: channel === "all" ? "instagram" : channel,
+        market: marcheCourant,
         type: "bold",
         caption: "",
         status: "draft",
@@ -851,6 +877,7 @@ const ReseauxTab: React.FC = () => {
       if (p.hashtags) copy.hashtags = p.hashtags;
       if (p.visual) copy.visual = p.visual;
       if (p.imageUrl) copy.imageUrl = p.imageUrl;
+      if (p.market) copy.market = p.market;
       await addPost(copy);
     } catch (e) {
       say("err", (e as Error).message);
@@ -868,7 +895,7 @@ const ReseauxTab: React.FC = () => {
 
   const copyBrief = async () => {
     try {
-      await navigator.clipboard.writeText(skillBrief(year, month, rows));
+      await navigator.clipboard.writeText(skillBrief(year, month, rows, marcheCourant));
       say("ok", "Brief copié — colle-le dans Claude Code.");
     } catch {
       say("err", "Copie refusée par le navigateur.");
@@ -971,6 +998,19 @@ const ReseauxTab: React.FC = () => {
           </button>
         )}
 
+        {/* Le marché avant le réseau : c'est lui qui décide de la langue, du
+            compte et du brief. Un réseau se change dix fois par jour, un
+            marché une fois par session. */}
+        <select
+          className={select}
+          value={marche}
+          onChange={(e) => setMarche(e.target.value as MarketId | "all")}
+          title="Marché : la langue des posts et le compte sur lequel ils partent"
+        >
+          <option value="all">Tous les marchés</option>
+          {MARKETS.map((m) => <option key={m.id} value={m.id}>{m.drapeau} {m.label}</option>)}
+        </select>
+
         <select className={select} value={channel} onChange={(e) => setChannel(e.target.value as PostChannel | "all")}>
           <option value="all">Tous les réseaux</option>
           {CHANNELS.map((c) => <option key={c} value={c}>{CHANNEL_META[c].label}</option>)}
@@ -996,6 +1036,7 @@ const ReseauxTab: React.FC = () => {
             ["calendrier", CalendarDays, "Calendrier"],
             ["liste", List, "Liste"],
             ["feed", Grid3x3, "Feed"],
+            ["campagnes", Megaphone, "Campagnes"],
           ] as const).map(([v, Icone, label]) => (
             <button
               key={v}
@@ -1028,8 +1069,8 @@ const ReseauxTab: React.FC = () => {
           <button onClick={verifierBlotato} disabled={busy} className={btnGhost} title="Demander à Blotato ce qu'il a fait des posts programmés">
             <span className="flex items-center gap-1.5"><RefreshCw size={12} /> Vérifier chez Blotato</span>
           </button>
-          <button onClick={copyBrief} className={btnGhost} title="Copier le brief du skill robi-social-media">
-            <span className="flex items-center gap-1.5"><Sparkles size={12} /> Brief du mois</span>
+          <button onClick={copyBrief} className={btnGhost} title={`Copier le brief du skill robi-social-media — marché ${MARKET_META[marcheCourant].label}`}>
+            <span className="flex items-center gap-1.5"><Sparkles size={12} /> Brief {MARKET_META[marcheCourant].drapeau}</span>
           </button>
           <button onClick={() => setImportOpen((v) => !v)} className={btnPrimary}>
             <span className="flex items-center gap-1.5"><FileJson size={12} /> Importer du JSON</span>
@@ -1115,8 +1156,9 @@ const ReseauxTab: React.FC = () => {
           <p className={sectionTitle}>Import JSON</p>
           <p className="text-[11px] text-slate-500 leading-relaxed">
             Colle la sortie du skill <code className="text-[var(--admin-ink)]">robi-social-media</code>. Les posts déjà
-            présents (même date, même réseau, même début de texte) sont ignorés — relancer le skill
-            sur un mois déjà importé ne duplique rien.
+            présents (même <code className="text-[var(--admin-ink)]">externalId</code>) sont enrichis, pas dupliqués — relancer le skill
+            sur un mois déjà importé ne duplique rien. Chaque post porte son marché
+            (<code className="text-[var(--admin-ink)]">&quot;market&quot;: &quot;fr&quot;|&quot;en&quot;|&quot;es&quot;|&quot;pt&quot;</code>) ; sans le champ, il est rangé en français.
           </p>
           <textarea
             className={`${input} min-h-[160px] font-mono text-[11px] leading-relaxed resize-y`}
@@ -1134,6 +1176,10 @@ const ReseauxTab: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Marchés + campagnes ads : la même question que le calendrier —
+          pour qui, avec quoi, et qu'est-ce que ça a donné — mais côté payant. */}
+      {vue === "campagnes" && <CampagnesBlock marche={marche} posts={rows} />}
 
       {/* Liste */}
       {vue === "liste" && (
@@ -1358,6 +1404,7 @@ const ReseauxTab: React.FC = () => {
                             </span>
                           )}
                           <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: CHANNEL_META[p.channel].color }} />
+                          {marketOf(p) !== "fr" && <span className="text-[9px] flex-none">{MARKET_META[marketOf(p)].drapeau}</span>}
                           <span className="text-[9px] font-bold truncate text-slate-700">{p.caption}</span>
                         </span>
                       </button>
@@ -1396,6 +1443,17 @@ const ReseauxTab: React.FC = () => {
                   style={{ backgroundColor: `${TYPE_META[p.type].color}2a`, color: TYPE_META[p.type].color }}>
                   {TYPE_META[p.type].label}
                 </span>
+                {/* Le marché se change ici, pas dans le formulaire : c'est un
+                    rangement, pas une réécriture, et un post publié doit
+                    pouvoir être reclassé sans rouvrir son texte. */}
+                <select
+                  value={marketOf(p)}
+                  onChange={(e) => updatePost(p.id!, { market: e.target.value as MarketId }).catch((err) => say("err", (err as Error).message))}
+                  className={`${btnPill} !py-0.5 !px-1.5 !text-[10px] border border-slate-200 bg-transparent`}
+                  title="Marché du post (langue + compte)"
+                >
+                  {MARKETS.map((m) => <option key={m.id} value={m.id}>{m.drapeau} {m.id.toUpperCase()}</option>)}
+                </select>
                 <span className="text-[11px] text-slate-500">{p.date}</span>
               </div>
               <button onClick={() => setOpenId(null)} className={`${btnGhost} !px-2`} aria-label="Fermer">
@@ -1741,6 +1799,11 @@ const LignePost = ({
           <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: TYPE_META[post.type].color }}>
             {TYPE_META[post.type].label}
           </span>
+          {marketOf(post) !== "fr" && (
+            <span className="text-[10px] font-bold text-slate-500" title={`Marché ${MARKET_META[marketOf(post)].label}`}>
+              {MARKET_META[marketOf(post)].drapeau} {marketOf(post).toUpperCase()}
+            </span>
+          )}
           <PastilleStatut post={post} />
           {bloquant && (
             <span className="text-[10px] font-bold text-amber-700">

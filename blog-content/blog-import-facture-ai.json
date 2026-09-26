@@ -1,0 +1,254 @@
+[
+  {
+    "slug": "creer-facture-avec-ia",
+    "category": "guides",
+    "date": "2026-06-29",
+    "published": true,
+    "featured": true,
+    "coverImage": "https://robi-app.com/covers/creer-facture-avec-ia.png",
+    "keywords": [
+      "créer une facture avec l'ia",
+      "facture ai",
+      "facture ia",
+      "logiciel facturation ia",
+      "facturation intelligence artificielle"
+    ],
+    "titleFr": "Comment Créer une Facture avec l'IA en 2026 (Guide Complet)",
+    "titleEn": "How to Create an Invoice with AI in 2026 (Complete Guide)",
+    "titleEs": "Cómo Crear una Factura con IA en 2026 (Guía Completa)",
+    "excerptFr": "L'intelligence artificielle crée vos factures conformes en 30 secondes à partir d'une simple phrase. Voici comment ça marche, étape par étape.",
+    "excerptEn": "Artificial intelligence creates compliant invoices in 30 seconds from a single sentence. Here's how it works, step by step.",
+    "excerptEs": "La inteligencia artificial crea facturas conformes en 30 segundos a partir de una sola frase. Así funciona, paso a paso.",
+    "metaDescFr": "Créer une facture avec l'IA en 2026 : dictez une phrase, l'IA génère un document conforme en 30 s. Guide complet, étapes et conseils pour freelances.",
+    "metaDescEn": "Create an invoice with AI in 2026: say a sentence, AI generates a compliant document in 30s. Full guide, steps and tips for freelancers.",
+    "metaDescEs": "Crear una factura con IA en 2026: di una frase y la IA genera un documento conforme en 30s. Guía completa, pasos y consejos para freelancers.",
+    "tldrFr": [
+      "Créer une facture avec l'IA consiste à décrire la prestation en langage naturel : l'IA génère un document conforme (numéro, TVA, mentions légales) en moins de 30 secondes.",
+      "Contrairement à ChatGPT, un logiciel de facture IA comme Robi gère la numérotation séquentielle légale, votre fichier clients, l'envoi, les relances et l'encaissement.",
+      "L'IA convient autant aux artisans (facturation vocale depuis le chantier) qu'aux freelances du digital (factures récurrentes en un mot)."
+    ],
+    "tldrEn": [
+      "Creating an invoice with AI means describing the job in natural language: AI generates a compliant document (number, VAT, legal mentions) in under 30 seconds.",
+      "Unlike ChatGPT, AI invoicing software like Robi handles legal sequential numbering, your client database, sending, reminders and payment collection.",
+      "AI suits both tradespeople (voice invoicing from the job site) and digital freelancers (recurring invoices in one word)."
+    ],
+    "tldrEs": [
+      "Crear una factura con IA consiste en describir el trabajo en lenguaje natural: la IA genera un documento conforme (número, IVA, menciones legales) en menos de 30 segundos.",
+      "A diferencia de ChatGPT, un software de factura IA como Robi gestiona la numeración secuencial legal, tu base de clientes, el envío, los recordatorios y el cobro.",
+      "La IA sirve tanto a autónomos (facturación por voz desde la obra) como a freelancers digitales (facturas recurrentes con una palabra)."
+    ],
+    "faqFr": [
+      {
+        "q": "Peut-on vraiment créer une facture juste en parlant ?",
+        "a": "Oui. Avec un logiciel de facture IA comme Robi, vous dictez « Facture de 500 € pour Alice » et l'IA génère le document conforme en 30 secondes. Vous validez puis envoyez."
+      },
+      {
+        "q": "Une facture générée par IA est-elle légale ?",
+        "a": "Oui, à condition que le logiciel applique les mentions obligatoires : numérotation séquentielle, identité du vendeur et du client, date, détail des prestations, TVA. Robi le fait automatiquement selon votre régime fiscal."
+      },
+      {
+        "q": "Quelle différence avec ChatGPT ?",
+        "a": "ChatGPT rédige un texte de facture, mais ne gère ni la numérotation légale, ni vos clients, ni l'envoi, ni les relances, ni l'encaissement. Un logiciel dédié pilote tout le cycle."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Can you really create an invoice just by speaking?",
+        "a": "Yes. With AI invoicing software like Robi, you say “€500 invoice for Alice” and AI generates the compliant document in 30 seconds. You review, then send."
+      },
+      {
+        "q": "Is an AI-generated invoice legal?",
+        "a": "Yes, as long as the software applies the mandatory mentions: sequential numbering, seller and client identity, date, line items, VAT. Robi does this automatically based on your tax scheme."
+      },
+      {
+        "q": "What's the difference with ChatGPT?",
+        "a": "ChatGPT drafts invoice text, but doesn't handle legal numbering, your clients, sending, reminders or collection. Dedicated software drives the whole cycle."
+      }
+    ],
+    "faqEs": [
+      {
+        "q": "¿De verdad se puede crear una factura solo hablando?",
+        "a": "Sí. Con un software de factura IA como Robi, dices «Factura de 500 € para Alice» y la IA genera el documento conforme en 30 segundos. Revisas y envías."
+      },
+      {
+        "q": "¿Una factura generada por IA es legal?",
+        "a": "Sí, siempre que el software aplique las menciones obligatorias: numeración secuencial, identidad del vendedor y del cliente, fecha, líneas de detalle, IVA. Robi lo hace automáticamente según tu régimen fiscal."
+      },
+      {
+        "q": "¿Qué diferencia hay con ChatGPT?",
+        "a": "ChatGPT redacta un texto de factura, pero no gestiona la numeración legal, tus clientes, el envío, los recordatorios ni el cobro. Un software dedicado dirige todo el ciclo."
+      }
+    ],
+    "contentFr": "## Créer une facture avec l'IA : de quoi parle-t-on ?\n\nCréer une facture avec l'intelligence artificielle, c'est remplacer la saisie manuelle — champ par champ dans un tableur ou un logiciel classique — par une simple instruction en langage naturel. Vous dites ou écrivez ce que vous voulez facturer, l'IA produit un document complet et conforme.\n\nConcrètement, au lieu de remplir dix champs, vous formulez : *« Prépare une facture de 500 € pour la refonte du site de Marc, payable à 30 jours »*. L'IA identifie le client, le montant, la prestation, calcule la TVA selon votre régime, applique la numérotation séquentielle légale et génère la facture en moins de 30 secondes.\n\nC'est le cœur de la **[facture AI](/fr/facture-ai)** : transformer une phrase en document prêt à envoyer.\n\n## Les 3 étapes pour créer une facture avec l'IA\n\n### 1. Décrivez la prestation\n\nDictez à la voix ou tapez une phrase. Pas besoin de vocabulaire comptable : « 3 jours de développement à 450 € pour la société Nova » suffit. L'IA comprend le contexte et retrouve même vos clients existants.\n\n### 2. L'IA génère le document conforme\n\nL'intelligence artificielle assemble la facture : coordonnées, numéro séquentiel, dates d'émission et d'échéance, lignes de prestation, total HT, TVA et total TTC. Si vous êtes en franchise de TVA, la mention *« TVA non applicable, art. 293 B du CGI »* s'ajoute automatiquement.\n\n### 3. Validez, envoyez, encaissez\n\nVous relisez, ajustez si besoin, puis envoyez en un clic. Les meilleurs outils ajoutent un lien de paiement Stripe ou PayPal et relancent automatiquement les impayés.\n\n## IA de création vs IA de traitement : ne confondez pas\n\nLe terme « facture IA » recouvre deux usages opposés :\n\n- **Créer ses factures** (Robi) : vous émettez des factures clients, l'IA les génère pour vous. C'est l'usage des freelances, artisans et TPE.\n- **Traiter des factures reçues** (OCR) : l'IA lit les factures fournisseurs pour les saisir en comptabilité. C'est l'usage des services comptables.\n\nSi vous êtes indépendant et que vous voulez **facturer vos clients**, c'est la création par IA qu'il vous faut.\n\n## Pourquoi l'IA change la donne pour les indépendants\n\nL'enjeu n'est pas seulement le gain de temps — même si passer de 10 minutes à 30 secondes par facture représente des heures économisées chaque mois. C'est surtout la **fin de la friction** : on facture immédiatement, depuis le chantier ou entre deux rendez-vous, au lieu de repousser la paperasse au dimanche soir.\n\nMoins de retard de facturation, c'est aussi être payé plus vite. Et avec des relances rédigées par l'IA, les impayés fondent.\n\n## Faut-il un logiciel, ou ChatGPT suffit-il ?\n\nChatGPT peut rédiger le **texte** d'une facture, mais il ne tient pas la numérotation séquentielle légale, ne connaît pas votre fichier clients, n'envoie rien, ne relance personne et n'encaisse pas. Pour une facturation réellement conforme et automatisée, un logiciel dédié est indispensable.\n\nVous voulez essayer sans vous engager ? Notre **[générateur de facture gratuit](/fr/tools/generateur-facture)** vous permet de créer et télécharger une facture PDF en quelques minutes, sans inscription. Et pour automatiser tout le cycle à la voix, découvrez **[la facture AI de Robi](/fr/facture-ai)**.\n\n## En résumé\n\nCréer une facture avec l'IA en 2026, c'est décrire une prestation en une phrase et laisser l'intelligence artificielle produire un document conforme, l'envoyer et suivre le paiement. Pour les indépendants, c'est le moyen le plus rapide de facturer — et d'être payé.",
+    "contentEn": "## Creating an invoice with AI: what does it mean?\n\nCreating an invoice with artificial intelligence means replacing manual entry — field by field in a spreadsheet or classic software — with a simple natural-language instruction. You say or type what you want to invoice, and AI produces a complete, compliant document.\n\nInstead of filling in ten fields, you phrase it: *“Prepare a €500 invoice for Marc's website redesign, due in 30 days”*. AI identifies the client, amount and service, calculates VAT based on your scheme, applies legal sequential numbering and generates the invoice in under 30 seconds.\n\nThat's the heart of the **[AI invoice](/en/facture-ai)**: turning a sentence into a ready-to-send document.\n\n## The 3 steps to create an invoice with AI\n\n### 1. Describe the job\n\nDictate by voice or type a sentence. No accounting vocabulary needed: “3 days of development at €450 for Nova Ltd” is enough. AI understands the context and even finds your existing clients.\n\n### 2. AI generates the compliant document\n\nThe AI assembles the invoice: details, sequential number, issue and due dates, line items, net total, VAT and gross total. If you're VAT-exempt, the exemption notice is added automatically.\n\n### 3. Review, send, get paid\n\nYou proofread, adjust if needed, then send in one click. The best tools add a Stripe or PayPal payment link and automatically chase late payers.\n\n## Creation AI vs processing AI: don't confuse them\n\nThe term “AI invoice” covers two opposite uses:\n\n- **Creating your invoices** (Robi): you issue client invoices, AI generates them for you. This is for freelancers, tradespeople and small businesses.\n- **Processing received invoices** (OCR): AI reads supplier invoices to enter them into accounting. This is for accounting teams.\n\nIf you're self-employed and want to **invoice your clients**, you need AI creation.\n\n## Why AI is a game-changer for the self-employed\n\nThe point isn't just time saved — though going from 10 minutes to 30 seconds per invoice adds up to hours each month. It's mostly the **end of friction**: you invoice immediately, from the job site or between meetings, instead of pushing paperwork to Sunday night.\n\nLess invoicing delay also means getting paid faster. And with AI-written reminders, unpaid invoices melt away.\n\n## Do you need software, or is ChatGPT enough?\n\nChatGPT can draft invoice **text**, but it doesn't maintain legal sequential numbering, doesn't know your client database, sends nothing, chases no one and collects nothing. For truly compliant, automated invoicing, dedicated software is essential.\n\nWant to try without commitment? Our **[free invoice generator](/en/tools/generateur-facture)** lets you create and download a PDF invoice in minutes, no sign-up. And to automate the whole cycle by voice, discover **[Robi's AI invoice](/en/facture-ai)**.\n\n## In short\n\nCreating an invoice with AI in 2026 means describing a job in one sentence and letting artificial intelligence produce a compliant document, send it and track payment. For the self-employed, it's the fastest way to invoice — and to get paid.",
+    "contentEs": "## Crear una factura con IA: ¿de qué hablamos?\n\nCrear una factura con inteligencia artificial significa sustituir la introducción manual — campo por campo en una hoja de cálculo o un software clásico — por una simple instrucción en lenguaje natural. Dices o escribes lo que quieres facturar y la IA produce un documento completo y conforme.\n\nEn lugar de rellenar diez campos, lo formulas: *«Prepara una factura de 500 € para el rediseño de la web de Marc, a 30 días»*. La IA identifica el cliente, el importe y el servicio, calcula el IVA según tu régimen, aplica la numeración secuencial legal y genera la factura en menos de 30 segundos.\n\nEse es el corazón de la **[factura con IA](/es/facture-ai)**: convertir una frase en un documento listo para enviar.\n\n## Los 3 pasos para crear una factura con IA\n\n### 1. Describe el trabajo\n\nDicta por voz o escribe una frase. Sin vocabulario contable: «3 días de desarrollo a 450 € para la empresa Nova» basta. La IA entiende el contexto e incluso encuentra tus clientes existentes.\n\n### 2. La IA genera el documento conforme\n\nLa IA ensambla la factura: datos, número secuencial, fechas de emisión y vencimiento, líneas de detalle, base imponible, IVA y total. Si estás exento de IVA, la mención de exención se añade automáticamente.\n\n### 3. Revisa, envía, cobra\n\nRepasas, ajustas si hace falta y envías en un clic. Las mejores herramientas añaden un enlace de pago Stripe o PayPal y reclaman automáticamente los impagos.\n\n## IA de creación vs IA de procesamiento: no las confundas\n\nEl término «factura IA» abarca dos usos opuestos:\n\n- **Crear tus facturas** (Robi): emites facturas de cliente, la IA las genera por ti. Es el uso de freelancers, autónomos y pequeñas empresas.\n- **Procesar facturas recibidas** (OCR): la IA lee facturas de proveedores para contabilizarlas. Es el uso de departamentos contables.\n\nSi eres autónomo y quieres **facturar a tus clientes**, necesitas la creación con IA.\n\n## Por qué la IA cambia las reglas para los autónomos\n\nLa clave no es solo el tiempo ahorrado — aunque pasar de 10 minutos a 30 segundos por factura suma horas cada mes. Es sobre todo el **fin de la fricción**: facturas al instante, desde la obra o entre dos citas, en lugar de dejar el papeleo para el domingo por la noche.\n\nMenos retraso al facturar también significa cobrar antes. Y con recordatorios redactados por la IA, los impagos se desvanecen.\n\n## ¿Hace falta un software o basta con ChatGPT?\n\nChatGPT puede redactar el **texto** de una factura, pero no mantiene la numeración secuencial legal, no conoce tu base de clientes, no envía nada, no reclama a nadie y no cobra. Para una facturación realmente conforme y automatizada, un software dedicado es imprescindible.\n\n¿Quieres probar sin compromiso? Nuestro **[generador de facturas gratis](/es/tools/generateur-facture)** te permite crear y descargar una factura PDF en minutos, sin registro. Y para automatizar todo el ciclo por voz, descubre **[la factura con IA de Robi](/es/facture-ai)**.\n\n## En resumen\n\nCrear una factura con IA en 2026 es describir un trabajo en una frase y dejar que la inteligencia artificial produzca un documento conforme, lo envíe y siga el pago. Para los autónomos, es la forma más rápida de facturar — y de cobrar."
+  },
+  {
+    "slug": "facture-vocale-creer-en-parlant",
+    "category": "tech",
+    "date": "2026-06-29",
+    "published": true,
+    "featured": false,
+    "coverImage": "https://robi-app.com/covers/facture-vocale.png",
+    "keywords": [
+      "facture vocale",
+      "créer facture en parlant",
+      "facturation vocale",
+      "facture par la voix",
+      "facture ai"
+    ],
+    "titleFr": "Facture Vocale : Créer une Facture en Parlant (Sans Saisie)",
+    "titleEn": "Voice Invoicing: Create an Invoice by Speaking (No Typing)",
+    "titleEs": "Factura por Voz: Crear una Factura Hablando (Sin Teclear)",
+    "excerptFr": "Et si vous dictiez vos factures comme un message vocal ? La facturation vocale par IA permet de facturer en 10 secondes, mains libres, depuis le terrain.",
+    "excerptEn": "What if you dictated your invoices like a voice note? AI voice invoicing lets you bill in 10 seconds, hands-free, from the field.",
+    "excerptEs": "¿Y si dictaras tus facturas como un mensaje de voz? La facturación por voz con IA permite facturar en 10 segundos, manos libres, desde el terreno.",
+    "metaDescFr": "Facture vocale : créez une facture en parlant grâce à l'IA. Idéal pour artisans et freelances sur le terrain. Comment ça marche et pour qui c'est fait.",
+    "metaDescEn": "Voice invoicing: create an invoice by speaking with AI. Ideal for tradespeople and freelancers in the field. How it works and who it's for.",
+    "metaDescEs": "Factura por voz: crea una factura hablando con IA. Ideal para autónomos y freelancers en el terreno. Cómo funciona y para quién es.",
+    "tldrFr": [
+      "La facture vocale permet de créer une facture en la dictant à voix haute : l'IA transcrit, structure et génère le document conforme.",
+      "C'est l'outil idéal pour les métiers de terrain (BTP, événementiel, services à domicile) qui facturent entre deux interventions, mains occupées.",
+      "Robi transforme une phrase vocale en facture envoyée et suivie, depuis le téléphone."
+    ],
+    "tldrEn": [
+      "Voice invoicing lets you create an invoice by dictating it out loud: AI transcribes, structures and generates the compliant document.",
+      "It's ideal for field jobs (construction, events, home services) that invoice between two interventions, hands busy.",
+      "Robi turns a spoken sentence into an invoice that's sent and tracked, right from your phone."
+    ],
+    "tldrEs": [
+      "La factura por voz permite crear una factura dictándola en voz alta: la IA transcribe, estructura y genera el documento conforme.",
+      "Es ideal para oficios de terreno (construcción, eventos, servicios a domicilio) que facturan entre dos intervenciones, con las manos ocupadas.",
+      "Robi convierte una frase hablada en una factura enviada y seguida, desde el móvil."
+    ],
+    "faqFr": [
+      {
+        "q": "La reconnaissance vocale comprend-elle les montants et les noms ?",
+        "a": "Oui. L'IA est entraînée au vocabulaire de la facturation : elle distingue le client, le montant, la quantité et la prestation, même dans une phrase parlée naturellement."
+      },
+      {
+        "q": "Puis-je facturer à la voix depuis mon téléphone ?",
+        "a": "Oui, c'est l'usage principal de Robi sur mobile, directement dans le navigateur de votre téléphone. Vous dictez, l'IA génère, vous envoyez — sans ouvrir un ordinateur."
+      },
+      {
+        "q": "Et si je me trompe en dictant ?",
+        "a": "Vous relisez toujours la facture générée avant l'envoi et pouvez corriger n'importe quel champ d'un tap. L'IA propose, vous validez."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "Does voice recognition understand amounts and names?",
+        "a": "Yes. The AI is trained on invoicing vocabulary: it distinguishes the client, amount, quantity and service, even in a naturally spoken sentence."
+      },
+      {
+        "q": "Can I invoice by voice from my phone?",
+        "a": "Yes, that's Robi's main use on mobile, right in your phone's browser. You dictate, AI generates, you send — without opening a computer."
+      },
+      {
+        "q": "What if I make a mistake while dictating?",
+        "a": "You always review the generated invoice before sending and can fix any field with a tap. AI proposes, you confirm."
+      }
+    ],
+    "faqEs": [
+      {
+        "q": "¿El reconocimiento de voz entiende importes y nombres?",
+        "a": "Sí. La IA está entrenada en vocabulario de facturación: distingue el cliente, el importe, la cantidad y el servicio, incluso en una frase hablada con naturalidad."
+      },
+      {
+        "q": "¿Puedo facturar por voz desde el móvil?",
+        "a": "Sí, es el uso principal de Robi en móvil, directamente en el navegador de tu teléfono. Dictas, la IA genera, envías — sin abrir un ordenador."
+      },
+      {
+        "q": "¿Y si me equivoco al dictar?",
+        "a": "Siempre revisas la factura generada antes de enviar y puedes corregir cualquier campo con un toque. La IA propone, tú confirmas."
+      }
+    ],
+    "contentFr": "## La facture vocale, c'est quoi ?\n\nLa facture vocale consiste à **créer une facture en la dictant**, comme on laisse un message vocal. Vous parlez, l'intelligence artificielle transcrit, comprend la demande et génère un document conforme. Plus de clavier, plus de champs à remplir : juste votre voix.\n\nC'est une application concrète de **[la facture AI](/fr/facture-ai)** : la voix devient l'interface la plus rapide pour facturer.\n\n## Comment fonctionne la facturation vocale par IA\n\nTout se joue en trois temps :\n\n1. **Vous dictez** : *« Facture de 1 200 € pour la rénovation de la salle de bain de M. Dupont, payable à réception »*.\n2. **L'IA structure** : elle isole le client (M. Dupont), le montant (1 200 €), la prestation (rénovation salle de bain) et les conditions de paiement.\n3. **La facture apparaît** : numérotée, datée, avec TVA et mentions légales. Vous validez et envoyez.\n\nL'IA ne fait pas que transcrire : elle **comprend** le contexte métier et complète ce qui manque (vos coordonnées, votre numérotation, votre TVA habituelle).\n\n## Pour qui la facture vocale change tout\n\n### Les métiers de terrain\n\nUn plombier, un électricien ou un couvreur a les mains prises toute la journée. Facturer le soir, de mémoire, c'est risquer d'oublier des interventions. Avec la facture vocale, on facture **sur place, juste après le travail**, en parlant à son téléphone.\n\n### Les freelances pressés\n\nEntre deux rendez-vous, dans le métro, le freelance dicte sa facture en dix secondes au lieu de repousser au week-end. Résultat : aucune facture en retard, donc des paiements plus rapides.\n\n### Les métiers de l'événementiel\n\nDJ, traiteur, wedding planner : on facture souvent dans l'urgence, après une prestation tardive. La voix permet de boucler la facture avant même d'avoir rangé le matériel.\n\n## Voix + automatisation : le combo gagnant\n\nLa vraie puissance arrive quand la voix s'enchaîne avec l'automatisation. Chez Robi, une fois la facture dictée et envoyée, l'IA :\n\n- ajoute un **lien de paiement** Stripe ou PayPal ;\n- **relance automatiquement** si le client tarde ;\n- vous **notifie** dès que la facture est ouverte ou payée.\n\nVous avez parlé dix secondes ; l'IA gère le reste jusqu'à l'encaissement.\n\n## Essayez par vous-même\n\nPour comprendre la logique, commencez par notre **[générateur de facture gratuit](/fr/tools/generateur-facture)** : vous verrez à quel point une facture conforme tient en quelques informations. Puis, pour passer à la dictée vocale et à l'automatisation complète, testez **[Robi](/fr/facture-ai)**.\n\n## En résumé\n\nLa facture vocale supprime la dernière friction de la facturation : la saisie. On parle, l'IA fait. Pour tous ceux qui travaillent les mains occupées ou le temps compté, c'est la façon la plus naturelle — et la plus rapide — de facturer.",
+    "contentEn": "## What is voice invoicing?\n\nVoice invoicing means **creating an invoice by dictating it**, like leaving a voice note. You speak, artificial intelligence transcribes, understands the request and generates a compliant document. No keyboard, no fields to fill in: just your voice.\n\nIt's a concrete application of **[the AI invoice](/en/facture-ai)**: voice becomes the fastest interface to bill.\n\n## How AI voice invoicing works\n\nIt happens in three steps:\n\n1. **You dictate**: *“€1,200 invoice for Mr Smith's bathroom renovation, due on receipt”*.\n2. **AI structures it**: it isolates the client (Mr Smith), the amount (€1,200), the service (bathroom renovation) and the payment terms.\n3. **The invoice appears**: numbered, dated, with VAT and legal mentions. You review and send.\n\nAI doesn't just transcribe: it **understands** the business context and fills in what's missing (your details, your numbering, your usual VAT).\n\n## Who voice invoicing changes everything for\n\n### Field jobs\n\nA plumber, electrician or roofer has their hands full all day. Invoicing at night, from memory, risks forgetting jobs. With voice invoicing, you bill **on site, right after the work**, by speaking to your phone.\n\n### Busy freelancers\n\nBetween two meetings, on the train, a freelancer dictates an invoice in ten seconds instead of pushing it to the weekend. Result: no late invoices, so faster payments.\n\n### Event professionals\n\nDJs, caterers, wedding planners: invoicing often happens in a rush, after a late gig. Voice lets you wrap up the invoice before you've even packed up the gear.\n\n## Voice + automation: the winning combo\n\nThe real power comes when voice chains into automation. With Robi, once the invoice is dictated and sent, AI:\n\n- adds a **payment link** (Stripe or PayPal);\n- **automatically chases** if the client is late;\n- **notifies you** as soon as the invoice is opened or paid.\n\nYou spoke for ten seconds; AI handles the rest through to collection.\n\n## Try it yourself\n\nTo grasp the logic, start with our **[free invoice generator](/en/tools/generateur-facture)**: you'll see how a compliant invoice fits into just a few details. Then, to move to voice dictation and full automation, try **[Robi](/en/facture-ai)**.\n\n## In short\n\nVoice invoicing removes the last friction of billing: data entry. You speak, AI does. For everyone working hands-busy or time-short, it's the most natural — and fastest — way to invoice.",
+    "contentEs": "## ¿Qué es la factura por voz?\n\nLa factura por voz consiste en **crear una factura dictándola**, como cuando dejas un mensaje de voz. Hablas, la inteligencia artificial transcribe, entiende la petición y genera un documento conforme. Sin teclado, sin campos que rellenar: solo tu voz.\n\nEs una aplicación concreta de **[la factura con IA](/es/facture-ai)**: la voz se convierte en la interfaz más rápida para facturar.\n\n## Cómo funciona la facturación por voz con IA\n\nOcurre en tres tiempos:\n\n1. **Dictas**: *«Factura de 1.200 € para la reforma del baño del Sr. García, a la recepción»*.\n2. **La IA lo estructura**: aísla el cliente (Sr. García), el importe (1.200 €), el servicio (reforma de baño) y las condiciones de pago.\n3. **Aparece la factura**: numerada, fechada, con IVA y menciones legales. Revisas y envías.\n\nLa IA no solo transcribe: **entiende** el contexto profesional y completa lo que falta (tus datos, tu numeración, tu IVA habitual).\n\n## Para quién la factura por voz lo cambia todo\n\n### Los oficios de terreno\n\nUn fontanero, un electricista o un techador tiene las manos ocupadas todo el día. Facturar de noche, de memoria, arriesga olvidar intervenciones. Con la factura por voz, facturas **in situ, justo después del trabajo**, hablando al móvil.\n\n### Los freelancers con prisa\n\nEntre dos citas, en el metro, el freelancer dicta su factura en diez segundos en lugar de dejarla para el fin de semana. Resultado: ninguna factura atrasada, y por tanto pagos más rápidos.\n\n### Los profesionales de eventos\n\nDJ, catering, wedding planner: a menudo se factura con prisa, tras una prestación tardía. La voz permite cerrar la factura antes incluso de recoger el material.\n\n## Voz + automatización: la combinación ganadora\n\nLa verdadera potencia llega cuando la voz se encadena con la automatización. Con Robi, una vez dictada y enviada la factura, la IA:\n\n- añade un **enlace de pago** (Stripe o PayPal);\n- **reclama automáticamente** si el cliente se retrasa;\n- te **notifica** en cuanto la factura se abre o se paga.\n\nHablaste diez segundos; la IA hace el resto hasta el cobro.\n\n## Pruébalo tú mismo\n\nPara entender la lógica, empieza por nuestro **[generador de facturas gratis](/es/tools/generateur-facture)**: verás cómo una factura conforme cabe en unos pocos datos. Luego, para pasar al dictado por voz y la automatización total, prueba **[Robi](/es/facture-ai)**.\n\n## En resumen\n\nLa factura por voz elimina la última fricción de la facturación: la introducción de datos. Hablas, la IA hace. Para todos los que trabajan con las manos ocupadas o con el tiempo justo, es la forma más natural — y rápida — de facturar."
+  },
+  {
+    "slug": "facturation-electronique-2026-2027-freelance",
+    "category": "legal",
+    "date": "2026-06-29",
+    "published": true,
+    "featured": true,
+    "coverImage": "https://robi-app.com/covers/facturation-electronique-2026.png",
+    "keywords": [
+      "facturation électronique 2026",
+      "facture électronique obligatoire",
+      "réforme facturation freelance",
+      "facture électronique auto-entrepreneur",
+      "facture ai"
+    ],
+    "titleFr": "Facturation Électronique Obligatoire 2026-2027 : le Guide Freelance",
+    "titleEn": "Mandatory E-Invoicing 2026-2027: the Freelancer's Guide",
+    "titleEs": "Facturación Electrónica Obligatoria 2026-2027: la Guía Freelance",
+    "excerptFr": "Réception obligatoire dès septembre 2026, émission en 2027 : ce que la réforme de la facture électronique change pour les freelances et auto-entrepreneurs.",
+    "excerptEn": "Mandatory reception from September 2026, issuance in 2027: what the e-invoicing reform changes for freelancers and the self-employed.",
+    "excerptEs": "Recepción obligatoria desde septiembre de 2026, emisión en 2027: lo que la reforma de la factura electrónica cambia para freelancers y autónomos.",
+    "metaDescFr": "Facturation électronique obligatoire 2026-2027 : calendrier, formats (Factur-X, UBL), plateformes agréées et impact pour les freelances. Le guide clair.",
+    "metaDescEn": "Mandatory e-invoicing 2026-2027: timeline, formats (Factur-X, UBL), approved platforms and impact for freelancers. The clear guide.",
+    "metaDescEs": "Facturación electrónica obligatoria 2026-2027: calendario, formatos (Factur-X, UBL), plataformas autorizadas e impacto para freelancers. La guía clara.",
+    "tldrFr": [
+      "En France, la réception de factures électroniques devient obligatoire pour toutes les entreprises au 1er septembre 2026 ; l'émission s'impose progressivement jusqu'en septembre 2027 pour les TPE et micro-entreprises.",
+      "Les factures devront circuler dans des formats structurés (Factur-X, UBL, CII) via des plateformes agréées par l'administration.",
+      "Choisir dès maintenant un logiciel conforme évite la précipitation : un outil comme Robi suit le calendrier et génère des documents au bon format."
+    ],
+    "tldrEn": [
+      "In France, receiving electronic invoices becomes mandatory for all businesses on 1 September 2026; issuance applies progressively until September 2027 for small businesses.",
+      "Invoices will have to flow in structured formats (Factur-X, UBL, CII) through government-approved platforms.",
+      "Choosing a compliant tool now avoids last-minute stress: a tool like Robi follows the timeline and generates documents in the right format."
+    ],
+    "tldrEs": [
+      "En Francia, recibir facturas electrónicas será obligatorio para todas las empresas el 1 de septiembre de 2026; la emisión se aplica progresivamente hasta septiembre de 2027 para pequeñas empresas.",
+      "Las facturas deberán circular en formatos estructurados (Factur-X, UBL, CII) a través de plataformas autorizadas por la administración.",
+      "Elegir ahora una herramienta conforme evita las prisas: una herramienta como Robi sigue el calendario y genera documentos en el formato correcto."
+    ],
+    "faqFr": [
+      {
+        "q": "À partir de quand la facture électronique est-elle obligatoire ?",
+        "a": "En France, toutes les entreprises doivent pouvoir recevoir des factures électroniques au 1er septembre 2026. L'obligation d'émettre s'applique aux grandes entreprises et ETI à cette date, puis aux PME, TPE et micro-entreprises au 1er septembre 2027."
+      },
+      {
+        "q": "Un auto-entrepreneur est-il concerné ?",
+        "a": "Oui. Même en franchise de TVA, les micro-entreprises devront recevoir puis émettre leurs factures au format électronique via une plateforme agréée, selon le calendrier 2026-2027."
+      },
+      {
+        "q": "Une simple facture PDF suffira-t-elle ?",
+        "a": "Non. Un PDF classique n'est pas une facture électronique au sens de la réforme. Il faut un format structuré (Factur-X, UBL ou CII) transmis via une plateforme agréée. Un logiciel conforme s'en charge pour vous."
+      }
+    ],
+    "faqEn": [
+      {
+        "q": "When does e-invoicing become mandatory?",
+        "a": "In France, all businesses must be able to receive electronic invoices by 1 September 2026. The obligation to issue applies to large companies and mid-caps on that date, then to SMEs and small businesses on 1 September 2027."
+      },
+      {
+        "q": "Is a self-employed person affected?",
+        "a": "Yes. Even when VAT-exempt, small businesses will have to receive and then issue invoices in electronic format via an approved platform, per the 2026-2027 timeline."
+      },
+      {
+        "q": "Will a simple PDF invoice be enough?",
+        "a": "No. A classic PDF is not an electronic invoice under the reform. You need a structured format (Factur-X, UBL or CII) sent via an approved platform. Compliant software handles this for you."
+      }
+    ],
+    "faqEs": [
+      {
+        "q": "¿Desde cuándo es obligatoria la factura electrónica?",
+        "a": "En Francia, todas las empresas deben poder recibir facturas electrónicas el 1 de septiembre de 2026. La obligación de emitir se aplica a grandes empresas en esa fecha, y a pymes y pequeñas empresas el 1 de septiembre de 2027."
+      },
+      {
+        "q": "¿Un autónomo está afectado?",
+        "a": "Sí. Incluso exento de IVA, las pequeñas empresas tendrán que recibir y luego emitir sus facturas en formato electrónico a través de una plataforma autorizada, según el calendario 2026-2027."
+      },
+      {
+        "q": "¿Bastará con una factura PDF normal?",
+        "a": "No. Un PDF clásico no es una factura electrónica según la reforma. Hace falta un formato estructurado (Factur-X, UBL o CII) enviado a través de una plataforma autorizada. Un software conforme se encarga por ti."
+      }
+    ],
+    "contentFr": "## La facturation électronique devient obligatoire : ce qui arrive\n\nLa France généralise la **facture électronique** entre les entreprises (B2B). Ce n'est plus une option : c'est une obligation légale qui se déploie en deux temps. L'objectif de l'administration est de lutter contre la fraude à la TVA et de simplifier les déclarations.\n\nPour un freelance ou un auto-entrepreneur, mieux vaut comprendre le calendrier maintenant que de se précipiter à la dernière minute.\n\n## Le calendrier à retenir\n\n- **1er septembre 2026** : toutes les entreprises, quelle que soit leur taille, doivent être capables de **recevoir** une facture électronique. Les grandes entreprises et ETI doivent aussi commencer à en **émettre**.\n- **1er septembre 2027** : l'obligation d'**émettre** des factures électroniques s'étend aux **PME, TPE et micro-entreprises**.\n\nAutrement dit : dès l'automne 2026, vous devez pouvoir recevoir des factures au format électronique. Et vous avez jusqu'à fin 2027 pour émettre les vôtres dans les règles.\n\n## Qu'est-ce qu'une « vraie » facture électronique ?\n\nAttention au piège : **un PDF envoyé par email n'est pas une facture électronique** au sens de la réforme. Une facture électronique conforme, c'est :\n\n- un **format structuré** lisible par les machines : Factur-X (PDF + données XML), UBL ou CII ;\n- transmise via une **plateforme agréée** par l'administration (et non par simple email).\n\nCes formats permettent à l'administration et à vos clients de traiter automatiquement la facture, sans ressaisie.\n\n## Ce que ça change concrètement pour vous\n\n### Vous devez choisir un outil conforme\n\nLe tableur et le PDF maison ne suffiront plus. Il vous faut un logiciel capable de générer le bon format et de transmettre via une plateforme agréée. Bonne nouvelle : c'est transparent une fois l'outil en place.\n\n### Même en franchise de TVA, vous êtes concerné\n\nBeaucoup de micro-entrepreneurs pensent être exemptés. Ce n'est pas le cas : la réforme concerne **toutes** les entreprises, y compris celles en franchise de TVA.\n\n### Anticiper, c'est éviter le stress\n\nChanger d'outil dans la précipitation, à quelques semaines de l'échéance, est le meilleur moyen de faire des erreurs. Choisir dès aujourd'hui une solution qui suit le calendrier vous met à l'abri.\n\n## Comment Robi vous prépare\n\nRobi suit la réforme et génère vos factures dans les règles. Vous facturez normalement — à la voix ou en une phrase grâce à **[la facture AI](/fr/facture-ai)** — et l'outil s'occupe de la conformité technique. Pas besoin de devenir expert en formats XML.\n\nEn attendant, vous pouvez déjà créer des factures propres et conformes avec notre **[générateur de facture gratuit](/fr/tools/generateur-facture)**, et lire notre guide des **[mentions obligatoires sur une facture](/fr/blog/mentions-obligatoires-facture)**.\n\n## En résumé\n\nLa facturation électronique obligatoire arrive : réception dès septembre 2026, émission jusqu'en septembre 2027 pour les indépendants. Le PDF classique ne suffira plus — il faudra un format structuré via une plateforme agréée. Anticipez en choisissant un outil conforme, et vous vivrez la transition sans douleur.",
+    "contentEn": "## E-invoicing becomes mandatory: what's coming\n\nFrance is generalising **electronic invoicing** between businesses (B2B). It's no longer optional: it's a legal obligation rolling out in two phases. The government's goal is to fight VAT fraud and simplify reporting.\n\nFor a freelancer or self-employed worker, it's better to understand the timeline now than to rush at the last minute.\n\n## The timeline to remember\n\n- **1 September 2026**: all businesses, whatever their size, must be able to **receive** an electronic invoice. Large companies and mid-caps must also start **issuing** them.\n- **1 September 2027**: the obligation to **issue** electronic invoices extends to **SMEs and small businesses**.\n\nIn other words: from autumn 2026, you must be able to receive invoices in electronic format. And you have until late 2027 to issue your own properly.\n\n## What is a “real” electronic invoice?\n\nBeware the trap: **a PDF sent by email is not an electronic invoice** under the reform. A compliant e-invoice is:\n\n- a **structured format** readable by machines: Factur-X (PDF + XML data), UBL or CII;\n- transmitted via a **government-approved platform** (not just email).\n\nThese formats let the tax authority and your clients process the invoice automatically, without re-keying.\n\n## What it concretely changes for you\n\n### You must choose a compliant tool\n\nSpreadsheets and homemade PDFs won't cut it anymore. You need software able to generate the right format and transmit via an approved platform. Good news: it's seamless once the tool is in place.\n\n### Even VAT-exempt, you're concerned\n\nMany micro-entrepreneurs think they're exempt. They're not: the reform applies to **all** businesses, including VAT-exempt ones.\n\n### Anticipating means avoiding stress\n\nSwitching tools in a rush, weeks before the deadline, is the surest way to make mistakes. Choosing a solution that follows the timeline today keeps you safe.\n\n## How Robi prepares you\n\nRobi tracks the reform and generates your invoices by the rules. You invoice normally — by voice or in one sentence thanks to **[the AI invoice](/en/facture-ai)** — and the tool handles technical compliance. No need to become an XML-format expert.\n\nIn the meantime, you can already create clean, compliant invoices with our **[free invoice generator](/en/tools/generateur-facture)**, and read our guide to **[mandatory invoice mentions](/en/blog/mentions-obligatoires-facture)**.\n\n## In short\n\nMandatory e-invoicing is coming: reception from September 2026, issuance by September 2027 for the self-employed. The classic PDF won't be enough — you'll need a structured format via an approved platform. Anticipate by choosing a compliant tool, and you'll go through the transition painlessly.",
+    "contentEs": "## La facturación electrónica se vuelve obligatoria: lo que viene\n\nFrancia generaliza la **factura electrónica** entre empresas (B2B). Ya no es opcional: es una obligación legal que se despliega en dos fases. El objetivo de la administración es combatir el fraude del IVA y simplificar las declaraciones.\n\nPara un freelancer o autónomo, es mejor entender el calendario ahora que precipitarse a última hora.\n\n## El calendario a recordar\n\n- **1 de septiembre de 2026**: todas las empresas, sea cual sea su tamaño, deben poder **recibir** una factura electrónica. Las grandes empresas también deben empezar a **emitirlas**.\n- **1 de septiembre de 2027**: la obligación de **emitir** facturas electrónicas se extiende a las **pymes y pequeñas empresas**.\n\nDicho de otro modo: desde el otoño de 2026, debes poder recibir facturas en formato electrónico. Y tienes hasta finales de 2027 para emitir las tuyas correctamente.\n\n## ¿Qué es una factura electrónica «de verdad»?\n\nCuidado con la trampa: **un PDF enviado por email no es una factura electrónica** según la reforma. Una factura electrónica conforme es:\n\n- un **formato estructurado** legible por máquinas: Factur-X (PDF + datos XML), UBL o CII;\n- transmitida a través de una **plataforma autorizada** por la administración (y no por simple email).\n\nEstos formatos permiten a la administración y a tus clientes procesar la factura automáticamente, sin volver a teclear.\n\n## Lo que cambia concretamente para ti\n\n### Debes elegir una herramienta conforme\n\nLa hoja de cálculo y el PDF casero ya no bastarán. Necesitas un software capaz de generar el formato correcto y transmitir vía una plataforma autorizada. Buena noticia: es transparente una vez instalada la herramienta.\n\n### Incluso exento de IVA, estás afectado\n\nMuchos autónomos creen estar exentos. No es así: la reforma afecta a **todas** las empresas, incluidas las exentas de IVA.\n\n### Anticipar es evitar el estrés\n\nCambiar de herramienta con prisa, semanas antes del plazo, es la mejor forma de cometer errores. Elegir hoy una solución que sigue el calendario te protege.\n\n## Cómo te prepara Robi\n\nRobi sigue la reforma y genera tus facturas según las reglas. Facturas con normalidad — por voz o en una frase gracias a **[la factura con IA](/es/facture-ai)** — y la herramienta se encarga de la conformidad técnica. No necesitas volverte experto en formatos XML.\n\nMientras tanto, ya puedes crear facturas limpias y conformes con nuestro **[generador de facturas gratis](/es/tools/generateur-facture)**, y leer nuestra guía de **[menciones obligatorias en una factura](/es/blog/mentions-obligatoires-facture)**.\n\n## En resumen\n\nLa facturación electrónica obligatoria llega: recepción desde septiembre de 2026, emisión hasta septiembre de 2027 para los autónomos. El PDF clásico no bastará — hará falta un formato estructurado vía plataforma autorizada. Anticipa eligiendo una herramienta conforme y vivirás la transición sin dolor."
+  }
+]

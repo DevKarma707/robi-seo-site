@@ -218,5 +218,29 @@ t("propositions changées au réimport → enrichissement", (() => {
   return a.action === "enrich" && (a as { patch: ImportPost }).patch.imagePropositions?.length === 2;
 })());
 
+// ── Marchés ───────────────────────────────────────────────────────────
+console.log("\n— Marchés —");
+
+t("sans marché → aucun champ posé (l'historique reste français par défaut)", (() => {
+  const r = validateImportPost(BASE, 0);
+  return r.ok && r.post.market === undefined;
+})());
+
+t("marché connu → porté", (() => {
+  const r = validateImportPost({ ...BASE, market: "en" }, 0);
+  return r.ok && r.post.market === "en";
+})());
+
+t("marché inconnu → refusé, pas remplacé", (() => {
+  const r = validateImportPost({ ...BASE, market: "de" }, 0);
+  return !r.ok && r.error.includes("marché inconnu");
+})());
+
+t("changement de marché au réimport → enrichissement", (() => {
+  const ancien = enBase({});
+  const a = planSocialImport([valide({ ...BASE, market: "es" })], [ancien]).actions[0];
+  return a.action === "enrich" && (a as { patch: ImportPost }).patch.market === "es";
+})());
+
 console.log(`\n${ko === 0 ? "✅ TOUT PASSE" : "❌ ÉCHECS"} — ${ok} ok, ${ko} ko\n`);
 process.exit(ko ? 1 : 0);

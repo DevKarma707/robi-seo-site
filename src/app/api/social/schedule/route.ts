@@ -76,6 +76,7 @@ export async function POST(req: Request) {
     {
       id: snap.id,
       channel: String(p.channel),
+      market: typeof p.market === "string" ? p.market : null,
       caption: String(p.caption ?? ""),
       hashtags: (p.hashtags as string) ?? null,
       imageUrl: p.imageUrl as string,
