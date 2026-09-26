@@ -121,7 +121,7 @@ export const priceMap: Record<string, { launch: number; normal: number; monthly:
   // Livres sterling
   en:      { launch: 49,      normal: 129,    monthly: 12,    yearly: 75,     biYearly: 125 },
   // Dollars US
-  "en-US": { launch: 59,      normal: 149,    monthly: 14,    yearly: 89,     biYearly: 149 },
+  "en-US": { launch: 69,      normal: 179,    monthly: 14,    yearly: 89,     biYearly: 149 },
   // Dollars australiens
   "en-AU": { launch: 99,      normal: 249,    monthly: 22,    yearly: 139,    biYearly: 229 },
   // Francs suisses
