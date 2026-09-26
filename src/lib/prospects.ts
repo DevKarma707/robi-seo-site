@@ -230,7 +230,7 @@ Concrètement : « facture 500 € pour Alice, prestation de conseil ». Trente 
 
 Pourquoi je vous écris maintenant : la facturation électronique devient obligatoire en France le 1er septembre 2026. Robi génère déjà du Factur-X natif, donc vous serez en règle sans rien changer à vos habitudes.
 
-C'est gratuit pour deux documents par mois, sans carte bancaire — de quoi juger sur pièce en cinq minutes : robi-app.com
+C'est gratuit pour quatre factures ou devis par mois, sans carte bancaire — de quoi juger sur pièce en cinq minutes : robi-app.com
 
 ${SIGN}`,
   },
@@ -245,7 +245,7 @@ Le principe : vous dictez ou vous écrivez une phrase, Robi sort la facture. « 
 
 Un point qui va vous concerner directement : la facture électronique devient obligatoire le 1er septembre 2026. Robi produit déjà du Factur-X, donc le sujet est réglé d'avance.
 
-Deux documents par mois gratuits, sans carte : robi-app.com
+Quatre factures ou devis gratuits par mois, sans carte : robi-app.com
 
 Si ça vous parle, dites-moi et je vous fais un accès complet pour tester sans limite.
 
@@ -292,7 +292,7 @@ Pour une structure comme {{societe}}, l'intérêt est surtout dans le volume : u
 
 Et le sujet qui arrive : facturation électronique obligatoire au 1er septembre 2026. Robi sort déjà du Factur-X conforme.
 
-Deux documents gratuits par mois pour juger sur pièce : robi-app.com
+Quatre factures ou devis gratuits par mois pour juger sur pièce : robi-app.com
 
 ${SIGN}`,
   },
@@ -358,7 +358,7 @@ Je viens de lire votre comparatif des logiciels de facturation sur {{societe}} �
 
 C'est ce que fait Robi AI (robi-app.com) : on dicte « Prépare une facture de 500 € pour Alice » et le document conforme sort en 30 secondes — numérotation, mentions TVA, format Factur-X prêt pour l'obligation du 1er septembre 2026. Relances d'impayés rédigées par l'IA, paiement en ligne intégré.
 
-Côté prix : gratuit pour 2 documents, puis 14 €/mois ou 89 €/an — et une offre de lancement à vie à 59 €, que je n'ai vue nulle part ailleurs.
+Côté prix : gratuit pour 4 factures ou devis par mois, puis 14 €/mois ou 89 €/an — et une offre de lancement à vie à 59 €, que je n'ai vue nulle part ailleurs.
 
 Je vous ouvre volontiers un accès complet pour le tester. Et si vous travaillez en affiliation, nous avons un programme.
 
@@ -397,7 +397,7 @@ ${SIGN}`,
 
 Je remonte mon message, au cas où il serait passé sous la pile.
 
-Deux documents par mois gratuits, sans carte bancaire, cinq minutes pour se faire une idée : robi-app.com
+Quatre factures ou devis gratuits par mois, sans carte bancaire, cinq minutes pour se faire une idée : robi-app.com
 
 Si le sujet n'est pas d'actualité, dites-le moi simplement et je ne reviendrai pas.
 

@@ -255,7 +255,7 @@
     "title": "¿Listo para simplificar tu gestión y disparar tus ventas?",
     "subtitle": "Únete a 2.000+ emprendedores que facturan sin esfuerzo",
     "button": "Empezar gratis",
-    "subtext": "2 documentos gratis • Sin tarjeta de crédito"
+    "subtext": "4 facturas o presupuestos gratis al mes • Sin tarjeta de crédito"
   },
   "footer": {
     "description": "El asistente de IA que te ahorra 10 horas al mes en facturación.",
@@ -414,7 +414,7 @@
       "howItWorks": "Cómo funciona",
       "simpleAs123": "Fácil como 1, 2, 3",
       "tryFeature": "Prueba Robi AI",
-      "freeFor14Days": "2 facturas o presupuestos gratis • Luego pasa a Pro"
+      "freeFor14Days": "4 facturas o presupuestos gratis al mes • Luego pasa a Pro"
     },
     "tools": {
       "heroTitle": "Herramientas gratuitas para",
@@ -585,7 +585,7 @@
       "object": "Objeto",
       "objectContent": "Las presentes Condiciones Generales de Venta (CGV) rigen las relaciones contractuales entre Robi AI Technologies SAS y cualquier usuario que suscriba un plan de pago en la plataforma de facturación Robi AI.",
       "offers": "Ofertas y precios",
-      "offersContent": "Robi AI ofrece los siguientes planes:\n\n- **Versión gratuita**: 2 facturas o presupuestos gratis, sin compromiso ni tarjeta de crédito requerida\n- **Pro Mensual**: 14€/mes, acceso ilimitado a todas las funcionalidades\n- **Pro Anual**: 89€/año (es decir, 7,42€/mes, 2 meses gratis), acceso ilimitado a todas las funcionalidades\n- **Pro Bianual**: 149€ por 2 años (es decir, 6,21€/mes), acceso ilimitado a todas las funcionalidades\n- **Oferta de lanzamiento**: 59€ acceso de por vida, reservada a los primeros 1.000 usuarios\n\nLas tarifas anteriores se aplican a la zona euro. Los precios aplicables en tu país se muestran en la página de Tarifas del sitio. Todos los precios se indican en euros con impuestos incluidos. Robi AI se reserva el derecho de modificar sus precios con un preaviso de 30 días.",
+      "offersContent": "Robi AI ofrece los siguientes planes:\n\n- **Versión gratuita**: 4 facturas o presupuestos gratis al mes, sin compromiso ni tarjeta de crédito requerida\n- **Pro Mensual**: 14€/mes, acceso ilimitado a todas las funcionalidades\n- **Pro Anual**: 89€/año (es decir, 7,42€/mes, 2 meses gratis), acceso ilimitado a todas las funcionalidades\n- **Pro Bianual**: 149€ por 2 años (es decir, 6,21€/mes), acceso ilimitado a todas las funcionalidades\n- **Oferta de lanzamiento**: 59€ acceso de por vida, reservada a los primeros 1.000 usuarios\n\nLas tarifas anteriores se aplican a la zona euro. Los precios aplicables en tu país se muestran en la página de Tarifas del sitio. Todos los precios se indican en euros con impuestos incluidos. Robi AI se reserva el derecho de modificar sus precios con un preaviso de 30 días.",
       "payment": "Modalidades de pago",
       "paymentContent": "Los pagos son procesados de forma segura por **Stripe**. Los medios de pago aceptados son las tarjetas bancarias (Visa, Mastercard, American Express).\n\nPara las suscripciones recurrentes (Pro Mensual, Pro Anual y Pro Bianual), el pago es automático en cada vencimiento. La oferta de lanzamiento de por vida es un pago único, sin renovación. El usuario puede actualizar sus datos de pago en cualquier momento desde su espacio personal.",
       "withdrawal": "Derecho de desistimiento",
@@ -603,16 +603,16 @@
     },
     "pricing": {
       "title": "Precios",
-      "description": "Descubre nuestros precios simples y transparentes. 2 documentos gratis antes de la versión Pro. Desde 7,42€/mes en plan anual.",
+      "description": "Descubre nuestros precios simples y transparentes. 4 facturas o presupuestos gratis al mes antes de la versión Pro. Desde 7,42€/mes en plan anual.",
       "badge": "Precios transparentes",
       "heroTitle": "Precios simples,",
       "heroTitleAccent": "ROI enorme.",
       "heroSubtitle": "Sin costes ocultos. Sin compromiso. Cancelación en un clic.",
       "guarantees": "Nuestras garantías",
       "freeTrial": "Prueba gratuita",
-      "freeTrialDesc": "2 facturas o presupuestos gratis para probar. Sin tarjeta de crédito.",
+      "freeTrialDesc": "4 facturas o presupuestos gratis al mes para probar. Sin tarjeta de crédito.",
       "moneyBack": "Sin compromiso",
-      "moneyBackDesc": "2 documentos gratis para probar. Pasa a Pro cuando estés listo.",
+      "moneyBackDesc": "4 facturas o presupuestos gratis al mes para probar. Pasa a Pro cuando estés listo.",
       "humanSupport": "Soporte humano",
       "humanSupportDesc": "Un equipo real que responde en menos de 24h. Sin chatbot.",
       "faqTitle": "Preguntas sobre precios",
@@ -621,7 +621,7 @@
       "faq2q": "¿Puedo cambiar de plan?",
       "faq2a": "Sí, puedes cambiar entre planes en cualquier momento. El cambio se aplica inmediatamente.",
       "faq3q": "¿Cómo funciona la versión gratuita?",
-      "faq3a": "Puedes crear 2 facturas o presupuestos gratis, sin compromiso. Si quieres continuar, pasa a la versión Pro.",
+      "faq3a": "Puedes crear 4 facturas o presupuestos gratis al mes, sin compromiso. Si quieres continuar, pasa a la versión Pro.",
       "faq4q": "¿Ofrecen descuentos para asociaciones?",
       "faq4a": "Sí, ofrecemos un 50% de descuento a asociaciones y ONGs. Contáctanos con tu número de registro.",
       "faq5q": "¿Puedo pagar por transferencia bancaria?",

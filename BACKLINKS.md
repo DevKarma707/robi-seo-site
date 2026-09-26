@@ -111,7 +111,7 @@ Certains demanderont un partenariat/affiliation — tu as déjà AFFILIATION.md,
   dans 16 pays. Conforme RGPD,
   chiffrement AES-256, hébergement européen.
 - **Catégories** : Facturation, Devis, Gestion freelance, IA
-- **Prix** : Gratuit (2 factures/devis) · 14 €/mois (sans engagement) ·
+- **Prix** : Gratuit (4 factures/devis par mois) · 14 €/mois (sans engagement) ·
   89 €/an (2 mois offerts) · 149 €/2 ans (meilleure offre) · Offre de
   lancement Lifetime 59 € (au lieu de 149 €, 1 000 premiers)
 - **Réseaux** : https://x.com/iamrobiai · https://instagram.com/robi.ai.app ·
@@ -144,7 +144,7 @@ generator ». Toujours donner **cette URL**, pas la page d'accueil.
 - **Tagline**: AI invoice generator — say it, Robi invoices it.
 - **Short description (≤ 160 chars)**:
   AI invoice generator for freelancers: describe the job by voice or text and
-  get a ready-to-send invoice in 30 seconds. Free for 2 invoices.
+  get a ready-to-send invoice in 30 seconds. Free for 4 invoices or quotes a month.
 - **Long description**:
   Robi AI is an AI invoice generator for freelancers, tradespeople and small
   businesses. Type or say "Invoice £800 to Acme for the website redesign" and
@@ -156,7 +156,7 @@ generator ». Toujours donner **cette URL**, pas la page d'accueil.
   any browser on desktop and mobile — no download. GDPR compliant, EU hosting.
 - **Category**: Invoicing / Finance · **Tags**: AI invoice generator, invoicing,
   freelancers, quotes, voice, small business, e-invoicing
-- **Pricing model**: Freemium — free plan (2 invoices/quotes), then
+- **Pricing model**: Freemium — free plan (4 invoices/quotes a month), then
   $14/month or $89/year (US) · £12/month or £75/year (UK) · launch offer:
   lifetime access $59 / £49 for the first 1,000 users. Vérifier la page
   pricing du pays avant de soumettre.

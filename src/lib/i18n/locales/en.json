@@ -285,7 +285,7 @@
     "title": "Ready to simplify your workflow and skyrocket your sales?",
     "subtitle": "Join 2,000+ entrepreneurs invoicing effortlessly",
     "button": "Start for free",
-    "subtext": "2 free documents • No credit card required"
+    "subtext": "4 free invoices or quotes a month • No credit card required"
   },
   "footer": {
     "description": "The AI assistant that saves you 10 hours per month on invoicing.",
@@ -445,7 +445,7 @@
       "howItWorks": "How it works",
       "simpleAs123": "As simple as 1, 2, 3",
       "tryFeature": "Try Robi AI",
-      "freeFor14Days": "2 free invoices or quotes • Then upgrade to Pro"
+      "freeFor14Days": "4 free invoices or quotes a month • Then upgrade to Pro"
     },
     "tools": {
       "heroTitle": "Free tools for",
@@ -616,7 +616,7 @@
       "object": "Purpose",
       "objectContent": "These Terms of Sale govern the contractual relationship between Robi AI Technologies SAS and any user subscribing to a paid plan on the Robi AI invoicing platform.",
       "offers": "Plans and pricing",
-      "offersContent": "Robi AI offers the following plans:\n\n- **Free version**: 2 free invoices or quotes, no commitment and no credit card required\n- **Pro Monthly**: €14/month, unlimited access to all features\n- **Pro Annual**: €89/year (i.e. €7.42/month, 2 months free), unlimited access to all features\n- **Pro Two-year**: €149 for 2 years (i.e. €6.21/month), unlimited access to all features\n- **Launch offer**: €59 lifetime access, reserved for the first 1,000 users\n\nThe rates above apply to the eurozone. The prices applicable in your country are shown on the site's Pricing page. All prices are shown in euros including tax. Robi AI reserves the right to modify its pricing with 30 days' notice.",
+      "offersContent": "Robi AI offers the following plans:\n\n- **Free version**: 4 free invoices or quotes a month, no commitment and no credit card required\n- **Pro Monthly**: €14/month, unlimited access to all features\n- **Pro Annual**: €89/year (i.e. €7.42/month, 2 months free), unlimited access to all features\n- **Pro Two-year**: €149 for 2 years (i.e. €6.21/month), unlimited access to all features\n- **Launch offer**: €59 lifetime access, reserved for the first 1,000 users\n\nThe rates above apply to the eurozone. The prices applicable in your country are shown on the site's Pricing page. All prices are shown in euros including tax. Robi AI reserves the right to modify its pricing with 30 days' notice.",
       "payment": "Payment terms",
       "paymentContent": "Payments are securely processed by **Stripe**. Accepted payment methods are credit and debit cards (Visa, Mastercard, American Express).\n\nFor recurring subscriptions (Pro Monthly, Pro Annual and Pro Two-year), payment is taken automatically at each renewal date. The lifetime launch offer is a one-off payment with no renewal. Users can update their payment details at any time from their personal account.",
       "withdrawal": "Right of withdrawal",
@@ -634,16 +634,16 @@
     },
     "pricing": {
       "title": "Pricing",
-      "description": "Discover our simple and transparent pricing. 2 free documents before upgrading to Pro. From €7.42/month billed annually.",
+      "description": "Discover our simple and transparent pricing. 4 free invoices or quotes a month before upgrading to Pro. From €7.42/month billed annually.",
       "badge": "Transparent pricing",
       "heroTitle": "Simple pricing,",
       "heroTitleAccent": "huge ROI.",
       "heroSubtitle": "No hidden fees. No commitment. Cancel with one click.",
       "guarantees": "Our guarantees",
       "freeTrial": "Free trial",
-      "freeTrialDesc": "2 free invoices or quotes to try. No credit card required.",
+      "freeTrialDesc": "4 free invoices or quotes a month to try. No credit card required.",
       "moneyBack": "No commitment",
-      "moneyBackDesc": "2 free documents to try. Upgrade to Pro when you're ready.",
+      "moneyBackDesc": "4 free invoices or quotes a month to try. Upgrade to Pro when you're ready.",
       "humanSupport": "Human support",
       "humanSupportDesc": "A real team that responds within 24 hours. No chatbot.",
       "faqTitle": "Pricing questions",
@@ -652,7 +652,7 @@
       "faq2q": "Can I change plans?",
       "faq2a": "Yes, you can switch between plans at any time. The change takes effect immediately.",
       "faq3q": "How does the free version work?",
-      "faq3a": "You can create 2 invoices or quotes for free, no commitment. If you want to continue, upgrade to the Pro version.",
+      "faq3a": "You can create 4 invoices or quotes a month for free, no commitment. If you want to continue, upgrade to the Pro version.",
       "faq4q": "Do you offer discounts for nonprofits?",
       "faq4a": "Yes, we offer 50% off to associations and NGOs. Contact us with your registration number.",
       "faq5q": "Can I pay by bank transfer?",

@@ -108,7 +108,7 @@ aux signaux / onglet actif / action principale, aucune ombre portée.
 
 ## Contexte produit (à connaître avant d'écrire)
 
-- **Prix** (France, cf. page pricing live) : **gratuit** = 2 factures/devis ·
+- **Prix** (France, cf. page pricing live) : **gratuit** = 4 factures/devis par mois ·
   **14 €/mois** (sans engagement) · **89 €/an** (2 mois offerts) · **149 €/2 ans**
   (meilleure offre, paiement unique) · **offre de lancement Lifetime 59 €** (au
   lieu de 149 €, réservée aux 1 000 premiers). Les mentions à 49 € sont périmées.

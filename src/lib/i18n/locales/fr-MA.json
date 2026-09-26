@@ -255,7 +255,7 @@
     "title": "Prêt à simplifier votre gestion et faire décoller vos ventes ?",
     "subtitle": "Rejoignez 2000+ entrepreneurs qui facturent sans effort",
     "button": "Démarrer gratuitement",
-    "subtext": "2 documents gratuits • Sans carte bancaire"
+    "subtext": "4 factures ou devis gratuits par mois • Sans carte bancaire"
   },
   "footer": {
     "description": "L'assistant IA qui vous fait gagner 10h par mois sur votre facturation.",
@@ -416,7 +416,7 @@
       "howItWorks": "Comment ça marche",
       "simpleAs123": "Simple comme 1, 2, 3",
       "tryFeature": "Essayer Robi AI",
-      "freeFor14Days": "2 factures ou devis gratuits • Puis passez en Pro"
+      "freeFor14Days": "4 factures ou devis gratuits par mois • Puis passez en Pro"
     },
     "tools": {
       "heroTitle": "Outils gratuits pour",
@@ -587,7 +587,7 @@
       "object": "Objet",
       "objectContent": "Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles entre Robi AI Technologies SAS et tout utilisateur souscrivant à un abonnement payant de la plateforme de facturation Robi AI.",
       "offers": "Offres et tarifs",
-      "offersContent": "Robi AI propose les offres suivantes :\n\n- **Version gratuite** : 2 factures ou devis gratuits, sans engagement ni carte bancaire requise\n- **Pro Mensuel** : 14€/mois, accès illimité à toutes les fonctionnalités\n- **Pro Annuel** : 89€/an (soit 7,42€/mois, 2 mois offerts), accès illimité à toutes les fonctionnalités\n- **Pro Bi-annuel** : 149€ pour 2 ans (soit 6,21€/mois), accès illimité à toutes les fonctionnalités\n- **Offre de lancement** : 59€ accès à vie, réservée aux 1000 premiers utilisateurs\n\nLes tarifs ci-dessus s'appliquent à la zone euro. Les prix applicables à votre pays sont affichés sur la page Tarifs du site. Tous les prix sont indiqués en euros TTC. Robi AI se réserve le droit de modifier ses tarifs avec un préavis de 30 jours.",
+      "offersContent": "Robi AI propose les offres suivantes :\n\n- **Version gratuite** : 4 factures ou devis gratuits par mois, sans engagement ni carte bancaire requise\n- **Pro Mensuel** : 14€/mois, accès illimité à toutes les fonctionnalités\n- **Pro Annuel** : 89€/an (soit 7,42€/mois, 2 mois offerts), accès illimité à toutes les fonctionnalités\n- **Pro Bi-annuel** : 149€ pour 2 ans (soit 6,21€/mois), accès illimité à toutes les fonctionnalités\n- **Offre de lancement** : 59€ accès à vie, réservée aux 1000 premiers utilisateurs\n\nLes tarifs ci-dessus s'appliquent à la zone euro. Les prix applicables à votre pays sont affichés sur la page Tarifs du site. Tous les prix sont indiqués en euros TTC. Robi AI se réserve le droit de modifier ses tarifs avec un préavis de 30 jours.",
       "payment": "Modalités de paiement",
       "paymentContent": "Les paiements sont traités de manière sécurisée par **Stripe**. Les moyens de paiement acceptés sont les cartes bancaires (Visa, Mastercard, American Express).\n\nPour les abonnements récurrents (Pro Mensuel, Pro Annuel et Pro Bi-annuel), le paiement est automatique à chaque échéance. L'offre de lancement à vie fait l'objet d'un paiement unique, sans reconduction. L'utilisateur peut mettre à jour ses informations de paiement à tout moment depuis son espace personnel.",
       "withdrawal": "Droit de rétractation",
@@ -605,16 +605,16 @@
     },
     "pricing": {
       "title": "Tarifs",
-      "description": "Découvrez nos tarifs simples et transparents. 2 documents gratuits avant la version Pro. À partir de 7,42€/mois en annuel.",
+      "description": "Découvrez nos tarifs simples et transparents. 4 factures ou devis gratuits par mois avant la version Pro. À partir de 7,42€/mois en annuel.",
       "badge": "Tarification transparente",
       "heroTitle": "Prix simples,",
       "heroTitleAccent": "ROI énorme.",
       "heroSubtitle": "Pas de frais cachés. Pas d'engagement. Annulation en un clic.",
       "guarantees": "Nos garanties",
       "freeTrial": "Essai gratuit",
-      "freeTrialDesc": "2 factures ou devis gratuits pour tester. Aucune carte bancaire requise.",
+      "freeTrialDesc": "4 factures ou devis gratuits par mois pour tester. Aucune carte bancaire requise.",
       "moneyBack": "Sans engagement",
-      "moneyBackDesc": "2 documents gratuits pour tester. Passez en Pro quand vous êtes prêt.",
+      "moneyBackDesc": "4 factures ou devis gratuits par mois pour tester. Passez en Pro quand vous êtes prêt.",
       "humanSupport": "Support humain",
       "humanSupportDesc": "Une vraie équipe française qui répond en moins de 24h. Pas de chatbot.",
       "faqTitle": "Questions sur les tarifs",
@@ -623,7 +623,7 @@
       "faq2q": "Puis-je changer de formule ?",
       "faq2a": "Oui, vous pouvez passer d'une formule à l'autre à tout moment. Le changement prend effet immédiatement.",
       "faq3q": "Comment fonctionne la version gratuite ?",
-      "faq3a": "Vous pouvez créer 2 factures ou devis gratuitement, sans engagement. Si vous souhaitez continuer, passez à la version Pro.",
+      "faq3a": "Vous pouvez créer 4 factures ou devis gratuitement par mois, sans engagement. Si vous souhaitez continuer, passez à la version Pro.",
       "faq4q": "Proposez-vous des réductions pour les associations ?",
       "faq4a": "Oui, nous offrons 50% de réduction aux associations et ONG. Contactez-nous avec votre numéro RNA.",
       "faq5q": "Puis-je payer par virement ?",
@@ -639,7 +639,7 @@
       "object": "Objet",
       "objectContent": "Les présentes Conditions Générales d'Utilisation (CGU) régissent l'accès et l'utilisation de l'application web Robi AI, accessible à l'adresse go.robi-app.com, éditée par Robi AI Technologies SAS.",
       "access": "Accès au service",
-      "accessContent": "L'application web Robi AI est accessible depuis tout navigateur moderne (Chrome, Firefox, Safari, Edge) sans installation préalable. L'accès requiert la création d'un compte utilisateur.\n\nUne version d'essai gratuite est disponible, permettant de créer jusqu'à **2 documents** (factures ou devis) sans carte bancaire. Au-delà, un abonnement payant est nécessaire.",
+      "accessContent": "L'application web Robi AI est accessible depuis tout navigateur moderne (Chrome, Firefox, Safari, Edge) sans installation préalable. L'accès requiert la création d'un compte utilisateur.\n\nUne version d'essai gratuite est disponible, permettant de créer jusqu'à **4 documents par mois** (factures ou devis) sans carte bancaire. Au-delà, un abonnement payant est nécessaire.",
       "account": "Création de compte",
       "accountContent": "Pour utiliser Robi AI, l'utilisateur doit créer un compte en fournissant :\n- Une adresse e-mail valide\n- Un mot de passe sécurisé\n\nL'utilisateur est seul responsable de la confidentialité de ses identifiants. Tout accès au service avec ses identifiants est réputé effectué par lui. En cas de compromission, l'utilisateur doit nous contacter immédiatement à support@robi-app.com.",
       "features": "Fonctionnalités",
@@ -667,7 +667,7 @@
       "object": "Objet",
       "objectContent": "Les présentes Conditions Générales d'Utilisation (CGU) régissent l'accès et l'utilisation de l'application mobile Robi AI, disponible sur **App Store** (iOS) et **Google Play** (Android), éditée par Robi AI Technologies SAS.",
       "access": "Téléchargement et accès",
-      "accessContent": "L'application mobile Robi AI est disponible gratuitement en téléchargement sur :\n- **App Store** (Apple) — pour iPhone et iPad sous iOS 15 ou supérieur\n- **Google Play** (Android) — pour appareils Android 8.0 ou supérieur\n\nLe téléchargement est gratuit. L'utilisation complète nécessite la création d'un compte et, au-delà de 2 documents gratuits, un abonnement payant.",
+      "accessContent": "L'application mobile Robi AI est disponible gratuitement en téléchargement sur :\n- **App Store** (Apple) — pour iPhone et iPad sous iOS 15 ou supérieur\n- **Google Play** (Android) — pour appareils Android 8.0 ou supérieur\n\nLe téléchargement est gratuit. L'utilisation complète nécessite la création d'un compte et, au-delà de 4 factures ou devis gratuits par mois, un abonnement payant.",
       "account": "Création de compte",
       "accountContent": "L'accès aux fonctionnalités de l'application nécessite la création d'un compte Robi AI. L'utilisateur peut s'inscrire via :\n- E-mail et mot de passe\n- Connexion via Google ou Apple\n\nUn seul compte est utilisable sur plusieurs appareils. L'utilisateur est seul responsable de la sécurité de ses identifiants.",
       "features": "Fonctionnalités mobiles",

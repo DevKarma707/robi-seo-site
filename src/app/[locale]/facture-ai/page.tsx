@@ -44,7 +44,7 @@ const content: Record<Lang, {
   fr: {
     metaTitle: "Facture IA (Facture AI) : créez vos factures par l'IA | Robi",
     metaDescription:
-      "Facture IA : créez devis et factures conformes Factur-X en 30 secondes en parlant à l'intelligence artificielle. Relances automatiques, paiement en ligne. 2 documents gratuits.",
+      "Facture IA : créez devis et factures conformes Factur-X en 30 secondes en parlant à l'intelligence artificielle. Relances automatiques, paiement en ligne. 4 factures ou devis gratuits par mois.",
     keywords: [
       "facture ia",
       "facture ai",
@@ -179,7 +179,7 @@ const content: Record<Lang, {
       {
         question: "Combien coûte un logiciel de facture IA ?",
         answer:
-          "Robi est gratuit pour 2 factures ou devis. Ensuite, en France : 14 €/mois sans engagement, 89 €/an, 149 € pour 2 ans, ou l'offre de lancement à vie à 59 € (paiement unique, réservée aux 1 000 premiers).",
+          "Robi est gratuit pour 4 factures ou devis par mois. Ensuite, en France : 14 €/mois sans engagement, 89 €/an, 149 € pour 2 ans, ou l'offre de lancement à vie à 59 € (paiement unique, réservée aux 1 000 premiers).",
       },
       {
         question: "La facture IA est-elle compatible avec la facturation électronique obligatoire ?",
@@ -191,7 +191,7 @@ const content: Record<Lang, {
   en: {
     metaTitle: "AI Invoice Generator: Create Invoices with AI in 30s | Robi",
     metaDescription:
-      "Invoice AI: generate compliant quotes and invoices in 30 seconds by typing or speaking to AI. Automatic reminders, e-signature, online payments. Free for 2 documents.",
+      "Invoice AI: generate compliant quotes and invoices in 30 seconds by typing or speaking to AI. Automatic reminders, e-signature, online payments. Free for 4 invoices or quotes a month.",
     keywords: [
       "ai invoice",
       "invoice ai",
@@ -329,7 +329,7 @@ const content: Record<Lang, {
       {
         question: "Is there a free AI invoice generator?",
         answer:
-          "Yes: Robi is free for your first 2 invoices or quotes, with no credit card. You get the full AI invoice generator — voice or text prompt, compliant numbering, VAT and a payment link — so you can judge it on a real invoice before choosing a plan.",
+          "Yes: Robi is free for 4 invoices or quotes a month, with no credit card. You get the full AI invoice generator — voice or text prompt, compliant numbering, VAT and a payment link — so you can judge it on a real invoice before choosing a plan.",
       },
       {
         question: "Can AI generate an invoice from a text prompt?",
@@ -339,7 +339,7 @@ const content: Record<Lang, {
       {
         question: "How much does AI invoicing software cost?",
         answer:
-          "Robi is free for 2 invoices or quotes. In the UK, paid plans are £12/month with no commitment, £75/year, £125 for 2 years, or a lifetime launch deal at £49 (one-time payment). Pricing is local in each of the 16 countries Robi supports.",
+          "Robi is free for 4 invoices or quotes a month. In the UK, paid plans are £12/month with no commitment, £75/year, £125 for 2 years, or a lifetime launch deal at £49 (one-time payment). Pricing is local in each of the 16 countries Robi supports.",
       },
     ],
   },
@@ -477,7 +477,7 @@ const content: Record<Lang, {
       {
         question: "¿Cuánto cuesta un programa de facturas con IA?",
         answer:
-          "Robi es gratis para 2 facturas o presupuestos. Después, en España: 14 €/mes sin compromiso, 89 €/año, 149 € por 2 años, o la oferta de lanzamiento de por vida a 59 € (pago único, reservada a los 1.000 primeros).",
+          "Robi es gratis para 4 facturas o presupuestos al mes. Después, en España: 14 €/mes sin compromiso, 89 €/año, 149 € por 2 años, o la oferta de lanzamiento de por vida a 59 € (pago único, reservada a los 1.000 primeros).",
       },
     ],
   },

@@ -56,7 +56,7 @@ export const ANGLES = [
   { id: "liberte", label: "Pourquoi tu as monté ta boîte", exemple: "ce n'était pas pour la paperasse" },
   { id: "travail-invisible", label: "Le travail après le travail", exemple: "la journée finit quand la paperasse finit" },
   { id: "echeance", label: "L'échéance qui approche", exemple: "1er septembre 2026" },
-  { id: "preuve-chiffree", label: "La preuve chiffrée", exemple: "2 documents gratuits par mois" },
+  { id: "preuve-chiffree", label: "La preuve chiffrée", exemple: "4 factures ou devis gratuits par mois" },
 ] as const;
 
 export type PersonaId = (typeof PERSONAS)[number]["id"];

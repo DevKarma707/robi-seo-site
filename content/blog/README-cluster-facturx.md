@@ -77,7 +77,7 @@ Vérifiées contre `~/Desktop/ROBI_V1_READY/utils/facturx/` :
 | **Validation avant export** des mentions manquantes | `validate.ts` — `validateFacturX()` |
 | Calculs **en centimes entiers** (règles `BR-CO-*`) | `xmlGenerator.ts` |
 | Motif d'exonération **293 B dans le XML** (valable jusqu'au 31/12/2026, puis L. 233-3 du CIBS) | `xmlGenerator.ts` — catégorie TVA `E` + BT-121 |
-| Prix : gratuit 2 factures · 14 €/mois · 89 €/an · 149 €/2 ans · Lifetime 59 € (1 000 premiers) | page pricing live + `CLAUDE.md` |
+| Prix : gratuit 4 factures ou devis/mois · 14 €/mois · 89 €/an · 149 €/2 ans · Lifetime 59 € (1 000 premiers) | page pricing live + `CLAUDE.md` |
 
 Aucun chiffre, prix ou témoignage inventé.
 
