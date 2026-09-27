@@ -176,9 +176,14 @@ const main = async () => {
     const legendeLocale = path.join(DOSSIER, `${d.base}_legende.txt`);
     const legende = fs.existsSync(legendeLocale) ? fs.readFileSync(legendeLocale, "utf8").trim() : null;
 
+    // Nom affiché dans l'onglet Ads : l'accroche (1re ligne de la légende), pour que deux
+    // créas du même sujet (ex. App mobile FR / EN) ne portent pas le même nom. Sans légende,
+    // on garde le nom tiré du fichier.
+    const accroche = legende?.split("\n")[0].trim().replace(/[.…]+$/, "").slice(0, 70);
+
     const doc = {
       fichier: l.fichier,
-      titre: d.titre,
+      titre: accroche || d.titre,
       genre: d.genre,
       date: d.date,
       langue: d.langue,
