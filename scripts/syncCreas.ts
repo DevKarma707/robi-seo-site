@@ -5,6 +5,8 @@
  *   npx tsx scripts/syncCreas.ts                 lit ~/Desktop/ROBI_DOC/VALIDÉ/README.md
  *   npx tsx scripts/syncCreas.ts --dossier <chemin>
  *   npx tsx scripts/syncCreas.ts --dry           affiche ce qui serait écrit, sans rien déposer
+ *   npx tsx scripts/syncCreas.ts --lier <fichier.mp4> <id de pub Meta>   relie une créa à sa pub (onglet Ads)
+ *   npx tsx scripts/syncCreas.ts --lier <fichier.mp4> aucun              retire le lien
  *
  * Pour chaque ligne du tableau du README : dépose la vidéo et sa couverture
  * dans Storage (`creas/<nom>`), lit la légende à côté, puis écrit
@@ -45,6 +47,13 @@ const args = process.argv.slice(2);
 const dry = args.includes("--dry");
 const iDossier = args.indexOf("--dossier");
 const DOSSIER = iDossier >= 0 ? path.resolve(args[iDossier + 1]) : path.join(os.homedir(), "Desktop/ROBI_DOC/VALIDÉ");
+
+const iLier = args.indexOf("--lier");
+const lier = iLier >= 0 ? { fichier: path.basename(args[iLier + 1] ?? ""), adId: args[iLier + 2] ?? "" } : null;
+if (lier && (!lier.fichier || !lier.adId)) {
+  console.error("Usage : npx tsx scripts/syncCreas.ts --lier <fichier.mp4> <id de pub Meta | aucun>");
+  process.exit(1);
+}
 
 const RAW = process.env.FIREBASE_SERVICE_ACCOUNT;
 const BUCKET = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
@@ -132,7 +141,24 @@ const extraireCouverture = (video: string, nom: string) => {
 };
 
 // ── Synchro ───────────────────────────────────────────────────────────
+/** Même champ que le menu « Relier à une pub Meta » de l'onglet Ads. */
+const lierPub = async ({ fichier, adId }: { fichier: string; adId: string }) => {
+  const ref = db!.doc(`adCreatives/${fichier}`);
+  if (!(await ref.get()).exists) {
+    console.error(`Créa inconnue : ${fichier}. Lancer d'abord la synchro (sans --lier).`);
+    process.exit(1);
+  }
+  const retirer = adId === "aucun";
+  if (!retirer && !/^\d+$/.test(adId)) {
+    console.error(`« ${adId} » n'est pas un id de pub Meta (chiffres uniquement, ex. 120212345678901234).`);
+    process.exit(1);
+  }
+  await ref.update({ metaAdId: retirer ? FieldValue.delete() : adId });
+  console.log(retirer ? `✓ ${fichier} — lien retiré` : `✓ ${fichier} — reliée à la pub ${adId}`);
+};
+
 const main = async () => {
+  if (lier) return lierPub(lier);
   const lignes = lireReadme();
   if (!lignes.length) {
     console.error(`Aucune ligne de créa lue dans ${path.join(DOSSIER, "README.md")}.`);
