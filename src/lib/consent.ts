@@ -3,7 +3,7 @@
  *
  * Deux catégories non essentielles sont soumises à consentement :
  *  - `analytics`  : Google Analytics 4
- *  - `marketing`  : Tolt + Reditus (affiliation)
+ *  - `marketing`  : Tolt + Reditus (affiliation), pixel Meta (mesure des publicités)
  *
  * Les cookies strictement nécessaires (auth, langue, thème) et la mesure
  * d'audience interne (VisitLogger → Firestore, agrégée, sans identifiant
@@ -13,7 +13,7 @@
 export const CONSENT_STORAGE_KEY = "robi_cookie_consent";
 
 /** Version du bandeau. L'incrémenter invalide les choix passés (nouveau tracker, etc.). */
-export const CONSENT_VERSION = 1;
+export const CONSENT_VERSION = 2; // v2 (27/09/2026) : ajout du pixel Meta dans « marketing »
 
 export type ConsentCategory = "analytics" | "marketing";
 

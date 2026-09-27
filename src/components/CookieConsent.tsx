@@ -90,7 +90,7 @@ export function CookieConsent({ locale, dict }: CookieConsentProps) {
                   title={t.marketingTitle || "Cookies marketing"}
                   description={
                     t.marketingDescription ||
-                    "Suivi des programmes d'affiliation (Tolt, Reditus)."
+                    "Suivi des programmes d'affiliation (Tolt, Reditus) et mesure de nos publicités Meta (Facebook, Instagram)."
                   }
                   checked={marketing}
                   onChange={setMarketing}

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyPolarSignature, toMajorUnits } from "@/lib/polarWebhook";
+import { sendMetaEvent } from "@/lib/metaCapi";
 
 /**
  * Endpoint: /api/webhooks/polar
@@ -71,7 +72,20 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 4. Notify Reditus
+    // 4. Meta (API Conversions) : l'achat réel, pour le ROI des pubs.
+    // Seulement sur order.created — un abonnement émet aussi un order à chaque
+    // paiement, compter subscription.created en plus ferait un doublon.
+    if (event.type === "order.created") {
+      await sendMetaEvent({
+        eventName: "Purchase",
+        eventId: `polar_${transactionId}`,
+        email: customerEmail,
+        value: toMajorUnits(amount) ?? undefined,
+        currency,
+      });
+    }
+
+    // 5. Notify Reditus
     if (REDITUS_API_KEY) {
       try {
         await fetch("https://app.getreditus.com/api/v1/payments", {

@@ -6,6 +6,7 @@ import { Footer } from "@/components/layouts/Footer";
 import { AffiliateTracking } from "@/components/AffiliateTracking";
 import { VisitLogger } from "@/components/VisitLogger";
 import { PostHogTracking } from "@/components/PostHogTracking";
+import { MetaPixel } from "@/components/MetaPixel";
 import { ConsentModeSync } from "@/components/ConsentModeSync";
 import { CookieConsent } from "@/components/CookieConsent";
 import { locales, Locale, defaultLocale } from "@/lib/i18n/config";
@@ -104,6 +105,7 @@ export default async function LocaleLayout({
         <AffiliateTracking />
         <VisitLogger />
         <PostHogTracking />
+        <MetaPixel />
         <Header locale={locale} dict={dict} />
         <main>{children}</main>
         <Footer locale={locale} dict={dict} />
