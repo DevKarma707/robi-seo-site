@@ -9,6 +9,7 @@ import {
   computeDisplayedSold, fetchAppStats, fetchHealthReport, fetchLaunchConfig,
   type AppStats, type HealthReport, type LaunchConfig,
 } from "@/lib/adminApi";
+import { diagnoseAi, isAiProblem } from "@/lib/aiHealth";
 import { ACCENT_INK, btn, card, kpiLabel, kpiValue, sectionTitle } from "./ui";
 import { CountUp } from "./motion";
 
@@ -74,9 +75,39 @@ export function buildAlerts(
 ): Alert[] {
   const alerts: Alert[] = [];
 
-  // — Technique : la fonction santé calcule déjà des problèmes en clair.
+  // — Technique : l'IA d'abord, avec sa cause et le geste à faire. Les lignes
+  //   génériques du rapport (« 4 échec(s) de génération IA ») ne disaient ni
+  //   pourquoi ni quoi faire : le quota Gemini épuisé du 25/09 est passé
+  //   inaperçu alors qu'une nouvelle inscrite l'a pris en pleine figure.
+  const ai = diagnoseAi(health);
+  if (ai) {
+    const when = (iso: string | null) =>
+      iso ? ` — dernière fois le ${new Date(iso).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" })}` : "";
+    ai.causes.forEach((cause) => {
+      alerts.push({
+        id: `ai-${cause.kind}`,
+        severity: cause.blocking ? "down" : "warn",
+        domain: "Technique",
+        title: `IA : ${cause.label} (${cause.count}×${when(cause.lastSeen)})`,
+        action: cause.action,
+        goTo: "sante",
+      });
+    });
+    if (ai.latencyWorstMs !== null && ai.latencyWorstMs > 30_000) {
+      alerts.push({
+        id: "ai-slow",
+        severity: "warn",
+        domain: "Technique",
+        title: `IA : jusqu'à ${Math.round(ai.latencyWorstMs / 1000)} s pour répondre`,
+        action: "Au-delà de 30 s, l'utilisateur croit que c'est planté. Regarder la taille des demandes et le modèle (GEMINI_MODEL).",
+        goTo: "sante",
+      });
+    }
+  }
+
+  // — Technique : les autres problèmes calculés par la fonction santé.
   if (health) {
-    health.problems.forEach((problem, i) => {
+    health.problems.filter((p) => !isAiProblem(p)).forEach((problem, i) => {
       alerts.push({
         id: `health-${i}`,
         severity: health.severity === "down" ? "down" : "warn",
@@ -373,7 +404,11 @@ const CockpitTab: React.FC<{ onNavigate?: (tab: TabId) => void }> = ({ onNavigat
       >
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <Kpi label="Plantages client" value={health?.clientErrors.total ?? "—"} sub={health ? `${health.clientErrors.affectedUsers} utilisateurs` : undefined} />
-          <Kpi label="Échecs IA" value={health?.aiFailures.total ?? "—"} sub="sur 7 jours" />
+          <Kpi
+            label="Échecs IA"
+            value={health?.aiFailures.total ?? "—"}
+            sub={health?.aiPerformance ? `sur ${health.aiPerformance.calls} appels · 7 j` : "sur 7 jours"}
+          />
           <Kpi
             label="Emails en échec"
             value={health?.emails.failureRate != null ? `${health.emails.failureRate} %` : "—"}

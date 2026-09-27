@@ -6,6 +6,7 @@ import {
   RefreshCw, Sparkles, ServerCrash, XCircle,
 } from "lucide-react";
 import { fetchHealthReport, type HealthReport, type HealthSignature } from "@/lib/adminApi";
+import { diagnoseAi, type AiDiagnosis } from "@/lib/aiHealth";
 import { ACCENT, ACCENT_INK, btn, card } from "./ui";
 
 const RED = "#f87171";
@@ -42,6 +43,80 @@ const relative = (iso?: string | null) => {
   if (h < 24) return `il y a ${h} h`;
   return `il y a ${Math.round(h / 24)} j`;
 };
+
+const AI_STATUS: Record<AiDiagnosis["status"], { label: string; color: string }> = {
+  ok: { label: "répond", color: ACCENT },
+  degraded: { label: "instable", color: AMBER },
+  down: { label: "bloquée", color: RED },
+};
+
+/**
+ * L'IA en clair : état, cause de chaque échec, date, geste à faire.
+ * « 4 échec(s) de génération IA » ne suffisait pas : le quota Gemini épuisé
+ * du 25/09 n'était lisible qu'en ouvrant les signatures une à une.
+ */
+function AiCard({ ai }: { ai: AiDiagnosis }) {
+  const st = AI_STATUS[ai.status];
+  const sec = (ms: number | null) => (ms === null ? "—" : `${Math.round(ms / 1000)} s`);
+  return (
+    <div className={`${card} p-5 border-l-4`} style={{ borderLeftColor: st.color }}>
+      <div className="flex items-center gap-2 mb-3">
+        <Sparkles size={15} style={{ color: st.color }} />
+        <p className="text-xs font-black uppercase tracking-widest text-slate-900">IA de l&apos;app</p>
+        <span
+          className="ml-auto text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider"
+          style={{ backgroundColor: `${st.color}22`, color: st.color }}
+        >
+          {st.label}
+        </span>
+      </div>
+
+      {ai.causes.length === 0 ? (
+        <p className="text-xs text-slate-600">Aucun échec sur la période.</p>
+      ) : (
+        <ul className="space-y-3">
+          {ai.causes.map((c) => (
+            <li key={c.kind}>
+              <p className="text-[13px] font-bold text-slate-900 flex items-start gap-2">
+                <span className="mt-[7px] w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: c.blocking ? RED : AMBER }} />
+                {c.label}
+              </p>
+              <p className="text-[11px] text-slate-500 ml-3.5 mt-0.5">
+                {c.count} fois · dernière le {fmtDate(c.lastSeen)} ({relative(c.lastSeen)})
+              </p>
+              <p className="text-[12px] text-slate-700 ml-3.5 mt-1">
+                <span className="font-bold">À faire : </span>{c.action}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 pt-4 border-t border-slate-200">
+        <div>
+          <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Appels</p>
+          <p className="text-sm font-bold text-slate-900">{ai.calls ?? "—"}</p>
+        </div>
+        <div>
+          <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Taux d&apos;échec</p>
+          <p className="text-sm font-bold" style={{ color: ai.failureRate !== null && ai.failureRate >= 20 ? RED : undefined }}>
+            {ai.failureRate === null ? "—" : `${ai.failureRate} %`}
+          </p>
+        </div>
+        <div>
+          <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Temps médian</p>
+          <p className="text-sm font-bold text-slate-900">{sec(ai.latencyP50Ms)}</p>
+        </div>
+        <div>
+          <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Pire temps</p>
+          <p className="text-sm font-bold" style={{ color: ai.latencyWorstMs !== null && ai.latencyWorstMs > 30_000 ? AMBER : undefined }}>
+            {sec(ai.latencyWorstMs)}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function Kpi({
   label, value, sub, icon, tone,
@@ -201,6 +276,7 @@ const SanteTab: React.FC = () => {
   if (!report) return null;
 
   const sev = SEVERITY[report.severity];
+  const ai = diagnoseAi(report);
   const cronLate = report.cron.staleHours === null || report.cron.staleHours > 26;
   const cronMeta = (report.cron.last?.meta || {}) as Record<string, number | string>;
 
@@ -246,6 +322,8 @@ const SanteTab: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {ai && <AiCard ai={ai} />}
 
       {/* KPIs */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

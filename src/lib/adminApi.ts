@@ -90,6 +90,15 @@ export interface HealthReport {
   emails: { sent: number | null; failed: number | null; failureRate: number | null };
   clientErrors: { total: number; affectedUsers: number; top: HealthSignature[] };
   aiFailures: { total: number; top: HealthSignature[] };
+  /** Appels IA agrégés (latence, taux d'échec). Absent des rapports anciens. */
+  aiPerformance?: {
+    calls: number;
+    failures: number;
+    failureRate: number | null;
+    latencyAvgMs: number | null;
+    latencyP50ApproxMs: number | null;
+    latencyP95WorstMs: number | null;
+  };
   emailErrors: { total: number; top: HealthSignature[] };
   functionErrors: { total: number; bySource: Record<string, number>; top: HealthSignature[] };
   cron: { last: { at: string; source: string; meta: Record<string, unknown> } | null; staleHours: number | null };
