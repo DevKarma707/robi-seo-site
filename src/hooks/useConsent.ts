@@ -7,6 +7,7 @@ import {
   DENIED_ALL,
   clearConsent,
   readConsent,
+  syncMarketingCookie,
   writeConsent,
 } from "@/lib/consent";
 
@@ -23,8 +24,12 @@ export function useConsent() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setConsent(readConsent());
+    const initial = readConsent();
+    setConsent(initial);
     setReady(true);
+    // Recopie le choix existant dans le cookie partagé avec l'app (choix faits
+    // avant l'existence du cookie, ou cookie effacé entre-temps).
+    syncMarketingCookie(initial);
 
     const onChange = () => setConsent(readConsent());
     window.addEventListener(CONSENT_EVENT, onChange);

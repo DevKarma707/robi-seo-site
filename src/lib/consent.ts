@@ -36,6 +36,25 @@ export const GRANTED_ALL: Omit<ConsentState, "version" | "date"> = {
   marketing: true,
 };
 
+/**
+ * Copie du choix « marketing » dans un cookie posé sur `.robi-app.com`, pour
+ * que l'app (go.robi-app.com) le respecte : le localStorage du site ne lui est
+ * pas lisible. Sans lui, l'app ne peut pas savoir si elle a le droit d'envoyer
+ * l'inscription à Meta. Même mécanisme que `robi_interne` (lib/internalTraffic).
+ * « 1 » = accepté, « 0 » = refusé, absent = pas de choix (donc refusé).
+ */
+export const MARKETING_COOKIE = "robi_mkt";
+const TREIZE_MOIS = 60 * 60 * 24 * 395; // durée max d'un choix recommandée par la CNIL
+
+export function syncMarketingCookie(state: Pick<ConsentState, "marketing"> | null): void {
+  if (typeof document === "undefined") return;
+  const domain = window.location.hostname.endsWith("robi-app.com") ? "; domain=.robi-app.com" : "";
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = state
+    ? `${MARKETING_COOKIE}=${state.marketing ? "1" : "0"}; path=/; max-age=${TREIZE_MOIS}; SameSite=Lax${domain}${secure}`
+    : `${MARKETING_COOKIE}=; path=/; max-age=0; SameSite=Lax${domain}${secure}`;
+}
+
 /** Évènement émis quand le choix change, pour que les composants se remontent. */
 export const CONSENT_EVENT = "robi:consent-change";
 
@@ -76,6 +95,7 @@ export function writeConsent(choice: Omit<ConsentState, "version" | "date">): Co
       // localStorage indisponible (navigation privée stricte) : on n'échoue pas,
       // le choix vaudra pour la session en cours via l'évènement ci-dessous.
     }
+    syncMarketingCookie(state);
     window.dispatchEvent(new CustomEvent<ConsentState>(CONSENT_EVENT, { detail: state }));
   }
   return state;
@@ -89,6 +109,7 @@ export function clearConsent(): void {
   } catch {
     // idem : pas de localStorage, rien à effacer.
   }
+  syncMarketingCookie(null);
   window.dispatchEvent(new CustomEvent(CONSENT_EVENT, { detail: null }));
 }
 
