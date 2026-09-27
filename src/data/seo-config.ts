@@ -913,16 +913,6 @@ export const blogPosts = [
     author: "Équipe Robi AI",
   },
   {
-    slug: "mentions-obligatoires-facture",
-    title: { fr: "Les Mentions Obligatoires sur une Facture en 2026", en: "Mandatory Information on an Invoice in 2026", es: "Información Obligatoria en una Factura en 2026", "pt-BR": "Informações Obrigatórias em uma Fatura em 2026" },
-    description: { fr: "Liste complète et à jour des mentions légales obligatoires sur vos factures pour éviter tout litige.", en: "Complete and up-to-date list of mandatory legal mentions on your invoices to avoid disputes.", es: "Lista completa y actualizada de las menciones legales obligatorias en tus facturas.", "pt-BR": "Lista completa e atualizada de informações legais obrigatórias nas suas faturas para evitar litígios." },
-    keywords: ["mentions obligatoires facture", "facture légale", "facture conforme 2026"],
-    category: "legal",
-    date: "2025-02-20",
-    readTime: { fr: 6, en: 6, es: 6 },
-    author: "Équipe Robi AI",
-  },
-  {
     slug: "relancer-client-impaye",
     title: { fr: "Comment Relancer un Client qui ne Paie Pas ? (5 Méthodes)", en: "How to Follow Up on an Unpaid Client? (5 Methods)", es: "¿Cómo Reclamar a un Cliente que No Paga? (5 Métodos)", "pt-BR": "Como Cobrar um Cliente que Não Paga? (5 Métodos)" },
     description: { fr: "5 techniques éprouvées pour relancer efficacement vos clients en retard sans abîmer la relation.", en: "5 proven techniques to effectively follow up on late clients without damaging the relationship.", es: "5 técnicas probadas para reclamar eficazmente a tus clientes morosos sin dañar la relación.", "pt-BR": "5 técnicas comprovadas para cobrar clientes atrasados com eficácia sem prejudicar o relacionamento." },
