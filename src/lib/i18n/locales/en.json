@@ -290,6 +290,7 @@
     "subtext": "4 free invoices or quotes a month • No credit card required"
   },
   "footer": {
+    "aiInvoice": "AI invoice",
     "description": "The AI assistant that saves you 10 hours per month on invoicing.",
     "product": "Product",
     "industries": "Industries",

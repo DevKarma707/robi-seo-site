@@ -290,6 +290,7 @@
     "subtext": "4 factures ou devis gratuits par mois • Sans carte bancaire"
   },
   "footer": {
+    "aiInvoice": "Facture IA",
     "description": "L'assistant IA qui vous fait gagner 10h par mois sur votre facturation.",
     "product": "Produit",
     "industries": "Industries",

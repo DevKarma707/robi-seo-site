@@ -290,6 +290,7 @@
     "subtext": "4 facturas o presupuestos gratis al mes • Sin tarjeta de crédito"
   },
   "footer": {
+    "aiInvoice": "Factura IA",
     "description": "El asistente de IA que te ahorra 10 horas al mes en facturación.",
     "product": "Producto",
     "industries": "Industrias",
