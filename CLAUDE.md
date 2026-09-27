@@ -5,7 +5,7 @@
 **Always deploy via `git push origin main`. Never use `vercel deploy --prod`.**
 
 The repo `DevKarma707/robi-seo-site` is connected to Vercel project
-`robi-seo-site` (team `quoteless-ai`, production domain `robi-app.com`).
+`robi-seo-site` (team `late-night-studio`, production domain `robi-app.com`).
 Every push to `main` triggers an automatic build + production deploy.
 
 Running `vercel deploy --prod` from CLI is redundant — it duplicates work
