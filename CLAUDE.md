@@ -35,7 +35,7 @@ codebases. Certains sujets sont à cheval : Polar a son webhook ici
 ## L'admin (`/admin`)
 
 Tableau de bord privé (Google sign-in, emails en dur dans `src/lib/firebase.ts`).
-Onglets : Cockpit, Pilotage, Tâches, Réseaux, Fichiers, Santé, Acquisition,
+Onglets : Cockpit, Pilotage, Tâches, Réseaux, Ads, Fichiers, Santé, Acquisition,
 Influenceurs, Analytics, SEO, Blog, Lancement.
 
 ### Imports JSON : un bouton = un skill
@@ -89,6 +89,14 @@ sous un autre nom.
   Écoute sur `127.0.0.1:4599`, ouvre une fenêtre VS Code par tâche et
   synchronise le dossier partagé dans `~/Desktop/ROBI_PARTAGE`. Jamais
   déployé : il ne tourne que sur le Mac de Ralph.
+- **Ads** — `src/components/admin/AdsTab.tsx`. Dépenses/diffusion lues dans
+  l'API Marketing Meta par `/api/admin/meta-ads` (env `META_ADS_ACCESS_TOKEN`,
+  jeton utilisateur système `ads_read`, jamais côté navigateur ;
+  `META_AD_ACCOUNT_ID` défaut 1585474145862630 = compte « Robi AI »).
+  Bibliothèque des créas = collection `adCreatives`, alimentée par
+  `npx tsx scripts/syncCreas.ts` depuis `~/Desktop/ROBI_DOC/VALIDÉ/README.md`
+  (à relancer après chaque créa validée ; ne ré-envoie pas un média déjà en place).
+  Plans de campagne = même `CampagnesBlock` que Réseaux.
 - **Fichiers** — dépôt dans Firebase Storage sous `partage/`, en lecture
   réservée à l'admin (contrairement à `blog/`, public). Nécessite que
   Storage soit provisionné sur le projet `robi-ai-website`.

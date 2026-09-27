@@ -61,6 +61,11 @@ service cloud.firestore {
     match /socialMarkets/{id} {
       allow read, create, update, delete: if isAdmin();
     }
+    // Bibliothèque des créas (onglet Ads) : écrite par scripts/syncCreas.ts
+    // (compte de service), l'admin ne fait que relier une créa à une pub.
+    match /adCreatives/{id} {
+      allow read, update: if isAdmin();
+    }
 
     // ── Désinscriptions ──
     // Le lien d'opt-out est cliqué par un destinataire non authentifié : la

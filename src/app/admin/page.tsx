@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks, FolderOpen, CalendarDays, Compass, TrendingDown, Search, Wallet } from "lucide-react";
+import { BarChart2, FileText, LogOut, ArrowUpRight, RefreshCw, Gauge, Rocket, HeartPulse, Target, Megaphone, ListChecks, FolderOpen, CalendarDays, Compass, TrendingDown, Search, Wallet, BadgeEuro } from "lucide-react";
 import {
   auth, onAuthStateChanged, signInWithGoogle, signOut, isAllowedEmail, firebaseReady,
   subscribeToArticles, subscribeToVisits, type Article, type VisitStats, type User,
@@ -23,12 +23,13 @@ import InfluenceursTab from "@/components/admin/InfluenceursTab";
 import KanbanTab from "@/components/admin/KanbanTab";
 import FichiersTab from "@/components/admin/FichiersTab";
 import ReseauxTab from "@/components/admin/ReseauxTab";
+import AdsTab from "@/components/admin/AdsTab";
 import ThemePicker from "@/components/admin/ThemePicker";
 import ModeToggle from "@/components/admin/ModeToggle";
 import { Toaster } from "@/components/admin/toast";
 import { focusRing } from "@/components/admin/ui";
 
-type Tab = "cockpit" | "pilotage" | "depenses" | "kanban" | "reseaux" | "fichiers" | "sante" | "produit" | "acquisition" | "influenceurs" | "analytics" | "seo" | "blog" | "lancement";
+type Tab = "cockpit" | "pilotage" | "depenses" | "kanban" | "reseaux" | "ads" | "fichiers" | "sante" | "produit" | "acquisition" | "influenceurs" | "analytics" | "seo" | "blog" | "lancement";
 
 const EMPTY_VISITS: VisitStats = {
   today: 0, week: 0, prevWeek: 0, month: 0, days: [], byPage: [], bySource: [],
@@ -154,6 +155,7 @@ export default function AdminPage() {
     { id: "depenses", label: "Dépenses", icon: <Wallet {...ICON} /> },
     { id: "kanban", label: "Tâches", icon: <ListChecks {...ICON} /> },
     { id: "reseaux", label: "Réseaux", icon: <CalendarDays {...ICON} /> },
+    { id: "ads", label: "Ads", icon: <BadgeEuro {...ICON} /> },
     { id: "fichiers", label: "Fichiers", icon: <FolderOpen {...ICON} /> },
     { id: "sante", label: "Santé", icon: <HeartPulse {...ICON} /> },
     { id: "produit", label: "Produit", icon: <TrendingDown {...ICON} /> },
@@ -171,6 +173,7 @@ export default function AdminPage() {
     depenses: "Ce que Robi coûte : consommation IA mesurée, factures saisies",
     kanban: "Le backlog du lancement, colonne par colonne",
     reseaux: "Calendrier éditorial : posts, visuels et statuts",
+    ads: "Les créas, ce qui tourne sur Meta, ce que ça coûte et rapporte",
     fichiers: "Le dossier de travail partagé avec Claude",
     produit: "Le tunnel et les bugs, lus dans PostHog",
     sante: "Ce qui casse en silence : emails, plantages, IA, crons",
@@ -252,6 +255,7 @@ export default function AdminPage() {
             {tab === "depenses" && <DepensesTab />}
             {tab === "kanban" && <KanbanTab />}
             {tab === "reseaux" && <ReseauxTab />}
+            {tab === "ads" && <AdsTab />}
             {tab === "fichiers" && <FichiersTab />}
             {tab === "sante" && <SanteTab />}
             {tab === "produit" && <ProduitTab />}

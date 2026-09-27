@@ -214,3 +214,53 @@ export interface ProduitReport {
 
 export const fetchProduitReport = (days = 7) =>
   authedFetch(`/api/admin/posthog?days=${days}`) as Promise<ProduitReport>;
+
+// ─── Ads (Meta) ──────────────────────────────────────────────────────
+// Lu dans l'API Marketing par /api/admin/meta-ads : le jeton Meta reste sur
+// le serveur, le navigateur ne reçoit que des agrégats.
+
+export interface MetaAdRow {
+  id: string;
+  name: string;
+  /** effective_status Meta : ACTIVE, PAUSED, CAMPAIGN_PAUSED, ADSET_PAUSED, PENDING_REVIEW, DISAPPROVED, WITH_ISSUES… */
+  status: string;
+  createdAt: string | null;
+  campaign: { id: string; name: string; objective: string | null } | null;
+  adset: { id: string; name: string; optimizationGoal: string | null } | null;
+  dailyBudget: number | null;
+  lifetimeBudget: number | null;
+  thumbnail: string | null;
+  spend: number;
+  impressions: number;
+  reach: number;
+  clicks: number;
+  ctr: number | null;
+  cpc: number | null;
+  cpm: number | null;
+  results: number;
+  /** Ce que « résultat » veut dire pour cette pub (achats, inscriptions, clics…), null si rien ne remonte. */
+  resultLabel: string | null;
+  costPerResult: number | null;
+  roas: number | null;
+}
+
+export interface MetaAdsReport {
+  configured: boolean;
+  accountId?: string;
+  account?: { id: string; name: string; currency: string; timezone: string; status: number; lifetimeSpend: number };
+  /** Toutes les sommes sur 30 jours glissants, aujourd'hui compris (fuseau du compte). */
+  totals?: {
+    today: number; d7: number; d30: number;
+    impressions: number; clicks: number;
+    cpm: number | null; cpc: number | null; ctr: number | null;
+    results: number; resultLabel: string | null; costPerResult: number | null;
+    purchaseValue: number; roas: number | null;
+  };
+  daily?: { date: string; spend: number; impressions: number; clicks: number; results: number }[];
+  ads?: MetaAdRow[];
+  /** null = lecture refusée ; [] = aucun pixel sur le compte. */
+  pixels?: { id: string; name: string; lastFired: string | null }[] | null;
+  computedAt?: string;
+}
+
+export const getMetaAds = () => authedFetch("/api/admin/meta-ads") as Promise<MetaAdsReport>;
