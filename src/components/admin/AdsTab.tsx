@@ -2,10 +2,14 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  AlertTriangle, BadgeEuro, Check, ClipboardCheck, Copy, Film, Link2, Play, Plug, RefreshCw, Target,
+  AlertTriangle, BadgeEuro, Check, ClipboardCheck, Copy, Film, Link2, List, Play, Plug, RefreshCw, Target, Trophy,
 } from "lucide-react";
-import { getMetaAds, type MetaAdRow, type MetaAdsReport } from "@/lib/adminApi";
+import { getMetaAds, type MetaAdRow, type MetaAdsReport, type MetaPeriode } from "@/lib/adminApi";
 import { subscribeToCreatives, linkCreativeToAd, type AdCreative } from "@/lib/adCreatives";
+import {
+  classerCreas, SEUIL_DEPENSE, SEUIL_IMPRESSIONS,
+  type Critere, type LigneCrea, type StatutCrea, type Verdict,
+} from "@/lib/adsClassement";
 import { subscribeToPosts, type SocialPost } from "@/lib/socialPosts";
 import { ACCENT_INK, btn, card, focusRing, kpiLabel, kpiValue, sectionTitle, select } from "./ui";
 import { AreaCurve, CountUp } from "./motion";
@@ -14,6 +18,9 @@ import { toast } from "./toast";
 
 /**
  * Onglet Ads : ce qui tourne, ce que ça coûte, ce que ça rapporte.
+ *
+ * En tête, le classement des créas : quelle vidéo tourne, laquelle coûte le
+ * moins cher par résultat, laquelle couper (règles dans lib/adsClassement.ts).
  *
  * Trois sources, du plus mesuré au plus déclaratif :
  *   1. Meta (API Marketing, via /api/admin/meta-ads) — dépense, diffusion, résultats ;
@@ -43,6 +50,30 @@ const STATUS: Record<string, { label: string; color: string }> = {
 };
 const statusOf = (s: string) => STATUS[s] ?? { label: s.toLowerCase().replace(/_/g, " "), color: "#94a3b8" };
 const ORDRE_STATUT = ["ACTIVE", "PENDING_REVIEW", "IN_PROCESS", "PREAPPROVAL", "WITH_ISSUES", "DISAPPROVED", "PENDING_BILLING_INFO", "ADSET_PAUSED", "CAMPAIGN_PAUSED", "PAUSED"];
+
+const PERIODES: { id: MetaPeriode; label: string; texte: string }[] = [
+  { id: "7", label: "7 j", texte: "sur 7 jours" },
+  { id: "30", label: "30 j", texte: "sur 30 jours" },
+  { id: "max", label: "Tout", texte: "depuis le début" },
+];
+
+const VERDICT: Record<Verdict, { label: string; color: string }> = {
+  meilleure: { label: "La meilleure", color: "#BEF221" },
+  bonne: { label: "Bonne", color: "#10B981" },
+  moyenne: { label: "Moyenne", color: "#94a3b8" },
+  couper: { label: "À couper", color: RED },
+  tot: { label: "Trop tôt", color: "#94a3b8" },
+  attente: { label: "Pas encore diffusée", color: "#94a3b8" },
+};
+
+const STATUT_CREA: Record<StatutCrea, { label: string; color: string }> = {
+  diffusion: { label: "En diffusion", color: "#10B981" },
+  probleme: { label: "Problème chez Meta", color: RED },
+  revue: { label: "En revue", color: "#6366f1" },
+  programmee: { label: "Programmée", color: "#6366f1" },
+  pause: { label: "En pause", color: "#f59e0b" },
+  terminee: { label: "Terminée", color: "#94a3b8" },
+};
 
 const fmtDay = (iso: string) =>
   new Date(`${iso}T12:00:00Z`).toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
@@ -119,6 +150,149 @@ function RappelPixel({ pixels }: { pixels: { name: string; lastFired: string | n
         calculer ni coût par inscription ni ROAS. À poser avant de lancer les pubs peintre : pixel sur robi-app.com et
         go.robi-app.com, avec <span className="a-mono">CompleteRegistration</span> à l&apos;inscription et{" "}
         <span className="a-mono">Purchase</span> (valeur + devise) au paiement.
+      </p>
+    </div>
+  );
+}
+
+// ─── Classement des créas ─────────────────────────────────────────────
+
+function ChipVerdict({ v }: { v: Verdict }) {
+  if (v === "meilleure") {
+    return (
+      <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-[var(--color-accent)] text-[var(--a-on-accent)] whitespace-nowrap">
+        <Trophy size={11} /> La meilleure
+      </span>
+    );
+  }
+  const d = VERDICT[v];
+  return (
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full border border-slate-200 text-slate-700 whitespace-nowrap">
+      <Dot color={d.color} /> {d.label}
+    </span>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="min-w-0">
+      <dt className="text-[10.5px] text-slate-500 whitespace-nowrap">{label}</dt>
+      <dd className="a-mono text-[12.5px] text-slate-800 tabular-nums whitespace-nowrap">{value}</dd>
+    </div>
+  );
+}
+
+function LigneClassement({
+  l, rang, critere, money,
+}: {
+  l: LigneCrea;
+  rang: number;
+  critere: Critere;
+  money: ReturnType<typeof moneyFmt>;
+}) {
+  const st = STATUT_CREA[l.statut];
+  const sousCout =
+    l.verdict === "tot"
+      ? `${int(l.impressions)} / ${int(SEUIL_IMPRESSIONS)} impr. pour juger`
+      : l.resultats
+        ? `par ${critere.label} · ${int(l.resultats)} ${l.resultats > 1 ? critere.pluriel : critere.label}`
+        : `par ${critere.label}`;
+  return (
+    <div className="flex flex-col md:flex-row md:items-center gap-3 py-3 border-b border-slate-200 last:border-0">
+      <div className="flex items-center gap-3 min-w-0 md:w-[320px] shrink-0">
+        <span className="a-mono w-5 text-right text-[12px] text-slate-400 shrink-0">{rang}</span>
+        {l.cover ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={l.cover} alt="" loading="lazy" className="w-9 h-16 rounded-md object-cover shrink-0 border border-slate-200" />
+        ) : (
+          <span className="w-9 h-16 rounded-md shrink-0 border border-slate-200 flex items-center justify-center text-slate-400"><Film size={14} /></span>
+        )}
+        <div className="min-w-0">
+          <p className="text-[13.5px] font-bold text-slate-900 truncate" title={l.titre}>
+            {l.titre}
+            {l.langue && <span className="a-mono ml-1.5 text-[10.5px] font-medium text-slate-400">{l.langue}</span>}
+          </p>
+          <p className="text-[11.5px] text-slate-500 flex items-center gap-1.5 min-w-0">
+            <Dot color={st.color} />
+            <span className="truncate">
+              {st.label}
+              {l.debut ? ` · démarre le ${fmtDay(l.debut.slice(0, 10))}` : ""}
+              {l.ads.length > 1 ? ` · ${l.ads.length} pubs` : ""}
+              {!l.crea ? " · hors VALIDÉ" : ""}
+            </span>
+          </p>
+        </div>
+      </div>
+      <div className="md:w-[130px] shrink-0 pl-8 md:pl-0"><ChipVerdict v={l.verdict} /></div>
+      <div className="md:w-[190px] shrink-0 pl-8 md:pl-0">
+        <p className={`a-mono text-[15px] font-semibold ${l.verdict === "couper" ? "" : "text-slate-900"}`} style={l.verdict === "couper" ? { color: RED } : undefined}>
+          {l.cout !== null ? money(l.cout) : "—"}
+        </p>
+        <p className="text-[11px] text-slate-500">{sousCout}</p>
+      </div>
+      <dl className="grid grid-cols-4 gap-3 flex-1 min-w-0 pl-8 md:pl-0">
+        <Stat label="Dépensé" value={money(l.spend)} />
+        <Stat label="Impressions" value={int(l.impressions)} />
+        <Stat label="Accroche 3 s" value={pct(l.hook)} />
+        <Stat label="Clic lien" value={pct(l.ctr)} />
+      </dl>
+    </div>
+  );
+}
+
+function Classement({
+  lignes, critere, periode, setPeriode, chargement, money,
+}: {
+  lignes: LigneCrea[];
+  critere: Critere;
+  periode: MetaPeriode;
+  setPeriode: (p: MetaPeriode) => void;
+  chargement: boolean;
+  money: ReturnType<typeof moneyFmt>;
+}) {
+  const enDiffusion = lignes.filter((l) => l.statut === "diffusion").length;
+  const texte = PERIODES.find((p) => p.id === periode)!.texte;
+  return (
+    <div className={`${card} p-5 space-y-2`}>
+      <div className="flex flex-wrap items-center gap-2">
+        <h3 className={sectionTitle}><span className="flex items-center gap-1.5"><Trophy size={14} /> Classement des créas</span></h3>
+        <span className="text-[11px] text-slate-400">
+          {lignes.length
+            ? `${enDiffusion} en diffusion · classées au coût par ${critere.label} ${texte}`
+            : texte}
+        </span>
+        <div className="ml-auto flex gap-1.5" role="group" aria-label="Période">
+          {PERIODES.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => setPeriode(p.id)}
+              disabled={chargement}
+              aria-pressed={periode === p.id}
+              className={`${btn} !py-1 ${periode === p.id ? "!bg-slate-900/[0.06] !text-slate-900 !border-slate-300" : ""}`}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {lignes.length ? (
+        <div>
+          {lignes.map((l, i) => (
+            <LigneClassement key={l.key} l={l} rang={i + 1} critere={critere} money={money} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-[13px] text-slate-600 py-2">
+          Aucune pub publiée sur le compte. Les brouillons du Gestionnaire de publicités n&apos;apparaissent ici
+          qu&apos;une fois publiés — chaque vidéo de VALIDÉ est alors reconnue toute seule.
+        </p>
+      )}
+
+      <p className="text-[11px] text-slate-400 leading-relaxed">
+        Une créa se juge à partir de {int(SEUIL_IMPRESSIONS)} impressions ou {money(SEUIL_DEPENSE, 0)} dépensés.
+        Critère commun : la visite de robi-app.com, puis le clic vers l&apos;app dès 10, l&apos;inscription dès 5,
+        l&apos;achat dès 3. « À couper » : coûte au moins deux fois la meilleure.
       </p>
     </div>
   );
@@ -205,10 +379,11 @@ const FILTRES = [
 ] as const;
 
 function CarteCrea({
-  c, ad, ads, money,
+  c, ligne, ads, money,
 }: {
   c: AdCreative;
-  ad: MetaAdRow | undefined;
+  /** Ses pubs Meta regroupées, si elle en a. */
+  ligne: LigneCrea | undefined;
   ads: MetaAdRow[] | null;
   money: ReturnType<typeof moneyFmt>;
 }) {
@@ -250,9 +425,9 @@ function CarteCrea({
         <span className="a-mono absolute top-2 left-2 text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-black/55 text-white pointer-events-none">
           {c.langue} · {c.duree ? `${c.duree} s` : c.format}
         </span>
-        {ad && (
+        {ligne && (
           <span className="absolute top-2 right-2 inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-black/55 text-white pointer-events-none">
-            <Dot color={statusOf(ad.status).color} /> {statusOf(ad.status).label}
+            <Dot color={STATUT_CREA[ligne.statut].color} /> {STATUT_CREA[ligne.statut].label}
           </span>
         )}
       </div>
@@ -265,12 +440,11 @@ function CarteCrea({
           <p className="text-[11px] text-slate-500 mt-0.5">{c.usages.join(" · ")}</p>
         </div>
 
-        {ad ? (
-          <p className="text-[12px] text-slate-700">
-            <strong className="a-mono text-slate-900">{money(ad.spend)}</strong> sur 30 j
-            {ad.results ? <> · {int(ad.results)} {ad.resultLabel}</> : null}
-            {ad.costPerResult !== null ? <> · {money(ad.costPerResult)}/rés.</> : null}
-          </p>
+        {ligne ? (
+          <div className="flex flex-wrap items-center gap-1.5 text-[12px] text-slate-700">
+            <ChipVerdict v={ligne.verdict} />
+            <span><strong className="a-mono text-slate-900">{money(ligne.spend)}</strong> dépensés</span>
+          </div>
         ) : (
           <p className="text-[12px] text-slate-500">{c.statut || "—"}</p>
         )}
@@ -301,7 +475,8 @@ function CarteCrea({
           </div>
         </details>
 
-        {ads && ads.length > 0 && (
+        {/* Le lien à la main ne sert plus qu'aux créas dont la vidéo n'a pas été notée à l'envoi chez Meta. */}
+        {ads && ads.length > 0 && !c.metaVideoIds?.length && (
           <label className="mt-auto flex items-center gap-1.5 text-[11px] text-slate-500">
             <Link2 size={12} className="shrink-0" />
             <select
@@ -320,11 +495,18 @@ function CarteCrea({
   );
 }
 
-function Bibliotheque({ creas, ads, money }: { creas: AdCreative[] | null; ads: MetaAdRow[] | null; money: ReturnType<typeof moneyFmt> }) {
+function Bibliotheque({
+  creas, ads, lignes, money,
+}: {
+  creas: AdCreative[] | null;
+  ads: MetaAdRow[] | null;
+  lignes: LigneCrea[];
+  money: ReturnType<typeof moneyFmt>;
+}) {
   const [filtre, setFiltre] = useState<(typeof FILTRES)[number]["id"]>("toutes");
   const test = FILTRES.find((f) => f.id === filtre)!.test;
   const visibles = (creas ?? []).filter(test);
-  const enPub = (creas ?? []).filter((c) => c.metaAdId && ads?.some((a) => a.id === c.metaAdId && a.status === "ACTIVE")).length;
+  const enPub = lignes.filter((l) => l.crea && l.statut === "diffusion").length;
 
   return (
     <div className={`${card} p-5 space-y-4`}>
@@ -354,7 +536,7 @@ function Bibliotheque({ creas, ads, money }: { creas: AdCreative[] | null; ads: 
       ) : (
         <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
           {visibles.map((c) => (
-            <CarteCrea key={c.id} c={c} ad={ads?.find((a) => a.id === c.metaAdId)} ads={ads} money={money} />
+            <CarteCrea key={c.id} c={c} ligne={lignes.find((l) => l.crea?.id === c.id)} ads={ads} money={money} />
           ))}
         </div>
       )}
@@ -373,18 +555,19 @@ export default function AdsTab() {
   const [chargement, setChargement] = useState(true);
   const [creas, setCreas] = useState<AdCreative[] | null>(null);
   const [posts, setPosts] = useState<SocialPost[]>([]);
+  const [periode, setPeriode] = useState<MetaPeriode>("30");
 
   const charger = useCallback(async () => {
     setChargement(true);
     setErreur(null);
     try {
-      setData(await getMetaAds());
+      setData(await getMetaAds(periode));
     } catch (e) {
       setErreur(e instanceof Error ? e.message : "Chargement impossible");
     } finally {
       setChargement(false);
     }
-  }, []);
+  }, [periode]);
 
   useEffect(() => { void charger(); }, [charger]);
   useEffect(() => {
@@ -408,6 +591,9 @@ export default function AdsTab() {
     [data]
   );
   const actives = ads?.filter((a) => a.status === "ACTIVE").length ?? 0;
+  const { lignes, critere } = useMemo(() => classerCreas(creas ?? [], ads ?? []), [creas, ads]);
+  const meilleure = lignes.find((l) => l.verdict === "meilleure");
+  const texteperiode = PERIODES.find((p) => p.id === periode)!.texte;
   const pixelMuet = data?.configured && data.pixels !== null && (data.pixels ?? []).every((p) => !p.lastFired);
 
   // Le verdict, lisible avant tout chiffre.
@@ -417,7 +603,7 @@ export default function AdsTab() {
       ? "Meta n'est pas encore branché. Les créas prêtes et les plans de campagne sont à jour ci-dessous."
       : actives === 0
         ? `Rien ne tourne. ${money(t?.d30, 0)} dépensés sur 30 jours.`
-        : `${actives} pub${actives > 1 ? "s" : ""} en cours · ${money(t?.today)} aujourd'hui · ${money(t?.d30, 0)} sur 30 jours${t?.roas ? ` · ROAS ${roasTxt(t.roas)}` : ""}.`;
+        : `${actives} pub${actives > 1 ? "s" : ""} en cours · ${money(t?.today)} aujourd'hui · ${money(t?.d30, 0)} sur 30 jours${t?.roas ? ` · ROAS ${roasTxt(t.roas)}` : ""}${meilleure && meilleure.cout !== null ? ` · meilleure créa : ${meilleure.titre} (${money(meilleure.cout)} par ${critere.label})` : ""}.`;
 
   return (
     <div className="space-y-6">
@@ -467,6 +653,15 @@ export default function AdsTab() {
             <Kpi label="ROAS" value={roasTxt(t.roas)} sub={t.purchaseValue ? `${money(t.purchaseValue, 0)} de ventes attribuées` : "achats non remontés"} />
           </div>
 
+          <Classement
+            lignes={lignes}
+            critere={critere}
+            periode={periode}
+            setPeriode={setPeriode}
+            chargement={chargement}
+            money={money}
+          />
+
           <div className={`${card} p-5`}>
             <div className="flex items-center gap-2 mb-4">
               <BadgeEuro size={14} className="text-slate-500" />
@@ -493,29 +688,33 @@ export default function AdsTab() {
             )}
           </div>
 
-          <div className={`${card} p-5 space-y-4`}>
-            <div className="flex flex-wrap items-center gap-2">
-              <h3 className={sectionTitle}>Pubs en cours</h3>
+          {/* Le détail par pub reste là pour vérifier un chiffre, replié : le classement suffit au quotidien. */}
+          <details className={`${card} p-5 group/p`}>
+            <summary className="flex flex-wrap items-center gap-2 cursor-pointer select-none list-none">
+              <h3 className={sectionTitle}><span className="flex items-center gap-1.5"><List size={14} /> Détail par pub</span></h3>
               <span className="text-[11px] text-slate-400">
-                {ads?.length ? `${ads.length} pub${ads.length > 1 ? "s" : ""} · ${actives} active${actives > 1 ? "s" : ""} · chiffres sur 30 jours` : ""}
+                {ads?.length
+                  ? `${ads.length} pub${ads.length > 1 ? "s" : ""} · ${actives} active${actives > 1 ? "s" : ""} · chiffres ${texteperiode}`
+                  : "aucune pub publiée"}
               </span>
+              <span className="ml-auto text-[11.5px] font-medium text-slate-500 group-open/p:hidden">Afficher</span>
+              <span className="ml-auto text-[11.5px] font-medium text-slate-500 hidden group-open/p:inline">Masquer</span>
+            </summary>
+            <div className="mt-4">
+              {ads && ads.length > 0 ? (
+                <TableauPubs ads={ads} money={money} />
+              ) : (
+                <div className="flex items-start gap-3 text-[13px] text-slate-600">
+                  <Check size={16} className="mt-0.5 shrink-0 text-slate-400" />
+                  <p>Aucune pub publiée sur le compte {data.account?.name ?? "Robi AI"}.</p>
+                </div>
+              )}
             </div>
-            {ads && ads.length > 0 ? (
-              <TableauPubs ads={ads} money={money} />
-            ) : (
-              <div className="flex items-start gap-3 text-[13px] text-slate-600">
-                <Check size={16} className="mt-0.5 shrink-0 text-slate-400" />
-                <p>
-                  Aucune pub sur le compte {data.account?.name ?? "Robi AI"}. Les deux pubs peintre sont prêtes dans la
-                  bibliothèque ci-dessous : pixel d&apos;abord, puis une campagne Ventes ou Inscriptions dans Ads Manager.
-                </p>
-              </div>
-            )}
-          </div>
+          </details>
         </>
       )}
 
-      <Bibliotheque creas={creas} ads={ads} money={money} />
+      <Bibliotheque creas={creas} ads={ads} lignes={lignes} money={money} />
 
       <div className="space-y-3">
         <div className="flex items-baseline gap-2">

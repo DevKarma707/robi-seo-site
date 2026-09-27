@@ -230,6 +230,23 @@ export interface MetaAdRow {
   dailyBudget: number | null;
   lifetimeBudget: number | null;
   thumbnail: string | null;
+  /** Vidéo Meta diffusée — relie la pub à sa créa de VALIDÉ (`adCreatives.metaVideoIds`). */
+  videoId: string | null;
+  /** Début / fin effectifs (ISO), ensemble de pubs sinon campagne. */
+  startsAt: string | null;
+  endsAt: string | null;
+  linkClicks: number;
+  /** Vues de la page d'arrivée (pixel). */
+  landingViews: number;
+  /** Clics vers l'app (événement Lead du pixel). */
+  leads: number;
+  signups: number;
+  purchases: number;
+  /** Vues de 3 s : l'accroche. */
+  videoViews: number;
+  /** ThruPlay (15 s ou fin) : la tenue. */
+  thruplays: number;
+  frequency: number | null;
   spend: number;
   impressions: number;
   reach: number;
@@ -257,10 +274,14 @@ export interface MetaAdsReport {
     purchaseValue: number; roas: number | null;
   };
   daily?: { date: string; spend: number; impressions: number; clicks: number; results: number }[];
+  /** Période des chiffres par pub (`ads`) : 7 j, 30 j ou depuis le début. */
+  periode?: MetaPeriode;
   ads?: MetaAdRow[];
   /** null = lecture refusée ; [] = aucun pixel sur le compte. */
   pixels?: { id: string; name: string; lastFired: string | null }[] | null;
   computedAt?: string;
 }
 
-export const getMetaAds = () => authedFetch("/api/admin/meta-ads") as Promise<MetaAdsReport>;
+export type MetaPeriode = "7" | "30" | "max";
+export const getMetaAds = (periode: MetaPeriode = "30") =>
+  authedFetch(`/api/admin/meta-ads?periode=${periode}`) as Promise<MetaAdsReport>;

@@ -30,8 +30,14 @@ export interface AdCreative {
   videoUrl: string | null;
   coverUrl: string | null;
   legende: string | null;
-  /** Pub Meta (id d'ad) qui diffuse cette créa. */
+  /** Pub Meta (id d'ad) reliée à la main — repli quand la vidéo n'est pas reconnue. */
   metaAdId?: string;
+  /**
+   * Vidéos Meta (id de la médiathèque du compte pub) qui sont cette créa.
+   * Posées par `scripts/syncCreas.ts --video` à l'envoi chez Meta : toute pub
+   * qui diffuse l'une d'elles est rattachée à la créa, sans lien à la main.
+   */
+  metaVideoIds?: string[];
   syncedAt?: Timestamp;
 }
 

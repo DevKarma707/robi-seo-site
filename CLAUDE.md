@@ -96,6 +96,10 @@ sous un autre nom.
   Bibliothèque des créas = collection `adCreatives`, alimentée par
   `npx tsx scripts/syncCreas.ts` depuis `~/Desktop/ROBI/ROBI_DOC/VALIDÉ/README.md`
   (à relancer après chaque créa validée ; ne ré-envoie pas un média déjà en place).
+  **Classement des créas** (en tête de l'onglet) : les pubs sont regroupées par créa
+  grâce à l'id de la vidéo Meta (`metaVideoIds`, posé par `syncCreas.ts --video
+  <fichier.mp4> <id vidéo>` à l'envoi chez Meta) — plus de lien à la main. Règles de
+  verdict (seuils, critère commun, « à couper ») dans `src/lib/adsClassement.ts`.
   Plans de campagne = même `CampagnesBlock` que Réseaux.
 - **Fichiers** — dépôt dans Firebase Storage sous `partage/`, en lecture
   réservée à l'admin (contrairement à `blog/`, public). Nécessite que

@@ -19,6 +19,15 @@ const TOKEN = process.env.META_ADS_ACCESS_TOKEN;
 const ACCOUNT_ID = (process.env.META_AD_ACCOUNT_ID || "1585474145862630").replace(/^act_/, "");
 
 const INSIGHT_FIELDS = "spend,impressions,reach,clicks,ctr,cpc,cpm,actions,action_values,purchase_roas";
+/**
+ * Par pub, en plus : de quoi juger une vidéo — l'accroche (vues de 3 s),
+ * la tenue (ThruPlay), les clics sur le lien et la fréquence.
+ */
+const AD_INSIGHT_FIELDS = `${INSIGHT_FIELDS},inline_link_clicks,frequency,video_thruplay_watched_actions`;
+
+/** Période du classement des pubs, choisie dans l'onglet. Le graphe et les KPI restent sur 30 jours. */
+const PERIODES = { "7": 7, "30": 30, max: null } as const;
+type Periode = keyof typeof PERIODES;
 
 /**
  * Ce qu'on appelle « résultat », du plus au moins précieux. Meta ne renvoie
@@ -49,6 +58,9 @@ interface Insight {
   actions?: Action[];
   action_values?: Action[];
   purchase_roas?: Action[];
+  inline_link_clicks?: string;
+  frequency?: string;
+  video_thruplay_watched_actions?: Action[];
 }
 interface GraphList<T> { data?: T[]; paging?: { next?: string } }
 
@@ -116,6 +128,13 @@ const dayIn = (tz: string, offsetDays = 0) => {
 /** Budgets en centimes chez Meta (devises à deux décimales, dont l'euro). */
 const budget = (s?: string) => (s ? Number(s) / 100 : null);
 
+/** Date Meta (« 2026-10-01T00:00:00+0200 ») → ISO, ou null. */
+const iso = (s?: string) => {
+  if (!s) return null;
+  const t = Date.parse(s.replace(/([+-]\d{2})(\d{2})$/, "$1:$2"));
+  return Number.isNaN(t) ? null : new Date(t).toISOString();
+};
+
 export async function GET(req: Request) {
   const guard = await requireAdmin(req);
   if (!guard.ok) {
@@ -128,6 +147,8 @@ export async function GET(req: Request) {
   }
 
   const act = `act_${ACCOUNT_ID}`;
+  const demandee = new URL(req.url).searchParams.get("periode") ?? "30";
+  const periode: Periode = demandee in PERIODES ? (demandee as Periode) : "30";
 
   try {
     const account = await graph<{
@@ -138,6 +159,10 @@ export async function GET(req: Request) {
     const today = dayIn(tz);
     const since = dayIn(tz, 29);
     const timeRange = JSON.stringify({ since, until: today });
+    const jours = PERIODES[periode];
+    const adInsights = jours === null
+      ? `insights.date_preset(maximum){${AD_INSIGHT_FIELDS}}`
+      : `insights.time_range(${JSON.stringify({ since: dayIn(tz, jours - 1), until: today })}){${AD_INSIGHT_FIELDS}}`;
 
     const [dailyRows, ads, pixels] = await Promise.all([
       graphAll<Insight>(`${act}/insights`, {
@@ -149,17 +174,17 @@ export async function GET(req: Request) {
       }),
       graphAll<{
         id: string; name: string; effective_status: string; created_time?: string;
-        campaign?: { id: string; name: string; objective?: string; daily_budget?: string; lifetime_budget?: string };
-        adset?: { id: string; name: string; daily_budget?: string; lifetime_budget?: string; optimization_goal?: string };
-        creative?: { id: string; thumbnail_url?: string; image_url?: string };
+        campaign?: { id: string; name: string; objective?: string; daily_budget?: string; lifetime_budget?: string; start_time?: string; stop_time?: string };
+        adset?: { id: string; name: string; daily_budget?: string; lifetime_budget?: string; optimization_goal?: string; start_time?: string; end_time?: string };
+        creative?: { id: string; thumbnail_url?: string; image_url?: string; video_id?: string };
         insights?: { data?: Insight[] };
       }>(`${act}/ads`, {
         fields: [
           "name", "effective_status", "created_time",
-          "campaign{name,objective,daily_budget,lifetime_budget}",
-          "adset{name,daily_budget,lifetime_budget,optimization_goal}",
-          "creative{thumbnail_url,image_url}",
-          `insights.time_range(${timeRange}){${INSIGHT_FIELDS}}`,
+          "campaign{name,objective,daily_budget,lifetime_budget,start_time,stop_time}",
+          "adset{name,daily_budget,lifetime_budget,optimization_goal,start_time,end_time}",
+          "creative{thumbnail_url,image_url,video_id}",
+          adInsights,
         ].join(","),
         limit: "100",
       }),
@@ -229,9 +254,14 @@ export async function GET(req: Request) {
         roas: purchaseValue30 > 0 && spend30 > 0 ? purchaseValue30 / spend30 : null,
       },
       daily,
+      periode,
       ads: ads.map((a) => {
         const i = a.insights?.data?.[0] ?? {};
         const r = resultOf(i.actions);
+        // Vues de 3 s (« video_view ») et ThruPlay (15 s ou fin de vidéo) :
+        // l'accroche et la tenue, rapportées aux impressions.
+        const vues3s = sumTypes(i.actions, ["video_view"]);
+        const thruplays = sumTypes(i.video_thruplay_watched_actions, ["video_view"]);
         return {
           id: a.id,
           name: a.name,
@@ -243,6 +273,19 @@ export async function GET(req: Request) {
           dailyBudget: budget(a.adset?.daily_budget) ?? budget(a.campaign?.daily_budget),
           lifetimeBudget: budget(a.adset?.lifetime_budget) ?? budget(a.campaign?.lifetime_budget),
           thumbnail: a.creative?.thumbnail_url || a.creative?.image_url || null,
+          /** Vidéo Meta diffusée : c'est par elle que l'onglet retrouve la créa de VALIDÉ. */
+          videoId: a.creative?.video_id ?? null,
+          // Début / fin effectifs : ceux de l'ensemble de pubs s'ils existent, sinon de la campagne.
+          startsAt: iso(a.adset?.start_time) ?? iso(a.campaign?.start_time),
+          endsAt: iso(a.adset?.end_time) ?? iso(a.campaign?.stop_time),
+          linkClicks: n(i.inline_link_clicks),
+          landingViews: sumTypes(i.actions, ["landing_page_view", "omni_landing_page_view"]),
+          leads: sumTypes(i.actions, RESULT_TYPES[2].types),
+          signups: sumTypes(i.actions, RESULT_TYPES[1].types),
+          purchases: sumTypes(i.actions, PURCHASE_TYPES),
+          videoViews: vues3s,
+          thruplays,
+          frequency: i.frequency ? Number(i.frequency) : null,
           spend: n(i.spend),
           impressions: n(i.impressions),
           reach: n(i.reach),

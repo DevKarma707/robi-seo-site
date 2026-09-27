@@ -7,6 +7,8 @@
  *   npx tsx scripts/syncCreas.ts --dry           affiche ce qui serait écrit, sans rien déposer
  *   npx tsx scripts/syncCreas.ts --lier <fichier.mp4> <id de pub Meta>   relie une créa à sa pub (onglet Ads)
  *   npx tsx scripts/syncCreas.ts --lier <fichier.mp4> aucun              retire le lien
+ *   npx tsx scripts/syncCreas.ts --video <fichier.mp4> <id vidéo Meta>   note la vidéo envoyée chez Meta :
+ *                                   toute pub qui la diffuse est rattachée à la créa (onglet Ads)
  *
  * Pour chaque ligne du tableau du README : dépose la vidéo et sa couverture
  * dans Storage (`creas/<nom>`), lit la légende à côté, puis écrit
@@ -52,6 +54,13 @@ const iLier = args.indexOf("--lier");
 const lier = iLier >= 0 ? { fichier: path.basename(args[iLier + 1] ?? ""), adId: args[iLier + 2] ?? "" } : null;
 if (lier && (!lier.fichier || !lier.adId)) {
   console.error("Usage : npx tsx scripts/syncCreas.ts --lier <fichier.mp4> <id de pub Meta | aucun>");
+  process.exit(1);
+}
+
+const iVideo = args.indexOf("--video");
+const video = iVideo >= 0 ? { fichier: path.basename(args[iVideo + 1] ?? ""), videoId: args[iVideo + 2] ?? "" } : null;
+if (video && (!video.fichier || !/^\d+$/.test(video.videoId))) {
+  console.error("Usage : npx tsx scripts/syncCreas.ts --video <fichier.mp4> <id vidéo Meta (chiffres)>");
   process.exit(1);
 }
 
@@ -157,8 +166,20 @@ const lierPub = async ({ fichier, adId }: { fichier: string; adId: string }) => 
   console.log(retirer ? `✓ ${fichier} — lien retiré` : `✓ ${fichier} — reliée à la pub ${adId}`);
 };
 
+/** Ajoute une vidéo Meta à la créa : la même vidéo peut servir dans plusieurs pubs, une créa peut avoir plusieurs envois. */
+const noterVideo = async ({ fichier, videoId }: { fichier: string; videoId: string }) => {
+  const ref = db!.doc(`adCreatives/${fichier}`);
+  if (!(await ref.get()).exists) {
+    console.error(`Créa inconnue : ${fichier}. Lancer d'abord la synchro (sans --video).`);
+    process.exit(1);
+  }
+  await ref.update({ metaVideoIds: FieldValue.arrayUnion(videoId) });
+  console.log(`✓ ${fichier} — vidéo Meta ${videoId}`);
+};
+
 const main = async () => {
   if (lier) return lierPub(lier);
+  if (video) return noterVideo(video);
   const lignes = lireReadme();
   if (!lignes.length) {
     console.error(`Aucune ligne de créa lue dans ${path.join(DOSSIER, "README.md")}.`);
