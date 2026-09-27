@@ -94,7 +94,7 @@ sous un autre nom.
   jeton utilisateur système `ads_read`, jamais côté navigateur ;
   `META_AD_ACCOUNT_ID` défaut 1585474145862630 = compte « Robi AI »).
   Bibliothèque des créas = collection `adCreatives`, alimentée par
-  `npx tsx scripts/syncCreas.ts` depuis `~/Desktop/ROBI_DOC/VALIDÉ/README.md`
+  `npx tsx scripts/syncCreas.ts` depuis `~/Desktop/ROBI/ROBI_DOC/VALIDÉ/README.md`
   (à relancer après chaque créa validée ; ne ré-envoie pas un média déjà en place).
   Plans de campagne = même `CampagnesBlock` que Réseaux.
 - **Fichiers** — dépôt dans Firebase Storage sous `partage/`, en lecture

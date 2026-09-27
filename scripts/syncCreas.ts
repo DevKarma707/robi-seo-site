@@ -2,7 +2,7 @@
  * Synchronise la bibliothèque des créas de l'onglet Ads avec le dossier des
  * créas validées.
  *
- *   npx tsx scripts/syncCreas.ts                 lit ~/Desktop/ROBI_DOC/VALIDÉ/README.md
+ *   npx tsx scripts/syncCreas.ts                 lit ~/Desktop/ROBI/ROBI_DOC/VALIDÉ/README.md
  *   npx tsx scripts/syncCreas.ts --dossier <chemin>
  *   npx tsx scripts/syncCreas.ts --dry           affiche ce qui serait écrit, sans rien déposer
  *   npx tsx scripts/syncCreas.ts --lier <fichier.mp4> <id de pub Meta>   relie une créa à sa pub (onglet Ads)
@@ -46,7 +46,7 @@ loadEnv();
 const args = process.argv.slice(2);
 const dry = args.includes("--dry");
 const iDossier = args.indexOf("--dossier");
-const DOSSIER = iDossier >= 0 ? path.resolve(args[iDossier + 1]) : path.join(os.homedir(), "Desktop/ROBI_DOC/VALIDÉ");
+const DOSSIER = iDossier >= 0 ? path.resolve(args[iDossier + 1]) : path.join(os.homedir(), "Desktop/ROBI/ROBI_DOC/VALIDÉ");
 
 const iLier = args.indexOf("--lier");
 const lier = iLier >= 0 ? { fichier: path.basename(args[iLier + 1] ?? ""), adId: args[iLier + 2] ?? "" } : null;

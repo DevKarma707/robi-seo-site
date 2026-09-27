@@ -27,7 +27,7 @@
       "runtimeExecutable": "/bin/sh",
       "runtimeArgs": [
         "-c",
-        "cd /Users/ralphkaram/Desktop/ROBI_APP && npx vite --port 5199 --strictPort"
+        "cd /Users/ralphkaram/Desktop/ROBI/ROBI_APP && npx vite --port 5199 --strictPort"
       ],
       "port": 5199
     }

@@ -58,7 +58,7 @@ const skillBrief = (year: number, month: number, history: SocialPost[], market: 
     `/robi-social-media ${MONTH_NAMES[month]} ${year} --marche ${market}`,
     "",
     `Génère le calendrier éditorial de ${MONTH_NAMES[month]} ${year} pour Robi — marché ${m.drapeau} ${m.label}.`,
-    "Lis d'abord branding/EDITORIAL_LINE.md (ligne éditoriale) et branding/BRAND_KIT.md dans ~/Desktop/ROBI_APP.",
+    "Lis d'abord branding/EDITORIAL_LINE.md (ligne éditoriale) et branding/BRAND_KIT.md dans ~/Desktop/ROBI/ROBI_APP.",
     "Sors un tableau JSON prêt à importer dans l'onglet Réseaux de l'admin.",
     "",
     "── LE MARCHÉ ──",
