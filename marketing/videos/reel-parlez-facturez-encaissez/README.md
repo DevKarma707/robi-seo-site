@@ -46,6 +46,10 @@ Vidéo finale : `renders/robi-reel-v2.mp4` (la v1 est dans l'historique git).
 Voix ElevenLabs françaises natives choisies par Ralph (Clément fait des fautes de prononciation) :
 - **Paul K** `0igQGE0lbNpTaWsexf1r` — enthousiaste, parisien neutre (recommandée pour ce reel)
 - **Alain** `ViSNE020Z1wEV4uZomv5` — grave, calme (version « storytelling »)
+- **Yann** `rlqCQzyNTVyUMPGBqC31` — chaleureux, posé (narration, tuto)
+
+→ **Retenue pour ce reel : Paul K.** Les trois sont aussi notées dans le skill `robi-pub-video`
+(`references/pipeline-technique.md` § Voix off française).
 
 Higgsfield ne donne pas accès à ces voix (« Voice not found ») : passer par l'API ElevenLabs
 (`ELEVENLABS_API_KEY`), modèle `eleven_multilingual_v2`, langue `fr`, endpoint `/with-timestamps`
