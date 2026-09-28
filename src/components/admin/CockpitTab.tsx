@@ -2,12 +2,12 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  AlertTriangle, ArrowRight, CalendarClock, CheckCircle2, Megaphone,
+  AlertTriangle, ArrowRight, Check, CalendarClock, CheckCircle2, ChevronDown, Megaphone,
   RefreshCw, ServerCrash, Users, XCircle,
 } from "lucide-react";
 import {
-  computeDisplayedSold, fetchAppStats, fetchHealthReport, fetchLaunchConfig,
-  type AppStats, type HealthReport, type LaunchConfig,
+  computeDisplayedSold, fetchAppStats, fetchHealthReport, fetchLaunchConfig, fetchProduitReport,
+  type AppStats, type HealthReport, type LaunchConfig, type ProduitReport,
 } from "@/lib/adminApi";
 import { diagnoseAi, isAiProblem } from "@/lib/aiHealth";
 import { ACCENT_INK, btn, card, kpiLabel, kpiValue, sectionTitle } from "./ui";
@@ -33,20 +33,40 @@ const AMBER = "#fbbf24";
 
 type Severity = "down" | "warn" | "info";
 type TabId =
-  | "pilotage" | "kanban" | "reseaux" | "fichiers" | "sante"
+  | "pilotage" | "kanban" | "reseaux" | "fichiers" | "sante" | "produit"
   | "acquisition" | "influenceurs" | "analytics" | "blog" | "lancement";
+
+type Domain = "Technique" | "Produit" | "Marketing" | "Échéance";
 
 interface Alert {
   id: string;
   severity: Severity;
-  domain: "Technique" | "Produit" | "Marketing" | "Échéance";
+  domain: Domain;
   title: string;
+  /** Les chiffres qui expliquent l'alerte (ex. le parcours d'achat), s'il y en a. */
+  detail?: string;
   /** Ce qu'il faut faire. Une alerte sans geste associé n'en est pas une. */
   action: string;
   goTo?: TabId;
+  /**
+   * Empreinte de l'état signalé. « Traité » masque l'alerte tant que
+   * l'empreinte ne change pas : une panne qui revient (nouvelle date) ou un
+   * chiffre qui bouge la fait réapparaître.
+   */
+  fingerprint: string;
+}
+
+export interface AlertBoard {
+  /** Ce qu'il reste à traiter. */
+  active: Alert[];
+  /** Pannes plus revues depuis 3 jours : très probablement réglées. */
+  resolved: Alert[];
 }
 
 const SEVERITY_RANK: Record<Severity, number> = { down: 0, warn: 1, info: 2 };
+/** À gravité égale, le business passe avant la technique. */
+const DOMAIN_RANK: Record<Domain, number> = { Produit: 0, Marketing: 1, "Échéance": 2, Technique: 3 };
+const HOUR = 3_600_000;
 
 const SEVERITY_STYLE: Record<Severity, { color: string; icon: React.ReactNode }> = {
   down: { color: RED, icon: <XCircle size={15} /> },
@@ -72,8 +92,12 @@ export function buildAlerts(
   stats: AppStats | null,
   health: HealthReport | null,
   launch: LaunchConfig | null,
-): Alert[] {
-  const alerts: Alert[] = [];
+  produit: ProduitReport | null = null,
+  now: number = Date.now(),
+): AlertBoard {
+  // L'empreinte vaut le titre par défaut : un chiffre qui change fait réapparaître l'alerte.
+  const alerts: (Omit<Alert, "fingerprint"> & { fingerprint?: string })[] = [];
+  const resolved: Alert[] = [];
 
   // — Technique : l'IA d'abord, avec sa cause et le geste à faire. Les lignes
   //   génériques du rapport (« 4 échec(s) de génération IA ») ne disaient ni
@@ -83,15 +107,25 @@ export function buildAlerts(
   if (ai) {
     const when = (iso: string | null) =>
       iso ? ` — dernière fois le ${new Date(iso).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" })}` : "";
+    // Le rapport couvre 7 jours glissants : sans tenir compte de l'âge, une
+    // panne réglée restait « urgente » une semaine (quota Gemini du 25/09
+    // encore en rouge le 28 alors que l'IA répondait).
     ai.causes.forEach((cause) => {
-      alerts.push({
+      const ageH = cause.lastSeen ? (now - new Date(cause.lastSeen).getTime()) / HOUR : 0;
+      const ageLabel = ageH >= 24 ? ` — plus vu depuis ${Math.floor(ageH / 24)} j` : "";
+      const alert: Alert = {
         id: `ai-${cause.kind}`,
-        severity: cause.blocking ? "down" : "warn",
+        severity: ageH >= 24 ? "warn" : cause.blocking ? "down" : "warn",
         domain: "Technique",
-        title: `IA : ${cause.label} (${cause.count}×${when(cause.lastSeen)})`,
-        action: cause.action,
+        title: `IA : ${cause.label} (${cause.count}×${when(cause.lastSeen)})${ageLabel}`,
+        action: ageH >= 24
+          ? `Probablement réglé : plus d'échec depuis ${Math.floor(ageH / 24)} j. Vérifier dans Santé, puis marquer « Traité ». Pour mémoire : ${cause.action}`
+          : cause.action,
         goTo: "sante",
-      });
+        fingerprint: `${cause.kind}|${cause.lastSeen ?? ""}`,
+      };
+      if (ageH >= 72) resolved.push({ ...alert, severity: "info" });
+      else alerts.push(alert);
     });
     if (ai.latencyWorstMs !== null && ai.latencyWorstMs > 30_000) {
       alerts.push({
@@ -138,14 +172,38 @@ export function buildAlerts(
 
   // — Produit : aucune conversion malgré du volume. Payer de l'acquisition
   //   avant d'avoir réglé ça revient à remplir un seau percé.
-  if (stats && stats.signups.total >= 10 && stats.soldSeats === 0) {
+  // soldSeats ne compte que l'accès à vie : un abonné mensuel ou annuel est
+  // pourtant une vente. paidSeats couvre tous les forfaits Polar.
+  const paid = stats ? (stats.paidSeats ?? stats.soldSeats) : 0;
+  if (stats && stats.signups.total >= 10 && paid === 0) {
+    // Où ça coince : on relit le parcours d'achat dans PostHog. Personne n'a
+    // vu l'offre, ou tout le monde l'a vue sans cliquer, ou le paiement a été
+    // lancé sans aboutir : trois problèmes différents, trois gestes différents.
+    const p = produit?.paiement ?? null;
+    let detail: string | undefined;
+    let action = "Confirmer que le paiement fonctionne de bout en bout avant toute dépense d'acquisition.";
+    if (p) {
+      detail = `${produit?.days ?? 30} derniers jours : ${p.vues} ont vu l'offre Pro → ${p.clics} ont cliqué → ${p.lances} ont lancé le paiement → ${p.payes} ont payé`
+        + (p.echecs > 0 ? ` · ${p.echecs} paiement${p.echecs > 1 ? "s" : ""} en échec` : "");
+      if (p.echecs > 0) {
+        action = "Des paiements échouent : faire un achat test de bout en bout et lire l'erreur dans Polar.";
+      } else if (p.lances > 0) {
+        action = "Des paiements ont été lancés sans aboutir : tester l'achat de bout en bout (page Polar, retour dans l'app, passage en Pro).";
+      } else if (p.vues > 0) {
+        action = "L'offre est vue mais personne ne lance le paiement : c'est le prix ou l'argumentaire de l'offre, pas le paiement.";
+      } else {
+        action = "Personne n'a encore vu l'offre Pro : la limite gratuite n'est pas atteinte. Montrer l'offre ailleurs que dans le blocage (tableau de bord, e-mails).";
+      }
+    }
     alerts.push({
       id: "no-conversion",
       severity: "down",
       domain: "Produit",
       title: `${stats.signups.total} inscrits et aucune vente`,
-      action: "Confirmer que le paiement fonctionne de bout en bout avant toute dépense d'acquisition.",
-      goTo: "pilotage",
+      detail,
+      action,
+      goTo: p ? "produit" : "pilotage",
+      fingerprint: `${stats.signups.total}|${p ? `${p.vues}-${p.clics}-${p.lances}-${p.echecs}` : ""}`,
     });
   }
 
@@ -201,7 +259,10 @@ export function buildAlerts(
     }
   }
 
-  return alerts.sort((a, b) => SEVERITY_RANK[a.severity] - SEVERITY_RANK[b.severity]);
+  const active: Alert[] = alerts
+    .map((a) => ({ ...a, fingerprint: a.fingerprint ?? a.title }))
+    .sort((a, b) => SEVERITY_RANK[a.severity] - SEVERITY_RANK[b.severity] || DOMAIN_RANK[a.domain] - DOMAIN_RANK[b.domain]);
+  return { active, resolved };
 }
 
 function Kpi({ label, value, sub }: { label: string; value: React.ReactNode; sub?: string }) {
@@ -241,10 +302,63 @@ function Section({
   );
 }
 
+const DISMISS_KEY = "robi-admin-cockpit-traite";
+
+function AlertRow({
+  alert: a, onNavigate, onDismiss, restoreLabel,
+}: {
+  alert: Alert;
+  onNavigate?: (tab: TabId) => void;
+  onDismiss?: () => void;
+  restoreLabel?: string;
+}) {
+  return (
+    <li className={`${card} p-4 flex items-start gap-3`}>
+      <span className="mt-0.5 shrink-0" style={{ color: SEVERITY_STYLE[a.severity].color }}>
+        {SEVERITY_STYLE[a.severity].icon}
+      </span>
+      <div className="flex-1 min-w-0">
+        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{a.domain}</span>
+        <p className="text-sm font-bold text-slate-900 mt-1">{a.title}</p>
+        {a.detail && (
+          <p className="text-[12px] font-semibold text-slate-700 mt-1.5 tabular-nums">{a.detail}</p>
+        )}
+        <p className="text-[12px] text-slate-500 mt-1 leading-relaxed">{a.action}</p>
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        {onDismiss && (
+          <button onClick={onDismiss} className={btn} title={restoreLabel ? undefined : "Masquer tant que rien ne change"}>
+            {restoreLabel ?? (<><Check size={13} /> Traité</>)}
+          </button>
+        )}
+        {a.goTo && onNavigate && (
+          <button onClick={() => onNavigate(a.goTo!)} className={btn}>
+            Ouvrir <ArrowRight size={13} />
+          </button>
+        )}
+      </div>
+    </li>
+  );
+}
+
 const CockpitTab: React.FC<{ onNavigate?: (tab: TabId) => void }> = ({ onNavigate }) => {
   const [stats, setStats] = useState<AppStats | null>(null);
   const [health, setHealth] = useState<HealthReport | null>(null);
   const [launch, setLaunch] = useState<LaunchConfig | null>(null);
+  const [produit, setProduit] = useState<ProduitReport | null>(null);
+  const [showDismissed, setShowDismissed] = useState(false);
+  const [showResolved, setShowResolved] = useState(false);
+  // Alertes marquées « Traité » : id → empreinte au moment du clic. Rangé dans
+  // ce navigateur (l'admin n'a qu'un utilisateur) ; si l'état signalé change,
+  // l'empreinte diffère et l'alerte revient d'elle-même.
+  const [dismissed, setDismissed] = useState<Record<string, string>>(() => {
+    if (typeof window === "undefined") return {};
+    try { return JSON.parse(localStorage.getItem(DISMISS_KEY) || "{}"); } catch { return {}; }
+  });
+  const saveDismissed = (next: Record<string, string>) => {
+    setDismissed(next);
+    try { localStorage.setItem(DISMISS_KEY, JSON.stringify(next)); } catch { /* stockage indisponible : masqué pour la session */ }
+  };
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState<string[]>([]);
 
@@ -260,17 +374,19 @@ const CockpitTab: React.FC<{ onNavigate?: (tab: TabId) => void }> = ({ onNavigat
   const apply = useCallback((
     results: PromiseSettledResult<unknown>[],
   ) => {
-    const [s, h, l] = results;
+    const [s, h, l, pr] = results;
     const failed: string[] = [];
     if (s.status === "fulfilled") setStats(s.value as AppStats); else failed.push("Statistiques");
     if (h.status === "fulfilled") setHealth(h.value as HealthReport); else failed.push("Santé");
     if (l.status === "fulfilled") setLaunch(l.value as LaunchConfig); else failed.push("Lancement");
+    // PostHog complète l'alerte « aucune vente » ; son absence ne mérite pas d'avertissement.
+    if (pr.status === "fulfilled") setProduit(pr.value as ProduitReport);
     setErrors(failed);
     setLoading(false);
   }, []);
 
   const fetchAll = () => Promise.allSettled([
-    fetchAppStats(), fetchHealthReport(7), fetchLaunchConfig(),
+    fetchAppStats(), fetchHealthReport(7), fetchLaunchConfig(), fetchProduitReport(30),
   ]);
 
   /** Rafraîchissement manuel : déclenché par un geste, pas par un rendu. */
@@ -289,8 +405,11 @@ const CockpitTab: React.FC<{ onNavigate?: (tab: TabId) => void }> = ({ onNavigat
     return () => { cancelled = true; };
   }, [apply]);
 
-  const alerts = useMemo(() => buildAlerts(stats, health, launch), [stats, health, launch]);
+  const board = useMemo(() => buildAlerts(stats, health, launch, produit), [stats, health, launch, produit]);
+  const alerts = board.active.filter((a) => dismissed[a.id] !== a.fingerprint);
+  const dismissedAlerts = board.active.filter((a) => dismissed[a.id] === a.fingerprint);
   const blocking = alerts.filter((a) => a.severity === "down").length;
+  const paidCount = stats ? (stats.paidSeats ?? stats.soldSeats) : null;
 
   return (
     <div className="space-y-8">
@@ -333,27 +452,54 @@ const CockpitTab: React.FC<{ onNavigate?: (tab: TabId) => void }> = ({ onNavigat
         ) : (
           <ul className="space-y-2">
             {alerts.map((a) => (
-              <li key={a.id} className={`${card} p-4 flex items-start gap-3`}>
-                <span className="mt-0.5 shrink-0" style={{ color: SEVERITY_STYLE[a.severity].color }}>
-                  {SEVERITY_STYLE[a.severity].icon}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                      {a.domain}
-                    </span>
-                  </div>
-                  <p className="text-sm font-bold text-slate-900 mt-1">{a.title}</p>
-                  <p className="text-[12px] text-slate-500 mt-1 leading-relaxed">{a.action}</p>
-                </div>
-                {a.goTo && onNavigate && (
-                  <button onClick={() => onNavigate(a.goTo!)} className={`${btn} shrink-0`}>
-                    Ouvrir <ArrowRight size={13} />
-                  </button>
-                )}
-              </li>
+              <AlertRow
+                key={a.id}
+                alert={a}
+                onNavigate={onNavigate}
+                onDismiss={() => saveDismissed({ ...dismissed, [a.id]: a.fingerprint })}
+              />
             ))}
           </ul>
+        )}
+
+        {dismissedAlerts.length > 0 && (
+          <div className="mt-3">
+            <button onClick={() => setShowDismissed((v) => !v)} className="text-[12px] font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1">
+              <ChevronDown size={13} className={`transition-transform ${showDismissed ? "rotate-180" : ""}`} />
+              {dismissedAlerts.length} marquée{dismissedAlerts.length > 1 ? "s" : ""} « Traité »
+            </button>
+            {showDismissed && (
+              <ul className="space-y-2 mt-2 opacity-70">
+                {dismissedAlerts.map((a) => (
+                  <AlertRow
+                    key={a.id}
+                    alert={a}
+                    onNavigate={onNavigate}
+                    restoreLabel="Réafficher"
+                    onDismiss={() => {
+                      const next = { ...dismissed };
+                      delete next[a.id];
+                      saveDismissed(next);
+                    }}
+                  />
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
+        {board.resolved.length > 0 && (
+          <div className="mt-3">
+            <button onClick={() => setShowResolved((v) => !v)} className="text-[12px] font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1">
+              <ChevronDown size={13} className={`transition-transform ${showResolved ? "rotate-180" : ""}`} />
+              Réglé récemment ({board.resolved.length}) · plus vu depuis 3 jours
+            </button>
+            {showResolved && (
+              <ul className="space-y-2 mt-2 opacity-70">
+                {board.resolved.map((a) => <AlertRow key={a.id} alert={a} onNavigate={onNavigate} />)}
+              </ul>
+            )}
+          </div>
         )}
       </Section>
 
@@ -367,7 +513,7 @@ const CockpitTab: React.FC<{ onNavigate?: (tab: TabId) => void }> = ({ onNavigat
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <Kpi label="Inscrits (7 j)" value={stats?.signups.j7 ?? "—"} sub={`${stats?.signups.j30 ?? "—"} sur 30 j`} />
           <Kpi label="Total inscrits" value={stats?.signups.total ?? "—"} />
-          <Kpi label="Ventes" value={stats?.soldSeats ?? "—"} sub="places réellement payées" />
+          <Kpi label="Ventes" value={paidCount ?? "—"} sub="comptes payants, tous forfaits" />
           <Kpi
             label="Conversion"
             value={stats ? `${stats.conversionRate} %` : "—"}

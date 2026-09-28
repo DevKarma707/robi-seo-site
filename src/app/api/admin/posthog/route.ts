@@ -115,7 +115,7 @@ export async function GET(req: Request) {
     });
 
   try {
-    const [funnelRows, errorRows, ctaRows, hostRows, prevRows, anciensRows, origineRows, sessionRows] = await Promise.all([
+    const [funnelRows, errorRows, ctaRows, hostRows, prevRows, anciensRows, origineRows, sessionRows, paiementRows] = await Promise.all([
       hogql(
         `SELECT event, count() AS total, count(DISTINCT person_id) AS personnes
          FROM events WHERE ${since} AND event IN (${eventList})
@@ -183,11 +183,20 @@ export async function GET(req: Request) {
          FROM events WHERE ${since} AND event IN ('$exception', 'error_boundary_caught')
          GROUP BY type, message`
       )),
+      // Parcours d'achat détaillé, pour le cockpit : clic sur « Passer Pro »
+      // et paiements échoués ne font pas partie du tunnel affiché dans Produit.
+      secondaire(hogql(
+        `SELECT event, count(DISTINCT person_id) AS personnes
+         FROM events WHERE ${since}
+           AND event IN ('paywall_viewed', 'paywall_cta_clicked', 'checkout_started', 'checkout_failed', 'checkout_completed')
+         GROUP BY event`
+      )),
     ]);
 
     const countBy = (rows: Row[] | null) =>
       rows ? Object.fromEntries(rows.map((r) => [String(r[0]), Number(r[1]) || 0])) : null;
     const prev = countBy(prevRows);
+    const paiement = countBy(paiementRows);
     const anciens = countBy(anciensRows);
     const sessions = new Map((sessionRows ?? []).map((r) => [`${r[0] ?? ""}|${r[1] ?? ""}`, r[2] ? String(r[2]) : null]));
 
@@ -232,6 +241,16 @@ export async function GET(req: Request) {
           }))
         : null,
       cta: ctaRows.map((r) => ({ page: r[0] ? String(r[0]) : "—", total: Number(r[1]) || 0 })),
+      // Personnes distinctes à chaque étape de l'achat ; null si la lecture a échoué.
+      paiement: paiement
+        ? {
+            vues: paiement.paywall_viewed ?? 0,
+            clics: paiement.paywall_cta_clicked ?? 0,
+            lances: paiement.checkout_started ?? 0,
+            echecs: paiement.checkout_failed ?? 0,
+            payes: paiement.checkout_completed ?? 0,
+          }
+        : null,
       mesure: {
         // Lue côté serveur : `NEXT_PUBLIC_` est inlinée dans le bundle du
         // navigateur au build, mais reste lisible ici. C'est le seul moyen de

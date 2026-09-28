@@ -215,6 +215,8 @@ export interface ProduitReport {
   /** Page d'arrivée (URL complète) et site d'origine des inscrits et payants de la période. */
   origines?: { page: string | null; origine: string | null; inscrits: number; payants: number }[] | null;
   cta?: { page: string; total: number }[];
+  /** Parcours d'achat (personnes distinctes) ; null si PostHog a refusé la lecture. */
+  paiement?: { vues: number; clics: number; lances: number; echecs: number; payes: number } | null;
   mesure?: {
     cleSiteConfiguree: boolean;
     domaines: { domaine: string; total: number; dernier: string | null }[];
