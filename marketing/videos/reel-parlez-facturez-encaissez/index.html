@@ -7,617 +7,570 @@
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
       :root {
-        --amethyst: #0d0630;
-        --deep: #0a0425;
-        --card: #120a3d;
-        --space: #18314f;
-        --lime: #bef221;
-        --ink: #f3f5ea;
-        --muted: #aeb3c9;
-        --paper: #f7f9f0;
-        --paper-ink: #0d0630;
-        --alert: #ff6b5e;
+        --lime: #bef221; --amethyst: #0d0630; --space: #18314f;
+        --ink: #0d0630; --g1: #64748b; --g2: #94a3b8; --line: #e2e8f0;
+        --paid: #10b981; --late: #ef4444; --light: #f3f4f8;
       }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--amethyst); }
-      #root {
-        position: relative; width: 100%; height: 100%; overflow: hidden;
-        background: var(--amethyst); color: var(--ink);
-        font-family: Inter, sans-serif; font-weight: 400;
-      }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--amethyst);
+        font-family: "Inter", sans-serif; color: #fff; -webkit-font-smoothing: antialiased; }
       .clip { position: absolute; inset: 0; }
-      .mono { font-family: "JetBrains Mono", monospace; }
       .abs { position: absolute; }
       .lime { color: var(--lime); }
+      #film { position: absolute; inset: 0; }
 
-      /* ---------- persistent background ---------- */
-      #bg { overflow: hidden; }
-      .glow { position: absolute; border-radius: 50%; }
-      #glow-a { width: 1300px; height: 1300px; left: -520px; top: -420px;
-        background: radial-gradient(circle, rgba(190,242,33,0.20) 0%, rgba(190,242,33,0.06) 38%, rgba(13,6,48,0) 68%); }
-      #glow-b { width: 1500px; height: 1500px; left: 180px; top: 900px;
-        background: radial-gradient(circle, rgba(24,49,79,0.95) 0%, rgba(24,49,79,0.45) 40%, rgba(13,6,48,0) 70%); }
-      #grid { position: absolute; left: -60px; top: -60px; width: 1200px; height: 2040px;
-        background-image:
-          linear-gradient(rgba(190,242,33,0.10) 2px, transparent 2px),
-          linear-gradient(90deg, rgba(190,242,33,0.10) 2px, transparent 2px);
-        background-size: 120px 120px; }
-      #grain { position: absolute; inset: 0; opacity: 0.16; mix-blend-mode: overlay;
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='4'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>"); }
-      .ghost { position: absolute; font-weight: 900; letter-spacing: -0.05em; color: rgba(190,242,33,0.12);
-        white-space: nowrap; line-height: 1; }
+      /* ---------- fonds ---------- */
+      #bg-base { background: var(--amethyst); }
+      #halo { position: absolute; width: 1400px; height: 1400px; right: -700px; top: -620px; border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(24,49,79,0.95), rgba(24,49,79,0.35) 55%, rgba(24,49,79,0)); }
+      #halo-l { position: absolute; width: 1200px; height: 1200px; left: -640px; bottom: -560px; border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(190,242,33,0.10), rgba(190,242,33,0) 70%); }
+      .reveal { position: absolute; inset: 0; clip-path: circle(0% at 50% 62%); }
+      #rv-light { background: var(--light); }
+      #rv-lime { background: var(--lime); }
 
-      /* ---------- shared pieces ---------- */
-      .phone { position: absolute; width: 580px; height: 1190px; border-radius: 96px;
-        background: #07031c; border: 16px solid #221c47; overflow: hidden; }
-      .phone::after { content: ""; position: absolute; left: 50%; top: 22px; width: 170px; height: 48px;
-        margin-left: -85px; border-radius: 30px; background: #000; }
-      .screen { position: absolute; inset: 0; overflow: hidden; }
-      .statusbar { position: absolute; left: 48px; right: 48px; top: 34px; height: 40px;
-        display: flex; justify-content: space-between; font-size: 26px; font-weight: 700; color: var(--ink); }
-      .notif { position: absolute; left: 26px; right: 26px; border-radius: 40px; padding: 26px 28px;
-        background: rgba(243,245,234,0.16); display: flex; gap: 22px; align-items: flex-start; }
-      .notif .ic { flex: 0 0 72px; height: 72px; border-radius: 20px; display: grid; place-items: center;
-        font-weight: 900; font-size: 30px; }
-      .notif .tx { flex: 1; min-width: 0; }
-      .notif .row { display: flex; justify-content: space-between; font-size: 26px; color: var(--muted); }
-      .notif .row b { color: var(--ink); font-weight: 700; font-size: 30px; }
-      .notif p { font-size: 30px; line-height: 1.25; margin-top: 6px; color: var(--ink); }
-      .kicker { font-size: 34px; font-weight: 700; letter-spacing: 0.02em; }
-      .h-xl { font-weight: 900; letter-spacing: -0.05em; line-height: 0.92; }
-      .pill { display: inline-flex; align-items: center; gap: 14px; border-radius: 999px; font-weight: 700; }
+      /* ---------- titres ---------- */
+      .head { position: absolute; left: 80px; top: 150px; width: 920px; }
+      .kick { font-size: 30px; font-weight: 700; letter-spacing: 0.14em; color: var(--g2); text-transform: uppercase; }
+      .kick b { color: var(--lime); font-weight: 700; }
+      .ttl { font-family: "Outfit", sans-serif; font-weight: 800; font-size: 112px; line-height: 1.0; letter-spacing: -0.045em; margin-top: 22px; }
+      .ttl span { display: block; padding-bottom: 6px; }
+      .dark .kick { color: var(--g1); }
+      .dark .ttl { color: var(--ink); }
 
-      /* ---------- S1 lockscreen ---------- */
-      #s1-phone { left: 250px; top: 640px; }
-      #s1-lock { background: radial-gradient(circle at 50% 30%, #1f3a5c 0%, #0d0630 70%); }
-      #s1-time { position: absolute; top: 150px; width: 100%; text-align: center; font-size: 150px;
-        font-weight: 700; letter-spacing: -0.03em; }
-      #s1-date { position: absolute; top: 118px; width: 100%; text-align: center; font-size: 32px; font-weight: 700; color: var(--muted); }
-      #s1-n1 { top: 390px; } #s1-n2 { top: 580px; } #s1-n3 { top: 770px; }
-      #s1-head { left: 80px; top: 170px; width: 920px; }
-      #s1-h1 { font-size: 200px; }
-      #s1-h2 { font-size: 84px; font-weight: 900; letter-spacing: -0.04em; margin-top: 26px; line-height: 1.02; }
-      #s1-h2 span { display: inline-block; }
+      /* ---------- iPhone titane ---------- */
+      #rig { position: absolute; left: 260px; top: 620px; width: 560px; height: 1169px; }
+      .ph-body { position: absolute; inset: 0; border-radius: 98px; padding: 7px;
+        background: linear-gradient(145deg, #a7a8ac 0%, #f0f0ec 16%, #8b8c90 36%, #d2d3cf 58%, #74757a 80%, #dcdcd8 100%); }
+      .ph-bezel { position: absolute; inset: 7px; border-radius: 91px; background: #040209; padding: 12px; }
+      .ph-screen { position: relative; width: 522px; height: 1131px; border-radius: 79px; overflow: hidden; background: #0d0630; }
+      .ph-island { position: absolute; left: 50%; top: 24px; width: 150px; height: 44px; margin-left: -75px; border-radius: 24px; background: #000; z-index: 9; }
+      .ph-btn { position: absolute; width: 8px; border-radius: 4px; background: linear-gradient(90deg, #8b8c90, #d2d3cf); }
+      .scr { position: absolute; inset: 0; opacity: 0; }
+      .scr img { width: 100%; height: 100%; display: block; }
+      #scr-lock { opacity: 1; background: radial-gradient(circle at 70% 18%, #1f3a5c 0%, #0d0630 62%); }
+      #lk-date { position: absolute; top: 118px; width: 100%; text-align: center; font-size: 28px; font-weight: 600; color: rgba(255,255,255,0.8); }
+      #lk-time { position: absolute; top: 150px; width: 100%; text-align: center; font-size: 150px; font-weight: 700; letter-spacing: -0.03em; }
+      #paid-flip { position: absolute; left: 80.6%; top: 33.76%; width: 15.9%; height: 3.47%; background: #fff; display: flex; align-items: center; justify-content: flex-end; }
+      #paid-flip i { font-style: normal; height: 78%; width: 66%; border-radius: 999px; background: var(--lime); color: var(--ink);
+        display: grid; place-items: center; font-size: 13px; font-weight: 800; letter-spacing: 0.04em; }
+      #row-hi { position: absolute; left: 0; right: 0; top: 30.2%; height: 8.2%; background: rgba(190,242,33,0.18); }
 
-      /* ---------- S2 chaos ---------- */
-      #s2-head { left: 80px; top: 180px; width: 920px; font-size: 118px; }
-      .win { position: absolute; border-radius: 26px; background: var(--paper); color: var(--paper-ink); overflow: hidden; border: 4px solid #d9dccb; }
-      .win .bar { height: 58px; background: #e3e6d6; display: flex; align-items: center; gap: 12px; padding: 0 22px; font-size: 24px; font-weight: 700; }
-      .win .bar i { width: 18px; height: 18px; border-radius: 50%; background: #c5c8b6; display: block; }
+      /* ---------- notifications iOS (skill) ---------- */
+      .notif { position: absolute; left: 70px; width: 940px; display: flex; align-items: center; gap: 26px; padding: 28px 32px; border-radius: 44px;
+        background: rgba(245,244,250,0.9); color: #17102b; box-shadow: 0 26px 60px rgba(5,2,26,0.35); }
+      .notif .app { width: 92px; height: 92px; border-radius: 22px; display: grid; place-items: center; flex: none; font-family: "Outfit", sans-serif; font-weight: 800; font-size: 38px; }
+      .notif .app svg { width: 62px; height: 62px; }
+      .notif .txt { flex: 1; min-width: 0; }
+      .notif .l1 { display: flex; justify-content: space-between; font-size: 24px; color: #5d5870; font-weight: 600; }
+      .notif b { display: block; font-size: 33px; font-weight: 800; letter-spacing: -0.01em; margin-top: 4px; }
+      .notif small { display: block; font-size: 27px; color: #3f3a52; margin-top: 3px; }
+
+      /* ---------- chaos ---------- */
+      .win { position: absolute; border-radius: 28px; background: #fff; color: var(--ink); overflow: hidden; border: 3px solid var(--line); box-shadow: 0 30px 60px rgba(13,6,48,0.18); }
+      .win .bar { height: 60px; background: #f1f3f7; display: flex; align-items: center; gap: 12px; padding: 0 22px; font-size: 24px; font-weight: 700; color: var(--g1); border-bottom: 3px solid var(--line); }
+      .win .bar i { width: 16px; height: 16px; border-radius: 50%; background: #cbd5e1; display: block; }
       .win .body { padding: 26px 30px; }
-      .ln { height: 18px; border-radius: 9px; background: #d6d9c8; margin: 16px 0; }
-      #s2-doc { left: 60px; top: 560px; width: 640px; height: 470px; }
-      #s2-sheet { left: 420px; top: 920px; width: 600px; height: 430px; }
-      .cells { display: grid; grid-template-columns: 1.4fr 1fr 1fr; border-top: 3px solid #cfd2c0; border-left: 3px solid #cfd2c0; }
-      .cells div { border-right: 3px solid #cfd2c0; border-bottom: 3px solid #cfd2c0; height: 62px; font-size: 26px; padding: 14px 12px; font-family: "JetBrains Mono", monospace; }
-      .err { color: #d6392b; font-weight: 700; }
-      #s2-calc { left: 110px; top: 1180px; width: 420px; height: 300px; border-radius: 34px; background: #1d2a44; padding: 36px; border: 4px solid #2c3d5e; }
-      #s2-calc .scr { font-size: 58px; text-align: right; font-weight: 700; color: var(--ink); }
-      #s2-calc .keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 28px; }
-      #s2-calc .keys i { display: block; height: 44px; border-radius: 14px; background: #2f4166; }
-      .tag { position: absolute; padding: 20px 34px; border-radius: 999px; font-size: 46px; font-weight: 900; letter-spacing: -0.02em; white-space: nowrap; }
-      .tag.l { background: var(--lime); color: var(--amethyst); }
-      .tag.w { background: var(--ink); color: var(--amethyst); }
-      .tag.r { background: var(--alert); color: #1a0606; }
-      #s2-rew { left: 390px; top: 810px; width: 300px; height: 300px; border-radius: 50%; background: rgba(13,6,48,0.85); border: 10px solid var(--ink); display: grid; place-items: center; }
-      #s2-flash { background: var(--ink); }
+      .ln { height: 18px; border-radius: 9px; background: #e2e8f0; margin: 16px 0; }
+      .cells { display: grid; grid-template-columns: 1.3fr 1fr 1fr; border-top: 3px solid var(--line); border-left: 3px solid var(--line); }
+      .cells div { border-right: 3px solid var(--line); border-bottom: 3px solid var(--line); height: 60px; font-size: 25px; padding: 14px 12px; font-family: "JetBrains Mono", monospace; }
+      .err { color: var(--late); font-weight: 700; }
+      #ch-doc { left: 50px; top: 620px; width: 600px; height: 420px; }
+      #ch-sheet { left: 450px; top: 980px; width: 590px; height: 420px; }
+      #ch-calc { position: absolute; left: 90px; top: 1260px; width: 420px; height: 280px; border-radius: 34px; background: var(--amethyst); padding: 36px; color: #fff; box-shadow: 0 30px 60px rgba(13,6,48,0.25); }
+      #ch-calc .scr2 { font-size: 46px; white-space: nowrap; text-align: right; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+      #ch-calc .keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 26px; }
+      #ch-calc .keys i { display: block; height: 42px; border-radius: 14px; background: #241a55; }
+      .tag { position: absolute; padding: 20px 34px; border-radius: 999px; font-size: 46px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; font-family: "Outfit", sans-serif; }
+      .tag.r { background: var(--late); color: #fff; }
+      .tag.a { background: var(--amethyst); color: #fff; }
+      .tag.l { background: var(--lime); color: var(--ink); }
 
-      /* ---------- S3 brand ---------- */
-      #s3-flash { background: var(--lime); }
-      #s3-ring { left: 290px; top: 380px; width: 500px; height: 500px; border-radius: 50%; border: 6px solid rgba(190,242,33,0.55); }
-      #s3-mark { left: 380px; top: 470px; width: 320px; height: 320px; }
-      #s3-word { left: 0; top: 880px; width: 1080px; text-align: center; font-size: 220px; }
-      #s3-word span { display: inline-block; }
-      #s3-base { left: 0; top: 1160px; width: 1080px; text-align: center; }
-      #s3-base div { font-size: 96px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.08; }
+      /* ---------- pastille Robi AI (skill) ---------- */
+      .pw { position: absolute; }
+      .pill { position: relative; display: flex; align-items: center; gap: 24px; padding: 22px 50px 22px 42px; border-radius: 999px;
+        background: linear-gradient(90deg, rgba(13,6,48,0.92) 0%, rgba(24,18,70,0.88) 55%, rgba(40,52,30,0.86) 100%);
+        border: 3px solid rgba(255,255,255,0.22); box-shadow: 0 24px 60px rgba(5,2,26,0.45), 0 0 70px rgba(190,242,33,0.22), inset 0 1px 0 rgba(255,255,255,0.18); overflow: hidden; }
+      .pill svg { width: 64px; height: 64px; display: block; flex: none; }
+      .pill b { font-weight: 800; font-size: 52px; letter-spacing: -0.02em; white-space: nowrap; color: #fff; }
+      .pill b i { font-style: normal; color: var(--lime); }
+      .pill .sheen { position: absolute; top: -30%; left: -40%; width: 30%; height: 160%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent); display: block; }
+      .ring { position: absolute; inset: -16px; border-radius: 999px; border: 4px solid var(--lime); opacity: 0; }
+      #pw1 { left: 290px; top: 540px; }
 
-      /* ---------- step scenes ---------- */
-      .step-head { left: 80px; top: 150px; width: 920px; }
-      .step-num { font-size: 40px; font-weight: 700; color: var(--lime); display: flex; align-items: center; gap: 22px; }
-      .step-num i { display: block; width: 120px; height: 4px; background: var(--lime); }
-      .step-title { font-size: 170px; margin-top: 18px; }
-      .step-sub { font-size: 48px; font-weight: 700; color: var(--muted); margin-top: 18px; letter-spacing: -0.02em; }
+      /* ---------- carte du hero (skill) ---------- */
+      .demo { position: absolute; left: 56px; top: 700px; width: 640px; filter: drop-shadow(0 34px 60px rgba(3,0,13,0.55)); }
+      .voice { background: #201c3c; border: 2px solid #5a526f; border-radius: 36px; padding: 32px 42px 46px; position: relative; z-index: 2; }
+      .voice-top { display: flex; justify-content: space-between; align-items: center; }
+      .voice-label { display: inline-flex; align-items: center; gap: 12px; font-size: 19px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #d6d1e0; }
+      .voice-label svg { width: 26px; height: 26px; color: var(--lime); }
+      .wave { display: flex; align-items: center; gap: 4px; height: 46px; }
+      .wave i { display: block; width: 4px; border-radius: 4px; background: var(--lime); }
+      .prompt { font-size: 33px; font-weight: 500; line-height: 1.42; color: #fff; letter-spacing: -0.025em; margin-top: 20px; min-height: 188px; }
+      .prompt .w { opacity: 0; }
+      .transfer { position: absolute; bottom: -24px; left: 46px; display: grid; place-items: center; width: 48px; height: 48px; background: var(--lime); border: 6px solid #f7f6f2; border-radius: 50%; color: var(--amethyst); z-index: 2; }
+      .transfer svg { width: 22px; height: 22px; }
+      .document { margin-top: -38px; padding: 88px 46px 38px; background: #f7f6f2; color: #17102b; border-radius: 0 0 30px 30px; position: relative; z-index: 1; clip-path: inset(0 0 100% 0); }
+      .doc-top { display: flex; justify-content: space-between; align-items: center; }
+      .doc-title { font-size: 56px; letter-spacing: -0.07em; font-weight: 600; }
+      .doc-title i { font-style: normal; color: #7c8d37; }
+      .doc-badge { background: var(--amethyst); border-radius: 16px; width: 70px; height: 70px; display: grid; place-items: center; }
+      .doc-badge svg { width: 50px; height: 50px; }
+      .rows { margin-top: 26px; }
+      .row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 17px 0; border-top: 2px solid #dedce1; font-size: 24px; }
+      .row span { color: #736e7f; font-weight: 500; }
+      .row b { font-weight: 700; white-space: nowrap; position: relative; min-width: 200px; text-align: right; }
+      .row b .val { opacity: 0; display: inline-block; }
+      .row b .sk { position: absolute; right: 0; top: 50%; width: 200px; height: 14px; margin-top: -7px; border-radius: 8px; background: linear-gradient(90deg, #e3e1e6, #efedf1, #e3e1e6); }
+      .row.total b { font-family: "Outfit", sans-serif; font-size: 36px; font-weight: 800; letter-spacing: -0.02em; }
+      .status { display: flex; align-items: center; gap: 18px; margin-top: 22px; padding: 18px 20px; border-radius: 20px; background: #ebe9ed; position: relative; }
+      .status-bg { position: absolute; inset: 0; border-radius: 20px; background: var(--lime); opacity: 0; }
+      .status .check { position: relative; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: #e4edd8; color: #486a2f; flex: none; }
+      .status .check svg { width: 26px; height: 26px; }
+      .status .txt { position: relative; height: 58px; flex: 1; }
+      .status .txt div { position: absolute; inset: 0; }
+      .status strong { display: block; font-size: 23px; font-weight: 700; }
+      .status small { display: block; font-size: 18px; color: #736e7f; margin-top: 4px; }
+      #st2, #st3 { opacity: 0; }
 
-      /* S4 */
-      #s4-phone { left: 250px; top: 690px; }
-      .app { background: #0d0630; }
-      .app-top { position: absolute; left: 40px; right: 40px; top: 110px; display: flex; align-items: center; gap: 18px; font-size: 34px; font-weight: 900; }
-      .app-top svg { width: 58px; height: 58px; }
-      #s4-bubble { position: absolute; left: 36px; right: 36px; top: 220px; border-radius: 40px; padding: 36px; background: var(--space); font-size: 42px; line-height: 1.3; font-weight: 700; min-height: 380px; }
-      #s4-bubble .w { opacity: 0; }
-      #s4-bubble .kw { color: var(--lime); }
-      #s4-listen { position: absolute; left: 36px; top: 640px; font-size: 28px; color: var(--muted); font-weight: 700; }
-      #s4-ok { position: absolute; left: 36px; top: 628px; padding: 16px 28px; background: var(--lime); color: var(--amethyst); font-size: 30px; }
-      #s4-wave { position: absolute; left: 60px; right: 60px; top: 730px; height: 130px; display: flex; align-items: center; justify-content: space-between; }
-      #s4-wave i { display: block; width: 12px; height: 120px; border-radius: 6px; background: var(--lime); }
-      #s4-mic { position: absolute; left: 175px; top: 900px; width: 200px; height: 200px; border-radius: 50%; background: var(--lime); display: grid; place-items: center; }
-      .ring { position: absolute; border-radius: 50%; border: 5px solid var(--lime); }
-      #s4-r1, #s4-r2 { left: 175px; top: 900px; width: 200px; height: 200px; }
+      /* ---------- puces ---------- */
+      .fx-intro { position: absolute; display: inline-flex; align-items: center; gap: 18px; padding: 20px 40px; border-radius: 999px; font-weight: 700; font-size: 42px; letter-spacing: -0.01em; color: #fff;
+        background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.22); white-space: nowrap; }
+      .fx-intro svg, .fx-chip svg { width: 60px; height: 40px; border-radius: 6px; display: block; box-shadow: 0 0 0 2px rgba(255,255,255,0.25); }
+      .fx-intro b, .fx-chip b { color: var(--lime); font-weight: 800; }
+      #fx1 { left: 80px; top: 540px; }
+      .chk { position: absolute; display: inline-flex; align-items: center; gap: 16px; padding: 20px 32px; border-radius: 24px; background: #fff; color: var(--ink);
+        font-size: 32px; font-weight: 700; border: 3px solid var(--line); box-shadow: 0 24px 50px rgba(3,0,13,0.35); white-space: nowrap; }
+      .chk i { width: 44px; height: 44px; border-radius: 50%; background: var(--lime); display: grid; place-items: center; flex: none; }
+      .chk svg { width: 26px; height: 26px; }
+      #ck1 { left: 640px; top: 1560px; } #ck2 { left: 560px; top: 1680px; } #ck3 { left: 110px; top: 1620px; }
 
-      /* S5 */
-      #s5-inv { left: 110px; top: 640px; width: 860px; height: 1010px; border-radius: 34px; background: var(--paper); color: var(--paper-ink); padding: 56px 60px; }
-      .inv-top { display: flex; justify-content: space-between; align-items: flex-start; }
-      .inv-brand { display: flex; align-items: center; gap: 16px; font-size: 40px; font-weight: 900; }
-      .inv-brand .sq { width: 70px; height: 70px; border-radius: 18px; background: var(--amethyst); display: grid; place-items: center; }
-      .inv-id { text-align: right; }
-      .inv-id b { display: block; font-size: 48px; font-weight: 900; letter-spacing: -0.02em; }
-      .inv-id span { font-size: 26px; color: #4b4f66; }
-      .inv-meta { margin-top: 50px; display: flex; justify-content: space-between; font-size: 28px; color: #4b4f66; }
-      .inv-meta b { display: block; color: var(--paper-ink); font-size: 34px; margin-top: 6px; }
-      .inv-line { margin-top: 50px; border-top: 4px solid var(--paper-ink); padding-top: 26px; display: flex; justify-content: space-between; font-size: 36px; font-weight: 700; }
-      .inv-line span:last-child { font-family: "JetBrains Mono", monospace; }
-      .inv-sub { display: flex; justify-content: space-between; font-size: 32px; margin-top: 22px; color: #4b4f66; }
-      .inv-sub span:last-child { font-family: "JetBrains Mono", monospace; color: var(--paper-ink); }
-      .inv-total { margin-top: 44px; border-radius: 26px; background: var(--amethyst); color: var(--ink); padding: 34px 38px; display: flex; justify-content: space-between; align-items: center; }
-      .inv-total > span { font-size: 34px; font-weight: 700; }
-      #s5-count { font: inherit; letter-spacing: inherit; }
-      .inv-total b { font-size: 76px; font-weight: 700; color: var(--lime); font-family: "JetBrains Mono", monospace; letter-spacing: -0.04em; }
-      .chk { position: absolute; padding: 18px 30px; background: var(--amethyst); color: var(--ink); font-size: 32px; border: 4px solid var(--lime); }
-      .chk svg { width: 34px; height: 34px; }
-      #s5-c1 { left: 80px; top: 540px; } #s5-c2 { left: 500px; top: 540px; } #s5-c3 { left: 60px; top: 1500px; }
-      #s5-stamp { left: 560px; top: 1430px; width: 440px; padding: 26px 30px; border-radius: 26px; background: var(--lime); color: var(--amethyst); border: 6px solid var(--amethyst); text-align: center; }
-      #s5-stamp small { display: block; font-size: 26px; font-weight: 700; letter-spacing: 0.06em; }
-      #s5-stamp b { display: block; font-size: 64px; font-weight: 900; letter-spacing: -0.03em; line-height: 1; margin-top: 6px; }
-
-      /* S6 */
-      #s6-phone { left: 250px; top: 690px; }
-      #s6-card { position: absolute; left: 36px; right: 36px; top: 210px; border-radius: 40px; padding: 38px; background: var(--space); }
-      #s6-card .id { font-size: 28px; color: var(--muted); }
-      #s6-card .amt { font-size: 64px; font-weight: 700; letter-spacing: -0.04em; margin-top: 10px; font-family: "JetBrains Mono", monospace; }
-      #s6-card .who { font-size: 32px; font-weight: 700; margin-top: 8px; }
-      .stwrap { position: relative; height: 60px; margin-top: 26px; }
-      #s6-status, #s6-status2 { position: absolute; left: 0; top: 0; padding: 12px 24px; font-size: 26px; background: rgba(243,245,234,0.16); color: var(--ink); }
-      #s6-status2 { background: var(--lime); color: var(--amethyst); }
-      #s6-send { position: absolute; left: 36px; right: 36px; top: 900px; height: 130px; border-radius: 40px; background: var(--lime); color: var(--amethyst); display: grid; place-items: center; font-size: 44px; font-weight: 900; }
-      #s6-tap { left: 225px; top: 915px; width: 100px; height: 100px; border-radius: 50%; border: 6px solid var(--ink); }
-      #s6-n1 { top: 560px; } #s6-n2 { top: 740px; }
-      #s6-paid { left: 90px; top: 900px; width: 900px; height: 230px; border-radius: 999px; background: var(--lime); color: var(--amethyst); display: flex; align-items: center; justify-content: space-between; padding: 0 70px 0 50px; }
-      #s6-paid .l { display: flex; align-items: center; gap: 26px; font-size: 64px; font-weight: 900; letter-spacing: -0.03em; }
-      #s6-paid .l i { width: 120px; height: 120px; border-radius: 50%; background: var(--amethyst); display: grid; place-items: center; }
-      #s6-paid b { font-size: 70px; font-weight: 700; font-family: "JetBrains Mono", monospace; letter-spacing: -0.04em; }
-      .spark { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: var(--lime); left: 530px; top: 1005px; opacity: 0; }
-      #s6-foot { left: 80px; top: 1200px; width: 920px; font-size: 42px; font-weight: 700; color: var(--muted); }
-
-      /* S7 */
-      #s7-head { left: 80px; top: 240px; width: 920px; }
-      #s7-free { font-size: 150px; }
-      #s7-free-sub { font-size: 50px; font-weight: 700; color: var(--muted); margin-top: 28px; }
-      #s7-card { left: 80px; top: 820px; width: 920px; height: 640px; border-radius: 48px; background: var(--card); border: 6px solid var(--lime); padding: 60px 64px; }
-      #s7-card .k { font-size: 32px; font-weight: 700; color: var(--lime); letter-spacing: 0.08em; }
-      #s7-card .t { font-size: 84px; font-weight: 900; letter-spacing: -0.04em; margin-top: 18px; }
-      #s7-price { display: flex; align-items: flex-end; gap: 36px; margin-top: 20px; }
-      #s7-price b { font-size: 230px; font-weight: 900; letter-spacing: -0.06em; color: var(--lime); line-height: 0.9; }
-      #s7-old { position: relative; font-size: 84px; font-weight: 700; color: var(--muted); padding-bottom: 20px; }
-      #s7-strike { position: absolute; left: -8px; right: -8px; top: 44px; height: 8px; background: var(--alert); transform-origin: left center; }
-      #s7-card .f { font-size: 40px; font-weight: 700; margin-top: 30px; }
-
-      /* S8 */
-      #s8-mark { left: 400px; top: 330px; width: 280px; height: 280px; }
-      #s8-word { left: 0; top: 650px; width: 1080px; text-align: center; font-size: 200px; }
-      #s8-base { left: 0; top: 920px; width: 1080px; text-align: center; font-size: 66px; font-weight: 900; letter-spacing: -0.03em; }
-      #s8-cta { left: 190px; top: 1110px; width: 700px; height: 150px; border-radius: 999px; background: var(--lime); color: var(--amethyst); display: grid; place-items: center; font-size: 54px; font-weight: 900; letter-spacing: -0.02em; }
-      #s8-url { left: 0; top: 1310px; width: 1080px; text-align: center; font-size: 46px; font-weight: 700; color: var(--ink); }
+      /* ---------- carte de fin (skill) ---------- */
+      #end-dim { background: rgba(8,3,32,0.62); }
+      .end-glow { position: absolute; left: 50%; top: 46%; width: 1300px; height: 1300px; margin: -650px 0 0 -650px; border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(190,242,33,0.16), rgba(190,242,33,0.04) 55%, transparent); }
+      .end { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 120px; }
+      #fl-pill { position: relative; }
+      #pw3 { position: relative; transform: scale(1.25); }
+      .end h2 { margin-top: 92px; text-align: center; font-family: "Outfit", sans-serif; font-weight: 800; font-size: 128px; line-height: 1.02; letter-spacing: -0.05em; }
+      .end h2 > span { display: block; }
+      .swap { position: relative; display: inline-block; height: 1.02em; vertical-align: top; clip-path: inset(-9% -90px -3% -90px); }
+      .swap b { position: absolute; left: 0; right: 0; top: 0; font-weight: 800; white-space: nowrap; text-align: center; }
+      .accin { display: inline-flex; align-items: flex-start; gap: 0.24em; }
+      .accin .robi { font-style: normal; }
+      .cyc { position: relative; display: block; width: 3.4em; height: 1.02em; clip-path: inset(0% -90px -3% -90px); text-align: left; }
+      .cyc b { position: absolute; left: 0; top: 0; font-weight: 800; color: var(--lime); white-space: nowrap; }
+      .offer-w { position: relative; margin-top: 88px; }
+      .offer { position: relative; display: inline-flex; align-items: center; gap: 18px; padding: 26px 48px; border-radius: 999px; background: var(--lime); color: var(--amethyst);
+        font-weight: 700; font-size: 40px; box-shadow: 0 20px 50px rgba(190,242,33,0.28); white-space: nowrap; }
+      .offer b { font-family: "Outfit", sans-serif; font-weight: 900; font-size: 52px; letter-spacing: -0.03em; }
+      .offer-ring { position: absolute; inset: -14px; border-radius: 999px; border: 4px solid var(--lime); opacity: 0; }
+      .fx-chip { margin-top: 48px; display: inline-flex; align-items: center; gap: 18px; padding: 20px 40px; border-radius: 999px; font-weight: 700; font-size: 40px; letter-spacing: -0.01em; color: #fff;
+        background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.22); white-space: nowrap; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="36" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="35.45" data-width="1080" data-height="1920">
+      <div id="film">
+        <!-- fonds -->
+        <div id="bg-base" class="clip" data-start="0" data-duration="35.45" data-track-index="0" data-layout-ignore>
+          <div id="halo"></div><div id="halo-l"></div>
+        </div>
+        <div id="bg-light" class="clip" data-start="4" data-duration="4" data-track-index="1" data-layout-ignore><div id="rv-light" class="reveal"></div></div>
+        <div id="bg-lime" class="clip" data-start="8" data-duration="3.2" data-track-index="1" data-layout-ignore><div id="rv-lime" class="reveal"></div></div>
 
-      <!-- ================= persistent background ================= -->
-      <div id="bg" data-layout-ignore class="clip" data-start="0" data-duration="36" data-track-index="0">
-        <div id="grid"></div>
-        <div id="glow-a" class="glow"></div>
-        <div id="glow-b" class="glow"></div>
-        <div id="ghost" class="ghost" style="left: -40px; top: 1480px; font-size: 400px;">FACTUR-X</div>
-        <div id="grain"></div>
+        <!-- iPhone titane, présent de bout en bout -->
+        <div id="phone" class="clip" data-start="0" data-duration="35.45" data-track-index="2" style="z-index: 5">
+          <div id="rig">
+            <div class="ph-btn" style="left: -6px; top: 250px; height: 70px"></div>
+            <div class="ph-btn" style="left: -6px; top: 350px; height: 120px"></div>
+            <div class="ph-btn" style="right: -6px; top: 330px; height: 170px"></div>
+            <div class="ph-body"></div>
+            <div class="ph-bezel">
+              <div class="ph-screen">
+                <div class="ph-island"></div>
+                <div id="scr-lock" class="scr">
+                  <div id="lk-date" data-layout-allow-overlap>lundi 28 septembre</div>
+                  <div id="lk-time" data-layout-allow-overlap>22:47</div>
+                </div>
+                <div id="scr-splash" class="scr"><img src="assets/screens/demo.png" alt="" /></div>
+                <div id="scr-new" class="scr"><img src="assets/screens/nouvelle.png" alt="" /></div>
+                <div id="scr-fact" class="scr"><img src="assets/screens/factures.png" alt="" /><div id="row-hi" style="opacity: 0"></div><div id="paid-flip" style="opacity: 0" data-layout-ignore><i>PAYÉ</i></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S1 : 22h47 -->
+        <section id="s1" class="clip" data-start="0" data-duration="4" data-track-index="3" style="z-index: 10">
+          <div id="s1-head" class="head">
+            <div class="kick" id="s1-k">Lundi soir</div>
+            <div class="ttl"><span id="s1-t1" data-layout-allow-overlap>22h47.</span><span id="s1-t2" data-layout-allow-overlap class="lime">Toujours pas facturé.</span></div>
+          </div>
+          <div id="n1" class="notif" style="top: 1010px"><span class="app" style="background: var(--lime); color: var(--ink)">SV</span>
+            <span class="txt"><span class="l1"><span>MESSAGES</span><span>maintenant</span></span><b>Studio Vernier</b><small>Vous m'envoyez la facture ce soir ?</small></span></div>
+          <div id="n2" class="notif" style="top: 1190px"><span class="app" style="background: var(--late); color: #fff">!</span>
+            <span class="txt"><span class="l1"><span>RAPPELS</span><span>22:40</span></span><b>Factures du mois</b><small>6 factures à faire avant demain</small></span></div>
+          <div id="n3" class="notif" style="top: 1370px"><span class="app" style="background: var(--amethyst); color: #fff">€</span>
+            <span class="txt"><span class="l1"><span>BANQUE</span><span>21:15</span></span><b>Solde du compte</b><small>312,40 €</small></span></div>
+        </section>
+
+        <!-- S2 : la paperasse -->
+        <section id="s2" class="clip" data-start="4" data-duration="4" data-track-index="3" style="z-index: 10">
+          <div class="head dark">
+            <div class="kick" id="s2-k">Excel, Word, calculette…</div>
+            <div class="ttl"><span id="s2-t1" data-layout-allow-overlap>Encore la</span><span id="s2-t2" data-layout-allow-overlap>paperasse ?</span></div>
+          </div>
+          <div id="ch-doc" class="win">
+            <div class="bar"><i></i><i></i><i></i><span>Facture_v3_FINAL(2).docx</span></div>
+            <div class="body"><div style="font-size: 44px; font-weight: 800">FACTURE N° ???</div>
+              <div class="ln" style="width: 70%"></div><div class="ln" style="width: 90%"></div><div class="ln" style="width: 55%"></div><div class="ln" style="width: 80%"></div></div>
+          </div>
+          <div id="ch-sheet" class="win">
+            <div class="bar"><i></i><i></i><i></i><span>compta_2026.xlsx</span></div>
+            <div class="body"><div class="cells">
+              <div>Presta</div><div>HT</div><div>TVA</div>
+              <div>Site</div><div>1350</div><div class="err">#REF!</div>
+              <div>Logo</div><div>450</div><div class="err">#N/A</div>
+              <div>Total</div><div class="err">#VALEUR!</div><div></div>
+            </div></div>
+          </div>
+          <div id="ch-calc"><div class="scr2">1350 × 1,2 = ?</div><div class="keys"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <div id="tg1" class="tag a" style="left: 600px; top: 560px">TVA ?</div>
+          <div id="tg2" class="tag l" style="left: 70px; top: 1080px">N° de facture ?</div>
+          <div id="tg3" class="tag r" style="left: 440px; top: 1440px">Mentions obligatoires ?</div>
+          <div id="tg4" class="tag a" style="left: 660px; top: 860px">SIRET ?</div>
+          <div id="tg5" class="tag l" style="left: 560px; top: 1600px">Factur-X ?!</div>
+          <div id="tg6" class="tag r" style="left: 90px; top: 1590px">Relancer qui ?</div>
+        </section>
+
+        <!-- S3 : Robi -->
+        <section id="s3" class="clip" data-start="8" data-duration="3" data-track-index="3" style="z-index: 10">
+          <div class="head dark">
+            <div class="kick" id="s3-k" style="color: var(--ink)">Et si…</div>
+            <div class="ttl"><span id="s3-t1" data-layout-allow-overlap>Vous la dictiez</span><span id="s3-t2" data-layout-allow-overlap>à Robi ?</span></div>
+          </div>
+          <div class="pw" id="pw1"><div class="ring" id="ring1"></div>
+            <div class="pill" id="pill1"><i class="sheen" id="pill1-sheen" data-layout-allow-overflow></i>
+              <svg viewBox="190 183 645 645" aria-hidden="true"><g fill="none" stroke="#BEF221" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"><path d="M505 405 V270 H430"/><rect x="290" y="400" width="445" height="340" rx="74"/><path d="M232 567 H290"/><path d="M735 567 H793"/></g><g fill="#BEF221"><rect x="410" y="505" width="46" height="125" rx="23"/><rect x="568" y="505" width="46" height="125" rx="23"/></g></svg>
+              <b>Robi <i>AI</i></b></div></div>
+        </section>
+
+        <!-- S4 + S5 : Parlez / Facturez (carte du hero qui sort de l'écran) -->
+        <section id="s4" class="clip" data-start="11" data-duration="11" data-track-index="3" style="z-index: 10">
+          <div class="head" id="h4">
+            <div class="kick"><b>01</b> / Parlez</div>
+            <div class="ttl"><span id="s4-t1" data-layout-allow-overlap>Vous dictez.</span><span id="s4-t2" data-layout-allow-overlap class="lime">Robi rédige.</span></div>
+          </div>
+          <div class="head" id="h5">
+            <div class="kick"><b>02</b> / Facturez</div>
+            <div class="ttl"><span id="s5-t1" data-layout-allow-overlap>TVA, mentions,</span><span id="s5-t2" data-layout-allow-overlap class="lime">tout y est.</span></div>
+          </div>
+          <div id="fx1" class="fx-intro" data-layout-allow-overlap><svg viewBox="0 0 30 20" aria-hidden="true"><rect width="10" height="20" fill="#0055A4"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#EF4135"/></svg><span>Conforme <b>Factur-X</b></span></div>
+          <div class="demo" id="demo">
+            <div class="voice">
+              <div class="voice-top">
+                <span class="voice-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>Vous dites</span>
+                <span class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+              </div>
+              <div class="prompt" id="prompt"><span class="w">«&nbsp;Facture</span> <span class="w">pour</span> <span class="w">Studio</span> <span class="w">Vernier,</span> <span class="w">refonte</span> <span class="w">du</span> <span class="w">site</span> <span class="w">vitrine,</span> <span class="w">1&nbsp;350&nbsp;euros</span> <span class="w">hors</span> <span class="w">taxes,</span> <span class="w">à</span> <span class="w">30</span> <span class="w">jours.&nbsp;»</span></div>
+              <span class="transfer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg></span>
+            </div>
+            <div class="document" id="doc" data-layout-allow-overflow>
+              <div class="doc-top"><div class="doc-title">Facture<i>.</i></div>
+                <div class="doc-badge"><svg viewBox="190 183 645 645" aria-hidden="true"><g fill="none" stroke="#BEF221" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"><path d="M505 405 V270 H430"/><rect x="290" y="400" width="445" height="340" rx="74"/><path d="M232 567 H290"/><path d="M735 567 H793"/></g><g fill="#BEF221"><rect x="410" y="505" width="46" height="125" rx="23"/><rect x="568" y="505" width="46" height="125" rx="23"/></g></svg></div></div>
+              <div class="rows">
+                <div class="row"><span>Client</span><b><i class="sk" id="sk1"></i><span class="val" id="v1">Studio Vernier</span></b></div>
+                <div class="row"><span>Prestation</span><b><i class="sk" id="sk2"></i><span class="val" id="v2">Refonte site vitrine</span></b></div>
+                <div class="row total"><span>Total TTC</span><b><i class="sk" id="sk3"></i><span class="val" id="v3"><span id="cnt">1 620,00</span> €</span></b></div>
+              </div>
+              <div class="status" id="status"><div class="status-bg" id="st-bg"></div>
+                <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+                <span class="txt">
+                  <div id="st1" data-layout-allow-overlap><strong>Robi rédige…</strong><small>D'après votre dictée</small></div>
+                  <div id="st2" data-layout-allow-overlap><strong>Facture créée</strong><small>À vérifier avant l'envoi</small></div>
+                  <div id="st3" data-layout-allow-overlap><strong>Envoyée à Studio Vernier</strong><small>Robi relancera si besoin</small></div>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div id="ck1" class="chk"><i><svg viewBox="0 0 24 24" fill="none" stroke="#0D0630" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>TVA 20 % calculée</div>
+          <div id="ck2" class="chk"><i><svg viewBox="0 0 24 24" fill="none" stroke="#0D0630" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>Mentions obligatoires</div>
+          <div id="ck3" class="chk"><i><svg viewBox="0 0 24 24" fill="none" stroke="#0D0630" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>N° automatique</div>
+        </section>
+
+        <!-- S6 : Encaissez -->
+        <section id="s6" class="clip" data-start="22" data-duration="6" data-track-index="3" style="z-index: 10">
+          <div class="head">
+            <div class="kick"><b>03</b> / Encaissez</div>
+            <div class="ttl"><span id="s6-t1" data-layout-allow-overlap>Envoyée. Payée.</span><span id="s6-t2" data-layout-allow-overlap class="lime">Sans relancer.</span></div>
+          </div>
+          <div id="n4" class="notif" style="top: 560px"><span class="app" style="background: var(--amethyst)"><svg viewBox="190 183 645 645" aria-hidden="true"><g fill="none" stroke="#BEF221" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"><path d="M505 405 V270 H430"/><rect x="290" y="400" width="445" height="340" rx="74"/><path d="M232 567 H290"/><path d="M735 567 H793"/></g><g fill="#BEF221"><rect x="410" y="505" width="46" height="125" rx="23"/><rect x="568" y="505" width="46" height="125" rx="23"/></g></svg></span>
+            <span class="txt"><span class="l1"><span>ROBI AI</span><span>maintenant</span></span><b>Paiement reçu · 1 620,00 €</b><small>Studio Vernier a payé en ligne.</small></span></div>
+          <div id="sparks"></div>
+        </section>
       </div>
 
-      <!-- ================= S1 — 22h47, lockscreen ================= -->
-      <section id="s1" class="clip" data-start="0" data-duration="4" data-track-index="1">
-        <div id="s1-wrap" class="abs" style="inset: 0">
-          <div id="s1-phone" class="phone">
-            <div id="s1-lock" class="screen">
-              <div class="statusbar"><span>Orange</span><span>18 %</span></div>
-              <div id="s1-date" data-layout-allow-overlap>lundi 28 septembre</div>
-              <div id="s1-time">22:47</div>
-              <div id="s1-n1" class="notif">
-                <div class="ic" style="background: var(--lime); color: var(--amethyst)">CD</div>
-                <div class="tx"><div class="row"><b>Mme Durand</b><span>maintenant</span></div><p>Vous m'envoyez la facture ce soir ?</p></div>
-              </div>
-              <div id="s1-n2" class="notif">
-                <div class="ic" style="background: var(--alert); color: #1a0606">!</div>
-                <div class="tx"><div class="row"><b>Rappel</b><span>22:40</span></div><p>6 factures à faire avant demain</p></div>
-              </div>
-              <div id="s1-n3" class="notif">
-                <div class="ic" style="background: var(--ink); color: var(--amethyst)">€</div>
-                <div class="tx"><div class="row"><b>Banque</b><span>21:15</span></div><p>Solde du compte : 312,40 €</p></div>
-              </div>
-            </div>
-          </div>
-          <div id="s1-head" class="abs">
-            <div id="s1-h1" class="h-xl">22h47.</div>
-            <div id="s1-h2"><span>Et</span> <span>toujours</span> <span class="lime">pas</span> <span class="lime">facturé.</span></div>
-          </div>
+      <!-- carte de fin de la série -->
+      <section id="endcard" class="clip" data-start="28" data-duration="7.45" data-track-index="4" style="z-index: 20">
+        <div id="end-dim" class="abs" style="inset: 0"></div>
+        <div class="end-glow" id="end-glow" data-layout-ignore></div>
+        <div class="end">
+          <div id="fl-pill"><div class="pw" id="pw3"><div class="ring" id="ring3"></div>
+            <div class="pill" id="pill3"><i class="sheen" id="pill3-sheen" data-layout-allow-overflow></i>
+              <svg viewBox="190 183 645 645" aria-hidden="true"><g fill="none" stroke="#BEF221" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"><path d="M505 405 V270 H430"/><rect x="290" y="400" width="445" height="340" rx="74"/><path d="M232 567 H290"/><path d="M735 567 H793"/></g><g fill="#BEF221"><rect x="410" y="505" width="46" height="125" rx="23"/><rect x="568" y="505" width="46" height="125" rx="23"/></g></svg>
+              <b>Robi <i>AI</i></b></div></div></div>
+          <h2>
+            <span id="e1"><span class="swap" id="sw" data-layout-allow-overflow><b id="sw0" data-layout-allow-overlap>Parlez.</b><b id="sw1" data-layout-allow-overlap>Écrivez.</b></span></span>
+            <span id="e2"><span class="accin" id="accin"><i class="robi">Robi</i><span class="cyc" id="cyc" data-layout-allow-overflow><b id="cy0" data-layout-allow-overlap>facture.</b><b id="cy1" data-layout-allow-overlap>envoie.</b><b id="cy2" data-layout-allow-overlap>relance.</b></span></span></span>
+            <span id="e3">Encaissez.</span>
+          </h2>
+          <div class="offer-w" id="fl-offer"><div class="offer-ring" id="offer-ring"></div><div class="offer" id="offer"><b>59 €</b> à vie · jusqu'au 31 octobre</div></div>
+          <div class="fx-chip" id="fxchip"><svg viewBox="0 0 30 20" aria-hidden="true"><rect width="10" height="20" fill="#0055A4"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#EF4135"/></svg><span>Conforme <b>Factur-X</b></span></div>
         </div>
       </section>
 
-      <!-- ================= S2 — la paperasse ================= -->
-      <section id="s2" class="clip" data-start="4" data-duration="4" data-track-index="1">
-        <div id="s2-wrap" class="abs" style="inset: 0">
-          <div id="s2-head" class="abs h-xl">Encore la paperasse ?</div>
-          <div id="s2-doc" class="win">
-            <div class="bar"><i></i><i></i><i></i><span>Facture_v3_FINAL(2).docx</span></div>
-            <div class="body">
-              <div style="font-size: 44px; font-weight: 900">FACTURE N° ???</div>
-              <div class="ln" style="width: 70%"></div><div class="ln" style="width: 90%"></div>
-              <div class="ln" style="width: 55%"></div><div class="ln" style="width: 82%"></div>
-              <div class="ln" style="width: 40%"></div>
-            </div>
-          </div>
-          <div id="s2-sheet" class="win">
-            <div class="bar"><i></i><i></i><i></i><span>compta_2026.xlsx</span></div>
-            <div class="body">
-              <div class="cells">
-                <div>Presta</div><div>HT</div><div>TVA</div>
-                <div>Site</div><div>1200</div><div class="err">#REF!</div>
-                <div>Logo</div><div>450</div><div class="err">#N/A</div>
-                <div>Total</div><div class="err">#VALEUR!</div><div></div>
-              </div>
-            </div>
-          </div>
-          <div id="s2-calc" class="abs">
-            <div class="scr mono">1200 × 1,2 = ?</div>
-            <div class="keys"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div id="s2-t1" class="tag w" style="left: 560px; top: 520px">TVA ?</div>
-          <div id="s2-t2" class="tag l" style="left: 60px; top: 1060px">N° de facture ?</div>
-          <div id="s2-t3" class="tag r" style="left: 470px; top: 1390px">Mentions obligatoires ?</div>
-          <div id="s2-t4" class="tag w" style="left: 620px; top: 790px">SIRET ?</div>
-          <div id="s2-t5" class="tag l" style="left: 150px; top: 1560px">Factur-X ?!</div>
-          <div id="s2-t6" class="tag r" style="left: 560px; top: 1650px">Relancer qui ?</div>
-          <div id="s2-rew" class="abs">
-            <svg width="170" height="130" viewBox="0 0 170 130"><path d="M82 10 L10 65 L82 120 Z M160 10 L88 65 L160 120 Z" fill="#f3f5ea" /></svg>
-          </div>
-        </div>
-        <div id="s2-flash" class="abs" style="inset: 0; opacity: 0"></div>
-      </section>
-
-      <!-- ================= S3 — Robi arrive ================= -->
-      <section id="s3" class="clip" data-start="8" data-duration="4" data-track-index="1">
-        <div id="s3-wrap" class="abs" style="inset: 0">
-          <div id="s3-ring" class="abs"></div>
-          <svg id="s3-mark" class="abs" viewBox="190 183 645 645" xmlns="http://www.w3.org/2000/svg">
-            <g fill="none" stroke="#BEF221" stroke-width="56" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M505 405 V270 H430" />
-              <rect x="290" y="400" width="445" height="340" rx="74" />
-              <path d="M232 567 H290" />
-              <path d="M735 567 H793" />
-            </g>
-            <g id="s3-eyes" fill="#BEF221">
-              <rect x="410" y="505" width="46" height="125" rx="23" />
-              <rect x="568" y="505" width="46" height="125" rx="23" />
-            </g>
-          </svg>
-          <div id="s3-word" class="abs h-xl"><span>R</span><span>o</span><span>b</span><span>i</span></div>
-          <div id="s3-base" class="abs">
-            <div id="s3-b1">Parlez.</div>
-            <div id="s3-b2">Facturez.</div>
-            <div id="s3-b3" class="lime">Encaissez.</div>
-          </div>
-        </div>
-        <div id="s3-flash" class="abs" style="inset: 0; opacity: 0"></div>
-      </section>
-
-      <!-- ================= S4 — Parlez ================= -->
-      <section id="s4" class="clip" data-start="12" data-duration="6" data-track-index="1">
-        <div id="s4-wrap" class="abs" style="inset: 0">
-          <div class="step-head abs">
-            <div id="s4-num" class="step-num mono"><span>01</span><i></i></div>
-            <div id="s4-title" class="step-title h-xl">Parlez.</div>
-            <div id="s4-sub" class="step-sub">Dictez votre facture à Robi.</div>
-          </div>
-          <div id="s4-phone" class="phone">
-            <div class="screen app">
-              <div class="statusbar"><span>22:48</span><span>18 %</span></div>
-              <div class="app-top">
-                <svg viewBox="190 183 645 645"><g fill="none" stroke="#BEF221" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"><path d="M505 405 V270 H430" /><rect x="290" y="400" width="445" height="340" rx="74" /><path d="M232 567 H290" /><path d="M735 567 H793" /></g><g fill="#BEF221"><rect x="410" y="505" width="46" height="125" rx="23" /><rect x="568" y="505" width="46" height="125" rx="23" /></g></svg>
-                <span>Nouvelle facture</span>
-              </div>
-              <div id="s4-bubble"><span class="w">Facture</span> <span class="w">pour</span> <span class="w kw">Mme</span> <span class="w kw">Durand,</span> <span class="w">refonte</span> <span class="w">du</span> <span class="w">site</span> <span class="w">vitrine,</span> <span class="w kw">1 200 €</span> <span class="w kw">HT,</span> <span class="w">paiement</span> <span class="w">à</span> <span class="w kw">30</span> <span class="w kw">jours.</span></div>
-              <div id="s4-listen" data-layout-allow-overlap data-layout-allow-occlusion>Robi écoute…</div>
-              <div id="s4-ok" class="pill" data-layout-allow-overlap>Compris ✓ Facture prête</div>
-              <div id="s4-wave">
-                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-              </div>
-              <div id="s4-r1" class="ring"></div>
-              <div id="s4-r2" class="ring"></div>
-              <div id="s4-mic">
-                <svg width="90" height="110" viewBox="0 0 90 110"><rect x="27" y="4" width="36" height="62" rx="18" fill="#0d0630" /><path d="M12 50 C12 72 26 84 45 84 C64 84 78 72 78 50" fill="none" stroke="#0d0630" stroke-width="9" stroke-linecap="round" /><path d="M45 84 V104" stroke="#0d0630" stroke-width="9" stroke-linecap="round" /></svg>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= S5 — Facturez ================= -->
-      <section id="s5" class="clip" data-start="18" data-duration="6" data-track-index="1">
-        <div id="s5-wrap" class="abs" style="inset: 0">
-          <div class="step-head abs">
-            <div id="s5-num" class="step-num mono"><span>02</span><i></i></div>
-            <div id="s5-title" class="step-title h-xl">Facturez.</div>
-            <div id="s5-sub" class="step-sub">En 30 secondes. Conforme.</div>
-          </div>
-          <div id="s5-inv" class="abs">
-            <div class="inv-top">
-              <div class="inv-brand"><div class="sq"><svg width="50" height="50" viewBox="190 183 645 645"><g fill="none" stroke="#BEF221" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"><path d="M505 405 V270 H430" /><rect x="290" y="400" width="445" height="340" rx="74" /><path d="M232 567 H290" /><path d="M735 567 H793" /></g><g fill="#BEF221"><rect x="410" y="505" width="46" height="125" rx="23" /><rect x="568" y="505" width="46" height="125" rx="23" /></g></svg></div>Studio Lina</div>
-              <div class="inv-id"><b>FACTURE</b><span class="mono">F-2026-042</span></div>
-            </div>
-            <div class="inv-meta">
-              <div>Client<b>Mme Claire Durand</b></div>
-              <div style="text-align: right">Échéance<b>28/10/2026</b></div>
-            </div>
-            <div id="s5-l1" class="inv-line"><span>Refonte site vitrine</span><span>1 200,00 €</span></div>
-            <div id="s5-l2" class="inv-sub"><span>Total HT</span><span>1 200,00 €</span></div>
-            <div id="s5-l3" class="inv-sub"><span>TVA 20 %</span><span>240,00 €</span></div>
-            <div id="s5-tot" class="inv-total"><span>Total TTC</span><b><span id="s5-count">1 440</span>,00 €</b></div>
-          </div>
-          <div id="s5-c1" class="chk pill"><svg viewBox="0 0 34 34"><path d="M6 18 L14 26 L28 9" fill="none" stroke="#BEF221" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></svg>N° automatique</div>
-          <div id="s5-c2" class="chk pill"><svg viewBox="0 0 34 34"><path d="M6 18 L14 26 L28 9" fill="none" stroke="#BEF221" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></svg>TVA calculée</div>
-          <div id="s5-c3" class="chk pill"><svg viewBox="0 0 34 34"><path d="M6 18 L14 26 L28 9" fill="none" stroke="#BEF221" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></svg>Mentions légales</div>
-          <div id="s5-stamp" class="abs" data-layout-allow-overlap><small class="mono" data-layout-allow-overlap>FACTURE ÉLECTRONIQUE</small><b data-layout-allow-overlap>Factur-X</b><small class="mono" data-layout-allow-overlap style="margin-top: 6px">EN 16931 ✓</small></div>
-        </div>
-      </section>
-
-      <!-- ================= S6 — Encaissez ================= -->
-      <section id="s6" class="clip" data-start="24" data-duration="6" data-track-index="1">
-        <div id="s6-wrap" class="abs" style="inset: 0">
-          <div class="step-head abs">
-            <div id="s6-num" class="step-num mono"><span>03</span><i></i></div>
-            <div id="s6-title" class="step-title h-xl">Encaissez.</div>
-          </div>
-          <div id="s6-phone" class="phone">
-            <div class="screen app">
-              <div class="statusbar"><span>22:49</span><span>18 %</span></div>
-              <div class="app-top"><span>Facture F-2026-042</span></div>
-              <div id="s6-card">
-                <div class="id mono">Mme Claire Durand</div>
-                <div class="amt">1 440,00 €</div>
-                <div class="stwrap"><div id="s6-status" class="pill" data-layout-allow-overlap>Brouillon</div><div id="s6-status2" class="pill" data-layout-allow-overlap>Envoyée ✓</div></div>
-              </div>
-              <div id="s6-n1" class="notif">
-                <div class="ic" style="background: var(--lime); color: var(--amethyst)">€</div>
-                <div class="tx"><div class="row"><b>Robi</b><span>22:49</span></div><p>Lien de paiement envoyé à Mme Durand</p></div>
-              </div>
-              <div id="s6-n2" class="notif">
-                <div class="ic" style="background: var(--ink); color: var(--amethyst)">◉</div>
-                <div class="tx"><div class="row"><b>Robi</b><span>08:12</span></div><p>Mme Durand a ouvert votre facture</p></div>
-              </div>
-              <div id="s6-send">Envoyer</div>
-            </div>
-          </div>
-          <div id="s6-tap" class="abs" style="left: 508px; top: 1620px"></div>
-          <div id="s6-paid" class="abs" data-layout-allow-overlap>
-            <div class="l"><i><svg width="70" height="70" viewBox="0 0 34 34"><path d="M6 18 L14 26 L28 9" fill="none" stroke="#BEF221" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></svg></i>Payé</div>
-            <b>1 440,00 €</b>
-          </div>
-          <div id="s6-sparks"></div>
-          <div id="s6-foot" class="abs" data-layout-allow-overlap>Paiement Stripe intégré. Relances automatiques.</div>
-        </div>
-      </section>
-
-      <!-- ================= S7 — Offre ================= -->
-      <section id="s7" class="clip" data-start="30" data-duration="3" data-track-index="1">
-        <div id="s7-wrap" class="abs" style="inset: 0">
-          <div id="s7-head" class="abs">
-            <div id="s7-free" class="h-xl">Gratuit pour <span class="lime">commencer.</span></div>
-            <div id="s7-free-sub">4 factures ou devis par mois.</div>
-          </div>
-          <div id="s7-card" class="abs">
-            <div class="k mono">OFFRE DE LANCEMENT</div>
-            <div class="t">Accès à vie</div>
-            <div id="s7-price"><b>59 €</b><div id="s7-old">149 €<div id="s7-strike"></div></div></div>
-            <div class="f">Réservé aux 1 000 premiers.</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= S8 — End card ================= -->
-      <section id="s8" class="clip" data-start="33" data-duration="3" data-track-index="1">
-        <div id="s8-wrap" class="abs" style="inset: 0">
-          <svg id="s8-mark" class="abs" viewBox="190 183 645 645" xmlns="http://www.w3.org/2000/svg">
-            <g fill="none" stroke="#BEF221" stroke-width="56" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M505 405 V270 H430" />
-              <rect x="290" y="400" width="445" height="340" rx="74" />
-              <path d="M232 567 H290" />
-              <path d="M735 567 H793" />
-            </g>
-            <g id="s8-eyes" fill="#BEF221">
-              <rect x="410" y="505" width="46" height="125" rx="23" />
-              <rect x="568" y="505" width="46" height="125" rx="23" />
-            </g>
-          </svg>
-          <div id="s8-word" class="abs h-xl">Robi</div>
-          <div id="s8-base" class="abs">Parlez. Facturez. <span class="lime">Encaissez.</span></div>
-          <div id="s8-cta" class="abs">Essayer gratuitement</div>
-          <div id="s8-url" class="abs mono">robi-app.com</div>
-        </div>
-      </section>
-
-      <!-- ================= audio ================= -->
-      <audio id="music" src="assets/audio/music.mp3" data-start="0" data-duration="36" data-track-index="10" data-volume="0.85"></audio>
-      <audio id="sfx-n1" src="assets/audio/notification.mp3" data-start="0.5" data-duration="1.5" data-track-index="11" data-volume="0.7"></audio>
-      <audio id="sfx-n2" src="assets/audio/notification.mp3" data-start="1.3" data-duration="1.5" data-track-index="12" data-volume="0.6"></audio>
-      <audio id="sfx-n3" src="assets/audio/notification.mp3" data-start="2.0" data-duration="1.5" data-track-index="13" data-volume="0.5"></audio>
-      <audio id="sfx-slam1" src="assets/audio/impact-bass-1.mp3" data-start="2.5" data-duration="1.4" data-track-index="14" data-volume="0.5"></audio>
-      <audio id="sfx-wh1" src="assets/audio/whoosh-short.mp3" data-start="3.7" data-duration="0.57" data-track-index="15" data-volume="0.8"></audio>
-      <audio id="sfx-p1" src="assets/audio/pop.mp3" data-start="4.5" data-duration="0.7" data-track-index="16" data-volume="0.5"></audio>
-      <audio id="sfx-p2" src="assets/audio/pop.mp3" data-start="5.0" data-duration="0.7" data-track-index="17" data-volume="0.5"></audio>
-      <audio id="sfx-p3" src="assets/audio/pop.mp3" data-start="5.5" data-duration="0.7" data-track-index="18" data-volume="0.5"></audio>
-      <audio id="sfx-p4" src="assets/audio/pop.mp3" data-start="6.0" data-duration="0.7" data-track-index="19" data-volume="0.5"></audio>
-      <audio id="sfx-p5" src="assets/audio/pop.mp3" data-start="6.5" data-duration="0.7" data-track-index="20" data-volume="0.5"></audio>
-      <audio id="sfx-gl" src="assets/audio/glitch-2.mp3" data-start="6.9" data-duration="1.0" data-track-index="21" data-volume="0.55"></audio>
-      <audio id="sfx-drop" src="assets/audio/impact-bass-1.mp3" data-start="8.0" data-duration="2.1" data-track-index="22" data-volume="0.8"></audio>
-      <audio id="sfx-sp1" src="assets/audio/sparkle.mp3" data-start="8.3" data-duration="1.8" data-track-index="23" data-volume="0.5"></audio>
-      <audio id="sfx-wh2" src="assets/audio/whoosh.mp3" data-start="11.6" data-duration="0.57" data-track-index="24" data-volume="0.8"></audio>
-      <audio id="sfx-ty" src="assets/audio/typing.mp3" data-start="13.1" data-duration="1.5" data-track-index="25" data-volume="0.35"></audio>
-      <audio id="sfx-ty2" src="assets/audio/typing.mp3" data-start="14.6" data-duration="1.5" data-track-index="26" data-volume="0.35"></audio>
-      <audio id="sfx-ok" src="assets/audio/chime.mp3" data-start="16.3" data-duration="1.4" data-track-index="27" data-volume="0.6"></audio>
-      <audio id="sfx-wh3" src="assets/audio/whoosh-short.mp3" data-start="17.6" data-duration="0.57" data-track-index="28" data-volume="0.8"></audio>
-      <audio id="sfx-c1" src="assets/audio/click-soft.mp3" data-start="20.6" data-duration="0.36" data-track-index="29" data-volume="0.7"></audio>
-      <audio id="sfx-c2" src="assets/audio/click-soft.mp3" data-start="20.9" data-duration="0.36" data-track-index="30" data-volume="0.7"></audio>
-      <audio id="sfx-c3" src="assets/audio/click-soft.mp3" data-start="21.2" data-duration="0.36" data-track-index="31" data-volume="0.7"></audio>
-      <audio id="sfx-stamp" src="assets/audio/impact-bass-1.mp3" data-start="21.8" data-duration="1.6" data-track-index="32" data-volume="0.7"></audio>
-      <audio id="sfx-wh4" src="assets/audio/whoosh.mp3" data-start="23.6" data-duration="0.57" data-track-index="33" data-volume="0.8"></audio>
-      <audio id="sfx-tap" src="assets/audio/click-soft.mp3" data-start="24.9" data-duration="0.36" data-track-index="34" data-volume="0.9"></audio>
-      <audio id="sfx-n4" src="assets/audio/notification.mp3" data-start="25.5" data-duration="1.5" data-track-index="35" data-volume="0.6"></audio>
-      <audio id="sfx-n5" src="assets/audio/notification.mp3" data-start="26.1" data-duration="1.5" data-track-index="36" data-volume="0.6"></audio>
-      <audio id="sfx-paid" src="assets/audio/ping.mp3" data-start="27.2" data-duration="1.3" data-track-index="37" data-volume="0.8"></audio>
-      <audio id="sfx-sp2" src="assets/audio/sparkle.mp3" data-start="27.25" data-duration="1.8" data-track-index="38" data-volume="0.55"></audio>
-      <audio id="sfx-wh5" src="assets/audio/whoosh-short.mp3" data-start="29.6" data-duration="0.57" data-track-index="39" data-volume="0.8"></audio>
-      <audio id="sfx-p6" src="assets/audio/pop.mp3" data-start="31.0" data-duration="0.7" data-track-index="40" data-volume="0.5"></audio>
-      <audio id="sfx-end" src="assets/audio/impact-bass-1.mp3" data-start="33.0" data-duration="2.1" data-track-index="41" data-volume="0.7"></audio>
+      <!-- son -->
+      <audio id="music" src="assets/audio/music-hiphop02.mp3" data-start="0" data-duration="35.45" data-track-index="10" data-volume="0.8"></audio>
+      <audio id="sfx-0" src="assets/audio/notification.mp3" data-start="0.5" data-duration="1.5" data-track-index="12" data-volume="0.55"></audio>
+      <audio id="sfx-1" src="assets/audio/notification.mp3" data-start="1.2" data-duration="1.5" data-track-index="13" data-volume="0.45"></audio>
+      <audio id="sfx-2" src="assets/audio/notification.mp3" data-start="1.9" data-duration="1.5" data-track-index="14" data-volume="0.4"></audio>
+      <audio id="sfx-3" src="assets/audio/impact-bass-1.mp3" data-start="2.3" data-duration="1.6" data-track-index="15" data-volume="0.45"></audio>
+      <audio id="sfx-4" src="assets/audio/whoosh-short.mp3" data-start="3.7" data-duration="0.57" data-track-index="16" data-volume="0.7"></audio>
+      <audio id="sfx-5" src="assets/audio/whoosh.mp3" data-start="4.0" data-duration="0.57" data-track-index="17" data-volume="0.6"></audio>
+      <audio id="sfx-6" src="assets/audio/pop.mp3" data-start="4.6" data-duration="0.7" data-track-index="18" data-volume="0.5"></audio>
+      <audio id="sfx-7" src="assets/audio/pop.mp3" data-start="4.9" data-duration="0.7" data-track-index="19" data-volume="0.5"></audio>
+      <audio id="sfx-8" src="assets/audio/pop.mp3" data-start="5.2" data-duration="0.7" data-track-index="20" data-volume="0.5"></audio>
+      <audio id="sfx-9" src="assets/audio/pop.mp3" data-start="5.8" data-duration="0.7" data-track-index="21" data-volume="0.45"></audio>
+      <audio id="sfx-10" src="assets/audio/pop.mp3" data-start="6.05" data-duration="0.7" data-track-index="22" data-volume="0.45"></audio>
+      <audio id="sfx-11" src="assets/audio/pop.mp3" data-start="6.3" data-duration="0.7" data-track-index="23" data-volume="0.45"></audio>
+      <audio id="sfx-12" src="assets/audio/pop.mp3" data-start="6.55" data-duration="0.7" data-track-index="24" data-volume="0.45"></audio>
+      <audio id="sfx-13" src="assets/audio/glitch-2.mp3" data-start="7.0" data-duration="1.0" data-track-index="11" data-volume="0.5"></audio>
+      <audio id="sfx-14" src="assets/audio/whoosh-short.mp3" data-start="7.4" data-duration="0.57" data-track-index="12" data-volume="0.7"></audio>
+      <audio id="sfx-15" src="assets/audio/impact-bass-1.mp3" data-start="8.0" data-duration="1.6" data-track-index="13" data-volume="0.7"></audio>
+      <audio id="sfx-16" src="assets/audio/pop.mp3" data-start="8.9" data-duration="0.7" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-17" src="assets/audio/sparkle.mp3" data-start="9.3" data-duration="1.8" data-track-index="15" data-volume="0.45"></audio>
+      <audio id="sfx-18" src="assets/audio/whoosh-short.mp3" data-start="10.75" data-duration="0.57" data-track-index="16" data-volume="0.7"></audio>
+      <audio id="sfx-19" src="assets/audio/whoosh.mp3" data-start="11.0" data-duration="0.57" data-track-index="17" data-volume="0.6"></audio>
+      <audio id="sfx-20" src="assets/audio/pop.mp3" data-start="11.9" data-duration="0.7" data-track-index="18" data-volume="0.55"></audio>
+      <audio id="sfx-21" src="assets/audio/typing.mp3" data-start="12.5" data-duration="1.5" data-track-index="19" data-volume="0.35"></audio>
+      <audio id="sfx-22" src="assets/audio/typing.mp3" data-start="14.0" data-duration="1.5" data-track-index="20" data-volume="0.35"></audio>
+      <audio id="sfx-23" src="assets/audio/click-soft.mp3" data-start="13.3" data-duration="0.36" data-track-index="21" data-volume="0.6"></audio>
+      <audio id="sfx-24" src="assets/audio/click-soft.mp3" data-start="14.2" data-duration="0.36" data-track-index="22" data-volume="0.6"></audio>
+      <audio id="sfx-25" src="assets/audio/click-soft.mp3" data-start="15.1" data-duration="0.36" data-track-index="23" data-volume="0.6"></audio>
+      <audio id="sfx-26" src="assets/audio/chime.mp3" data-start="15.7" data-duration="1.6" data-track-index="24" data-volume="0.5"></audio>
+      <audio id="sfx-27" src="assets/audio/pop.mp3" data-start="16.7" data-duration="0.7" data-track-index="11" data-volume="0.55"></audio>
+      <audio id="sfx-28" src="assets/audio/click-soft.mp3" data-start="17.6" data-duration="0.36" data-track-index="12" data-volume="0.6"></audio>
+      <audio id="sfx-29" src="assets/audio/click-soft.mp3" data-start="18.1" data-duration="0.36" data-track-index="13" data-volume="0.6"></audio>
+      <audio id="sfx-30" src="assets/audio/click-soft.mp3" data-start="18.6" data-duration="0.36" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-31" src="assets/audio/pop.mp3" data-start="19.8" data-duration="0.7" data-track-index="15" data-volume="0.55"></audio>
+      <audio id="sfx-32" src="assets/audio/whoosh-short.mp3" data-start="21.7" data-duration="0.57" data-track-index="16" data-volume="0.7"></audio>
+      <audio id="sfx-33" src="assets/audio/whoosh.mp3" data-start="22.0" data-duration="0.57" data-track-index="17" data-volume="0.6"></audio>
+      <audio id="sfx-34" src="assets/audio/notification.mp3" data-start="24.0" data-duration="1.5" data-track-index="18" data-volume="0.6"></audio>
+      <audio id="sfx-35" src="assets/audio/ping.mp3" data-start="24.6" data-duration="1.3" data-track-index="19" data-volume="0.6"></audio>
+      <audio id="sfx-36" src="assets/audio/sparkle.mp3" data-start="24.65" data-duration="1.8" data-track-index="20" data-volume="0.5"></audio>
+      <audio id="sfx-37" src="assets/audio/chime.mp3" data-start="24.8" data-duration="1.6" data-track-index="21" data-volume="0.4"></audio>
+      <audio id="sfx-38" src="assets/audio/whoosh-cinematic.mp3" data-start="27.7" data-duration="1.8" data-track-index="22" data-volume="0.6"></audio>
+      <audio id="sfx-39" src="assets/audio/pop.mp3" data-start="28.3" data-duration="0.7" data-track-index="23" data-volume="0.5"></audio>
+      <audio id="sfx-40" src="assets/audio/impact-bass-1.mp3" data-start="29.75" data-duration="1.6" data-track-index="24" data-volume="0.5"></audio>
+      <audio id="sfx-41" src="assets/audio/ping.mp3" data-start="29.75" data-duration="1.3" data-track-index="11" data-volume="0.55"></audio>
+      <audio id="sfx-42" src="assets/audio/pop.mp3" data-start="30.5" data-duration="0.7" data-track-index="12" data-volume="0.45"></audio>
+      <audio id="sfx-43" src="assets/audio/sfx-tic.wav" data-start="29.6" data-duration="0.14" data-track-index="13" data-volume="0.55"></audio>
+      <audio id="sfx-44" src="assets/audio/sfx-tic.wav" data-start="30.9" data-duration="0.14" data-track-index="14" data-volume="0.55"></audio>
+      <audio id="sfx-45" src="assets/audio/sfx-tic.wav" data-start="32.2" data-duration="0.14" data-track-index="15" data-volume="0.55"></audio>
+      <audio id="sfx-46" src="assets/audio/sfx-tic.wav" data-start="33.5" data-duration="0.14" data-track-index="16" data-volume="0.55"></audio>
+      <audio id="sfx-47" src="assets/audio/sfx-tic.wav" data-start="34.8" data-duration="0.14" data-track-index="17" data-volume="0.55"></audio>
+      <audio id="sfx-48" src="assets/audio/sfx-tic.wav" data-start="30.25" data-duration="0.14" data-track-index="18" data-volume="0.55"></audio>
+      <audio id="sfx-49" src="assets/audio/sfx-tic.wav" data-start="31.55" data-duration="0.14" data-track-index="19" data-volume="0.55"></audio>
+      <audio id="sfx-50" src="assets/audio/sfx-tic.wav" data-start="32.85" data-duration="0.14" data-track-index="20" data-volume="0.55"></audio>
+      <audio id="sfx-51" src="assets/audio/sfx-tic.wav" data-start="34.15" data-duration="0.14" data-track-index="21" data-volume="0.55"></audio>
     </div>
 
     <script>
-      const tl = gsap.timeline({ paused: true });
+      // roulette de la carte de fin : un mot change toutes les 1,3 s, les deux lignes décalées d'une demi-période
+      const T_END = 28, CYC0 = T_END + 1.6, PER = 1.3;
+      const CYC_T = [], SW_T = [];
+      for (let k = 0; CYC0 + k * PER < 35.2; k++) CYC_T.push(+(CYC0 + k * PER).toFixed(2));
+      for (let k = 0; CYC0 + PER / 2 + k * PER < 35.2; k++) SW_T.push(+(CYC0 + PER / 2 + k * PER).toFixed(2));
 
-      // ---------- background ambience (whole film) ----------
-      tl.fromTo("#grid", { x: 0, y: 0 }, { x: -120, y: -240, duration: 36, ease: "none" }, 0);
-      tl.fromTo("#glow-a", { x: 0, y: 0, scale: 1 }, { x: 260, y: 520, scale: 1.25, duration: 36, ease: "sine.inOut" }, 0);
-      tl.fromTo("#glow-b", { x: 0, y: 0, scale: 1 }, { x: -380, y: -380, scale: 0.9, duration: 36, ease: "sine.inOut" }, 0);
-      tl.fromTo("#ghost", { x: 0 }, { x: -1400, duration: 36, ease: "none" }, 0);
+      function build() {
+        const tl = gsap.timeline({ paused: true });
+        const $ = (id) => document.getElementById(id);
 
-      // ---------- S1 (0–4) ----------
-      tl.fromTo("#s1-phone", { y: 260, scale: 1.12, rotation: -4 }, { y: 0, scale: 1, rotation: 0, duration: 1.4, ease: "expo.out" }, 0);
-      [["#s1-n1", 0.5], ["#s1-n2", 1.3], ["#s1-n3", 2.0]].forEach(([id, t]) => {
-        tl.fromTo(id, { y: -70, scale: 0.86, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, t);
-      });
-      tl.fromTo("#s1-h1", { scale: 1.6, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.4, ease: "power4.out" }, 2.5);
-      tl.fromTo("#s1-h2 span", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, stagger: 0.12, ease: "power3.out" }, 2.8);
-      tl.to("#s1-phone", { rotation: 2, duration: 0.08, yoyo: true, repeat: 5, ease: "sine.inOut" }, 2.0);
-      tl.to("#s1-wrap", { y: -520, opacity: 0, filter: "blur(18px)", duration: 0.32, ease: "power3.in" }, 3.68);
+        // ambiance
+        tl.fromTo("#halo", { x: 0, y: 0, scale: 1 }, { x: -120, y: 90, scale: 1.12, duration: 35.45, ease: "sine.inOut" }, 0);
+        tl.fromTo("#halo-l", { x: 0, y: 0 }, { x: 140, y: -120, duration: 35.45, ease: "sine.inOut" }, 0);
 
-      // ---------- S2 (4–8) ----------
-      tl.fromTo("#s2-wrap", { y: 520, filter: "blur(18px)" }, { y: 0, filter: "blur(0px)", duration: 0.35, ease: "power3.out" }, 4.0);
-      tl.fromTo("#s2-head", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 4.05);
-      tl.fromTo("#s2-doc", { scale: 0.4, rotation: -30, opacity: 0 }, { scale: 1, rotation: -6, opacity: 1, duration: 0.4, ease: "back.out(1.8)" }, 4.5);
-      tl.fromTo("#s2-sheet", { scale: 0.4, rotation: 30, opacity: 0 }, { scale: 1, rotation: 5, opacity: 1, duration: 0.4, ease: "back.out(1.8)" }, 5.0);
-      tl.fromTo("#s2-calc", { y: 400, rotation: 20, opacity: 0 }, { y: 0, rotation: -4, opacity: 1, duration: 0.4, ease: "back.out(1.6)" }, 5.5);
-      [["#s2-t1", 5.25, 8], ["#s2-t2", 5.75, -7], ["#s2-t4", 6.0, 10], ["#s2-t3", 6.25, -5], ["#s2-t5", 6.5, 6], ["#s2-t6", 6.7, -9]].forEach(([id, t, r]) => {
-        tl.fromTo(id, { scale: 2.2, rotation: r * 3, opacity: 0 }, { scale: 1, rotation: r, opacity: 1, duration: 0.22, ease: "power4.out" }, t);
-      });
-      tl.to("#s2-wrap", { x: 18, duration: 0.05, yoyo: true, repeat: 7, ease: "none" }, 6.5);
-      // rewind
-      tl.to(["#s2-doc", "#s2-sheet", "#s2-calc", "#s2-t1", "#s2-t2", "#s2-t3", "#s2-t4", "#s2-t5", "#s2-t6", "#s2-head"],
-        { x: 0, y: 0, scale: 0, rotation: -180, opacity: 0, duration: 0.45, stagger: 0.02, ease: "power3.in" }, 6.95);
-      tl.fromTo("#s2-rew", { scale: 0, rotation: 90 }, { scale: 1, rotation: 0, duration: 0.35, ease: "back.out(2)" }, 6.95);
-      tl.to("#s2-rew", { rotation: -360, duration: 0.45, ease: "power2.in" }, 7.3);
-      tl.fromTo("#s2-flash", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.in" }, 7.75);
+        // ---- téléphone : un seul, qui voyage ----
+        const rig = "#rig";
+        tl.fromTo(rig, { y: 380, scale: 1.08, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: 1.2, ease: "expo.out" }, 0);
+        tl.to(rig, { rotation: 1.5, duration: 0.07, yoyo: true, repeat: 5, ease: "sine.inOut" }, 1.9);
+        tl.to(rig, { scale: 0.9, y: 40, duration: 0.6, ease: "power3.out" }, 4.0);
+        tl.to(rig, { x: 10, duration: 0.05, yoyo: true, repeat: 7, ease: "none" }, 6.6);
+        tl.to(rig, { scale: 0.86, y: 70, duration: 0.5, ease: "power3.out" }, 8.0);
+        tl.to(rig, { x: 250, y: 60, scale: 0.9, rotationY: -22, transformPerspective: 1800, duration: 0.8, ease: "expo.inOut" }, 11.0);
+        tl.to(rig, { x: -40, y: 40, scale: 0.94, rotationY: 12, transformPerspective: 1800, duration: 0.8, ease: "expo.inOut" }, 22.0);
+        tl.to(rig, { scale: 1.0, rotationY: 0, duration: 5, ease: "sine.inOut" }, 22.8);
 
-      // ---------- S3 (8–12) ----------
-      tl.fromTo("#s3-flash", { opacity: 1 }, { opacity: 0, duration: 0.45, ease: "power2.out" }, 8.0);
-      tl.fromTo("#s3-mark", { scale: 0, rotation: -25 }, { scale: 1, rotation: 0, duration: 0.8, ease: "elastic.out(1, 0.5)" }, 8.05);
-      tl.fromTo("#s3-ring", { scale: 0.3, opacity: 1 }, { scale: 1.6, opacity: 0, duration: 1.1, ease: "power2.out" }, 8.1);
-      tl.fromTo("#s3-word span", { y: 180, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, stagger: 0.07, ease: "expo.out" }, 8.7);
-      tl.fromTo("#s3-eyes", { scaleY: 1, transformOrigin: "50% 50%" }, { scaleY: 0.1, duration: 0.08, yoyo: true, repeat: 1, ease: "power1.inOut" }, 9.55);
-      tl.fromTo("#s3-b1", { x: -200, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power4.out" }, 10.0);
-      tl.fromTo("#s3-b2", { x: 200, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power4.out" }, 10.5);
-      tl.fromTo("#s3-b3", { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.4)" }, 11.0);
-      tl.to("#s3-mark", { y: -22, duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut" }, 9.0);
-      tl.to("#s3-wrap", { x: -1080, filter: "blur(20px)", duration: 0.35, ease: "power3.in" }, 11.65);
+        // écrans
+        tl.to("#scr-splash", { opacity: 1, duration: 0.15 }, 8.0);
+        tl.to("#scr-lock", { opacity: 0, duration: 0.15 }, 8.1);
+        tl.to("#scr-splash", { opacity: 0, duration: 0.2 }, 11.4);
+        tl.to("#scr-new", { opacity: 0, duration: 0.2 }, 22.4);
+        tl.to("#scr-new", { opacity: 1, duration: 0.2 }, 11.2);
+        tl.to("#scr-fact", { opacity: 1, duration: 0.2 }, 22.2);
+        tl.fromTo("#row-hi", { opacity: 0 }, { opacity: 1, duration: 0.25, yoyo: true, repeat: 1, ease: "sine.inOut" }, 23.2);
+        tl.fromTo("#paid-flip", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(3)" }, 24.6);
 
-      // ---------- S4 Parlez (12–18) ----------
-      tl.fromTo("#s4-wrap", { x: 1080, filter: "blur(20px)" }, { x: 0, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 12.0);
-      tl.fromTo("#s4-num", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 12.15);
-      tl.fromTo("#s4-title", { y: 90, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 12.2);
-      tl.fromTo("#s4-sub", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, 12.5);
-      tl.fromTo("#s4-phone", { y: 700, rotation: 6 }, { y: 0, rotation: 0, duration: 0.7, ease: "expo.out" }, 12.25);
-      tl.fromTo("#s4-mic", { scale: 1 }, { scale: 0.9, duration: 0.12, yoyo: true, repeat: 1, ease: "power1.inOut" }, 12.8);
-      [["#s4-r1", 0], ["#s4-r2", 0.5]].forEach(([id, o]) => {
-        tl.fromTo(id, { scale: 1, opacity: 0.8 }, { scale: 1.9, opacity: 0, duration: 1.0, repeat: 3, ease: "power1.out" }, 12.9 + o);
-      });
-      document.querySelectorAll("#s4-wave i").forEach((bar, i) => {
-        const base = 0.18 + 0.12 * Math.abs(Math.sin(i * 1.7));
-        const peak = 0.45 + 0.55 * Math.abs(Math.sin(i * 0.9 + 1.3));
-        tl.fromTo(bar, { scaleY: base }, { scaleY: peak, duration: 0.16 + (i % 5) * 0.03, yoyo: true, repeat: 17, ease: "sine.inOut" }, 13.0 + (i % 4) * 0.04);
-        tl.to(bar, { scaleY: 0.08, duration: 0.25, ease: "power2.out" }, 16.2);
-      });
-      tl.set("#s4-wave i", { scaleY: 0.1 }, 12.0);
-      const words = document.querySelectorAll("#s4-bubble .w");
-      words.forEach((w, i) => { tl.fromTo(w, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.14, ease: "power2.out" }, 13.1 + i * 0.21); });
-      tl.to("#s4-listen", { opacity: 0, duration: 0.2 }, 16.2);
-      tl.fromTo("#s4-ok", { scale: 0.5, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.5)" }, 16.3);
-      tl.to("#s4-phone", { scale: 1.04, duration: 1.2, ease: "sine.out" }, 16.3);
-      tl.to("#s4-wrap", { y: -900, filter: "blur(20px)", duration: 0.35, ease: "power3.in" }, 17.65);
+        // ---- fonds révélés en cercle depuis le téléphone ----
+        tl.fromTo("#rv-light", { clipPath: "circle(0% at 50% 62%)" }, { clipPath: "circle(150% at 50% 62%)", duration: 0.7, ease: "power3.inOut" }, 4.0);
+        tl.to("#rv-light", { clipPath: "circle(0% at 50% 62%)", duration: 0.5, ease: "power3.in" }, 7.45);
+        tl.fromTo("#rv-lime", { clipPath: "circle(0% at 50% 64%)" }, { clipPath: "circle(150% at 50% 64%)", duration: 0.6, ease: "power3.inOut" }, 8.0);
+        tl.to("#rv-lime", { clipPath: "circle(0% at 50% 64%)", duration: 0.45, ease: "power3.in" }, 10.7);
 
-      // ---------- S5 Facturez (18–24) ----------
-      tl.fromTo("#s5-wrap", { y: 900, filter: "blur(20px)" }, { y: 0, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 18.0);
-      tl.fromTo("#s5-num", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 18.15);
-      tl.fromTo("#s5-title", { y: 90, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 18.2);
-      tl.fromTo("#s5-sub", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, 18.5);
-      tl.fromTo("#s5-inv", { rotationX: 60, y: 300, scale: 0.8, opacity: 0, transformPerspective: 1600, transformOrigin: "50% 100%" },
-        { rotationX: 0, y: 0, scale: 1, opacity: 1, duration: 0.8, ease: "expo.out" }, 18.3);
-      tl.fromTo("#s5-l1", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 19.0);
-      tl.fromTo("#s5-l2", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 19.25);
-      tl.fromTo("#s5-l3", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 19.5);
-      tl.fromTo("#s5-tot", { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" }, 19.8);
-      const counter = { v: 0 };
-      const countEl = document.getElementById("s5-count");
-      tl.fromTo(counter, { v: 0 }, { v: 1440, duration: 0.9, ease: "power3.out",
-        onUpdate: () => { const n = Math.round(counter.v); countEl.textContent = n >= 1000 ? Math.floor(n / 1000) + " " + String(n % 1000).padStart(3, "0") : String(n); } }, 19.85);
-      [["#s5-c1", 20.6, 1], ["#s5-c2", 20.9, -1], ["#s5-c3", 21.2, 1]].forEach(([id, t, d]) => {
-        tl.fromTo(id, { x: 120 * d, opacity: 0, scale: 0.8 }, { x: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, t);
-      });
-      tl.fromTo("#s5-stamp", { scale: 2.6, rotation: -30, opacity: 0 }, { scale: 1, rotation: -8, opacity: 1, duration: 0.3, ease: "power4.in" }, 21.55);
-      tl.to("#s5-inv", { x: -12, duration: 0.05, yoyo: true, repeat: 3, ease: "none" }, 21.85);
-      tl.to("#s5-wrap", { scale: 1.05, duration: 1.8, ease: "sine.inOut", transformOrigin: "60% 70%" }, 21.85);
-      tl.to("#s5-wrap", { x: 1080, filter: "blur(20px)", duration: 0.35, ease: "power3.in" }, 23.65);
+        // ---- S1 ----
+        [["#n1", 0.5], ["#n2", 1.2], ["#n3", 1.9]].forEach(([id, t]) => {
+          tl.fromTo(id, { y: 220, scale: 0.5, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }, t);
+        });
+        tl.fromTo("#s1-k", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 2.2);
+        tl.fromTo("#s1-t1", { scale: 1.5, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.4, ease: "power4.out" }, 2.3);
+        tl.fromTo("#s1-t2", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 2.65);
+        tl.to(["#n1", "#n2", "#n3"], { y: -900, opacity: 0, duration: 0.35, stagger: 0.04, ease: "power3.in" }, 3.65);
+        tl.to("#s1-head", { y: -60, opacity: 0, duration: 0.3, ease: "power2.in" }, 3.7);
 
-      // ---------- S6 Encaissez (24–30) ----------
-      tl.fromTo("#s6-wrap", { x: -1080, filter: "blur(20px)" }, { x: 0, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 24.0);
-      tl.fromTo("#s6-num", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 24.15);
-      tl.fromTo("#s6-title", { y: 90, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 24.2);
-      tl.fromTo("#s6-tap", { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.2, ease: "power2.out" }, 24.75);
-      tl.to("#s6-tap", { scale: 1.8, opacity: 0, duration: 0.4, ease: "power2.out" }, 24.95);
-      tl.fromTo("#s6-send", { scale: 1 }, { scale: 0.93, duration: 0.1, yoyo: true, repeat: 1, ease: "power1.inOut" }, 24.9);
-      tl.to("#s6-status", { opacity: 0, duration: 0.1 }, 25.1);
-      tl.fromTo("#s6-status2", { scale: 0.4, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)" }, 25.1);
-      tl.fromTo("#s6-n1", { y: -120, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2)" }, 25.5);
-      tl.fromTo("#s6-n2", { y: -120, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2)" }, 26.1);
-      tl.fromTo("#s6-paid", { scale: 0.2, opacity: 0, rotation: -6 }, { scale: 1, opacity: 1, rotation: -3, duration: 0.5, ease: "elastic.out(1, 0.55)" }, 27.2);
-      tl.to("#s6-phone", { y: 500, opacity: 0, duration: 0.45, ease: "power3.in" }, 26.95);
-      tl.fromTo("#s6-foot", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, 27.8);
-      // deterministic spark burst
-      const sparkHost = document.getElementById("s6-sparks");
-      for (let i = 0; i < 16; i++) {
-        const s = document.createElement("div");
-        s.className = "spark";
-        if (i % 3 === 1) s.style.background = "#f3f5ea";
-        sparkHost.appendChild(s);
-        const a = (i / 16) * Math.PI * 2 + 0.2;
-        const r = 420 + (i % 4) * 90;
-        tl.fromTo(s, { x: 0, y: 0, scale: 1, opacity: 1 }, { x: Math.cos(a) * r, y: Math.sin(a) * r * 0.7, scale: 0.2, opacity: 0, duration: 0.9, ease: "expo.out", immediateRender: false }, 27.25);
+        // ---- S2 : les fichiers jaillissent de l'écran puis y retournent ----
+        tl.fromTo("#s2-k", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 4.25);
+        tl.fromTo(["#s2-t1", "#s2-t2"], { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, stagger: 0.1, ease: "power3.out" }, 4.3);
+        const out = [["#ch-doc", 4.6, -6, 190, 180], ["#ch-sheet", 4.9, 5, -200, -80], ["#ch-calc", 5.2, -4, 180, -220],
+          ["#tg1", 5.8, 8, -200, 400], ["#tg2", 6.05, -7, 240, 0], ["#tg4", 6.3, 10, -250, 200], ["#tg3", 6.55, -5, 20, -380], ["#tg5", 6.7, 6, -120, -450], ["#tg6", 6.8, -9, 250, -420]];
+        out.forEach(([id, t, r, dx, dy]) => {
+          tl.fromTo(id, { x: dx, y: dy, scale: 0.15, rotation: 0, opacity: 0 }, { x: 0, y: 0, scale: 1, rotation: r, opacity: 1, duration: 0.45, ease: "back.out(1.5)" }, t);
+        });
+        out.forEach(([id, , , dx, dy], i) => {
+          tl.to(id, { x: dx, y: dy, scale: 0.05, rotation: -120, opacity: 0, duration: 0.45, ease: "power3.in" }, 7.0 + i * 0.03);
+        });
+        tl.to(["#s2-k", "#s2-t1", "#s2-t2"], { opacity: 0, y: -40, duration: 0.3, ease: "power2.in" }, 7.3);
+
+        // ---- S3 : Robi ----
+        tl.fromTo("#s3-k", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 8.3);
+        tl.fromTo(["#s3-t1", "#s3-t2"], { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, stagger: 0.12, ease: "expo.out" }, 8.35);
+        tl.fromTo("#pill1", { opacity: 0, scale: 0.4, rotation: -8, y: 260 }, { opacity: 1, scale: 1, rotation: -3, y: 0, duration: 0.55, ease: "back.out(2.2)" }, 8.9);
+        tl.fromTo("#ring1", { opacity: 0.9, scale: 0.92 }, { opacity: 0, scale: 1.35, duration: 0.8, ease: "power2.out", immediateRender: false }, 9.05);
+        tl.fromTo("#pill1-sheen", { xPercent: 0, rotation: 18 }, { xPercent: 520, rotation: 18, duration: 0.9, ease: "power2.inOut" }, 9.3);
+        tl.to("#pw1", { y: -12, duration: 0.6, yoyo: true, repeat: 1, ease: "sine.inOut" }, 9.5);
+        tl.to("#pill1", { scale: 0.85, y: 200, opacity: 0, duration: 0.35, ease: "power2.in" }, 10.6);
+        tl.to(["#s3-k", "#s3-t1", "#s3-t2"], { opacity: 0, y: -40, duration: 0.3, ease: "power2.in" }, 10.65);
+
+        // ---- S4 : la carte du hero sort de l'écran ----
+        tl.fromTo("#h4 .kick", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 11.3);
+        tl.fromTo(["#s4-t1", "#s4-t2"], { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, stagger: 0.12, ease: "expo.out" }, 11.35);
+        tl.fromTo("#demo", { x: 420, y: 160, scale: 0.4, rotation: 6, opacity: 0 }, { x: 0, y: 0, scale: 1, rotation: -4, opacity: 1, duration: 0.7, ease: "power3.out" }, 11.9);
+        const words = document.querySelectorAll("#prompt .w");
+        const W0 = 12.5, WS = 0.22;
+        words.forEach((w, i) => tl.fromTo(w, { opacity: 0 }, { opacity: 1, duration: 0.08 }, W0 + i * WS));
+        const WEND = W0 + words.length * WS;
+        // onde : vive pendant la dictée, au repos sinon
+        document.querySelectorAll("#wave i").forEach((b, j) => {
+          const H = [8, 14, 23, 12, 30, 20, 36, 17, 26, 40, 22, 32, 16, 28, 35, 18, 25, 12, 21, 9][j] * 2;
+          b.style.height = H + "px";
+          tl.fromTo(b, { scaleY: 0.18 }, { scaleY: 1, duration: 0.14 + (j % 4) * 0.03, yoyo: true, repeat: 2 * Math.round((WEND - W0) / (0.28 + (j % 4) * 0.06)) - 1, ease: "sine.inOut" }, W0 - 0.1 + (j % 3) * 0.03);
+          tl.to(b, { scaleY: 0.18, duration: 0.2 }, WEND + 0.05);
+        });
+        // le document s'ouvre sur « Facture », chaque ligne se remplit quand elle est dite
+        tl.to("#doc", { clipPath: "inset(0 0 0% 0)", duration: 0.75, ease: "expo.out" }, W0 + 0.05);
+        [["1", 3], ["2", 7], ["3", 10]].forEach(([k, wi]) => {
+          const t = W0 + wi * WS;
+          tl.to("#sk" + k, { opacity: 0, duration: 0.2 }, t);
+          tl.fromTo("#v" + k, { x: 18, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, t);
+        });
+        const cnt = { v: 0 }; const cEl = $("cnt");
+        const fmt = (n) => { const s = n.toFixed(2).replace(".", ","); const [a, b] = s.split(","); return a.replace(/\B(?=(\d{3})+(?!\d))/g, " ") + "," + b; };
+        tl.fromTo(cnt, { v: 0 }, { v: 1620, duration: 0.9, ease: "power3.out", onUpdate: () => { cEl.textContent = fmt(cnt.v); } }, W0 + 10 * WS);
+        const T_MADE = WEND + 0.02;
+        tl.to("#st1", { opacity: 0, duration: 0.15 }, T_MADE);
+        tl.fromTo("#st2", { opacity: 0 }, { opacity: 1, duration: 0.2 }, T_MADE);
+        tl.to(["#h4 .kick", "#s4-t1", "#s4-t2"], { opacity: 0, y: -40, duration: 0.3, stagger: 0.04, ease: "power2.in" }, 16.3);
+
+        // ---- S5 : Facturez ----
+        tl.fromTo("#h5 .kick", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 16.5);
+        tl.fromTo(["#s5-t1", "#s5-t2"], { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, stagger: 0.12, ease: "expo.out" }, 16.55);
+        tl.fromTo("#fx1", { x: 520, y: 380, scale: 0.4, opacity: 0 }, { x: 0, y: 0, scale: 1, opacity: 1, duration: 0.55, ease: "back.out(1.8)" }, 16.7);
+        [["#ck1", 17.6, 3], ["#ck2", 18.1, -2], ["#ck3", 18.6, 2]].forEach(([id, t, r]) => {
+          tl.fromTo(id, { x: id === "#ck3" ? 500 : 0, y: -500, scale: 0.3, opacity: 0, rotation: 0 }, { x: 0, y: 0, scale: 1, opacity: 1, rotation: r, duration: 0.45, ease: "back.out(1.8)" }, t);
+        });
+        const T_ENV = 19.8;
+        tl.to("#st2", { opacity: 0, duration: 0.15 }, T_ENV);
+        tl.fromTo("#st3", { opacity: 0 }, { opacity: 1, duration: 0.2 }, T_ENV);
+        tl.fromTo("#st-bg", { opacity: 0 }, { opacity: 1, duration: 0.25 }, T_ENV);
+        tl.to("#status .check", { scale: 1.18, duration: 0.18, yoyo: true, repeat: 3, ease: "sine.inOut" }, T_ENV + 0.1);
+        // sortie douce de la carte (0,35 s)
+        tl.to("#demo", { opacity: 0, y: 60, scale: 0.92, duration: 0.35, ease: "power2.in" }, 21.3);
+        tl.to(["#fx1", "#ck1", "#ck2", "#ck3"], { opacity: 0, y: 40, duration: 0.3, stagger: 0.03, ease: "power2.in" }, 21.35);
+        tl.to(["#h5 .kick", "#s5-t1", "#s5-t2"], { opacity: 0, y: -40, duration: 0.3, stagger: 0.04, ease: "power2.in" }, 21.6);
+
+        // ---- S6 : Encaissez ----
+        tl.fromTo("#s6 .kick", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 22.3);
+        tl.fromTo(["#s6-t1", "#s6-t2"], { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, stagger: 0.14, ease: "expo.out" }, 22.35);
+        tl.fromTo("#n4", { y: 360, scale: 0.5, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.55, ease: "back.out(1.5)" }, 24.0);
+        const sh = $("sparks");
+        for (let i = 0; i < 14; i++) {
+          const s = document.createElement("div");
+          s.style.cssText = "position:absolute;width:20px;height:20px;border-radius:50%;left:880px;top:1015px;opacity:0;background:" + (i % 3 === 1 ? "#ffffff" : "#BEF221");
+          sh.appendChild(s);
+          const a = (i / 14) * Math.PI * 2 + 0.3, r = 150 + (i % 4) * 55;
+          tl.fromTo(s, { x: 0, y: 0, scale: 1, opacity: 1 }, { x: Math.cos(a) * r, y: Math.sin(a) * r, scale: 0.2, opacity: 0, duration: 0.8, ease: "expo.out", immediateRender: false }, 24.65);
+        }
+
+        // ---- carte de fin (skill robi-pub-video) ----
+        tl.fromTo("#film", { filter: "blur(0px)" }, { filter: "blur(22px)", duration: 0.7, ease: "power2.out" }, T_END);
+        tl.fromTo("#end-dim", { opacity: 0 }, { opacity: 1, duration: 0.6 }, T_END);
+        tl.fromTo("#end-glow", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }, T_END + 0.2);
+        tl.fromTo("#pill3", { opacity: 0, scale: 0.5, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "back.out(2)" }, T_END + 0.3);
+        tl.fromTo("#ring3", { opacity: 0.9, scale: 0.92 }, { opacity: 0, scale: 1.4, duration: 0.9, ease: "power2.out", immediateRender: false }, T_END + 0.45);
+        tl.fromTo("#pill3-sheen", { xPercent: 0, rotation: 18 }, { xPercent: 520, rotation: 18, duration: 1.0, ease: "power2.inOut" }, T_END + 0.7);
+        ["#e1", "#e2", "#e3"].forEach((s, i) => tl.fromTo(s, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, T_END + 0.65 + i * 0.22));
+        // roulettes : « Parlez. ↔ Écrivez. » et « Robi facture. / envoie. / relance. », jamais ensemble
+        const cyW = [0, 1, 2].map((k) => $("cy" + k).offsetWidth);
+        const probe = document.createElement("span");
+        probe.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;font:inherit;letter-spacing:inherit";
+        $("e1").appendChild(probe);
+        const swW = ["Parlez.", "Écrivez."].map((t) => { probe.textContent = t; return probe.offsetWidth; });
+        probe.remove();
+        $("cyc").style.width = Math.max(...cyW) + "px";
+        $("sw").style.width = Math.max(...swW) + "px";
+        const cx = (w) => (Math.max(...cyW) - w) / 2;
+        gsap.set("#accin", { x: cx(cyW[0]) });
+        gsap.set(["#cy1", "#cy2"], { yPercent: 130 });
+        gsap.set("#sw1", { yPercent: 130 });
+        const SLIDE = 0.42;
+        CYC_T.forEach((t, k) => {
+          const prev = k % 3, cur = (k + 1) % 3;
+          tl.fromTo("#cy" + prev, { yPercent: 0 }, { yPercent: -130, duration: SLIDE, ease: "power3.out", immediateRender: false }, t);
+          tl.fromTo("#cy" + cur, { yPercent: 130 }, { yPercent: 0, duration: SLIDE, ease: "power3.out", immediateRender: false }, t);
+          tl.fromTo("#accin", { x: cx(cyW[prev]) }, { x: cx(cyW[cur]), duration: SLIDE, ease: "power3.out", immediateRender: false }, t);
+        });
+        SW_T.forEach((t, k) => {
+          const prev = k % 2, cur = (k + 1) % 2;
+          tl.fromTo("#sw" + prev, { yPercent: 0 }, { yPercent: -130, duration: SLIDE, ease: "power3.out", immediateRender: false }, t);
+          tl.fromTo("#sw" + cur, { yPercent: 130 }, { yPercent: 0, duration: SLIDE, ease: "power3.out", immediateRender: false }, t);
+        });
+        // l'offre tombe en dernier, comme une notification
+        const T_OFF = T_END + 1.75;
+        tl.fromTo("#offer", { opacity: 0, y: -70, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(2.2)" }, T_OFF);
+        tl.fromTo("#offer-ring", { opacity: 0.9, scale: 0.95 }, { opacity: 0, scale: 1.18, duration: 0.7, ease: "power2.out", immediateRender: false }, T_OFF + 0.35);
+        tl.fromTo("#offer", { rotation: 0 }, { keyframes: [{ rotation: -2.5, duration: 0.07 }, { rotation: 2.5, duration: 0.07 }, { rotation: -1.5, duration: 0.07 }, { rotation: 0, duration: 0.07 }], immediateRender: false }, T_OFF + 0.4);
+        tl.fromTo("#fxchip", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, T_OFF + 0.75);
+        const flotte = (sel, at, amp, per) => {
+          const n = Math.max(0, Math.floor((35.45 - at) / per) - 1);
+          tl.fromTo(sel, { y: 0 }, { y: -amp, duration: per, ease: "sine.inOut", yoyo: true, repeat: n, immediateRender: false }, at);
+        };
+        flotte("#fl-pill", T_END + 1.0, 8, 1.35);
+        flotte("#fl-offer", T_OFF + 0.9, 6, 1.6);
+
+        window.__timelines["main"] = tl;
       }
-      tl.to("#s6-wrap", { y: 900, filter: "blur(20px)", duration: 0.35, ease: "power3.in" }, 29.65);
-
-      // ---------- S7 Offre (30–33) ----------
-      tl.fromTo("#s7-wrap", { y: -900, filter: "blur(20px)" }, { y: 0, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 30.0);
-      tl.fromTo("#s7-free", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 30.1);
-      tl.fromTo("#s7-free-sub", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, 30.45);
-      tl.fromTo("#s7-card", { y: 400, rotation: 4, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.6, ease: "expo.out" }, 30.9);
-      tl.fromTo("#s7-strike", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power3.out" }, 31.6);
-      tl.fromTo("#s7-price b", { scale: 0.6, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.45, ease: "back.out(2.2)" }, 31.3);
-      tl.to("#s7-wrap", { scale: 0.85, opacity: 0, duration: 0.25, ease: "power2.in" }, 32.75);
-
-      // ---------- S8 End card (33–36) ----------
-      tl.fromTo("#s8-mark", { scale: 0, rotation: 20 }, { scale: 1, rotation: 0, duration: 0.7, ease: "elastic.out(1, 0.5)" }, 33.0);
-      tl.fromTo("#s8-word", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 33.15);
-      tl.fromTo("#s8-base", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 33.45);
-      tl.fromTo("#s8-cta", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, 33.75);
-      tl.fromTo("#s8-url", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 34.1);
-      tl.to("#s8-cta", { scale: 1.05, duration: 0.4, yoyo: true, repeat: 3, ease: "sine.inOut" }, 34.3);
-      tl.fromTo("#s8-eyes", { scaleY: 1, transformOrigin: "50% 50%" }, { scaleY: 0.1, duration: 0.08, yoyo: true, repeat: 1, ease: "power1.inOut" }, 34.8);
-
-      window.__timelines["main"] = tl;
+      document.fonts.ready.then(build);
     </script>
   </body>
 </html>
