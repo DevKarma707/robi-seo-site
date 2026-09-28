@@ -14,6 +14,7 @@ import { subscribeToPosts, type SocialPost } from "@/lib/socialPosts";
 import { ACCENT_INK, btn, card, focusRing, kpiLabel, kpiValue, sectionTitle, select } from "./ui";
 import { AreaCurve, CountUp } from "./motion";
 import CampagnesBlock from "./CampagnesBlock";
+import CalendrierCampagnes from "./CalendrierCampagnes";
 import { toast } from "./toast";
 
 /**
@@ -713,6 +714,8 @@ export default function AdsTab() {
           </details>
         </>
       )}
+
+      <CalendrierCampagnes />
 
       <Bibliotheque creas={creas} ads={ads} lignes={lignes} money={money} />
 
