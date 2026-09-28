@@ -17,6 +17,7 @@
   "hero": {
     "badge": "Nuevo: Seguimiento de facturas con IA",
     "title": "Habla",
+    "titleWords": ["Habla", "Escribe"],
     "titleAccent": "Cobra",
     "rotatingWords": [
       "Factura",

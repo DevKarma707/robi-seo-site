@@ -17,6 +17,7 @@
   "hero": {
     "badge": "New: AI Invoice Chasing",
     "title": "Talk",
+    "titleWords": ["Talk", "Type"],
     "titleAccent": "Cash in",
     "rotatingWords": [
       "Invoice",

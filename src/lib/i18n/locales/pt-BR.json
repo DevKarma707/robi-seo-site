@@ -17,6 +17,7 @@
   "hero": {
     "badge": "Novo: Lembretes Inteligentes via IA",
     "title": "Fale",
+    "titleWords": ["Fale", "Escreva"],
     "titleAccent": "Receba",
     "rotatingWords": [
       "Fature",

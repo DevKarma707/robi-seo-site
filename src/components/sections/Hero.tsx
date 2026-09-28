@@ -41,27 +41,36 @@ interface HeroProps {
     lifetimeLabel?: string;
   };
   rotatingWords?: string[];
+  /** Le titre lui-même défile (« Parlez » ↔ « Écrivez ») : Robi se pilote à
+   *  la voix comme au clavier. Sans liste, le titre reste fixe. */
+  titleWords?: string[];
   visual?: "mockups" | "editorial";
   story?: HeroStoryCopy;
 }
 
-function WordRotator({ words }: { words: string[] }) {
+function WordRotator({ words, className = "text-[#BEF221]", delay = 0 }: { words: string[]; className?: string; delay?: number }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     if (!words || words.length === 0) return;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let timer: ReturnType<typeof setInterval> | undefined;
+    let start: ReturnType<typeof setTimeout> | undefined;
     const sync = () => {
       clearInterval(timer);
+      clearTimeout(start);
       if (!motion.matches) {
-        timer = setInterval(() => setIndex((prev) => (prev + 1) % words.length), 2500);
+        // Décalage : deux mots qui changent au même instant se lisent mal.
+        start = setTimeout(() => {
+          timer = setInterval(() => setIndex((prev) => (prev + 1) % words.length), 2500);
+        }, delay);
       }
     };
     sync();
     motion.addEventListener("change", sync);
     return () => {
       clearInterval(timer);
+      clearTimeout(start);
       motion.removeEventListener("change", sync);
     };
   }, [words]);
@@ -72,7 +81,7 @@ function WordRotator({ words }: { words: string[] }) {
     <span className="relative inline-flex h-[1.1em] items-center overflow-hidden align-bottom">
       <span
         key={index}
-        className="animate-slide-up-fade text-[#BEF221]"
+        className={`animate-slide-up-fade ${className}`}
       >
         {words[index]}
       </span>
@@ -89,6 +98,7 @@ export function Hero({
   variant = "default",
   launchOffer,
   rotatingWords = ["Facture", "Envoi", "Relance", "Notifie"],
+  titleWords,
   visual = "mockups",
   story,
 }: HeroProps) {
@@ -132,7 +142,11 @@ export function Hero({
         {isCenter ? (
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] mb-6 md:mb-8 tracking-tighter">
-              <span className="block opacity-90">{title}</span>
+              <span className="block opacity-90">
+                {titleWords && titleWords.length > 1
+                  ? <WordRotator words={titleWords} className="text-white" delay={1250} />
+                  : title}
+              </span>
               <span className="flex items-center justify-center gap-3">
                 Robi <WordRotator words={rotatingWords} />
               </span>
@@ -167,7 +181,11 @@ export function Hero({
             <div className={`text-center lg:text-left ${isEditorial ? storyStyles.content : ""}`}>
               {isEditorial && <p className={storyStyles.eyebrow}>{story.eyebrow}</p>}
               <h1 className={`text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6 md:mb-8 tracking-tighter ${isEditorial ? storyStyles.heading : ""}`}>
-                <span className="block opacity-90">{title}</span>
+                <span className="block opacity-90">
+                {titleWords && titleWords.length > 1
+                  ? <WordRotator words={titleWords} className="text-white" delay={1250} />
+                  : title}
+              </span>
                 <span className="flex items-center justify-center lg:justify-start gap-3">
                   Robi <WordRotator words={rotatingWords} />
                 </span>

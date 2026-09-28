@@ -156,6 +156,7 @@ export default async function Home({
         title={dict.hero.title}
         titleAccent={dict.hero.titleAccent}
         rotatingWords={dict.hero.rotatingWords}
+        titleWords={dict.hero.titleWords}
         subtitle={dict.hero.subtitle}
         ctaText={dict.hero.cta}
         ctaHref="https://go.robi-app.com/?signup"

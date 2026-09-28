@@ -17,6 +17,7 @@
   "hero": {
     "badge": "Nouveau : Relance facture par IA",
     "title": "Parlez",
+    "titleWords": ["Parlez", "Écrivez"],
     "titleAccent": "Encaissez",
     "rotatingWords": [
       "Facture",
