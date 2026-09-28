@@ -54,6 +54,8 @@ export interface LaunchConfig {
   trancheHistory?: { index: number; at: string }[];
   /** Offre de bienvenue : fenêtre après l'inscription pendant laquelle l'accès à vie est proposé. */
   welcome?: { enabled: boolean; hours: number; since: string | null };
+  /** Relances e-mail J+1 / J+2 / J+7 des inscrits sans achat (functions/src/nurture.ts de l'app). */
+  nurture?: { enabled: boolean; since: string | null };
 }
 
 const authedFetch = async (url: string, init?: RequestInit) => {

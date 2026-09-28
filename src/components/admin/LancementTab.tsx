@@ -339,6 +339,36 @@ const LancementTab: React.FC = () => {
         </div>
       </div>
 
+      {/* Relances e-mail des inscrits */}
+      <div className={`${card} p-5 space-y-3`}>
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-1">
+            <p className="text-xs font-black uppercase tracking-widest text-slate-900">Relances e-mail des inscrits (J+1, J+2, J+7)</p>
+            <p className="text-[11px] text-slate-500 leading-relaxed max-w-[70ch]">
+              Chaque matin à 10 h, signés « Ralph — Robi AI », aux comptes gratuits à l&apos;adresse confirmée :
+              <b> J+1</b> premier devis dicté, <b>J+2</b> relances automatiques + Factur-X — à tous ;
+              <b> J+7</b> offre de lancement (prix, places et date limite réels) — seulement à ceux qui ont coché
+              « conseils et offres » à l&apos;inscription. Désinscription en un clic dans chaque mail.
+              Concerne les comptes créés à partir de 2 jours avant l&apos;activation, jamais l&apos;ancien fichier.
+            </p>
+            {config.nurture?.since && (
+              <p className="text-[10px] text-slate-400">
+                Activées le {new Date(config.nurture.since).toLocaleString("fr-FR")}.
+              </p>
+            )}
+          </div>
+          <button
+            onClick={() => save({ nurture: { enabled: !config.nurture?.enabled, since: config.nurture?.since ?? null } })}
+            disabled={saving}
+            className={`px-3 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all disabled:opacity-40 flex-none ${
+              config.nurture?.enabled ? "bg-[var(--color-accent)] text-[var(--color-text-on-accent)]" : "bg-slate-100 text-slate-600"
+            }`}
+          >
+            {config.nurture?.enabled ? "Actives" : "Désactivées"}
+          </button>
+        </div>
+      </div>
+
       {/* Garde-fou légal */}
       {padded && (
         <div className="rounded-2xl border border-amber-300 bg-amber-50 p-5">
