@@ -41,6 +41,28 @@ Vidéo finale : `renders/robi-reel-v2.mp4` (la v1 est dans l'historique git).
 - Le rendu HyperFrames sort à ~−17,7 LUFS ; mastering final à −14 LUFS :
   `ffmpeg -i renders/robi-reel-v2-raw.mp4 -c:v copy -af "volume=3.7dB,alimiter=limit=0.84:level=false" -c:a aac -b:a 192k renders/robi-reel-v2.mp4`
 
+## Voix off (à faire)
+
+Voix ElevenLabs françaises natives choisies par Ralph (Clément fait des fautes de prononciation) :
+- **Paul K** `0igQGE0lbNpTaWsexf1r` — enthousiaste, parisien neutre (recommandée pour ce reel)
+- **Alain** `ViSNE020Z1wEV4uZomv5` — grave, calme (version « storytelling »)
+
+Higgsfield ne donne pas accès à ces voix (« Voice not found ») : passer par l'API ElevenLabs
+(`ELEVENLABS_API_KEY`), modèle `eleven_multilingual_v2`, langue `fr`, endpoint `/with-timestamps`
+pour caler la carte « Vous dites » mot à mot. Montants écrits en toutes lettres.
+
+| Scène | Texte |
+|---|---|
+| 22h47 (0–4 s) | « 22h47. Et la facture de Studio Vernier… toujours pas faite. » |
+| Paperasse (4–8 s) | « Excel, Word, la TVA, les mentions… encore la paperasse. » |
+| Robi (8–11 s) | « Et si vous la dictiez à Robi ? » |
+| 01 Parlez (11–16 s) | « Facture pour Studio Vernier, refonte du site vitrine, mille trois cent cinquante euros hors taxes, à trente jours. » |
+| 02 Facturez (16–22 s) | « TVA, mentions obligatoires, Factur-X : tout y est. » |
+| 03 Encaissez (22–28 s) | « Et quand le client paie, vous le voyez tout de suite. » |
+| Fin (28–35 s) | « Robi. Cinquante-neuf euros à vie, jusqu'au trente et un octobre. » |
+
+Baisser la musique sous la voix (`/hyperframes-audio` → carve), sous-titres jamais en même temps que la carte.
+
 ## Modifier et relancer
 
 ```bash
