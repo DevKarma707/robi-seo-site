@@ -111,7 +111,7 @@ export function LaunchBar({ locale, copy, normal }: { locale: string; copy: Laun
       {/* Tampon & marqueur : le prix est tamponné, l'ancien prix rayé d'un
           trait droit, les places surlignées — en boucle toutes les 7 s.
           Bouton à la taille de « Connexion », en négatif. */}
-      <div className="max-w-7xl mx-auto h-11 lg:h-[60px] pl-5 pr-9 lg:pl-4 lg:pr-10 flex items-center justify-between md:justify-center gap-3 lg:gap-6 text-[13px] lg:text-[14.5px] whitespace-nowrap">
+      <div className="max-w-7xl mx-auto h-11 lg:h-14 pl-5 pr-9 lg:pl-4 lg:pr-10 flex items-center justify-between md:justify-center gap-3 lg:gap-6 text-[13px] lg:text-sm whitespace-nowrap">
         <span className="hidden md:inline-flex items-center gap-2 font-semibold">
           <Bot className="w-[18px] h-[18px]" strokeWidth={2.2} aria-hidden="true" />
           {copy.badge}
@@ -139,12 +139,12 @@ export function LaunchBar({ locale, copy, normal }: { locale: string; copy: Laun
         {chrono && (
           <span className="hidden md:inline-flex items-baseline gap-1.5 font-medium">
             {copy.endsIn}
-            <span className={`${styles.clock} tabular-nums font-extrabold tracking-tight text-[15px] lg:text-base`}>{chrono}</span>
+            <span className={`${styles.clock} tabular-nums font-extrabold tracking-tight text-[15px]`}>{chrono}</span>
           </span>
         )}
         <a
           href={`/${locale}/#pricing`}
-          className="group inline-flex items-center gap-1.5 flex-none rounded-full bg-[#0D0630] text-[#BEF221] font-bold text-xs px-3 py-1.5 lg:text-sm lg:px-4 lg:py-2 hover:bg-[#1a1150] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0D0630]"
+          className="group inline-flex items-center gap-1.5 flex-none rounded-full bg-[#0D0630] text-[#BEF221] font-bold text-xs px-3 py-1.5 lg:text-sm lg:px-4 lg:py-1.5 hover:bg-[#1a1150] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0D0630]"
         >
           {copy.cta}
           <ArrowRight className="w-3.5 h-3.5 lg:w-4 lg:h-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
