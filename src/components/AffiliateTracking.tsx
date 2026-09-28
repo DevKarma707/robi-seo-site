@@ -47,27 +47,40 @@ export function AffiliateTracking() {
         />
       )}
 
-      {/* Global Lead & Persistence Hook */}
+      {/* Global Lead & Persistence Hook — propage vers l'app le ?ref=
+          d'affiliation et les utm_* de la page d'arrivée. Sans ça, un inscrit
+          venu de la bio Instagram était enregistré « robi-app.com » : l'app ne
+          voit que le référent, et les utm restent sur la première page du
+          site. Mémorisés pour la visite (sessionStorage, rien de déposé chez
+          un tiers), repris sur n'importe quelle page du site. */}
       <Script id="affiliate-click-handler" strategy="afterInteractive">
         {`
-          document.addEventListener('click', function(e) {
-            const link = e.target.closest('a');
-            if (!link || !link.href) return;
-
-            // Target links to your app
-            if (link.href.includes('go.robi-app.com')) {
-              const urlParams = new URLSearchParams(window.location.search);
-              const ref = urlParams.get('ref');
-              
-              if (ref) {
-                const targetUrl = new URL(link.href);
-                targetUrl.searchParams.set('ref', ref);
-                link.href = targetUrl.toString();
+          (function () {
+            var KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+            var STORE = 'robi_utm';
+            var landing = new URLSearchParams(window.location.search);
+            try {
+              if (landing.get('utm_source')) {
+                var keep = {};
+                KEYS.forEach(function (k) { var v = landing.get(k); if (v) keep[k] = v.slice(0, 120); });
+                sessionStorage.setItem(STORE, JSON.stringify(keep));
               }
-              
-              console.log('[AFFILIATE] Propagation du ref vers l\\'app:', ref || 'aucun');
-            }
-          });
+            } catch (err) {}
+
+            document.addEventListener('click', function (e) {
+              var link = e.target.closest && e.target.closest('a');
+              if (!link || !link.href || link.href.indexOf('go.robi-app.com') === -1) return;
+              var targetUrl = new URL(link.href);
+              var ref = new URLSearchParams(window.location.search).get('ref');
+              if (ref) targetUrl.searchParams.set('ref', ref);
+              var utm = null;
+              try { utm = JSON.parse(sessionStorage.getItem(STORE) || 'null'); } catch (err) {}
+              if (utm && !targetUrl.searchParams.get('utm_source')) {
+                KEYS.forEach(function (k) { if (utm[k]) targetUrl.searchParams.set(k, utm[k]); });
+              }
+              link.href = targetUrl.toString();
+            });
+          })();
         `}
       </Script>
     </>
