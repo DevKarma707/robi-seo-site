@@ -16,7 +16,7 @@ import { ACCENT, ACCENT_INK, btnGhost, btnPill, btnPrimary, card, input } from "
 import { toast } from "./toast";
 
 const EMPTY: Omit<Influencer, "id"> = {
-  name: "", platform: "instagram", status: "prospect", discountPct: 20, commissionPct: 30,
+  name: "", platform: "instagram", status: "prospect", discountPct: 20, commissionPct: 20,
 };
 
 const today = () => new Date().toISOString().slice(0, 10);

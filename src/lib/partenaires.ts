@@ -15,7 +15,7 @@ import { BRAND } from "./email/newsletter";
 
 export const PROGRAMME = {
   discountPct: 20,
-  commissionPct: 30,
+  commissionPct: 20,
   /** Seuil de versement, en euros. */
   minPayoutEur: 30,
   /** Durée pendant laquelle un lien cliqué reste attribué. */
