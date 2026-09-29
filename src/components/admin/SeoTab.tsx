@@ -11,6 +11,7 @@ import {
   type SeoKeyword, type SeoStatus,
 } from "@/lib/seoKeywords";
 import { parseGscFiles, saveSeoReport, subscribeToSeoReports, type GscReport } from "@/lib/searchConsole";
+import SeoBilan from "./SeoBilan";
 import seed from "../../../content/seo/seo-keywords-seed.json";
 import { btn, btnAccent, card, input, kpiLabel, kpiValue, sectionTitle, select, ACCENT_INK } from "./ui";
 import { toast } from "./toast";
@@ -204,6 +205,9 @@ const SeoTab: React.FC<{ keywords: SeoKeyword[] }> = ({ keywords }) => {
 
   return (
     <div className="space-y-5">
+      {/* ── Bilan du dernier export Search Console ─────────── */}
+      <SeoBilan reports={reports} />
+
       {/* ── KPIs ───────────────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         {[
