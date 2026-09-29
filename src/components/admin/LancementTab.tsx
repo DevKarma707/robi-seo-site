@@ -345,7 +345,7 @@ const LancementTab: React.FC = () => {
           <div className="space-y-1">
             <p className="text-xs font-black uppercase tracking-widest text-slate-900">Relances e-mail des inscrits (J+1, J+2, J+7)</p>
             <p className="text-[11px] text-slate-500 leading-relaxed max-w-[70ch]">
-              Chaque matin à 10 h, signés « Ralph — Robi AI », aux comptes gratuits à l&apos;adresse confirmée :
+              Chaque matin à 10 h, signés « Robi AI », aux comptes gratuits à l&apos;adresse confirmée :
               <b> J+1</b> premier devis dicté, <b>J+2</b> relances automatiques + Factur-X — à tous ;
               <b> J+7</b> offre de lancement (prix, places et date limite réels) — seulement à ceux qui ont coché
               « conseils et offres » à l&apos;inscription. Désinscription en un clic dans chaque mail.
