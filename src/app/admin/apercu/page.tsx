@@ -21,7 +21,7 @@ import {
   Megaphone, BarChart2, FileText, Rocket, ArrowUpRight, LogOut, Filter, Globe,
 } from "lucide-react";
 import { Lancement, Revenu, Alertes } from "@/components/admin/PilotageTab";
-import { IncidentHistory } from "@/components/admin/SanteTab";
+import { IncidentHistory, ServicesBoard } from "@/components/admin/SanteTab";
 import type { HealthReport } from "@/lib/adminApi";
 import WorldMapBlock from "@/components/admin/WorldMapBlock";
 import ThemePicker from "@/components/admin/ThemePicker";
@@ -45,6 +45,11 @@ const HEALTH_DEMO: HealthReport = {
   emailErrors: { total: 0, top: [] },
   functionErrors: { total: 1, bySource: { createPolarPortalSession: 1 }, top: [{ signature: "f1", count: 1, firstSeen: h(0.4), lastSeen: h(0.4), sample: "Portail client Polar : Forbidden" }] },
   cron: { last: null, staleHours: null },
+  crons: [
+    { at: h(6), source: "runRemindersDaily", meta: { outcome: "ok", sent: 2, failed: 0, skipped: 5 }, staleHours: 6 },
+    { at: h(4), source: "runNurtureDaily", meta: { outcome: "disabled", sent: 0 }, staleHours: 4 },
+  ],
+  aiPerformance: { calls: 142, failures: 8, failureRate: 5.6, latencyAvgMs: 4200, latencyP50ApproxMs: 3100, latencyP95WorstMs: 67000 },
   daily: [
     { date: d(4), count: 2, byKind: { client_error: 2 } },
     { date: d(1), count: 3, byKind: { ai_failed: 3 } },
@@ -151,6 +156,7 @@ export default function ApercuAdmin() {
               days={61}
             />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ServicesBoard report={HEALTH_DEMO} days={7} setDays={() => {}} />
           <IncidentHistory report={HEALTH_DEMO} />
               <Revenu stats={{ revenue: { oneShot: 177, mrr: 14, total: 191 }, byPlan: { lifetime: 3, monthly: 1 } }} />
               <Alertes

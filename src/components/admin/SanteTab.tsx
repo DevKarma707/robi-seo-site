@@ -2,8 +2,8 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  Activity, AlertTriangle, CheckCircle2, Clock, Mail, MonitorX,
-  RefreshCw, Sparkles, ServerCrash, XCircle,
+  Activity, AlertTriangle, CheckCircle2, Clock, CreditCard, Mail, MonitorX,
+  RefreshCw, Sparkles, XCircle,
 } from "lucide-react";
 import { fetchHealthReport, type HealthReport, type HealthSignature } from "@/lib/adminApi";
 import { diagnoseAi, type AiDiagnosis } from "@/lib/aiHealth";
@@ -12,26 +12,6 @@ import { ACCENT, ACCENT_INK, btn, card } from "./ui";
 const RED = "#f87171";
 const AMBER = "#fbbf24";
 
-const SEVERITY: Record<HealthReport["severity"], { label: string; color: string; icon: React.ReactNode; blurb: string }> = {
-  ok: {
-    label: "Tout est vert",
-    color: ACCENT,
-    icon: <CheckCircle2 size={18} />,
-    blurb: "Aucun signal anormal sur la fenêtre analysée.",
-  },
-  warn: {
-    label: "À surveiller",
-    color: AMBER,
-    icon: <AlertTriangle size={18} />,
-    blurb: "Des incidents sont remontés sans que le service soit interrompu.",
-  },
-  down: {
-    label: "Incident sérieux",
-    color: RED,
-    icon: <XCircle size={18} />,
-    blurb: "Un chemin critique est cassé. À traiter en priorité.",
-  },
-};
 
 const fmtDate = (iso?: string | null) =>
   iso ? new Date(iso).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" }) : "—";
@@ -118,23 +98,6 @@ function AiCard({ ai }: { ai: AiDiagnosis }) {
   );
 }
 
-function Kpi({
-  label, value, sub, icon, tone,
-}: {
-  label: string; value: React.ReactNode; sub?: string; icon: React.ReactNode; tone: "good" | "bad" | "neutral";
-}) {
-  const color = tone === "bad" ? RED : tone === "good" ? ACCENT : "#fff";
-  return (
-    <div className={`${card} p-4`}>
-      <div className="flex items-center gap-1.5 mb-1.5 text-slate-500">
-        {icon}
-        <p className="text-[10px] font-bold uppercase tracking-widest">{label}</p>
-      </div>
-      <span className="font-black text-3xl" style={{ color }}>{value}</span>
-      {sub && <p className="text-[11px] mt-1 text-slate-500">{sub}</p>}
-    </div>
-  );
-}
 
 /** Les quatre familles d'incidents, chacune sa couleur sur le graphe et la chronologie. */
 const KINDS = [
@@ -354,6 +317,130 @@ export function IncidentHistory({ report }: { report: HealthReport }) {
   );
 }
 
+
+type Level = "ok" | "warn" | "down" | "off";
+const LEVEL: Record<Level, { color: string; ink: string; label: string }> = {
+  ok: { color: ACCENT, ink: ACCENT_INK, label: "OK" },
+  warn: { color: AMBER, ink: "#d97706", label: "À surveiller" },
+  down: { color: RED, ink: RED, label: "En panne" },
+  off: { color: "#94a3b8", ink: "#64748b", label: "Éteint" },
+};
+type Service = { key: string; name: string; icon: React.ReactNode; level: Level; status: string; detail: string };
+
+/** Niveau d'après la dernière apparition : < 1 h en panne, < 24 h à surveiller, sinon réglé. */
+const levelFromLast = (iso?: string | null): Level => {
+  if (!iso) return "ok";
+  const h = (Date.now() - Date.parse(iso)) / 3_600_000;
+  return h < 1 ? "down" : h < 24 ? "warn" : "ok";
+};
+const newest = (sigs: HealthSignature[]) => sigs.map((s) => s.lastSeen).sort().pop() ?? null;
+const PAY = /polar|stripe|checkout|portal|paiement|payment/i;
+
+/**
+ * Un service = une tuile : vert / orange / rouge / gris, une phrase, un chiffre.
+ * Remplace le verdict générique (« À surveiller » + liste brute) et les 4
+ * compteurs, qui ne disaient pas QUEL service allait mal.
+ */
+function buildServices(report: HealthReport): Service[] {
+  const out: Service[] = [];
+
+  const appLast = newest(report.clientErrors.top);
+  const appLevel = report.clientErrors.total ? levelFromLast(appLast) : "ok";
+  out.push({ key: "app", name: "Application", icon: <MonitorX size={14} />, level: appLevel,
+    status: report.clientErrors.total ? (appLevel === "ok" ? "Réglé" : `${report.clientErrors.total} plantage(s)`) : "Aucun plantage",
+    detail: report.clientErrors.total ? `${report.clientErrors.affectedUsers} compte(s) touché(s) · dernier ${relative(appLast)}` : `sur ${report.windowDays} j` });
+
+  const aiLast = newest(report.aiFailures.top);
+  const perf = report.aiPerformance;
+  // Même règle que les autres tuiles (dernier échec < 1 h = en panne, < 24 h =
+  // à surveiller), plus un taux d'échec anormal sur la période.
+  let aiLevel: Level = report.aiFailures.total ? levelFromLast(aiLast) : "ok";
+  if (aiLevel === "ok" && perf && (perf.failureRate ?? 0) > 10) aiLevel = "warn";
+  out.push({ key: "ai", name: "Robi IA", icon: <Sparkles size={14} />, level: aiLevel,
+    status: aiLevel === "ok" ? "Répond" : aiLevel === "down" ? "Indisponible" : "Instable",
+    detail: perf ? `${perf.calls} appels · ${perf.failureRate ?? 0} % d'échecs${perf.latencyP50ApproxMs ? ` · ${Math.round(perf.latencyP50ApproxMs / 100) / 10} s en moyenne` : ""}` : `${report.aiFailures.total} échec(s) · dernier ${relative(aiLast)}` });
+
+  const rate = report.emails.failureRate;
+  const mailLevel: Level = rate === null ? "ok" : rate > 20 ? "down" : rate > 5 ? "warn" : "ok";
+  out.push({ key: "mail", name: "E-mails", icon: <Mail size={14} />, level: mailLevel,
+    status: rate === null ? "Pas encore mesuré" : `${rate} % d'échecs`,
+    detail: report.emails.failed !== null ? `${report.emails.failed} refusé(s) sur ${(report.emails.sent ?? 0) + report.emails.failed}` : "index Firestore en cours" });
+
+  const payErrors = Object.entries(report.functionErrors.bySource).filter(([k]) => PAY.test(k));
+  const payCount = payErrors.reduce((n, [, v]) => n + v, 0);
+  const payLast = newest(report.functionErrors.top.filter((sg) => PAY.test(`${sg.signature} ${sg.sample}`)));
+  const payLevel: Level = payCount ? (levelFromLast(payLast) === "ok" ? "warn" : levelFromLast(payLast)) : "ok";
+  out.push({ key: "pay", name: "Paiements", icon: <CreditCard size={14} />, level: payLevel,
+    status: payCount ? `${payCount} erreur(s)` : "Aucune erreur",
+    detail: payCount ? payErrors.map(([k, v]) => `${k} (${v})`).join(", ") : "Polar · Stripe · espace client" });
+
+  const crons = report.crons ?? (report.cron.last ? [{ ...report.cron.last, staleHours: report.cron.staleHours ?? 999 }] : []);
+  const rem = crons.find((c) => c.source === "runRemindersDaily");
+  const remLevel: Level = !rem ? "down" : rem.staleHours > 48 ? "down" : rem.staleHours > 26 ? "warn" : "ok";
+  const remMeta = (rem?.meta || {}) as Record<string, number | string>;
+  out.push({ key: "rem", name: "Relances factures", icon: <Clock size={14} />, level: remLevel,
+    status: !rem ? "Jamais passé" : remLevel === "ok" ? "À l'heure" : `En retard (${rem.staleHours} h)`,
+    detail: rem ? `8 h chaque jour · dernier ${relative(rem.at)} · ${String(remMeta.sent ?? 0)} envoyée(s)` : "aucune trace sur la période" });
+
+  const nur = crons.find((c) => c.source === "runNurtureDaily");
+  const nurMeta = (nur?.meta || {}) as Record<string, number | string>;
+  const nurOff = !nur || nurMeta.outcome === "disabled";
+  const nurLevel: Level = nurOff ? "off" : nur!.staleHours > 26 ? "warn" : String(nurMeta.outcome) === "partial" ? "warn" : "ok";
+  out.push({ key: "nur", name: "Relances inscrits", icon: <Mail size={14} />, level: nurLevel,
+    status: nurOff ? "Éteintes" : nurLevel === "ok" ? "Actives" : "À vérifier",
+    detail: nurOff ? "J+1 / J+2 / J+7 — Admin › Lancement" : `10 h chaque jour · ${String(nurMeta.sent ?? 0)} envoyé(s) au dernier passage` });
+
+  return out;
+}
+
+export function ServicesBoard({ report, days, setDays }: { report: HealthReport; days: number; setDays: (d: number) => void }) {
+  const services = buildServices(report);
+  const bad = services.filter((sv) => sv.level === "down" || sv.level === "warn");
+  const worst: Level = services.some((sv) => sv.level === "down") ? "down" : bad.length ? "warn" : "ok";
+  const down = services.filter((sv) => sv.level === "down").map((sv) => sv.name);
+  const warn = services.filter((sv) => sv.level === "warn").map((sv) => sv.name);
+  const head = worst === "ok"
+    ? "Tout fonctionne"
+    : [down.length ? `En panne : ${down.join(", ")}` : "", warn.length ? `À surveiller : ${warn.join(", ")}` : ""].filter(Boolean).join(" · ");
+  return (
+    <div className={`${card} p-5 space-y-4 border-l-4`} style={{ borderLeftColor: LEVEL[worst].color }}>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <span style={{ color: LEVEL[worst].ink }} className="mt-0.5">{worst === "ok" ? <CheckCircle2 size={18} /> : worst === "down" ? <XCircle size={18} /> : <AlertTriangle size={18} />}</span>
+          <div>
+            <p className="text-xs font-black uppercase tracking-widest text-slate-900">État des services</p>
+            <p className="font-black text-[15px] mt-1" style={{ color: LEVEL[worst].ink }}>{head}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-1 flex-shrink-0">
+          {[7, 30].map((d) => (
+            <button key={d} onClick={() => setDays(d)}
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-black transition-all ${days === d ? "bg-slate-200 text-slate-900" : "text-slate-500 hover:text-slate-700"}`}>
+              {d} j
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+        {services.map((sv) => {
+          const L = LEVEL[sv.level];
+          return (
+            <div key={sv.key} className="rounded-xl border border-slate-200 p-3.5">
+              <div className="flex items-center gap-2 text-slate-500">
+                <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: L.color }} />
+                {sv.icon}
+                <p className="text-[11px] font-bold uppercase tracking-wider truncate">{sv.name}</p>
+              </div>
+              <p className={`font-black text-[15px] mt-2 ${sv.level === "ok" ? "text-slate-900" : ""}`} style={sv.level === "ok" ? undefined : { color: L.ink }}>{sv.status}</p>
+              <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">{sv.detail}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 const SanteTab: React.FC = () => {
   const [days, setDays] = useState(7);
   const [report, setReport] = useState<HealthReport | null>(null);
@@ -399,135 +486,14 @@ const SanteTab: React.FC = () => {
 
   if (!report) return null;
 
-  const sev = SEVERITY[report.severity];
   const ai = diagnoseAi(report);
-  const cronLate = report.cron.staleHours === null || report.cron.staleHours > 26;
-  const cronMeta = (report.cron.last?.meta || {}) as Record<string, number | string>;
 
   return (
     <div className="space-y-6">
-      {/* Verdict */}
-      {/* Surface standard plutôt qu'un fond translucide maison : à 5 %
-          d'opacité la teinte disparaissait sur la coquille sombre, et le texte
-          — écrit dans les gris d'une carte claire — devenait illisible. La
-          couleur de sévérité reste sur l'icône, le titre et le liseré. */}
-      <div className={`${card} p-5 border-l-4`} style={{ borderLeftColor: sev.color }}>
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <span style={{ color: sev.color }} className="mt-0.5">{sev.icon}</span>
-            <div>
-              <p className="font-black text-base" style={{ color: sev.color }}>{sev.label}</p>
-              <p className="text-[12px] text-slate-600 mt-0.5">{sev.blurb}</p>
-              {report.problems.length > 0 && (
-                <ul className="mt-3 space-y-1">
-                  {report.problems.map((p) => (
-                    <li key={p} className="text-[12px] text-slate-700 flex items-start gap-2">
-                      <span className="mt-[7px] w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: sev.color }} />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
+      <ServicesBoard report={report} days={days} setDays={setDays} />
 
-          <div className="flex items-center gap-1 flex-shrink-0">
-            {[7, 30].map((d) => (
-              <button
-                key={d}
-                onClick={() => setDays(d)}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-black transition-all ${
-                  days === d ? "bg-slate-200 text-slate-900" : "text-slate-500 hover:text-slate-700"
-                }`}
-              >
-                {d} j
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {ai && <AiCard ai={ai} />}
-
-      {/* KPIs */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Kpi
-          label="Emails en échec"
-          icon={<Mail size={13} />}
-          value={
-            report.emails.failureRate === null
-              ? <span className="text-slate-400 text-xl">index en cours</span>
-              : `${report.emails.failureRate}%`
-          }
-          sub={
-            report.emails.failed !== null
-              ? `${report.emails.failed} échec(s) / ${(report.emails.sent ?? 0) + report.emails.failed} envoi(s)`
-              : undefined
-          }
-          tone={report.emails.failureRate !== null && report.emails.failureRate > 5 ? "bad" : "good"}
-        />
-        <Kpi
-          label="Plantages app"
-          icon={<MonitorX size={13} />}
-          value={report.clientErrors.total}
-          sub={report.clientErrors.affectedUsers > 0 ? `${report.clientErrors.affectedUsers} compte(s) touché(s)` : undefined}
-          tone={report.clientErrors.total > 0 ? "bad" : "good"}
-        />
-        <Kpi
-          label="Échecs IA"
-          icon={<Sparkles size={13} />}
-          value={report.aiFailures.total}
-          tone={report.aiFailures.total > 0 ? "bad" : "good"}
-        />
-        <Kpi
-          label="Erreurs fonctions"
-          icon={<ServerCrash size={13} />}
-          value={report.functionErrors.total}
-          sub={Object.keys(report.functionErrors.bySource).length > 0 ? Object.entries(report.functionErrors.bySource).map(([k, v]) => `${k} (${v})`).join(", ") : undefined}
-          tone={report.functionErrors.total > 0 ? "bad" : "good"}
-        />
-      </div>
-
-      {/* Cron */}
-      <div className={`${card} p-5`}>
-        <div className="flex items-center gap-2 mb-3">
-          <Clock size={15} style={{ color: cronLate ? RED : ACCENT }} />
-          <p className="text-xs font-black uppercase tracking-widest text-slate-900">Relances automatiques</p>
-          <span
-            className="ml-auto text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider"
-            style={{ backgroundColor: cronLate ? `${RED}22` : `${ACCENT}22`, color: cronLate ? RED : ACCENT }}
-          >
-            {cronLate ? "en retard" : "à l'heure"}
-          </span>
-        </div>
-        {report.cron.last ? (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Dernier passage</p>
-              <p className="text-sm font-bold text-slate-900">{fmtDate(report.cron.last.at)}</p>
-              <p className="text-[10px] text-slate-400">{relative(report.cron.last.at)}</p>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Issue</p>
-              <p className="text-sm font-bold text-slate-900">{String(cronMeta.outcome ?? "—")}</p>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Relances envoyées</p>
-              <p className="text-sm font-bold text-slate-900">{String(cronMeta.sent ?? 0)}</p>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Échecs / ignorés</p>
-              <p className="text-sm font-bold text-slate-900">{String(cronMeta.failed ?? 0)} / {String(cronMeta.skipped ?? 0)}</p>
-            </div>
-          </div>
-        ) : (
-          <p className="text-xs text-slate-600">
-            Aucune trace d&apos;exécution. Le job tourne tous les jours à 8 h (Europe/Paris) —
-            la première trace apparaîtra au prochain passage. Si rien n&apos;arrive demain,
-            c&apos;est qu&apos;il ne tourne pas.
-          </p>
-        )}
-      </div>
+      {/* Détail de l'IA seulement quand elle a un souci : sinon la tuile suffit. */}
+      {ai && ai.status !== "ok" && <AiCard ai={ai} />}
 
       <IncidentHistory report={report} />
 
