@@ -81,6 +81,8 @@ const authedFetch = async (url: string, init?: RequestInit) => {
 export interface HealthSignature {
   signature: string;
   count: number;
+  /** Première apparition sur la fenêtre (absent des rapports d'avant le 29/09). */
+  firstSeen?: string;
   lastSeen: string;
   sample: string;
 }
@@ -104,7 +106,8 @@ export interface HealthReport {
   emailErrors: { total: number; top: HealthSignature[] };
   functionErrors: { total: number; bySource: Record<string, number>; top: HealthSignature[] };
   cron: { last: { at: string; source: string; meta: Record<string, unknown> } | null; staleHours: number | null };
-  daily: { date: string; count: number }[];
+  /** `byKind` : client_error / ai_failed / email_failed / function_error (depuis le 29/09). */
+  daily: { date: string; count: number; byKind?: Record<string, number> }[];
   truncated: boolean;
   computedAt: string;
 }

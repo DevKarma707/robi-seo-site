@@ -136,46 +136,48 @@ function Kpi({
   );
 }
 
-/** Grouped incidents. The signature collapses ids and numbers so repeats stack. */
-function Incidents({
-  title, icon, items, empty, tone = "bad",
-}: {
-  title: string; icon: React.ReactNode; items: HealthSignature[]; empty: string; tone?: "bad" | "neutral";
-}) {
-  return (
-    <div className={`${card} p-5`}>
-      <div className="flex items-center gap-2 mb-4">
-        <span style={{ color: items.length ? (tone === "bad" ? RED : AMBER) : ACCENT }}>{icon}</span>
-        <p className="text-xs font-black uppercase tracking-widest text-slate-900">{title}</p>
-        {items.length > 0 && (
-          <span className="ml-auto text-[10px] font-black px-2 py-0.5 rounded-full" style={{ backgroundColor: `${RED}22`, color: RED }}>
-            {items.reduce((s, i) => s + i.count, 0)}
-          </span>
-        )}
-      </div>
-      {items.length === 0 ? (
-        <p className="text-xs text-slate-500">{empty}</p>
-      ) : (
-        <div className="space-y-3">
-          {items.map((it) => (
-            <div key={it.signature} className="flex items-start gap-3">
-              <span
-                className="mt-0.5 min-w-[26px] h-[22px] px-1.5 rounded-md text-[11px] font-black flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: `${RED}1f`, color: RED }}
-              >
-                {it.count}
-              </span>
-              <div className="min-w-0">
-                <p className="text-[12px] text-slate-700 font-mono break-words leading-snug">{it.sample}</p>
-                <p className="text-[10px] text-slate-400 mt-0.5">dernière fois {relative(it.lastSeen)}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+/** Les quatre familles d'incidents, chacune sa couleur sur le graphe et la chronologie. */
+const KINDS = [
+  { key: "ai_failed", label: "IA", color: "#a78bfa" },
+  { key: "client_error", label: "Plantage app", color: RED },
+  { key: "email_failed", label: "E-mail refusé", color: "#60a5fa" },
+  { key: "function_error", label: "Serveur", color: "#fb923c" },
+] as const;
+type KindKey = (typeof KINDS)[number]["key"];
+const KIND_BY_KEY = Object.fromEntries(KINDS.map((k) => [k.key, k])) as Record<KindKey, (typeof KINDS)[number]>;
+
+/** « 3 h 40 », « 25 min », « 2 j » : depuis combien de temps c'est calme. */
+const since = (iso: string) => {
+  const min = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 60_000));
+  if (min < 60) return `${min} min`;
+  if (min < 24 * 60) return `${Math.floor(min / 60)} h${min % 60 ? ` ${String(min % 60).padStart(2, "0")}` : ""}`;
+  return `${Math.round(min / 1440)} j`;
+};
+
+/**
+ * Où en est un incident, d'après sa dernière apparition :
+ * moins d'une heure = en cours ; moins de 24 h = calme mais trop tôt pour
+ * crier victoire ; au-delà = résolu. Même logique que le Cockpit.
+ */
+function statusOf(lastSeen: string): { label: string; color: string; ink: string } {
+  const h = (Date.now() - Date.parse(lastSeen)) / 3_600_000;
+  if (h < 1) return { label: "En cours", color: RED, ink: RED };
+  if (h < 24) return { label: `Calme depuis ${since(lastSeen)}`, color: AMBER, ink: "#d97706" };
+  // Pastille en vert accent, texte en ACCENT_INK : le vert clair sur fond
+  // blanc (mode clair) ne se lisait pas.
+  return { label: `Résolu · plus vu depuis ${since(lastSeen)}`, color: ACCENT, ink: ACCENT_INK };
 }
+
+/** « 29/09 11:00 », et « 29/09 11:00 → 15:24 » quand tout tient dans la journée. */
+const hm = (iso: string) => new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+const dm = (iso: string) => new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" });
+const span = (first: string | undefined, last: string) => {
+  if (!first || first === last) return `${dm(last)} ${hm(last)}`;
+  return dm(first) === dm(last) ? `${dm(first)} ${hm(first)} → ${hm(last)}` : `${dm(first)} ${hm(first)} → ${dm(last)} ${hm(last)}`;
+};
+
+const dayLabel = (date: string) =>
+  new Date(`${date}T12:00:00`).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric" }).replace(".", "");
 
 /**
  * Complète la série avec les jours sans incident.
@@ -186,46 +188,168 @@ function Incidents({
  * Un jour calme est une information, il doit occuper sa place.
  */
 function fillDays(
-  days: { date: string; count: number }[],
+  days: HealthReport["daily"],
   windowDays: number,
   today = new Date(),
-): { date: string; count: number }[] {
-  const byDate = new Map(days.map((d) => [d.date, d.count]));
-  const out: { date: string; count: number }[] = [];
+): HealthReport["daily"] {
+  const byDate = new Map(days.map((d) => [d.date, d]));
+  const out: HealthReport["daily"] = [];
   for (let i = windowDays - 1; i >= 0; i--) {
     const d = new Date(today);
     d.setUTCDate(d.getUTCDate() - i);
     const key = d.toISOString().slice(0, 10);
-    out.push({ date: key, count: byDate.get(key) ?? 0 });
+    out.push(byDate.get(key) ?? { date: key, count: 0, byKind: {} });
   }
   return out;
 }
 
-function DailyBars({ days, windowDays }: { days: { date: string; count: number }[]; windowDays: number }) {
-  const series = fillDays(days, windowDays);
-  if (series.length === 0) return null;
+type Incident = HealthSignature & { kind: KindKey };
+
+/**
+ * Historique des incidents : où on en est (en cours / calme / résolu), un
+ * graphe daté et coloré par type, puis la chronologie « du … au … ».
+ * Avant : des barres rouges sans date ni légende — impossible de savoir
+ * quand un problème avait commencé, ni s'il était réglé.
+ */
+export function IncidentHistory({ report }: { report: HealthReport }) {
+  const [showAll, setShowAll] = useState(false);
+  const [open, setOpen] = useState<string | null>(null);
+
+  const incidents: Incident[] = [
+    ...report.aiFailures.top.map((s) => ({ ...s, kind: "ai_failed" as const })),
+    ...report.clientErrors.top.map((s) => ({ ...s, kind: "client_error" as const })),
+    ...report.emailErrors.top.map((s) => ({ ...s, kind: "email_failed" as const })),
+    ...report.functionErrors.top.map((s) => ({ ...s, kind: "function_error" as const })),
+  ].sort((a, b) => b.lastSeen.localeCompare(a.lastSeen));
+
+  const latest = incidents[0] ?? null;
+  const head = latest ? statusOf(latest.lastSeen) : null;
+  const totals = Object.fromEntries(KINDS.map((k) => [k.key, 0])) as Record<KindKey, number>;
+  const series = fillDays(report.daily, report.windowDays);
+  series.forEach((d) => KINDS.forEach((k) => { totals[k.key] += d.byKind?.[k.key] ?? 0; }));
+  const hasByKind = series.some((d) => d.byKind && Object.keys(d.byKind).length > 0);
   const max = Math.max(1, ...series.map((d) => d.count));
+  const shown = showAll ? incidents : incidents.slice(0, 6);
+  const labelEvery = series.length > 14 ? 5 : 1;
+
   return (
-    <div className={`${card} p-5`}>
-      <div className="flex items-center gap-2 mb-4">
-        <Activity size={15} style={{ color: ACCENT_INK }} />
-        <p className="text-xs font-black uppercase tracking-widest text-slate-900">Incidents par jour</p>
+    <div className={`${card} p-5 space-y-5`}>
+      {/* Où on en est, lisible en une seconde */}
+      <div className="flex items-start gap-3">
+        <Activity size={16} className="mt-0.5 flex-shrink-0" style={{ color: head?.color ?? ACCENT }} />
+        <div className="min-w-0">
+          <p className="text-xs font-black uppercase tracking-widest text-slate-900">Historique des incidents</p>
+          {latest && head ? (
+            <p className="text-[13px] mt-1">
+              <span className="font-black" style={{ color: head.ink }}>{head.label}</span>
+              <span className="text-slate-600">
+                {" "}— dernier incident le {dm(latest.lastSeen)} à {hm(latest.lastSeen)} ({KIND_BY_KEY[latest.kind].label.toLowerCase()})
+              </span>
+            </p>
+          ) : (
+            <p className="text-[13px] mt-1 font-black" style={{ color: ACCENT_INK }}>
+              Aucun incident sur les {report.windowDays} derniers jours
+            </p>
+          )}
+        </div>
       </div>
-      <div className="flex items-end gap-1 h-20">
-        {series.map((d) => (
-          // h-full matters: without a resolved parent height the bars' own
-          // percentage heights collapse to zero and the chart renders empty.
-          <div key={d.date} className="flex-1 h-full flex flex-col justify-end group relative">
-            <div
-              className="w-full rounded-sm"
-              style={{ height: `${Math.max((d.count / max) * 100, 4)}%`, backgroundColor: d.count > 0 ? RED : "var(--color-slate-100)" }}
-            />
-            <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-slate-900 opacity-0 group-hover:opacity-100 whitespace-nowrap">
-              {d.count} · {d.date.slice(5)}
-            </span>
+
+      {/* Graphe daté, coloré par type */}
+      <div>
+        <div className="flex items-end gap-1 h-28 pt-4">
+          {series.map((d) => {
+            const today = d.date === new Date().toISOString().slice(0, 10);
+            const parts = hasByKind
+              ? KINDS.map((k) => ({ ...k, n: d.byKind?.[k.key] ?? 0 })).filter((p) => p.n > 0)
+              : d.count > 0 ? [{ key: "all", label: "Incidents", color: RED, n: d.count }] : [];
+            return (
+              <div
+                key={d.date}
+                className="flex-1 h-full flex flex-col justify-end relative"
+                title={`${dayLabel(d.date)} : ${d.count} incident(s)${parts.length ? " — " + parts.map((p) => `${p.label} ${p.n}`).join(", ") : ""}`}
+              >
+                {d.count > 0 && (
+                  <span className="text-[10px] font-black text-slate-700 text-center mb-0.5">{d.count}</span>
+                )}
+                {d.count > 0 ? (
+                  <div className="w-full rounded-sm overflow-hidden flex flex-col-reverse" style={{ height: `${Math.max((d.count / max) * 100, 8)}%` }}>
+                    {parts.map((p) => (
+                      <div key={p.key} style={{ height: `${(p.n / d.count) * 100}%`, backgroundColor: p.color }} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="w-full h-[3px] rounded-sm bg-slate-200" />
+                )}
+                {today && <span className="absolute -top-1 right-0 left-0 mx-auto w-1 h-1 rounded-full" style={{ backgroundColor: ACCENT_INK }} />}
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex gap-1 mt-1.5">
+          {series.map((d, i) => {
+            const today = d.date === new Date().toISOString().slice(0, 10);
+            const show = today || i % labelEvery === 0;
+            return (
+              <span key={d.date} className={`flex-1 text-center text-[10px] ${today ? "font-black text-slate-900" : "text-slate-400"}`}>
+                {show ? (today ? "auj." : dayLabel(d.date)) : ""}
+              </span>
+            );
+          })}
+        </div>
+        {hasByKind && (
+          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3">
+            {KINDS.map((k) => (
+              <span key={k.key} className="flex items-center gap-1.5 text-[11px] text-slate-600">
+                <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: k.color }} />
+                {k.label} <span className="font-bold text-slate-900">{totals[k.key]}</span>
+              </span>
+            ))}
           </div>
-        ))}
+        )}
       </div>
+
+      {/* Chronologie : du … au …, et si c'est réglé */}
+      {incidents.length > 0 && (
+        <div className="border-t border-slate-200 pt-4">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3">Ce qui s&apos;est passé</p>
+          <ul className="space-y-2.5">
+            {shown.map((it) => {
+              const st = statusOf(it.lastSeen);
+              const k = KIND_BY_KEY[it.kind];
+              const id = `${it.kind}|${it.signature}`;
+              return (
+                <li key={id} className="flex items-start gap-3">
+                  <span className="mt-1.5 w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: st.color }} />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <span className="text-[10px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded" style={{ backgroundColor: `${k.color}22`, color: k.color }}>
+                        {k.label}
+                      </span>
+                      <span className="text-[11px] font-black" style={{ color: st.ink }}>{st.label}</span>
+                      <span className="text-[11px] text-slate-500">
+                        {it.count}× · {span(it.firstSeen, it.lastSeen)}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setOpen(open === id ? null : id)}
+                      className={`text-left text-[12px] text-slate-700 mt-1 w-full ${open === id ? "font-mono break-words" : "truncate"}`}
+                      title={open === id ? "Réduire" : "Voir le message complet"}
+                    >
+                      {it.sample}
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          {incidents.length > 6 && (
+            <button type="button" onClick={() => setShowAll(!showAll)} className="mt-3 text-[11px] font-bold text-slate-500 hover:text-slate-900">
+              {showAll ? "Réduire" : `Voir les ${incidents.length} incidents`}
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -405,35 +529,7 @@ const SanteTab: React.FC = () => {
         )}
       </div>
 
-      <DailyBars days={report.daily} windowDays={report.windowDays} />
-
-      {/* Incidents détaillés */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Incidents
-          title="Plantages de l'app"
-          icon={<MonitorX size={15} />}
-          items={report.clientErrors.top}
-          empty="Aucun plantage remonté."
-        />
-        <Incidents
-          title="Échecs de génération IA"
-          icon={<Sparkles size={15} />}
-          items={report.aiFailures.top}
-          empty="Aucun échec de génération."
-        />
-        <Incidents
-          title="Emails refusés"
-          icon={<Mail size={15} />}
-          items={report.emailErrors.top}
-          empty="Aucun envoi refusé."
-        />
-        <Incidents
-          title="Erreurs de fonctions"
-          icon={<ServerCrash size={15} />}
-          items={report.functionErrors.top}
-          empty="Aucune erreur côté serveur."
-        />
-      </div>
+      <IncidentHistory report={report} />
 
       <div className="flex items-center justify-between">
         <p className="text-[10px] text-slate-400">

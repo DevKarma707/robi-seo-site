@@ -21,12 +21,37 @@ import {
   Megaphone, BarChart2, FileText, Rocket, ArrowUpRight, LogOut, Filter, Globe,
 } from "lucide-react";
 import { Lancement, Revenu, Alertes } from "@/components/admin/PilotageTab";
+import { IncidentHistory } from "@/components/admin/SanteTab";
+import type { HealthReport } from "@/lib/adminApi";
 import WorldMapBlock from "@/components/admin/WorldMapBlock";
 import ThemePicker from "@/components/admin/ThemePicker";
 import { ACCENT, btn, btnAccent, btnGhost, btnPill, btnPrimary, card, focusRing, kpiLabel, kpiValue, sectionTitle } from "@/components/admin/ui";
 import ModeToggle from "@/components/admin/ModeToggle";
 import { Toaster, toast } from "@/components/admin/toast";
 import { AreaCurve, CountUp } from "@/components/admin/motion";
+
+
+/** Rapport de santé factice, calqué sur le 29/09 (Gemini surchargé le matin). */
+const h = (hoursAgo: number) => new Date(Date.now() - hoursAgo * 3_600_000).toISOString();
+const d = (daysAgo: number) => new Date(Date.now() - daysAgo * 86_400_000).toISOString().slice(0, 10);
+const HEALTH_DEMO: HealthReport = {
+  windowDays: 7, severity: "warn", problems: [],
+  emails: { sent: 40, failed: 0, failureRate: 0 },
+  clientErrors: { total: 2, affectedUsers: 1, top: [{ signature: "c1", count: 2, firstSeen: h(98), lastSeen: h(97), sample: "TypeError: Cannot read properties of undefined (reading 'items')" }] },
+  aiFailures: { total: 8, top: [
+    { signature: "a1", count: 5, firstSeen: h(8), lastSeen: h(3.6), sample: "PROVIDER_OVERLOADED — This model is currently experiencing high demand" },
+    { signature: "a2", count: 3, firstSeen: h(30), lastSeen: h(26), sample: "PROVIDER_QUOTA — You exceeded your current quota (free tier)" },
+  ] },
+  emailErrors: { total: 0, top: [] },
+  functionErrors: { total: 1, bySource: { createPolarPortalSession: 1 }, top: [{ signature: "f1", count: 1, firstSeen: h(0.4), lastSeen: h(0.4), sample: "Portail client Polar : Forbidden" }] },
+  cron: { last: null, staleHours: null },
+  daily: [
+    { date: d(4), count: 2, byKind: { client_error: 2 } },
+    { date: d(1), count: 3, byKind: { ai_failed: 3 } },
+    { date: d(0), count: 6, byKind: { ai_failed: 5, function_error: 1 } },
+  ],
+  truncated: false, computedAt: new Date().toISOString(),
+};
 
 const NAV = [
   { label: "Pilotage", icon: <Gauge size={17} />, active: true },
@@ -126,6 +151,7 @@ export default function ApercuAdmin() {
               days={61}
             />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <IncidentHistory report={HEALTH_DEMO} />
               <Revenu stats={{ revenue: { oneShot: 177, mrr: 14, total: 191 }, byPlan: { lifetime: 3, monthly: 1 } }} />
               <Alertes
                 health={{
