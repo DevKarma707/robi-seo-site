@@ -38,6 +38,8 @@ export interface GscReport {
   rangeLabel?: string;   // « Les 3 derniers mois », repris des filtres de l'export
   totals: { clicks: number; impressions: number; ctr: number; position: number };
   daily: GscDay[];
+  /** Pas du graphique exporté : Search Console propose jour, semaine ou mois. Absent = jour. */
+  granularity?: "day" | "week" | "month";
   queries: GscRow[];
   pages: GscRow[];
   countries: GscRow[];
@@ -118,11 +120,15 @@ const num = (s: string | undefined) => {
 const norm = (s: string) =>
   s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 
-type Kind = "daily" | "queries" | "pages" | "countries" | "devices" | "filters" | "unknown";
+type Kind = "daily" | "periods" | "queries" | "pages" | "countries" | "devices" | "filters" | "unknown";
 
 const kindOf = (header: string): Kind => {
   const h = norm(header);
   if (h === "date") return "daily";
+  // Graphique agrégé par semaine ou par mois (réglage « Afficher par » de
+  // Search Console) : première colonne « Période » et non « Date ». Le 29/09
+  // un export hebdomadaire était refusé comme « incomplet ».
+  if (h === "periode" || h === "period" || h.startsWith("semaine") || h.startsWith("week") || h === "mois" || h === "month") return "periods";
   if (h.startsWith("requete") || h.includes("quer")) return "queries";
   if (h.startsWith("page")) return "pages";
   if (h.startsWith("pays") || h.startsWith("countr")) return "countries";
@@ -169,6 +175,8 @@ export async function parseGscFiles(files: File[]): Promise<Omit<GscReport, "id"
   let countries: GscRow[] = [];
   let devices: GscRow[] = [];
   let rangeLabel: string | undefined;
+  let granularity: "day" | "week" | "month" = "day";
+  let lastEnd: string | undefined;
 
   for (const text of texts) {
     const table = parseCsv(text);
@@ -180,6 +188,29 @@ export async function parseGscFiles(files: File[]): Promise<Omit<GscReport, "id"
           .map((r) => ({ date: r[0].trim(), clicks: num(r[1]), impressions: num(r[2]), position: num(r[4]) }))
           .sort((a, b) => a.date.localeCompare(b.date));
         break;
+      case "periods": {
+        // « 2026-06-28 - 2026-07-04 » (semaine) ou « 2026-07 » (mois) : chaque
+        // point est daté de son premier jour, la fin de la dernière période
+        // donne la fin de l'export.
+        const points: GscDay[] = [];
+        for (const r of table.slice(1)) {
+          const key = (r[0] || "").trim();
+          const range = key.match(/^(\d{4}-\d{2}-\d{2})\s*[-–]\s*(\d{4}-\d{2}-\d{2})$/);
+          const month = key.match(/^(\d{4})-(\d{2})$/);
+          let start: string | null = null, end: string | null = null;
+          if (range) { start = range[1]; end = range[2]; granularity = "week"; }
+          else if (month) {
+            start = `${month[1]}-${month[2]}-01`;
+            end = new Date(Date.UTC(+month[1], +month[2], 0)).toISOString().slice(0, 10);
+            granularity = "month";
+          } else if (/^\d{4}-\d{2}-\d{2}$/.test(key)) { start = end = key; }
+          if (!start || !end) continue;
+          points.push({ date: start, clicks: num(r[1]), impressions: num(r[2]), position: num(r[4]) });
+          if (!lastEnd || end > lastEnd) lastEnd = end;
+        }
+        daily = points.sort((a, b) => a.date.localeCompare(b.date));
+        break;
+      }
       case "queries": queries = toRows(table).sort(byImpressions).slice(0, MAX_QUERIES); break;
       case "pages": pages = toRows(table).sort(byImpressions).slice(0, MAX_PAGES); break;
       case "countries": countries = toRows(table).sort(byImpressions).slice(0, MAX_COUNTRIES); break;
@@ -193,7 +224,7 @@ export async function parseGscFiles(files: File[]): Promise<Omit<GscReport, "id"
   }
 
   if (!daily.length) {
-    throw new Error("Export incomplet : le graphique jour par jour (Graphique.csv / Chart.csv) est absent. Exporte depuis l'onglet Performances, sans filtre de requête ou de page.");
+    throw new Error("Export incomplet : le graphique (Graphique.csv / Chart.csv) est absent ou illisible. Exporte depuis l'onglet Performances, sans filtre de requête ou de page.");
   }
 
   const clicks = daily.reduce((s, d) => s + d.clicks, 0);
@@ -205,7 +236,8 @@ export async function parseGscFiles(files: File[]): Promise<Omit<GscReport, "id"
 
   return {
     periodStart: daily[0].date,
-    periodEnd: daily[daily.length - 1].date,
+    periodEnd: granularity === "day" ? daily[daily.length - 1].date : (lastEnd || daily[daily.length - 1].date),
+    ...(granularity !== "day" ? { granularity } : {}),
     ...(rangeLabel ? { rangeLabel } : {}),
     totals: {
       clicks,

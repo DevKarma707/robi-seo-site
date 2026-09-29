@@ -192,17 +192,17 @@ const SearchConsoleBlock: React.FC = () => {
 
           {/* Impressions par jour */}
           <div className={`${card} p-5`}>
-            <p className={`${sectionTitle} mb-4`}>Impressions par jour</p>
+            <p className={`${sectionTitle} mb-4`}>Impressions par {current.granularity === "week" ? "semaine" : current.granularity === "month" ? "mois" : "jour"}</p>
             <AreaCurve
               height={130}
               format={fmtInt}
               points={current.daily.map((d) => ({
                 value: d.impressions,
-                label: `${fmtDate(d.date)} · ${d.clicks} clic${d.clicks > 1 ? "s" : ""}`,
+                label: `${current.granularity === "week" ? "Semaine du " : ""}${fmtDate(d.date)} · ${d.clicks} clic${d.clicks > 1 ? "s" : ""}`,
                 mark: d.clicks > 0,
               }))}
             />
-            <p className="text-[11px] text-slate-400 mt-3">Pastille lime = au moins un clic ce jour-là. Survole la courbe pour le détail.</p>
+            <p className="text-[11px] text-slate-400 mt-3">Pastille lime = au moins un clic {current.granularity === "week" ? "cette semaine-là" : current.granularity === "month" ? "ce mois-là" : "ce jour-là"}. Survole la courbe pour le détail.</p>
           </div>
 
           {/* Requêtes suivies */}
