@@ -106,6 +106,8 @@ export interface HealthReport {
   emailErrors: { total: number; top: HealthSignature[] };
   functionErrors: { total: number; bySource: Record<string, number>; top: HealthSignature[] };
   cron: { last: { at: string; source: string; meta: Record<string, unknown> } | null; staleHours: number | null };
+  /** Dernier passage de chaque tâche planifiée (depuis le 30/09). */
+  crons?: { at: string; source: string; meta: Record<string, unknown>; staleHours: number }[];
   /** `byKind` : client_error / ai_failed / email_failed / function_error (depuis le 29/09). */
   daily: { date: string; count: number; byKind?: Record<string, number> }[];
   truncated: boolean;
