@@ -1,6 +1,16 @@
 {
   "crons": [
-    { "path": "/api/admin/replies", "schedule": "0 6 * * *" },
-    { "path": "/api/social/blotato-status", "schedule": "0 10 * * *" }
+    {
+      "path": "/api/admin/replies",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/social/blotato-status",
+      "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/partenaires/recap",
+      "schedule": "0 8 1 * *"
+    }
   ]
 }

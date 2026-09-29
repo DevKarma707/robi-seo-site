@@ -123,6 +123,10 @@ export const createInfluencerCode = (body: {
 }) =>
   authedFetch("/api/admin/influencers/code", { method: "POST", body: JSON.stringify(body) }) as Promise<CreatedInfluencerCode>;
 
+/** Envoie (ou renvoie) le mail de bienvenue : lien, code, conditions. */
+export const sendInfluencerWelcome = (influencerId: string) =>
+  authedFetch("/api/admin/influencers/bienvenue", { method: "POST", body: JSON.stringify({ influencerId }) }) as Promise<{ ok: boolean; sent: boolean }>;
+
 /** Désactive un code (supprimé chez Polar, historique conservé). */
 export const disableInfluencerCode = (code: string) =>
   authedFetch(`/api/admin/influencers/code?code=${encodeURIComponent(code)}`, { method: "DELETE" }) as Promise<{ code: string; active: false }>;

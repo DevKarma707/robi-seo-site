@@ -39,6 +39,15 @@ export interface Influencer {
   notes?: string;
   /** Clics sur le lien court robi-app.com/r/CODE (compté par la route /r). */
   clicks?: number;
+  /** Pays ISO-2 et langue des mails (fr / en / es), renseignés à l'inscription sur /partenaires. */
+  country?: string;
+  language?: string;
+  /** Comment le partenaire veut être payé, et où. */
+  payoutMethod?: "paypal" | "virement" | "wise";
+  payoutDetails?: string;
+  /** « site » quand la fiche vient du formulaire public. */
+  source?: string;
+  welcomeSentAt?: Timestamp;
   /** Fiche prospect d'origine, quand l'influenceur vient de l'onglet Acquisition. */
   prospectId?: string;
   contactedAt?: string;     // yyyy-mm-dd

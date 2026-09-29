@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Megaphone, Plus, RefreshCw, AlertTriangle, Trash2, ExternalLink, Ticket, Copy, Link2, Download, Zap, Ban, Wallet,
+  Megaphone, Plus, RefreshCw, AlertTriangle, Trash2, ExternalLink, Ticket, Copy, Link2, Download, Zap, Ban, Wallet, Mail,
 } from "lucide-react";
 import {
   subscribeToInfluencers, addInfluencer, updateInfluencer, deleteInfluencer,
@@ -11,7 +11,7 @@ import {
   PLATFORM_META, PLATFORMS, STATUS_META, INFLUENCER_PIPELINE,
   type Influencer, type InfluencerPlatform, type InfluencerStatus, type AttributionStats, type Payout,
 } from "@/lib/influencers";
-import { fetchAttributionStats, createInfluencerCode, disableInfluencerCode } from "@/lib/adminApi";
+import { fetchAttributionStats, createInfluencerCode, disableInfluencerCode, sendInfluencerWelcome } from "@/lib/adminApi";
 import { ACCENT, ACCENT_INK, btnGhost, btnPill, btnPrimary, card, input } from "./ui";
 import { toast } from "./toast";
 
@@ -133,6 +133,10 @@ const InfluenceursTab: React.FC = () => {
         ...(inf.signedAt ? {} : { signedAt: today() }),
       });
       say("ok", res.existed ? `Code ${res.code} déjà chez Polar, rattaché.` : `Code ${res.code} créé chez Polar.`);
+      if (inf.email) {
+        const w = await sendInfluencerWelcome(inf.id!).catch(() => ({ sent: false }));
+        say(w.sent ? "ok" : "err", w.sent ? `Mail de bienvenue envoyé à ${inf.email}.` : "Mail de bienvenue non envoyé (SMTP ?). Bouton « Renvoyer » sur la fiche.");
+      }
     } catch (e) {
       say("err", (e as Error).message);
     } finally {
@@ -484,6 +488,15 @@ const InfluenceursTab: React.FC = () => {
                     <button onClick={() => copy(selected.promoCode!, "Code")} className={btnGhost} title="Copier le code">
                       <span className="flex items-center gap-1.5"><Copy size={12} /> Code {selected.promoCode}</span>
                     </button>
+                    {selected.email && (
+                      <button
+                        onClick={async () => { const w = await sendInfluencerWelcome(selected.id!).catch(() => ({ sent: false })); say(w.sent ? "ok" : "err", w.sent ? "Mail de bienvenue envoyé." : "Envoi impossible."); }}
+                        className={btnGhost}
+                        title={selected.welcomeSentAt ? "Déjà envoyé, renvoyer" : "Envoyer le mail de bienvenue"}
+                      >
+                        <span className="flex items-center gap-1.5"><Mail size={12} /> {selected.welcomeSentAt ? "Renvoyer" : "Mail de bienvenue"}</span>
+                      </button>
+                    )}
                     <button onClick={() => disable(selected)} disabled={activating} className={`${btnPill} ml-auto text-red-600 hover:bg-red-500/10`} title="Désactiver le code chez Polar">
                       <span className="flex items-center gap-1.5"><Ban size={12} /> Désactiver</span>
                     </button>
@@ -506,6 +519,17 @@ const InfluenceursTab: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {(selected.source === "site" || selected.payoutMethod || selected.country) && (
+              <p className="text-[11px] text-slate-600">
+                {[
+                  selected.source === "site" ? "Inscrit via /partenaires" : null,
+                  selected.country ? `Pays ${selected.country}` : null,
+                  selected.language ? `Mails en ${selected.language}` : null,
+                  selected.payoutMethod ? `Paiement ${selected.payoutMethod}${selected.payoutDetails ? ` · ${selected.payoutDetails}` : ""}` : "Moyen de paiement non renseigné",
+                ].filter(Boolean).join(" · ")}
+              </p>
+            )}
 
             {/* Statut */}
             <div className="flex flex-wrap gap-1.5">

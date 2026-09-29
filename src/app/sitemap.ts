@@ -59,6 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...localizedUrls("/blog", "daily", 0.8),
     ...localizedUrls("/tools", "monthly", 0.7),
     ...localizedUrls("/contact", "monthly", 0.6),
+    ...localizedUrls("/partenaires", "monthly", 0.7),
     ...localizedUrls("/legal", "yearly", 0.3),
     ...localizedUrls("/privacy", "yearly", 0.3),
     ...localizedUrls("/terms", "yearly", 0.3),
