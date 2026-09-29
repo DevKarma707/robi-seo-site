@@ -615,7 +615,7 @@ const AcquisitionTab: React.FC = () => {
                         key={v.key}
                         onClick={() => updateProspect(selected.id!, { chosenDraft: v.key }, selected)}
                         className={`text-left rounded-xl border p-2.5 transition ${active ? "border-transparent" : "border-slate-200 bg-white hover:bg-slate-50"}`}
-                        style={active ? { backgroundColor: ACCENT, color: ACCENT_INK } : undefined}
+                        style={active ? { backgroundColor: ACCENT, color: "var(--a-on-accent)" } : undefined}
                       >
                         <div className="flex items-center justify-between gap-2">
                           <span className="text-[11px] font-bold">Variante {v.key}</span>
@@ -683,7 +683,7 @@ const AcquisitionTab: React.FC = () => {
                     onClick={send}
                     disabled={busy || !selected.email || !smtp?.configured || isOptedOut(selected)}
                     className={btnPrimary}
-                    title={!smtp?.configured ? "SMTP de prospection non configuré" : undefined}
+                    title={!selected.email ? "Pas d'email sur la fiche : copie le message et envoie-le en DM" : !smtp?.configured ? "SMTP de prospection non configuré" : undefined}
                   >
                     <span className="flex items-center gap-1.5">
                       {busy ? <RefreshCw size={12} className="animate-spin" /> : <Send size={12} />} Envoyer
