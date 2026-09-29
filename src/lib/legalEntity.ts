@@ -43,6 +43,8 @@ export const LEGAL_ENTITY: LegalEntity = {
   registered: false,
   // Nom retenu par Ralph le 29/09/2026, société pas encore immatriculée.
   name: "Late Night Studio",
+  // Obligatoire (LCEN art. 6) : une personne physique, même avant l'immatriculation.
+  publicationDirector: "Ralph Karam",
 };
 
 /** Contact de l'éditeur. Vérifié : cette boîte existe, contrairement au domaine robi.ai d'avant. */
@@ -92,7 +94,10 @@ export function formatEditorBlock(locale: string): string {
   const contactLine = `${CONTACT_LABEL[lang]} : ${CONTACT_EMAIL}`;
 
   if (!LEGAL_ENTITY.registered) {
-    return `${PENDING_NOTICE[lang]}\n\n${contactLine}`;
+    const director = LEGAL_ENTITY.publicationDirector
+      ? `\n${DIRECTOR_LABEL[lang]} : ${LEGAL_ENTITY.publicationDirector}`
+      : "";
+    return `${PENDING_NOTICE[lang]}\n\n${contactLine}${director}`;
   }
 
   const e = LEGAL_ENTITY;

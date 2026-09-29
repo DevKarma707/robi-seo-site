@@ -27,10 +27,7 @@
     ],
     "subtitle": "Deja que la IA se encargue de todo.\nSimplifica tus facturas y cobra más rápido.",
     "cta": "Empezar Gratis",
-    "secondaryCta": "Ver Demo",
-    "socialProof": "Se unieron",
-    "socialProofHighlight": "2.000+",
-    "socialProofEnd": "freelancers"
+    "secondaryCta": "Ver Demo"
   },
   "features": {
     "title": "Todas las herramientas para",
@@ -256,7 +253,7 @@
   },
   "cta": {
     "title": "¿Listo para simplificar tu gestión y disparar tus ventas?",
-    "subtitle": "Únete a 2.000+ emprendedores que facturan sin esfuerzo",
+    "subtitle": "Únete a los emprendedores que facturan sin esfuerzo",
     "button": "Empezar gratis",
     "subtext": "4 facturas o presupuestos gratis al mes • Sin tarjeta de crédito"
   },

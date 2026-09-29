@@ -30,7 +30,7 @@ function StyledRobiTitle({ text }: { text: string }) {
 
 export function CTA({
   title = "Ready to automate your invoicing?",
-  subtitle = "Join 2000+ entrepreneurs who invoice effortlessly",
+  subtitle = "Join the entrepreneurs invoicing effortlessly",
   ctaText = "Start with Robi AI",
   ctaHref = "https://go.robi-app.com/?signup",
   secondaryText = "No card • Cancel anytime",

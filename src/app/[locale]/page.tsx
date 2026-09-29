@@ -165,11 +165,6 @@ export default async function Home({
         variant="default"
         visual="editorial"
         story={getHeroStoryCopy(locale)}
-        socialProof={{
-          text: dict.hero.socialProof,
-          highlight: dict.hero.socialProofHighlight,
-          end: dict.hero.socialProofEnd,
-        }}
         launchOffer={{
           text: dict.pricing?.launchOfferBadge || "OFFRE LIMITEE",
           highlight: new Intl.NumberFormat(locale, {

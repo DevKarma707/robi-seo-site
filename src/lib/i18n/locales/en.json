@@ -27,10 +27,7 @@
     ],
     "subtitle": "Let AI handle everything.\nSimplify your invoices and get paid faster.",
     "cta": "Start for Free",
-    "secondaryCta": "Watch Demo",
-    "socialProof": "Joined by",
-    "socialProofHighlight": "2,000+",
-    "socialProofEnd": "freelancers"
+    "secondaryCta": "Watch Demo"
   },
   "features": {
     "title": "All the tools to",
@@ -286,7 +283,7 @@
   },
   "cta": {
     "title": "Ready to simplify your workflow and skyrocket your sales?",
-    "subtitle": "Join 2,000+ entrepreneurs invoicing effortlessly",
+    "subtitle": "Join the entrepreneurs invoicing effortlessly",
     "button": "Start for free",
     "subtext": "4 free invoices or quotes a month • No credit card required"
   },

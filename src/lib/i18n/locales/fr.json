@@ -27,10 +27,7 @@
     ],
     "subtitle": "Laissez l'IA s'occuper de tout.\nSimplifiez vos factures et encaissez plus vite.",
     "cta": "Démarrer Gratuitement",
-    "secondaryCta": "Voir la démo",
-    "socialProof": "Rejoint par",
-    "socialProofHighlight": "2000+",
-    "socialProofEnd": "freelances"
+    "secondaryCta": "Voir la démo"
   },
   "features": {
     "title": "Tous les outils pour",
@@ -286,7 +283,7 @@
   },
   "cta": {
     "title": "Prêt à simplifier votre gestion et faire décoller vos ventes ?",
-    "subtitle": "Rejoignez 2000+ entrepreneurs qui facturent sans effort",
+    "subtitle": "Rejoignez les entrepreneurs qui facturent sans effort",
     "button": "Démarrer gratuitement",
     "subtext": "4 factures ou devis gratuits par mois • Sans carte bancaire"
   },
