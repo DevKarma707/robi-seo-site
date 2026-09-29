@@ -3,6 +3,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale } from "@/lib/i18n/config";
 import { SimulateurChargesClient } from "./client";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -14,6 +15,7 @@ export async function generateMetadata({
   const t = (dict.pages as any).tools?.simulateur;
 
   return {
+    ...pageSeo(locale, "/tools/simulateur-charges"),
     title: t?.title || "Simulateur de Charges",
     description: t?.subtitle || "Estimez vos charges sociales et fiscales",
     keywords: ["simulateur charges freelance", "charges sociales", "tax simulator"],

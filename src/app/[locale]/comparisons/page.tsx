@@ -9,6 +9,7 @@ import { CTA } from "@/components/sections/CTA";
 import { ArrowRight, Swords } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -20,6 +21,7 @@ export async function generateMetadata({
   const comp = dict.pages.comparisons;
 
   return {
+    ...pageSeo(locale, "/comparisons"),
     title: `${comp.badge}`,
     description: dict.meta.description,
     keywords: ["robi ai vs", "comparatif facturation", "alternative facturation"],

@@ -6,6 +6,7 @@ import { LegalContent } from "@/components/sections/LegalContent";
 import { formatEditorBlock } from "@/lib/legalEntity";
 import { CTA } from "@/components/sections/CTA";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -17,6 +18,7 @@ export async function generateMetadata({
   const legal = (dict.pages as any).legal;
 
   return {
+    ...pageSeo(locale, "/legal"),
     title: legal?.title || "Mentions Légales",
     description: legal?.description || "",
   };

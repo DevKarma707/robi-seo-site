@@ -5,6 +5,7 @@ import { Hero } from "@/components/sections/Hero";
 import { LegalContent } from "@/components/sections/LegalContent";
 import { CTA } from "@/components/sections/CTA";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -16,6 +17,7 @@ export async function generateMetadata({
   const privacy = (dict.pages as any).privacy;
 
   return {
+    ...pageSeo(locale, "/privacy"),
     title: privacy?.title || "Politique de Confidentialité",
     description: privacy?.description || "",
   };

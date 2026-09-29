@@ -7,6 +7,7 @@ import { Hero } from "@/components/sections/Hero";
 import { CTA } from "@/components/sections/CTA";
 import { ArrowRight, Bot, Zap, Bell, CreditCard, BarChart3 } from "lucide-react";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -17,6 +18,7 @@ export async function generateMetadata({
   const dict = await getDictionary(locale);
 
   return {
+    ...pageSeo(locale, "/features"),
     title: `${dict.nav.features}`,
     description: dict.meta.description,
     keywords: ["fonctionnalités robi", "facturation ia", "logiciel facturation features"],

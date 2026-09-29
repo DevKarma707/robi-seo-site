@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { blogPosts, t } from "@/data/seo-config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { Locale, locales } from "@/lib/i18n/config";
+import { Locale } from "@/lib/i18n/config";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -23,6 +23,7 @@ import {
   type FaqItem,
 } from "@/lib/blog-articles";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 // Static slugs are prerendered; articles published from /admin (Firestore)
 // render on-demand (dynamicParams) and are cached/revalidated.
 export const dynamicParams = true;
@@ -101,16 +102,7 @@ export async function generateMetadata({
     title,
     description,
     keywords,
-    alternates: {
-      canonical: `/${locale}${path}`,
-      languages: {
-        ...locales.reduce(
-          (acc, l) => ({ ...acc, [l]: `/${l}${path}` }),
-          {} as Record<string, string>
-        ),
-        "x-default": `/fr${path}`,
-      },
-    },
+    ...pageSeo(locale, path),
     openGraph: {
       title,
       description,

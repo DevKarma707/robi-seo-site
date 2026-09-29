@@ -11,6 +11,7 @@ import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
 import { Check, Sparkles, Zap, Clock, TrendingUp } from "lucide-react";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateStaticParams() {
   return features.map((feature) => ({
     slug: feature.slug,
@@ -31,6 +32,7 @@ export async function generateMetadata({
   }
 
   return {
+    ...pageSeo(locale, `/features/${slug}`),
     title: t(feature.title, locale),
     description: t(feature.description, locale),
     keywords: feature.keywords,

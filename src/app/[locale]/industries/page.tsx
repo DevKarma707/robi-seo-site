@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/Card";
 import { CTA } from "@/components/sections/CTA";
 import { ArrowRight, Hammer, Code, Palette, PartyPopper, Briefcase, Heart } from "lucide-react";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -18,6 +19,7 @@ export async function generateMetadata({
   const dict = await getDictionary(locale);
 
   return {
+    ...pageSeo(locale, "/industries"),
     title: dict.pages.industries.title,
     description: dict.pages.industries.description,
     keywords: [

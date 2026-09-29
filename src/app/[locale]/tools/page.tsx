@@ -9,6 +9,7 @@ import { CTA } from "@/components/sections/CTA";
 import { Calculator, FileText, Scale, ArrowRight, ReceiptText } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -19,6 +20,7 @@ export async function generateMetadata({
   const dict = await getDictionary(locale);
 
   return {
+    ...pageSeo(locale, "/tools"),
     title: `${dict.nav.tools}`,
     description: dict.meta.description,
     keywords: ["outils freelance", "calculateur tjm", "simulateur charges freelance"],

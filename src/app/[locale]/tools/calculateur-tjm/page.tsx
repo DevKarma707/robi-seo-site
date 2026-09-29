@@ -3,6 +3,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale } from "@/lib/i18n/config";
 import { CalculateurTJMClient } from "./client";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -14,6 +15,7 @@ export async function generateMetadata({
   const t = (dict.pages as any).tools?.calculateur;
 
   return {
+    ...pageSeo(locale, "/tools/calculateur-tjm"),
     title: t?.title || "Calculateur de TJM",
     description: t?.subtitle || "Calculez votre Tarif Journalier Moyen",
     keywords: ["calculateur tjm", "tarif journalier moyen", "freelance calculator"],

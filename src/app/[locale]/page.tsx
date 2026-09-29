@@ -15,6 +15,13 @@ import { Locale, locales, defaultLocale, localeCurrencies, priceMap } from "@/li
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getHeroStoryCopy } from "@/lib/i18n/heroStory";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
+
+/** Accueil : adresse officielle et versions de chaque marché (voir pageSeo). */
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageSeo(locale, "", "regional");
+}
 function getValidLocale(locale: string): Locale {
   return locales.includes(locale as Locale) ? (locale as Locale) : defaultLocale;
 }

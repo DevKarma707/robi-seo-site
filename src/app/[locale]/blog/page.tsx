@@ -15,6 +15,7 @@ import {
   articleReadTime,
 } from "@/lib/blog-articles";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 // Revalidate so articles published from /admin (Firestore) appear within ~1 min.
 export const revalidate = 60;
 
@@ -38,6 +39,7 @@ export async function generateMetadata({
   const dict = await getDictionary(locale);
 
   return {
+    ...pageSeo(locale, "/blog"),
     title: dict.pages.blog.title,
     description: dict.pages.blog.description,
     keywords: ["blog freelance", "conseils facturation", "guide auto-entrepreneur"],

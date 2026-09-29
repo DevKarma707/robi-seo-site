@@ -13,6 +13,7 @@ import { CTA } from "@/components/sections/CTA";
 import { Check, X, Zap, Clock, AlertTriangle } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 // Generate static pages for all industries
 export async function generateStaticParams() {
   return industries.map((industry) => ({
@@ -37,6 +38,7 @@ export async function generateMetadata({
   }
 
   return {
+    ...pageSeo(locale, `/industries/${slug}`),
     title: t(industry.title, locale),
     description: t(industry.description, locale),
     keywords: industry.keywords,

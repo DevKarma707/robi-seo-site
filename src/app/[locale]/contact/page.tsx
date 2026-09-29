@@ -5,6 +5,7 @@ import { Hero } from "@/components/sections/Hero";
 import { CTA } from "@/components/sections/CTA";
 import { ContactForm } from "./client";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -16,6 +17,7 @@ export async function generateMetadata({
   const contact = dict.pages.contact;
 
   return {
+    ...pageSeo(locale, "/contact"),
     title: `${contact.title}`,
     description: contact.subtitle,
     keywords: ["contact", "robi ai", "support", "help"],

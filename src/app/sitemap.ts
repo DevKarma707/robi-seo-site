@@ -35,7 +35,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
     }));
   }
-  // All 16 locales (homepage, pricing, blog, tools…)
+  // Toutes les locales : seulement les pages qui changent vraiment selon le
+  // marché (accueil, tarifs en devise locale). Le reste n'existe qu'en
+  // FR/EN/ES ; les variantes régionales sont en noindex (voir lib/seo/pageSeo)
+  // et n'ont rien à faire dans le plan du site. Le 29/09/2026 il listait 806
+  // URLs dont ~530 variantes : Google en laissait 468 « détectées, non indexées ».
   const localizedUrls = (
     path: string,
     cf: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never",
@@ -54,15 +58,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Page pilier "facture AI" — éditoriale FR/EN/ES uniquement
     ...coreUrls("/facture-ai", "weekly", 0.95),
     ...localizedUrls("/pricing", "weekly", 0.9),
-    ...localizedUrls("/features", "weekly", 0.9),
-    ...localizedUrls("/industries", "weekly", 0.8),
-    ...localizedUrls("/blog", "daily", 0.8),
-    ...localizedUrls("/tools", "monthly", 0.7),
-    ...localizedUrls("/contact", "monthly", 0.6),
-    ...localizedUrls("/partenaires", "monthly", 0.7),
-    ...localizedUrls("/legal", "yearly", 0.3),
-    ...localizedUrls("/privacy", "yearly", 0.3),
-    ...localizedUrls("/terms", "yearly", 0.3),
+    ...coreUrls("/features", "weekly", 0.9),
+    ...coreUrls("/industries", "weekly", 0.8),
+    ...coreUrls("/blog", "daily", 0.8),
+    ...coreUrls("/tools", "monthly", 0.7),
+    ...coreUrls("/contact", "monthly", 0.6),
+    ...coreUrls("/partenaires", "monthly", 0.7),
+    ...coreUrls("/legal", "yearly", 0.3),
+    ...coreUrls("/privacy", "yearly", 0.3),
+    ...coreUrls("/terms", "yearly", 0.3),
+    ...coreUrls("/cgv", "yearly", 0.3),
   ];
 
   // Industry pages
@@ -82,7 +87,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Blog posts (static, from seo-config)
   const blogPages = blogPosts.flatMap((post) =>
-    localizedUrls(`/blog/${post.slug}`, "monthly", 0.6)
+    coreUrls(`/blog/${post.slug}`, "monthly", 0.6)
   );
 
   // Blog posts published from /admin (Firestore), excluding any static dup
@@ -90,11 +95,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticSlugs = new Set(blogPosts.map((p) => p.slug));
   const dbBlogPages = dbArticles
     .filter((a) => !staticSlugs.has(a.slug))
-    .flatMap((a) => localizedUrls(`/blog/${a.slug}`, "weekly", 0.7));
+    .flatMap((a) => coreUrls(`/blog/${a.slug}`, "weekly", 0.7));
 
   // Tools pages
   const toolPages = tools.flatMap((tool) =>
-    localizedUrls(`/tools/${tool.slug}`, "monthly", 0.7)
+    coreUrls(`/tools/${tool.slug}`, "monthly", 0.7)
   );
 
   return [

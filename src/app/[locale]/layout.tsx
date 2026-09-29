@@ -43,16 +43,9 @@ export async function generateMetadata({
     },
     description: dict.meta.description,
     metadataBase: new URL("https://robi-app.com"),
-    alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        ...locales.reduce(
-          (acc, l) => ({ ...acc, [l]: `/${l}` }),
-          {} as Record<string, string>
-        ),
-        "x-default": "/fr",
-      },
-    },
+    // Pas de canonical ni de hreflang ici : posés au niveau du layout, ils
+    // s'appliquaient à toutes les pages et désignaient l'accueil comme version
+    // officielle de 165 pages. Chaque page les déclare via pageSeo().
     openGraph: {
       title: dict.meta.title,
       description: dict.meta.description,

@@ -3,13 +3,14 @@ import { Hero } from "@/components/sections/Hero";
 import { partnerCopy } from "./copy";
 import { PartnerForm } from "./client";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const c = partnerCopy(locale);
   return {
     title: c.metaTitle,
     description: c.metaDescription,
-    alternates: { canonical: `https://robi-app.com/${locale}/partenaires` },
+    ...pageSeo(locale, "/partenaires"),
   };
 }
 

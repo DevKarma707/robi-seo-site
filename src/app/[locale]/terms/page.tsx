@@ -5,6 +5,7 @@ import { Hero } from "@/components/sections/Hero";
 import { LegalContent } from "@/components/sections/LegalContent";
 import { CTA } from "@/components/sections/CTA";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -16,6 +17,7 @@ export async function generateMetadata({
   const cgu = (dict.pages as any).cguWeb || (dict.pages as any).terms;
 
   return {
+    ...pageSeo(locale, "/terms"),
     title: cgu?.title || "CGU App Web",
     description: cgu?.description || "",
   };

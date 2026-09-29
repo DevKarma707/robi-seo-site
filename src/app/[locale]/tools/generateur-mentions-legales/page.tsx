@@ -3,6 +3,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale } from "@/lib/i18n/config";
 import { GenerateurMentionsClient } from "./client";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -14,6 +15,7 @@ export async function generateMetadata({
   const t = (dict.pages as any).tools?.mentions;
 
   return {
+    ...pageSeo(locale, "/tools/generateur-mentions-legales"),
     title: t?.title || "Générateur de Mentions Légales",
     description: t?.subtitle || "Créez vos mentions légales conformes RGPD",
     keywords: ["mentions légales", "RGPD", "legal notice generator"],

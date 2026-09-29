@@ -9,6 +9,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale } from "@/lib/i18n/config";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
+import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateMetadata({
   params,
 }: {
@@ -19,6 +20,7 @@ export async function generateMetadata({
   const dict = await getDictionary(locale);
 
   return {
+    ...pageSeo(locale, "/pricing", "regional"),
     title: dict.pages.pricing.title,
     description: dict.pages.pricing.description,
     keywords: ["prix robi ai", "tarif facturation freelance", "logiciel facturation prix"],
