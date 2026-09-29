@@ -58,7 +58,27 @@ export function AffiliateTracking() {
           (function () {
             var KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
             var STORE = 'robi_utm';
+            var REF_STORE = 'robi_ref';
+            var REF_TTL = 90 * 24 * 3600 * 1000;
             var landing = new URLSearchParams(window.location.search);
+            // Code partenaire (?ref=CODE) : gardé 90 jours sur le site, comme
+            // dans l'app, pour qu'un visiteur qui revient plus tard par la page
+            // tarifs parte quand même vers l'app avec son code.
+            var normRef = function (v) {
+              v = (v || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+              return v.length >= 3 && v.length <= 24 ? v : '';
+            };
+            var storedRef = function () {
+              try {
+                var raw = JSON.parse(localStorage.getItem(REF_STORE) || 'null');
+                if (!raw || !raw.at || Date.now() - Date.parse(raw.at) > REF_TTL) return '';
+                return normRef(raw.code);
+              } catch (err) { return ''; }
+            };
+            try {
+              var landingRef = normRef(landing.get('ref'));
+              if (landingRef) localStorage.setItem(REF_STORE, JSON.stringify({ code: landingRef, at: new Date().toISOString() }));
+            } catch (err) {}
             try {
               if (landing.get('utm_source')) {
                 var keep = {};
@@ -71,7 +91,7 @@ export function AffiliateTracking() {
               var link = e.target.closest && e.target.closest('a');
               if (!link || !link.href || link.href.indexOf('go.robi-app.com') === -1) return;
               var targetUrl = new URL(link.href);
-              var ref = new URLSearchParams(window.location.search).get('ref');
+              var ref = normRef(new URLSearchParams(window.location.search).get('ref')) || storedRef();
               if (ref) targetUrl.searchParams.set('ref', ref);
               var utm = null;
               try { utm = JSON.parse(sessionStorage.getItem(STORE) || 'null'); } catch (err) {}

@@ -109,6 +109,24 @@ export interface HealthReport {
   computedAt: string;
 }
 
+export interface CreatedInfluencerCode {
+  code: string;
+  discountId: string;
+  discountPct: number;
+  /** true si le code existait déjà (chez nous ou chez Polar) et a été adopté. */
+  existed: boolean;
+}
+
+/** Crée le code promo Polar d'un influenceur (idempotent). */
+export const createInfluencerCode = (body: {
+  name: string; code: string; discountPct: number; commissionPct?: number; influencerId?: string;
+}) =>
+  authedFetch("/api/admin/influencers/code", { method: "POST", body: JSON.stringify(body) }) as Promise<CreatedInfluencerCode>;
+
+/** Désactive un code (supprimé chez Polar, historique conservé). */
+export const disableInfluencerCode = (code: string) =>
+  authedFetch(`/api/admin/influencers/code?code=${encodeURIComponent(code)}`, { method: "DELETE" }) as Promise<{ code: string; active: false }>;
+
 export const fetchAttributionStats = (days?: number) =>
   authedFetch(`/api/admin/attribution${days ? `?days=${days}` : ""}`) as Promise<
     import("./influencers").AttributionStats

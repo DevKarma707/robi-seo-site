@@ -47,6 +47,11 @@ service cloud.firestore {
       allow read, create, update, delete: if isAdmin();
     }
 
+    // ── Versements de commissions aux influenceurs ──
+    match /influencerPayouts/{id} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
     // ── Calendrier réseaux sociaux (onglet Réseaux) ──
     // Oublié à la création de l'onglet : sans règle, Firestore refuse tout,
     // et l'import JSON échouait en « Missing or insufficient permissions ».

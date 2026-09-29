@@ -45,6 +45,7 @@ export function middleware(request: NextRequest) {
     pathname.startsWith("/api") ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/desinscription") ||
+    pathname.startsWith("/r/") || // liens courts partenaires (robi-app.com/r/CODE)
     pathname.includes(".") // static files
   ) {
     return NextResponse.next();
