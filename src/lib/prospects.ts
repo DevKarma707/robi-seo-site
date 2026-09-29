@@ -199,7 +199,8 @@ export const stepOf = (p: Prospect): SeqStep => {
 export const hasNextStep = (p: Prospect) => (p.seqStep ?? 0) + 1 < sequenceFor(p.segment).length;
 
 // ─── Templates ────────────────────────────────────────────────────────
-const SIGN = `Ralph Karam — Robi AI
+// Voix : « l'équipe Robi AI », jamais un prénom (règle du 29/09/2026).
+const SIGN = `L'équipe Robi AI
 robi-app.com · Dites-le. Robi facture.`;
 
 export interface MessageTemplate {
@@ -213,10 +214,12 @@ export interface MessageTemplate {
 }
 
 /**
- * Positionnement : Robi transforme une phrase en facture conforme. L'argument
- * qui ouvre les portes en 2026, c'est l'obligation de facturation électronique
- * au 1er septembre — c'est vrai, daté, et vérifiable, donc utilisable sans
- * exagérer.
+ * Positionnement : Robi transforme une phrase en facture conforme.
+ * Facture électronique — dates exactes, à ne pas durcir : depuis le
+ * 1er septembre 2026 toutes les entreprises doivent pouvoir RECEVOIR des
+ * factures électroniques ; l'ÉMISSION devient obligatoire pour les TPE,
+ * PME et indépendants au 1er septembre 2027 (grandes entreprises et ETI dès
+ * 2026). Vrai, daté, vérifiable : utilisable sans exagérer.
  */
 export const DEFAULT_TEMPLATES: MessageTemplate[] = [
   {
@@ -224,11 +227,11 @@ export const DEFAULT_TEMPLATES: MessageTemplate[] = [
     subject: "Vos factures, dictées en 30 secondes",
     body: `Bonjour {{prenom}},
 
-Je suis Ralph, je développe Robi — un outil de facturation où vous dictez ce que vous avez fait et où la facture sort conforme, numérotée, prête à envoyer.
+Ici l'équipe Robi AI. Robi est un outil de facturation où vous dictez ce que vous avez fait et où la facture sort conforme, numérotée, prête à envoyer.
 
 Concrètement : « facture 500 € pour Alice, prestation de conseil ». Trente secondes plus tard le PDF est prêt, la TVA est calculée, la numérotation est séquentielle, les mentions légales sont là.
 
-Pourquoi je vous écris maintenant : la facturation électronique devient obligatoire en France le 1er septembre 2026. Robi génère déjà du Factur-X natif, donc vous serez en règle sans rien changer à vos habitudes.
+Pourquoi maintenant : depuis le 1er septembre 2026, toutes les entreprises doivent pouvoir recevoir des factures électroniques, et l'émission devient obligatoire pour les TPE et indépendants en septembre 2027. Robi produit déjà du Factur-X natif : vous serez en règle sans changer vos habitudes.
 
 C'est gratuit pour quatre factures ou devis par mois, sans carte bancaire — de quoi juger sur pièce en cinq minutes : robi-app.com
 
@@ -239,15 +242,15 @@ ${SIGN}`,
     subject: "Facturer sans y passer le dimanche soir",
     body: `Bonjour {{prenom}},
 
-Ralph, je développe Robi — la facturation pour ceux qui facturent seuls.
+Ici l'équipe Robi AI — la facturation pour ceux qui facturent seuls.
 
 Le principe : vous dictez ou vous écrivez une phrase, Robi sort la facture. « Facture 1 200 € pour {{societe}}, mission de trois jours. » C'est tout. Numérotation séquentielle, TVA, mentions légales, relances automatiques quand le client ne paie pas.
 
-Un point qui va vous concerner directement : la facture électronique devient obligatoire le 1er septembre 2026. Robi produit déjà du Factur-X, donc le sujet est réglé d'avance.
+Un point qui va vous concerner : l'émission de factures électroniques devient obligatoire pour les indépendants en septembre 2027. Robi produit déjà du Factur-X, le sujet est réglé d'avance.
 
 Quatre factures ou devis gratuits par mois, sans carte : robi-app.com
 
-Si ça vous parle, dites-moi et je vous fais un accès complet pour tester sans limite.
+Si ça vous parle, répondez-nous et nous vous ouvrons un accès complet pour tester sans limite.
 
 ${SIGN}`,
   },
@@ -256,11 +259,11 @@ ${SIGN}`,
     subject: "Devis et factures depuis le chantier",
     body: `Bonjour {{prenom}},
 
-Ralph, je développe Robi — un outil de devis et factures qui marche depuis le téléphone, sur le chantier, sans s'asseoir devant un ordinateur.
+Ici l'équipe Robi AI. Robi est un outil de devis et factures qui marche depuis le téléphone, sur le chantier, sans s'asseoir devant un ordinateur.
 
 Vous dictez : « devis pour {{societe}}, pose de 40 m² de carrelage, 3 200 € ». Le devis part par mail, le client le signe en ligne, et vous le transformez en facture en un clic quand le chantier est fini.
 
-Ce qui compte pour vous en 2026 : la facturation électronique devient obligatoire au 1er septembre. Robi est déjà au format Factur-X, donc rien à faire de votre côté.
+Ce qui arrive : l'émission de factures électroniques devient obligatoire pour les artisans et TPE en septembre 2027. Robi est déjà au format Factur-X, rien à faire de votre côté.
 
 Gratuit pour commencer, sans carte bancaire : robi-app.com
 
@@ -268,16 +271,16 @@ ${SIGN}`,
   },
   {
     id: "comptable-first", label: "Expert-comptable — premier email", segment: "comptable", channel: "email", templateKey: "first",
-    subject: "Factur-X pour vos clients TPE — au 1er septembre",
+    subject: "Factur-X pour vos clients TPE, avant 2027",
     body: `Bonjour {{prenom}},
 
-Ralph, je développe Robi, un outil de facturation à destination des indépendants et des TPE.
+Ici l'équipe Robi AI. Robi est un outil de facturation pensé pour les indépendants et les TPE.
 
-Je vous écris parce que le 1er septembre 2026 va vous tomber dessus autant qu'à eux : vos clients qui facturent encore sur Word ou Excel vont devoir passer au format électronique, et c'est vous qu'ils appelleront.
+Nous vous écrivons parce que l'échéance va vous concerner autant qu'eux : depuis le 1er septembre 2026 vos clients doivent pouvoir recevoir des factures électroniques, et en septembre 2027 ils devront en émettre. Ceux qui facturent encore sur Word ou Excel vous appelleront.
 
 Robi génère du Factur-X natif — XML EN 16931 embarqué dans un PDF/A-3, validé sur les outils officiels. Le client dicte sa facture, elle sort conforme. Vous récupérez des pièces exploitables au lieu de scans.
 
-Je serais heureux de vous le montrer en quinze minutes, et de voir si un accès pour votre cabinet ou vos clients a du sens. Je peux prévoir des conditions particulières pour un cabinet.
+Nous serions heureux de vous le montrer en quinze minutes, et de voir si un accès pour votre cabinet ou vos clients a du sens. Des conditions particulières sont possibles pour un cabinet.
 
 ${SIGN}`,
   },
@@ -286,11 +289,11 @@ ${SIGN}`,
     subject: "Devis et factures pour {{societe}}",
     body: `Bonjour {{prenom}},
 
-Ralph, je développe Robi — devis et factures générés à la voix ou en une phrase.
+Ici l'équipe Robi AI — devis et factures générés à la voix ou en une phrase.
 
-Pour une structure comme {{societe}}, l'intérêt est surtout dans le volume : un devis dicté en trente secondes, envoyé, signé en ligne par le client, puis transformé en facture en un clic. Les relances d'impayés partent tout seules.
+Pour une structure comme {{societe}}, l'intérêt est surtout dans le volume : un devis dicté en trente secondes, envoyé, signé en ligne par le client, puis transformé en facture en un clic. Les relances d'impayés partent toutes seules.
 
-Et le sujet qui arrive : facturation électronique obligatoire au 1er septembre 2026. Robi sort déjà du Factur-X conforme.
+Et le sujet qui arrive : l'émission de factures électroniques devient obligatoire pour les PME en septembre 2027. Robi sort déjà du Factur-X conforme.
 
 Quatre factures ou devis gratuits par mois pour juger sur pièce : robi-app.com
 
@@ -301,11 +304,11 @@ ${SIGN}`,
     subject: "Un outil de facturation pour vos résidents",
     body: `Bonjour {{prenom}},
 
-Ralph, je développe Robi — un outil de facturation pour indépendants : on dicte une phrase, la facture sort conforme.
+Ici l'équipe Robi AI. Robi est un outil de facturation pour indépendants : on dicte une phrase, la facture sort conforme.
 
-Je vous écris parce que vos résidents vont tous être concernés par l'obligation de facturation électronique du 1er septembre 2026, et que beaucoup facturent encore sur Word.
+Nous vous écrivons parce que vos résidents sont tous concernés par la facture électronique — réception obligatoire depuis septembre 2026, émission en septembre 2027 — et que beaucoup facturent encore sur Word.
 
-Je peux proposer aux membres de {{societe}} un accès à conditions préférentielles, et venir faire une session de trente minutes sur ce que l'obligation change concrètement pour un indépendant. C'est un contenu utile pour votre communauté, et ça ne vous coûte rien.
+Nous pouvons proposer aux membres de {{societe}} un accès à conditions préférentielles, et venir animer une session de trente minutes sur ce que l'obligation change concrètement pour un indépendant. Un contenu utile pour votre communauté, qui ne vous coûte rien.
 
 Ça vous intéresse d'en parler ?
 
@@ -313,14 +316,14 @@ ${SIGN}`,
   },
   {
     id: "federation-first", label: "Fédération — premier email", segment: "federation", channel: "email", templateKey: "first",
-    subject: "Facturation électronique 2026 — accompagner vos adhérents",
+    subject: "Facturation électronique — accompagner vos adhérents",
     body: `Bonjour {{prenom}},
 
-Ralph, je développe Robi, un outil de facturation à destination des indépendants et des TPE.
+Ici l'équipe Robi AI. Robi est un outil de facturation pour les indépendants et les TPE.
 
-Le 1er septembre 2026, la facturation électronique devient obligatoire. Une partie de vos adhérents n'est pas prête, et beaucoup découvriront le sujet trop tard.
+Depuis le 1er septembre 2026, toutes les entreprises doivent pouvoir recevoir des factures électroniques, et l'émission devient obligatoire pour les TPE en septembre 2027. Une partie de vos adhérents n'est pas prête, et beaucoup découvriront le sujet trop tard.
 
-Robi génère du Factur-X natif conforme à la norme EN 16931. Je peux mettre à disposition de {{societe}} de quoi accompagner vos adhérents : un accès à conditions préférentielles, et si vous le souhaitez un webinaire ou une note pédagogique sur ce que l'obligation implique réellement.
+Robi génère du Factur-X natif conforme à la norme EN 16931. Nous pouvons mettre à disposition de {{societe}} de quoi accompagner vos adhérents : un accès à conditions préférentielles et, si vous le souhaitez, un webinaire ou une note pédagogique sur ce que l'obligation implique réellement.
 
 Seriez-vous disponible pour en discuter ?
 
@@ -332,11 +335,11 @@ ${SIGN}`,
     subject: "Partenariat — un outil de facturation pour votre audience",
     body: `Bonjour {{prenom}},
 
-Ralph, je développe Robi : un outil de facturation où l'on dicte une phrase et où la facture sort conforme. Cible : indépendants, artisans, TPE.
+Ici l'équipe Robi AI. Robi est un outil de facturation où l'on dicte une phrase et où la facture sort conforme. Cible : indépendants, artisans, TPE.
 
-Je vous écris parce qu'une partie de votre audience va se prendre l'obligation de facturation électronique du 1er septembre 2026 en pleine figure, et que la plupart ne le savent pas encore. C'est un sujet utile à traiter, et Robi est déjà conforme.
+Nous vous écrivons parce qu'une partie de votre audience va devoir passer à la facture électronique (émission obligatoire pour les indépendants en septembre 2027), et que la plupart ne le savent pas encore. C'est un sujet utile à traiter, et Robi est déjà conforme.
 
-Ce que je propose :
+Ce que nous proposons :
 — un code promo à votre nom, qui donne une vraie remise à votre audience
 — une commission sur chaque vente réalisée avec ce code
 — un accès complet gratuit pour vous, pour que vous en parliez en connaissance de cause
@@ -354,13 +357,13 @@ ${SIGN}`,
     subject: "Un outil de facturation vocale / IA pour votre comparatif ?",
     body: `Bonjour {{prenom}},
 
-Je viens de lire votre comparatif des logiciels de facturation sur {{societe}} — sélection très complète. Un créneau n'y figure pas encore : la facturation par IA, à la voix.
+Nous venons de lire votre comparatif des logiciels de facturation sur {{societe}} — sélection très complète. Un créneau n'y figure pas encore : la facturation par IA, à la voix.
 
-C'est ce que fait Robi AI (robi-app.com) : on dicte « Prépare une facture de 500 € pour Alice » et le document conforme sort en 30 secondes — numérotation, mentions TVA, format Factur-X prêt pour l'obligation du 1er septembre 2026. Relances d'impayés rédigées par l'IA, paiement en ligne intégré.
+C'est ce que fait Robi AI (robi-app.com) : on dicte « Prépare une facture de 500 € pour Alice » et le document conforme sort en 30 secondes — numérotation, mentions TVA, format Factur-X prêt pour la facture électronique. Relances d'impayés rédigées par l'IA, paiement en ligne intégré.
 
-Côté prix : gratuit pour 4 factures ou devis par mois, puis 14 €/mois ou 89 €/an — et une offre de lancement à vie à 59 €, que je n'ai vue nulle part ailleurs.
+Côté prix : gratuit pour 4 factures ou devis par mois, puis 14 €/mois ou 89 €/an — et une offre de lancement à vie à 59 €.
 
-Je vous ouvre volontiers un accès complet pour le tester. Et si vous travaillez en affiliation, nous avons un programme.
+Nous vous ouvrons volontiers un accès complet pour le tester. Et si vous travaillez en affiliation, nous avons un programme.
 
 ${SIGN}`,
   },
@@ -369,20 +372,20 @@ ${SIGN}`,
     subject: "Re: Robi AI pour votre comparatif",
     body: `Bonjour {{prenom}},
 
-Je me permets de remonter mon message de la semaine dernière.
+Nous nous permettons de remonter notre message de la semaine dernière.
 
-Si ça peut faciliter votre évaluation, je vous crée un accès complet en deux minutes — vous pourrez tester la création d'une facture à la voix directement.
+Si ça peut faciliter votre évaluation, nous vous créons un accès complet en deux minutes — vous pourrez tester la création d'une facture à la voix directement.
 
-Et si l'outil ne correspond pas à votre ligne éditoriale, un simple « non merci » me va très bien.
+Et si l'outil ne correspond pas à votre ligne éditoriale, un simple « non merci » nous va très bien.
 
 ${SIGN}`,
   },
   {
     id: "backlink-breakup", label: "Backlink — clôture", segment: "backlink", channel: "email", templateKey: "breakup",
-    subject: "Je referme le sujet",
+    subject: "Nous refermons le sujet",
     body: `Bonjour {{prenom}},
 
-Je n'insiste pas davantage. Si vous mettez à jour votre comparatif plus tard — notamment avec l'obligation de facturation électronique — je reste disponible pour un accès de test ou des informations sur Robi AI.
+Nous n'insistons pas davantage. Si vous mettez à jour votre comparatif plus tard — notamment sur la facture électronique — nous restons disponibles pour un accès de test ou des informations sur Robi AI.
 
 Bonne continuation,
 
@@ -395,42 +398,42 @@ ${SIGN}`,
     subject: "Re: vos factures",
     body: `Bonjour {{prenom}},
 
-Je remonte mon message, au cas où il serait passé sous la pile.
+Nous remontons notre message, au cas où il serait passé sous la pile.
 
 Quatre factures ou devis gratuits par mois, sans carte bancaire, cinq minutes pour se faire une idée : robi-app.com
 
-Si le sujet n'est pas d'actualité, dites-le moi simplement et je ne reviendrai pas.
+Si le sujet n'est pas d'actualité, dites-le-nous simplement et nous ne reviendrons pas.
 
 ${SIGN}`,
   },
   {
     id: "all-linkedin", label: "LinkedIn — mot de connexion", segment: "all", channel: "linkedin", templateKey: "linkedin",
     subject: "",
-    body: `Bonjour {{prenom}}, Ralph — je développe Robi, un outil de facturation pour indépendants et TPE (facture dictée, Factur-X conforme avant l'obligation de septembre 2026). Je vous ajoute avec plaisir.`,
+    body: `Bonjour {{prenom}}, ici l'équipe Robi AI — un outil de facturation pour indépendants et TPE (facture dictée, Factur-X conforme avant l'obligation d'émission de 2027). Au plaisir d'échanger.`,
   },
   {
     id: "all-facturx", label: "Relance 2 — l'angle Factur-X", segment: "all", channel: "email", templateKey: "facturx",
-    subject: "Le 1er septembre 2026, votre facture PDF ne suffira plus",
+    subject: "En 2027, votre facture PDF ne suffira plus",
     body: `Bonjour {{prenom}},
 
 Un point concret, même si Robi ne vous intéresse pas.
 
-À partir du 1er septembre 2026, une facture entre entreprises devra être émise au format électronique structuré. Un PDF classique, même envoyé par mail, ne sera plus valable. Le format attendu en France est Factur-X : un PDF qui embarque le XML de la facture.
+Depuis le 1er septembre 2026, toutes les entreprises doivent pouvoir recevoir des factures électroniques. Au 1er septembre 2027, les TPE, PME et indépendants devront aussi en émettre : un PDF classique envoyé par mail ne suffira plus entre entreprises. Le format attendu en France est Factur-X : un PDF qui embarque les données de la facture.
 
-La plupart des outils annoncent le sujet pour plus tard. Robi le fait déjà, et c'est validé sur les outils officiels de contrôle.
+Beaucoup d'outils annoncent le sujet pour plus tard. Robi le fait déjà, validé sur les outils officiels de contrôle.
 
-Si vous voulez vérifier où vous en êtes, je réponds volontiers à vos questions même sans que vous testiez l'outil.
+Si vous voulez vérifier où vous en êtes, nous répondons volontiers à vos questions, même sans que vous testiez l'outil.
 
 ${SIGN}`,
   },
   {
     id: "all-breakup", label: "Clôture", segment: "all", channel: "email", templateKey: "breakup",
-    subject: "Je vous laisse tranquille",
+    subject: "Nous vous laissons tranquille",
     body: `Bonjour {{prenom}},
 
-Je n'insiste pas davantage — je referme le sujet de mon côté.
+Nous n'insistons pas davantage — nous refermons le sujet de notre côté.
 
-Si un jour la facturation devient un point de friction, ou si l'échéance de septembre 2026 vous pose question, mon adresse reste ouverte.
+Si un jour la facturation devient un point de friction, ou si l'échéance de 2027 vous pose question, notre adresse reste ouverte.
 
 Bonne continuation,
 
