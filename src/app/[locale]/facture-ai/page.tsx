@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale, isContentIndexable } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
+import { getHeroStoryCopy } from "@/lib/i18n/heroStory";
 import { Card } from "@/components/ui/Card";
 import { Pricing } from "@/components/sections/Pricing";
 import { FAQ } from "@/components/sections/FAQ";
@@ -560,7 +561,9 @@ export default async function FactureAIPage({
         titleAccent={c.hero.titleAccent}
         subtitle={c.hero.subtitle}
         ctaText={dict.cta.button}
-        variant="centered"
+        rotatingWords={[]}
+        visual="editorial"
+        story={getHeroStoryCopy(locale)}
       />
 
       {/* Stats */}

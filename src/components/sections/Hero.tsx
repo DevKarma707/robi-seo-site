@@ -147,9 +147,11 @@ export function Hero({
                   ? <WordRotator words={titleWords} className="text-white" delay={1250} />
                   : title}
               </span>
-              <span className="flex items-center justify-center gap-3">
-                Robi <WordRotator words={rotatingWords} />
-              </span>
+              {rotatingWords.length > 0 && (
+                <span className="flex items-center justify-center gap-3">
+                  Robi <WordRotator words={rotatingWords} />
+                </span>
+              )}
               <span className="block text-[#BEF221]">{titleAccent}</span>
             </h1>
 
@@ -186,9 +188,11 @@ export function Hero({
                   ? <WordRotator words={titleWords} className="text-white" delay={1250} />
                   : title}
               </span>
-                <span className="flex items-center justify-center lg:justify-start gap-3">
-                  Robi <WordRotator words={rotatingWords} />
-                </span>
+                {rotatingWords.length > 0 && (
+                  <span className="flex items-center justify-center lg:justify-start gap-3">
+                    Robi <WordRotator words={rotatingWords} />
+                  </span>
+                )}
                 <span className="block text-[#BEF221]">{titleAccent}</span>
               </h1>
 
