@@ -10,6 +10,17 @@ interface LegalContentProps {
   lastUpdated: string;
 }
 
+/**
+ * Gras en ligne (« … par **Polar** … ») : sans ça les astérisques
+ * s'affichaient tels quels au milieu des phrases.
+ */
+function inline(text: string) {
+  const parts = text.split(/\*\*(.+?)\*\*/g);
+  return parts.map((part, i) =>
+    i % 2 === 1 ? <strong key={i} className="text-gray-900">{part}</strong> : part
+  );
+}
+
 function renderContent(content: string) {
   return content
     .split("\n")
@@ -27,7 +38,7 @@ function renderContent(content: string) {
           return (
             <li key={i} className="text-gray-500 mb-2 ml-4 list-disc">
               <strong className="text-gray-900">{match[1]}</strong>
-              {match[2] ? ` : ${match[2]}` : ""}
+              {match[2] ? <> : {inline(match[2])}</> : ""}
             </li>
           );
         }
@@ -35,14 +46,14 @@ function renderContent(content: string) {
       if (line.startsWith("- ")) {
         return (
           <li key={i} className="text-gray-500 mb-2 ml-4 list-disc">
-            {line.slice(2)}
+            {inline(line.slice(2))}
           </li>
         );
       }
       if (line.trim() === "") return <br key={i} />;
       return (
         <p key={i} className="text-gray-500 leading-relaxed">
-          {line}
+          {inline(line)}
         </p>
       );
     });
