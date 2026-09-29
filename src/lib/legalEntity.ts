@@ -41,6 +41,8 @@ export interface LegalEntity {
 
 export const LEGAL_ENTITY: LegalEntity = {
   registered: false,
+  // Nom retenu par Ralph le 29/09/2026, société pas encore immatriculée.
+  name: "Late Night Studio",
 };
 
 /** Contact de l'éditeur. Vérifié : cette boîte existe, contrairement au domaine robi.ai d'avant. */
@@ -54,10 +56,10 @@ export const CONTACT_EMAIL = "support@robi-app.com";
  * est une affirmation mensongère sur l'identité du vendeur.
  */
 const PENDING_NOTICE: Record<string, string> = {
-  fr: "Société en cours de constitution.\n\nLes informations d'immatriculation (dénomination sociale, SIRET, RCS, siège social et capital) seront publiées ici dès l'immatriculation effective.",
-  en: "Company currently being incorporated.\n\nRegistration details (legal name, company number, registered office and share capital) will be published here as soon as incorporation is complete.",
-  es: "Sociedad en proceso de constitución.\n\nLos datos de registro (denominación social, número de identificación, domicilio social y capital) se publicarán aquí en cuanto se complete la constitución.",
-  pt: "Sociedade em processo de constituição.\n\nOs dados de registo (denominação social, número de identificação, sede social e capital) serão publicados aqui assim que a constituição estiver concluída.",
+  fr: "Late Night Studio — société en cours de création.\n\nLes informations d'immatriculation (dénomination sociale, SIRET, RCS, siège social et capital) seront publiées ici dès l'immatriculation effective.",
+  en: "Late Night Studio — company currently being incorporated.\n\nRegistration details (legal name, company number, registered office and share capital) will be published here as soon as incorporation is complete.",
+  es: "Late Night Studio — sociedad en proceso de constitución.\n\nLos datos de registro (denominación social, número de identificación, domicilio social y capital) se publicarán aquí en cuanto se complete la constitución.",
+  pt: "Late Night Studio — sociedade em processo de constituição.\n\nOs dados de registo (denominação social, número de identificação, sede social e capital) serão publicados aqui assim que a constituição estiver concluída.",
 };
 
 const CONTACT_LABEL: Record<string, string> = {
