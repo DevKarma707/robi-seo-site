@@ -32,6 +32,8 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
   const t = dict.payments || defaultDict.payments;
   const l = labels[locale.split("-")[0]] || labels.en;
   const demo = getHeroDeviceCopy(locale);
+  // Stripe n'ouvre pas de compte aux entreprises marocaines : au Maroc, seul PayPal.
+  const stripe = demo.cardPayments;
   const amount = new Intl.NumberFormat(demo.locale, { style: "currency", currency: demo.currency }).format(demo.scenarios[0].amount);
 
   return (
@@ -103,7 +105,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
                   <h3 className="mt-7 text-left text-[11px] font-bold uppercase tracking-widest text-white/50">
                     {t.integrations}
                   </h3>
-                  <div className="mt-3 grid grid-cols-5 gap-2 lg:gap-3">
+                  <div className={`mt-3 grid gap-2 lg:gap-3 ${stripe ? "grid-cols-5" : "grid-cols-3"}`}>
                     <div className="flex h-12 items-center justify-center rounded-xl bg-white" title="Visa">
                       <span className="text-[#1A1F71] text-base font-black italic tracking-tighter">VISA</span>
                     </div>
@@ -113,6 +115,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
                         <i className="absolute left-4 top-0 block h-6 w-6 rounded-full bg-[#F79E1B] mix-blend-multiply" />
                       </span>
                     </div>
+                    {stripe && (<>
                     <div className="flex h-12 items-center justify-center rounded-xl bg-white" title="Carte Bancaire">
                       <span className="rounded-md bg-gradient-to-br from-[#0B5C3A] to-[#1E6FB8] px-2 py-1 text-[11px] font-black tracking-wide text-white">CB</span>
                     </div>
@@ -120,6 +123,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
                       <Apple className="h-4 w-4" fill="currentColor" strokeWidth={0} />
                       <span className="text-sm font-semibold tracking-tight">Pay</span>
                     </div>
+                    </>)}
                     <div className="flex h-12 items-center justify-center rounded-xl bg-white" title="PayPal">
                       <span className="text-sm font-black italic tracking-tight"><span className="text-[#003087]">Pay</span><span className="text-[#009CDE]">Pal</span></span>
                     </div>
@@ -134,7 +138,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
                         PIX
                       </span>
                     )}
-                    <span className="rounded-md bg-[#635BFF] px-2.5 py-1 text-sm font-black tracking-tight text-white">stripe</span>
+                    {stripe && <span className="rounded-md bg-[#635BFF] px-2.5 py-1 text-sm font-black tracking-tight text-white">stripe</span>}
                     <span className="text-base font-black italic tracking-tight"><span className="text-white">Pay</span><span className="text-[#5CC4F0]">Pal</span></span>
                   </div>
                 </div>

@@ -46,7 +46,7 @@
     },
     "payments": {
       "title": "Paiement Intégré",
-      "description": "Stripe et PayPal intégrés. Vos clients paient en un clic, vous êtes crédité instantanément."
+      "description": "PayPal intégré. Vos clients paient en un clic, par carte ou avec leur compte PayPal."
     },
     "emails": {
       "title": "Emails Personnalisés",
@@ -84,7 +84,7 @@
     }
   },
   "payments": {
-    "title": "Simplifiez vos transactions avec PayPal & Stripe",
+    "title": "Simplifiez vos transactions avec PayPal",
     "subtitle": "Dites adieu aux retards de paiement. Proposez une expérience de paiement fluide et moderne à vos clients.",
     "cta": "Voir les paiements en ligne",
     "integrations": "Intégrations :",
@@ -208,7 +208,7 @@
     "cloudTitle": "Vos données sur le cloud",
     "cloudDesc": "Accédez à vos données en toute simplicité, de n'importe où et sur tous vos appareils. Partagez-les facilement avec vos collaborateurs pour une gestion fluide.",
     "encryptionTitle": "Chiffrement bancaire",
-    "encryptionDesc": "Toutes vos données sont chiffrées avec le protocole AES-256, le même standard utilisé par les banques. Vos transactions sont sécurisées par Stripe."
+    "encryptionDesc": "Toutes vos données sont chiffrées avec le protocole AES-256, le même standard utilisé par les banques."
   },
   "quoteSignature": {
     "title": "Ne perdez plus une vente à cause d'un devis envoyé trop tard",
@@ -408,7 +408,7 @@
         "quoteCreation": "Création de devis",
         "aiInvoicing": "Facturation par IA",
         "autoReminders": "Relances automatiques",
-        "stripePaypal": "Paiement Stripe/PayPal",
+        "stripePaypal": "Paiement en ligne (PayPal)",
         "mobileApp": "Application mobile",
         "localSupport": "Support français",
         "customTemplates": "Templates personnalisables",
