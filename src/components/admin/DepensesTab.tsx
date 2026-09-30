@@ -149,7 +149,7 @@ export default function DepensesTab() {
       )}
 
       {/* ── KPI du mois ─────────────────────────────────── */}
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <div className={`${card} p-4`}>
           <div className={kpiLabel}>Total ce mois</div>
           <div className={`${kpiValue} mt-2`}>{eur(current?.total)}</div>
@@ -159,6 +159,13 @@ export default function DepensesTab() {
           <div className={`${kpiValue} mt-2`}>{eur(current?.ai.cost)}</div>
           <div className="text-[11.5px] text-slate-500 mt-1.5">
             {current ? `${compact(current.ai.tokens)} tokens · ${compact(current.ai.calls)} appels` : "—"}
+          </div>
+        </div>
+        <div className={`${card} p-4`}>
+          <div className={kpiLabel}>Dont app (module Dépenses)</div>
+          <div className={`${kpiValue} mt-2`}>{eur(current?.app?.total ?? 0)}</div>
+          <div className="text-[11.5px] text-slate-500 mt-1.5">
+            {current?.app?.items.length ? `${current.app.items.length} dépense(s) ce mois · TTC` : "rien de noté ce mois"}
           </div>
         </div>
         <div className={`${card} p-4`}>
@@ -174,9 +181,10 @@ export default function DepensesTab() {
       <div className={`${card} p-4 flex items-start gap-2.5`}>
         <Info size={15} style={{ color: ACCENT_INK }} className="mt-0.5 shrink-0" />
         <p className="text-[12.5px] text-slate-600 leading-relaxed">
-          Seule la consommation IA est mesurée automatiquement. Vercel, Firebase, Pinecone,
-          Supabase, les noms de domaine et le reste ne sont lisibles par aucune API :
-          <strong className="text-slate-900"> ils n&apos;apparaissent que si vous les saisissez ci-dessous.</strong>
+          Deux sources automatiques : la consommation IA, mesurée à chaque appel, et
+          <strong className="text-slate-900"> les dépenses que tu notes dans l&apos;app Robi</strong> (module Dépenses,
+          scan de reçu compris) — plus besoin de les retaper ici. Le reste (Vercel, Firebase, domaines…)
+          n&apos;apparaît que s&apos;il est noté dans l&apos;app ou saisi ci-dessous.
         </p>
       </div>
 
@@ -189,6 +197,7 @@ export default function DepensesTab() {
               <tr className="text-left text-slate-500 text-[11.5px] uppercase tracking-wide">
                 <th className="py-2 pr-3 font-semibold">Mois</th>
                 <th className="py-2 px-3 font-semibold text-right">IA</th>
+                <th className="py-2 px-3 font-semibold text-right">App</th>
                 <th className="py-2 px-3 font-semibold text-right">Saisi</th>
                 <th className="py-2 px-3 font-semibold text-right">Total</th>
                 <th className="py-2 px-3 font-semibold text-right">Actifs</th>
@@ -200,6 +209,7 @@ export default function DepensesTab() {
                 <tr key={m.month} className="border-t border-slate-200">
                   <td className="py-2.5 pr-3 font-medium text-slate-900">{MONTH_LABEL(m.month)}</td>
                   <td className="py-2.5 px-3 text-right tabular-nums text-slate-700">{eur(m.ai.cost)}</td>
+                  <td className="py-2.5 px-3 text-right tabular-nums text-slate-700">{eur(m.app?.total ?? 0)}</td>
                   <td className="py-2.5 px-3 text-right tabular-nums text-slate-700">{eur(m.declared.total)}</td>
                   <td className="py-2.5 px-3 text-right tabular-nums font-bold text-slate-900">{eur(m.total)}</td>
                   <td className="py-2.5 px-3 text-right tabular-nums text-slate-700">{m.activeUsers || "—"}</td>
@@ -207,11 +217,34 @@ export default function DepensesTab() {
                 </tr>
               ))}
               {!loading && (report?.months ?? []).length === 0 && (
-                <tr><td colSpan={6} className="py-6 text-center text-slate-500">Aucune donnée pour l&apos;instant.</td></tr>
+                <tr><td colSpan={7} className="py-6 text-center text-slate-500">Aucune donnée pour l&apos;instant.</td></tr>
               )}
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* ── Depuis l'app ───────────────────────────────── */}
+      <div className={`${card} p-4`}>
+        <h3 className={sectionTitle}>Depuis l&apos;app Robi · ce mois</h3>
+        <p className="text-[12.5px] text-slate-500 mt-0.5">
+          Notées dans l&apos;app (Dépenses), compte {report?.app?.owner ?? "de Ralph"}. Pour ajouter, modifier ou scanner un reçu : go.robi-app.com › Dépenses.
+        </p>
+        {current?.app?.items.length ? (
+          <ul className="mt-3 divide-y divide-slate-200">
+            {current.app.items.map((it, i) => (
+              <li key={`${it.label}-${i}`} className="py-2 flex items-center justify-between gap-3 text-[13px]">
+                <span className="text-slate-900 font-medium truncate">{it.label}</span>
+                <span className="text-slate-500 text-[12px] flex-1 truncate">
+                  {it.category} · {it.recurrence === "monthly" ? "chaque mois" : it.recurrence === "yearly" ? "chaque année" : "ponctuelle"}{it.scanned ? " · reçu scanné" : ""}
+                </span>
+                <span className="tabular-nums font-bold text-slate-900">{eur(it.amount)}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-[12.5px] text-slate-500 mt-3">Aucune dépense notée dans l&apos;app pour ce mois.</p>
+        )}
       </div>
 
       {/* ── Saisie ──────────────────────────────────────── */}

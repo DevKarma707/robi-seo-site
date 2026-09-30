@@ -195,6 +195,8 @@ export interface CostMonth {
   month: string;
   ai: { tokens: number; calls: number; cost: number };
   declared: { total: number; items: { label: string; amount: number; kind: string }[] };
+  /** Dépenses notées dans le module Dépenses de l'app (compte de Ralph), TTC — depuis le 30/09. */
+  app?: { total: number; items: { label: string; amount: number; category: string; recurrence: string; scanned: boolean }[] };
   total: number;
   activeUsers: number;
   costPerActiveUser: number | null;
@@ -205,6 +207,7 @@ export interface CostReport {
   declared: DeclaredCost[];
   pricePerMillionTokens: number;
   note: string;
+  app?: { owner: string; count: number };
   computedAt: string;
 }
 
