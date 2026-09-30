@@ -8,7 +8,8 @@ export const dynamic = "force-dynamic";
  * Lien court partenaire : robi-app.com/r/MARIE20
  *
  * Compte un clic sur la fiche influenceur qui porte ce code, puis renvoie sur
- * la page d'accueil avec `?ref=` (mémorisé par le site puis par l'app, qui
+ * sa page d'atterrissage /{langue}/code/CODE quand la fiche est active (sinon
+ * sur la page d'accueil), avec `?ref=` (mémorisé par le site puis par l'app, qui
  * l'applique au checkout) et des utm cohérents pour l'attribution des
  * inscriptions. Un code inconnu redirige quand même : le visiteur ne doit
  * jamais tomber sur une erreur à cause d'un partenaire radié.
@@ -34,6 +35,11 @@ export async function GET(_req: Request, ctx: { params: Promise<{ code: string }
       try {
         const snap = await db.collection("influencers").where("promoCode", "==", code).limit(1).get();
         if (!snap.empty) {
+          const f = snap.docs[0].data() as { status?: string; language?: string };
+          if (f.status === "actif") {
+            const lang = f.language === "en" || f.language === "es" ? f.language : "fr";
+            target.pathname = `/${lang}/code/${code}`;
+          }
           await snap.docs[0].ref.set(
             { clicks: FieldValue.increment(1), lastClickAt: FieldValue.serverTimestamp() },
             { merge: true }
