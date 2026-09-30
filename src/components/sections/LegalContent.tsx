@@ -72,7 +72,7 @@ export function LegalContent({ sections, lastUpdated }: LegalContentProps) {
             <ScrollReveal key={index} delay={index * 50}>
               <div className="border-b border-gray-200 pb-12 last:border-0">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-lg bg-[#BEF221]/20 flex items-center justify-center text-[#BEF221] text-sm font-black">
+                  <span className="w-8 h-8 rounded-full bg-[#0D0630] flex items-center justify-center text-[#BEF221] text-sm font-black tabular-nums">
                     {index + 1}
                   </span>
                   {section.title}

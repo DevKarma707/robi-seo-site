@@ -128,18 +128,6 @@ export default async function IndustryPage({
         }}
       />
 
-      <div className="bg-gray-50 pt-24 pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Breadcrumbs
-            locale={locale}
-            items={[
-              { label: ind.title, href: `/${locale}/industries` },
-              { label: t(industry.name, locale) },
-            ]}
-          />
-        </div>
-      </div>
-
       {/* FAQPage schema (GEO) — quand un contenu FAQ unique existe pour le métier */}
       {rich && rich.faq.length > 0 && (
         <script
@@ -159,6 +147,8 @@ export default async function IndustryPage({
       )}
 
       <Hero
+
+        crumbs={<Breadcrumbs tone="dark" locale={locale} items={[ { label: ind.title, href: `/${locale}/industries` }, { label: t(industry.name, locale) }, ]} />}
         badge={`${ind.solutionFor} ${t(industry.name, locale)}`}
         title={t(industry.heroTitle, locale)}
         subtitle={t(industry.description, locale)}
@@ -177,14 +167,14 @@ export default async function IndustryPage({
       )}
 
       {/* Pain Points Section */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 lg:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge variant="warning" className="mb-4">
               <AlertTriangle className="w-3 h-3 mr-1" />
               {ind.commonProblems}
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900">
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">
               {ind.challengesOf} {industryName}
             </h2>
           </div>
@@ -192,7 +182,7 @@ export default async function IndustryPage({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {industry.painPoints.map((pain, index) => (
               <Card key={index} variant="default" className="text-center">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-red-500/10 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-red-500/10 flex items-center justify-center">
                   <X className="w-8 h-8 text-red-400" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{t(pain, locale)}</h3>
@@ -206,14 +196,14 @@ export default async function IndustryPage({
       </section>
 
       {/* Solutions Section */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-16 md:py-24 lg:py-28 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge variant="success" className="mb-4">
               <Zap className="w-3 h-3 mr-1" />
               {ind.solutionsRobi}
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900">
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">
               {ind.featuresFor} {industryName}
             </h2>
           </div>
@@ -237,12 +227,12 @@ export default async function IndustryPage({
       </section>
 
       {/* Time Savings Section */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 lg:py-28 bg-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#BEF221]/20 mb-8">
-            <Clock className="w-10 h-10 text-[#BEF221]" />
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#0D0630] mb-8">
+            <Clock className="w-7 h-7 text-[#BEF221]" />
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">
+          <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630] mb-6">
             {ind.save10h}
           </h2>
           <p className="text-xl text-gray-600 mb-8">
@@ -250,15 +240,15 @@ export default async function IndustryPage({
           </p>
           <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div>
-              <p className="text-4xl font-black text-[#BEF221]">30s</p>
+              <p className="text-4xl font-black tracking-tight tabular-nums text-[#0D0630]">30s</p>
               <p className="text-gray-500 text-sm">{ind.toCreateQuote}</p>
             </div>
             <div>
-              <p className="text-4xl font-black text-[#BEF221]">2x</p>
+              <p className="text-4xl font-black tracking-tight tabular-nums text-[#0D0630]">2x</p>
               <p className="text-gray-500 text-sm">{ind.paidFaster}</p>
             </div>
             <div>
-              <p className="text-4xl font-black text-[#BEF221]">0</p>
+              <p className="text-4xl font-black tracking-tight tabular-nums text-[#0D0630]">0</p>
               <p className="text-gray-500 text-sm">{ind.manualReminder}</p>
             </div>
           </div>

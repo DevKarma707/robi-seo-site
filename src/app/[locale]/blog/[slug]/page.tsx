@@ -1827,7 +1827,7 @@ export default async function BlogPostPage({
       </article>
 
       {/* Related Posts */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-16 md:py-24 lg:py-28 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">
             {dict.pages.blog.relatedPosts}
@@ -1839,7 +1839,7 @@ export default async function BlogPostPage({
                   <Badge className={categoryColors[relatedPost.category]}>
                     {dict.pages.blog.categories[relatedPost.category as keyof typeof dict.pages.blog.categories]}
                   </Badge>
-                  <h3 className="text-lg font-bold text-gray-900 mt-4 mb-2 group-hover:text-[#BEF221] transition-colors line-clamp-2">
+                  <h3 className="text-lg font-bold text-gray-900 mt-4 mb-2 decoration-[#BEF221] decoration-2 underline-offset-4 group-hover:underline line-clamp-2">
                     {t(relatedPost.title, locale)}
                   </h3>
                   <p className="text-gray-500 text-sm line-clamp-2">

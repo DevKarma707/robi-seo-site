@@ -79,23 +79,23 @@ export default async function ToolsPage({
         variant="centered"
       />
 
-      <section className="py-24 bg-white relative">
+      <section className="py-16 md:py-24 lg:py-28 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {tools.map((tool, index) => {
               const Icon = toolIcons[tool.slug] || Calculator;
               return (
-                <ScrollReveal key={tool.slug} delay={index * 100}>
-                  <Link href={`/${locale}/tools/${tool.slug}`}>
+                <ScrollReveal key={tool.slug} delay={index * 100} className="h-full">
+                  <Link href={`/${locale}/tools/${tool.slug}`} className="block h-full">
                     <Card className="h-full group cursor-pointer text-center">
-                      <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#BEF221]/20 flex items-center justify-center group-hover:bg-[#BEF221] transition-colors">
-                        <Icon className="w-10 h-10 text-[#BEF221] group-hover:text-[#0D0630] transition-colors" />
+                      <div className="w-14 h-14 mx-auto mb-6 rounded-2xl bg-[#0D0630] flex items-center justify-center">
+                        <Icon className="w-7 h-7 text-[#BEF221]" />
                       </div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#BEF221] transition-colors">
+                      <h3 className="text-xl font-bold text-[#0D0630] mb-3 decoration-[#BEF221] decoration-2 underline-offset-4 group-hover:underline">
                         {t(tool.name, locale)}
                       </h3>
                       <p className="text-gray-500 mb-4">{t(tool.description, locale)}</p>
-                      <span className="inline-flex items-center gap-2 text-[#BEF221] font-medium">
+                      <span className="inline-flex items-center gap-2 text-[#0D0630] font-semibold">
                         {dict.common.learnMore}
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </span>

@@ -33,32 +33,21 @@ export function CalculateurTJMClient({ dict, freeTool, ctaDict, locale }: Calcul
 
   return (
     <>
-      <div className="bg-white pt-24 pb-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Breadcrumbs
-            locale={locale as any}
-            items={[
-              { label: "Tools", href: `/${locale}/tools` },
-              { label: dict.title },
-            ]}
-          />
-        </div>
-      </div>
-
       <Hero
+        crumbs={<Breadcrumbs tone="dark" locale={locale as any} items={[ { label: String(locale).startsWith("fr") ? "Outils" : "Tools", href: `/${locale}/tools` }, { label: dict.title }, ]} />}
         badge={freeTool}
         title={dict.title || "Calculateur de TJM"}
         subtitle={dict.subtitle || ""}
         variant="centered"
       />
 
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 lg:py-28 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Form */}
             <Card className="p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                <Calculator className="w-6 h-6 text-[#BEF221]" />
+                <Calculator className="w-6 h-6 text-[#0D0630]" />
                 {dict.params || "Vos paramètres"}
               </h2>
 
@@ -157,7 +146,7 @@ export function CalculateurTJMClient({ dict, freeTool, ctaDict, locale }: Calcul
                 <h2 className="text-xl font-bold text-gray-900 mb-6">
                   {dict.recommended || "Votre TJM recommandé"}
                 </h2>
-                <div className="text-6xl font-black text-[#BEF221] mb-4">
+                <div className="text-6xl font-black tracking-tight tabular-nums text-[#0D0630] mb-4">
                   {tjmCalcule}€
                   <span className="text-xl text-gray-500">{dict.perDay || "/jour"}</span>
                 </div>
@@ -168,28 +157,28 @@ export function CalculateurTJMClient({ dict, freeTool, ctaDict, locale }: Calcul
 
               <div className="grid grid-cols-2 gap-4">
                 <Card className="p-6 text-center">
-                  <Clock className="w-8 h-8 text-[#BEF221] mx-auto mb-3" />
+                  <Clock className="w-8 h-8 text-[#0D0630] mx-auto mb-3" />
                   <p className="text-3xl font-bold text-gray-900">
                     {joursFacturables}
                   </p>
                   <p className="text-sm text-gray-500">{dict.billableDays || "Jours facturables/an"}</p>
                 </Card>
                 <Card className="p-6 text-center">
-                  <TrendingUp className="w-8 h-8 text-[#BEF221] mx-auto mb-3" />
+                  <TrendingUp className="w-8 h-8 text-[#0D0630] mx-auto mb-3" />
                   <p className="text-3xl font-bold text-gray-900">
                     {Math.round(salaireAvantCharges).toLocaleString()}€
                   </p>
                   <p className="text-sm text-gray-500">{dict.requiredRevenue || "CA nécessaire/an"}</p>
                 </Card>
                 <Card className="p-6 text-center">
-                  <PiggyBank className="w-8 h-8 text-[#BEF221] mx-auto mb-3" />
+                  <PiggyBank className="w-8 h-8 text-[#0D0630] mx-auto mb-3" />
                   <p className="text-3xl font-bold text-gray-900">
                     {Math.round(tjmCalcule * 5).toLocaleString()}€
                   </p>
                   <p className="text-sm text-gray-500">{dict.weeklyRevenue || "CA/semaine"}</p>
                 </Card>
                 <Card className="p-6 text-center">
-                  <Calculator className="w-8 h-8 text-[#BEF221] mx-auto mb-3" />
+                  <Calculator className="w-8 h-8 text-[#0D0630] mx-auto mb-3" />
                   <p className="text-3xl font-bold text-gray-900">
                     {Math.round(tjmCalcule * 20).toLocaleString()}€
                   </p>
@@ -197,7 +186,7 @@ export function CalculateurTJMClient({ dict, freeTool, ctaDict, locale }: Calcul
                 </Card>
               </div>
 
-              <Card className="p-6 bg-[#BEF221]/10 border-[#BEF221]/30">
+              <Card className="p-6 !bg-[#F6F5FA]">
                 <h3 className="font-bold text-gray-900 mb-2">
                   💡 {dict.tip || "Conseil Robi"}
                 </h3>

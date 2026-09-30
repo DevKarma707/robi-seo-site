@@ -280,20 +280,9 @@ export function GenerateurFactureClient({ locale, lang, ctaDict, toolsLabel, faq
         }}
       />
 
-      <div className="bg-white pt-24 pb-4 no-print">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Breadcrumbs
-            locale={locale}
-            items={[
-              { label: toolsLabel, href: `/${locale}/tools` },
-              { label: T.heroTitle },
-            ]}
-          />
-        </div>
-      </div>
-
       <div className="no-print">
         <Hero
+          crumbs={<Breadcrumbs tone="dark" locale={locale} items={[ { label: toolsLabel, href: `/${locale}/tools` }, { label: T.heroTitle }, ]} />}
           badge={T.heroBadge}
           title={T.heroTitle}
           titleAccent={T.heroAccent}
@@ -441,7 +430,7 @@ export function GenerateurFactureClient({ locale, lang, ctaDict, toolsLabel, faq
                 </div>
               </div>
 
-              <div id="invoice-paper" className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 md:p-10 text-gray-800">
+              <div id="invoice-paper" className="bg-white rounded-[28px] border border-gray-200 p-8 md:p-10 text-gray-800">
                 <div className="flex justify-between items-start mb-8">
                   <div>
                     <p className="text-2xl font-black text-[#0D0630] tracking-tight">{T.invoice}</p>
@@ -543,9 +532,9 @@ export function GenerateurFactureClient({ locale, lang, ctaDict, toolsLabel, faq
       </section>
 
       {/* FAQ — server-provided, mirrors the JSON-LD */}
-      <section className="py-20 bg-white no-print">
+      <section className="py-14 md:py-20 lg:py-24 bg-white no-print">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-8 text-center">{T.faqTitle}</h2>
+          <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630] mb-8 text-center">{T.faqTitle}</h2>
           <div className="space-y-4">
             {faq.map((item, i) => (
               <Card key={i} className="p-6">

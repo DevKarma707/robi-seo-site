@@ -132,7 +132,7 @@ export default async function BlogPage({
         variant="centered"
       />
 
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 lg:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Featured Post */}
           {featured && (
@@ -149,7 +149,7 @@ export default async function BlogPage({
                     <Badge className={categoryColors[featured.category] ?? categoryColors.guides}>
                       {blog.categories[featured.category as keyof typeof blog.categories] ?? featured.category}
                     </Badge>
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mt-4 mb-4 group-hover:text-[#BEF221] transition-colors">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mt-4 mb-4 decoration-[#BEF221] decoration-2 underline-offset-4 group-hover:underline">
                       {featured.title}
                     </h2>
                     <p className="text-gray-600 mb-6">{featured.description}</p>
@@ -179,7 +179,7 @@ export default async function BlogPage({
                   <Badge className={categoryColors[post.category] ?? categoryColors.guides}>
                     {blog.categories[post.category as keyof typeof blog.categories] ?? post.category}
                   </Badge>
-                  <h3 className="text-xl font-bold text-gray-900 mt-4 mb-3 group-hover:text-[#BEF221] transition-colors line-clamp-2">
+                  <h3 className="text-xl font-bold text-gray-900 mt-4 mb-3 decoration-[#BEF221] decoration-2 underline-offset-4 group-hover:underline line-clamp-2">
                     {post.title}
                   </h3>
                   <p className="text-gray-500 mb-4 line-clamp-2">{post.description}</p>

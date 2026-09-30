@@ -122,7 +122,7 @@ export function ContactForm({ dict }: ContactFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8"
+      className="max-w-2xl mx-auto bg-white rounded-[28px] border border-gray-200 p-6 md:p-10"
     >
       {/* Name Field */}
       <div className="mb-6">
@@ -136,7 +136,7 @@ export function ContactForm({ dict }: ContactFormProps) {
           value={formData.name}
           onChange={handleChange}
           placeholder={dict.form.placeholder_name}
-          className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEF221] text-gray-900 placeholder-gray-500"
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEF221] text-gray-900 placeholder-gray-500"
           disabled={status === "loading"}
         />
       </div>
@@ -153,7 +153,7 @@ export function ContactForm({ dict }: ContactFormProps) {
           value={formData.email}
           onChange={handleChange}
           placeholder={dict.form.placeholder_email}
-          className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEF221] text-gray-900 placeholder-gray-500"
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEF221] text-gray-900 placeholder-gray-500"
           disabled={status === "loading"}
         />
       </div>
@@ -168,7 +168,7 @@ export function ContactForm({ dict }: ContactFormProps) {
           name="subject"
           value={formData.subject}
           onChange={handleChange}
-          className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEF221] text-gray-900 bg-white"
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEF221] text-gray-900 bg-white"
           disabled={status === "loading"}
         >
           <option value="general">{dict.subjects.general}</option>
@@ -190,7 +190,7 @@ export function ContactForm({ dict }: ContactFormProps) {
           onChange={handleChange}
           placeholder={dict.form.placeholder_message}
           rows={6}
-          className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEF221] text-gray-900 placeholder-gray-500 resize-none"
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEF221] text-gray-900 placeholder-gray-500 resize-none"
           disabled={status === "loading"}
         />
       </div>
@@ -215,7 +215,7 @@ export function ContactForm({ dict }: ContactFormProps) {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="w-full bg-[#BEF221] text-[#0D0630] font-bold py-3 px-6 rounded-lg hover:bg-[#a8d51a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full bg-[#BEF221] text-[#0D0630] font-bold py-3.5 px-6 rounded-full hover:bg-[#a8d51a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {status === "loading" ? (
           <>

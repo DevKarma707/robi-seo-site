@@ -185,12 +185,12 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
         variant="centered"
       />
 
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 lg:py-28 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {step === 1 && (
             <Card className="p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                <FileText className="w-6 h-6 text-[#BEF221]" />
+                <FileText className="w-6 h-6 text-[#0D0630]" />
                 {dict.siteInfo || "Informations sur votre site"}
               </h2>
 
@@ -331,7 +331,7 @@ Les présentes mentions légales sont soumises au droit français. En cas de lit
               <Card className="p-8">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                    <FileText className="w-6 h-6 text-[#BEF221]" />
+                    <FileText className="w-6 h-6 text-[#0D0630]" />
                     {dict.yourMentions || "Vos mentions légales"}
                   </h2>
                   <div className="flex gap-2">

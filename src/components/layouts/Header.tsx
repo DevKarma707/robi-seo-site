@@ -25,7 +25,7 @@ export function Header({ locale, dict }: HeaderProps) {
   ];
 
   return (
-    <header className="fixed w-full z-50 bg-[#0D0630]/70 backdrop-blur-xl border-b border-white/[0.08] supports-[backdrop-filter]:bg-[#0D0630]/60">
+    <header className="fixed w-full z-50 bg-[#0D0630]/90 backdrop-blur-xl border-b border-white/[0.08] supports-[backdrop-filter]:bg-[#0D0630]/85">
       {dict.pricing?.launchBar && (
         <LaunchBar
           locale={locale}

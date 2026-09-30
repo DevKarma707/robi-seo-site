@@ -73,7 +73,7 @@ export default async function ComparisonsPage({
         variant="centered"
       />
 
-      <section className="py-24 bg-white relative">
+      <section className="py-16 md:py-24 lg:py-28 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {comparisons.map((comparison, index) => (
@@ -81,11 +81,11 @@ export default async function ComparisonsPage({
                 <Link href={`/${locale}/comparisons/${comparison.slug}`}>
                   <Card className="h-full group cursor-pointer">
                     <div className="flex items-center gap-4 mb-6">
-                      <div className="w-14 h-14 rounded-2xl bg-[#BEF221]/20 flex items-center justify-center group-hover:bg-[#BEF221] transition-colors">
-                        <Swords className="w-7 h-7 text-[#BEF221] group-hover:text-[#0D0630] transition-colors" />
+                      <div className="w-12 h-12 shrink-0 rounded-2xl bg-[#0D0630] flex items-center justify-center">
+                        <Swords className="w-6 h-6 text-[#BEF221]" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#BEF221] transition-colors">
+                        <h3 className="text-xl font-bold text-[#0D0630] decoration-[#BEF221] decoration-2 underline-offset-4 group-hover:underline">
                           Robi AI vs {comparison.competitor}
                         </h3>
                       </div>
@@ -93,7 +93,7 @@ export default async function ComparisonsPage({
                     <p className="text-gray-500 mb-6">
                       {t(comparison.description, locale)}
                     </p>
-                    <span className="inline-flex items-center gap-2 text-[#BEF221] font-medium">
+                    <span className="inline-flex items-center gap-2 text-[#0D0630] font-semibold">
                       {comp.detailedComparison}
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </span>

@@ -13,25 +13,23 @@ export function Card({
   className = "",
   hover = true,
 }: CardProps) {
-  const baseStyles = "rounded-3xl p-8 transition-all duration-300";
+  // Refonte du 30/09/2026 : surfaces à plat, 28 px, aucune ombre portée.
+  const baseStyles = "rounded-[28px] p-6 md:p-8 transition-all duration-500";
 
   const variants = {
-    default: "bg-white border border-gray-100 shadow-lg shadow-gray-200/40",
-    glass: "bg-gray-100 backdrop-blur-xl border border-gray-200",
+    default: "bg-white border border-gray-200",
+    glass: "bg-[#F6F5FA] border border-gray-200",
     dark: "bg-gray-50 border border-gray-200 text-gray-900",
     accent: "bg-white border border-[#BEF221]",
     featured: "bg-[#0D0630] border border-[#BEF221]/20 text-white",
   };
 
   const hoverVariants = {
-    default:
-      "hover:-translate-y-1 hover:border-[#BEF221]/50 hover:shadow-[0_8px_30px_rgba(190,242,33,0.15)]",
-    glass: "hover:shadow-xl hover:-translate-y-1",
-    dark: "hover:shadow-xl hover:-translate-y-1",
-    accent:
-      "hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(190,242,33,0.2)]",
-    featured:
-      "hover:-translate-y-1 hover:border-[#BEF221]/40 hover:shadow-[0_8px_30px_rgba(190,242,33,0.15)]",
+    default: "hover:-translate-y-1 hover:border-[#0D0630]/25",
+    glass: "hover:-translate-y-1",
+    dark: "hover:-translate-y-1",
+    accent: "hover:-translate-y-1",
+    featured: "hover:-translate-y-1 hover:border-[#BEF221]/40",
   };
 
   const hoverStyles = hover ? hoverVariants[variant] : "";

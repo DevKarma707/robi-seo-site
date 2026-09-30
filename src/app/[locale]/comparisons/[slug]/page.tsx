@@ -217,10 +217,10 @@ export default async function ComparisonPage({
       />
 
       {/* Comparison Table */}
-      <section className="py-24 bg-white relative">
+      <section className="py-16 md:py-24 lg:py-28 bg-white relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900">
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">
               {comp.detailedComparison}
             </h2>
             <p className="text-gray-500 mt-4">
@@ -234,7 +234,7 @@ export default async function ComparisonPage({
               <div className="grid grid-cols-3 bg-gray-100 text-gray-900 p-6">
                 <div className="font-bold">{comp.feature}</div>
                 <div className="text-center font-bold">
-                  <span className="text-[#BEF221]">Robi AI</span>
+                  <span className="inline-block rounded-full bg-[#0D0630] px-3 py-1 text-[#BEF221]">Robi AI</span>
                 </div>
                 <div className="text-center font-bold">{comparison.competitor}</div>
               </div>
@@ -305,10 +305,10 @@ export default async function ComparisonPage({
 
       {/* Pricing comparison */}
       {pricing && (
-        <section className="py-24 bg-gray-50 relative">
+        <section className="py-16 md:py-24 lg:py-28 bg-gray-50 relative">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-black text-gray-900">
+              <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">
                 {fill(comp.pricingTitle)}
               </h2>
               <p className="text-gray-500 mt-4">{fill(comp.pricingSubtitle)}</p>
@@ -364,13 +364,13 @@ export default async function ComparisonPage({
       )}
 
       {/* Why Choose Robi */}
-      <section className="py-24 bg-white relative">
+      <section className="py-16 md:py-24 lg:py-28 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <Badge variant="accent" className="mb-4">
               {comp.exclusiveAdvantages}
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900">
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">
               {comp.whyChoose}
             </h2>
           </ScrollReveal>
@@ -411,10 +411,10 @@ export default async function ComparisonPage({
       </section>
 
       {/* FAQ — mirrors the FAQPage JSON-LD above */}
-      <section className="py-24 bg-gray-50 relative">
+      <section className="py-16 md:py-24 lg:py-28 bg-gray-50 relative">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900">
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">
               {comp.faqTitle}
             </h2>
           </ScrollReveal>

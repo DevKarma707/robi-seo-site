@@ -69,7 +69,7 @@ export default async function ContactPage({
         variant="centered"
       />
 
-      <section className="py-24 bg-white relative">
+      <section className="py-16 md:py-24 lg:py-28 bg-white relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <ContactForm dict={contact} />
         </div>

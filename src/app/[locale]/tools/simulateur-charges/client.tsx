@@ -73,32 +73,21 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
 
   return (
     <>
-      <div className="bg-white pt-24 pb-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Breadcrumbs
-            locale={locale as any}
-            items={[
-              { label: "Tools", href: `/${locale}/tools` },
-              { label: dict.title },
-            ]}
-          />
-        </div>
-      </div>
-
       <Hero
+        crumbs={<Breadcrumbs tone="dark" locale={locale as any} items={[ { label: String(locale).startsWith("fr") ? "Outils" : "Tools", href: `/${locale}/tools` }, { label: dict.title }, ]} />}
         badge={freeTool}
         title={dict.title || "Simulateur de Charges"}
         subtitle={dict.subtitle || ""}
         variant="centered"
       />
 
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 lg:py-28 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Form */}
             <Card className="p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                <Scale className="w-6 h-6 text-[#BEF221]" />
+                <Scale className="w-6 h-6 text-[#0D0630]" />
                 {dict.params || "Vos paramètres"}
               </h2>
 
@@ -213,7 +202,7 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
 
                   <div className="flex justify-between items-center py-4">
                     <span className="text-gray-900 font-bold text-lg">{dict.netIncome || "Revenu net"}</span>
-                    <span className="text-[#BEF221] font-black text-3xl">
+                    <span className="text-[#0D0630] font-black text-3xl tracking-tight tabular-nums">
                       {Math.round(netFinal).toLocaleString()}€
                     </span>
                   </div>
@@ -227,7 +216,7 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
                   <p className="text-sm text-gray-500">{dict.effectiveRate || "Taux de prélèvement"}</p>
                 </Card>
                 <Card className="p-6 text-center">
-                  <PiggyBank className="w-8 h-8 text-[#BEF221] mx-auto mb-3" />
+                  <PiggyBank className="w-8 h-8 text-[#0D0630] mx-auto mb-3" />
                   <p className="text-3xl font-bold text-gray-900">
                     {Math.round(netFinal / 12).toLocaleString()}€
                   </p>
@@ -235,14 +224,14 @@ export function SimulateurChargesClient({ dict, freeTool, ctaDict, locale }: Sim
                 </Card>
               </div>
 
-              <Card className="p-6 bg-amber-500/10 border-amber-500/30">
+              <Card className="p-6 !bg-amber-50 !border-amber-200">
                 <div className="flex gap-4">
-                  <AlertCircle className="w-6 h-6 text-amber-400 flex-shrink-0" />
+                  <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0" />
                   <div>
-                    <h3 className="font-bold text-amber-300 mb-1">
+                    <h3 className="font-bold text-amber-900 mb-1">
                       {dict.disclaimer || "Simulation indicative"}
                     </h3>
-                    <p className="text-sm text-amber-200/70">
+                    <p className="text-sm text-amber-800">
                       {dict.disclaimerText || "Cette simulation est une estimation. Les montants réels peuvent varier selon votre situation personnelle. Consultez un expert-comptable pour un calcul précis."}
                     </p>
                   </div>

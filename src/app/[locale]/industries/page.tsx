@@ -65,17 +65,17 @@ export default async function IndustriesPage({
         variant="centered"
       />
 
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 lg:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {industriesByCategory.map((category) => {
             const Icon = categoryIcons[category.id] || Briefcase;
             return (
               <div key={category.id} className="mb-16 last:mb-0">
                 <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-[#BEF221]/10 border border-[#BEF221]/20 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-[#0D0630] flex items-center justify-center">
                     <Icon className="w-6 h-6 text-[#BEF221]" />
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-black text-gray-900">
+                  <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">
                     {t(category.name, locale)}
                   </h2>
                   <span className="text-sm text-gray-400 ml-2">
@@ -100,7 +100,7 @@ export default async function IndustriesPage({
                           {industry.features.slice(0, 2).map((feature, idx) => (
                             <span
                               key={idx}
-                              className="text-xs bg-[#BEF221]/10 text-[#BEF221] px-2 py-0.5 rounded-full"
+                              className="text-xs bg-[#BEF221]/25 text-[#0D0630] font-medium px-2 py-0.5 rounded-full"
                             >
                               {t(feature, locale)}
                             </span>
@@ -119,20 +119,20 @@ export default async function IndustriesPage({
       {/* Stats Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8">
-            {ind.adaptedTo} <span className="text-[#BEF221]">{industries.length}{ind.professionsSuffix}</span>
+          <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630] mb-8">
+            {ind.adaptedTo} <span className="underline decoration-[#BEF221] decoration-4 underline-offset-4">{industries.length}{ind.professionsSuffix}</span>
           </h2>
           <div className="grid grid-cols-3 gap-8">
             <div>
-              <p className="text-4xl font-black text-[#BEF221]">{industries.length}</p>
+              <p className="text-4xl font-black tracking-tight tabular-nums text-[#0D0630]">{industries.length}</p>
               <p className="text-gray-500 text-sm">Industries</p>
             </div>
             <div>
-              <p className="text-4xl font-black text-[#BEF221]">{industryCategories.length}</p>
+              <p className="text-4xl font-black tracking-tight tabular-nums text-[#0D0630]">{industryCategories.length}</p>
               <p className="text-gray-500 text-sm">{ind.categories}</p>
             </div>
             <div>
-              <p className="text-4xl font-black text-[#BEF221]">∞</p>
+              <p className="text-4xl font-black tracking-tight tabular-nums text-[#0D0630]">∞</p>
               <p className="text-gray-500 text-sm">{ind.customization}</p>
             </div>
           </div>

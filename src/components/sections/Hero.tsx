@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { LaunchSeats, useLaunchOffer, formatCurrentLaunchPrice } from "@/components/ui/LaunchSeats";
@@ -17,6 +17,8 @@ import storyStyles from "@/components/ui/HeroStory.module.css";
 
 interface HeroProps {
   badge?: string;
+  /** Fil d'Ariane posé au-dessus du titre (pages intérieures, variante centrée). */
+  crumbs?: ReactNode;
   title: string;
   titleAccent?: string;
   subtitle: string;
@@ -97,6 +99,8 @@ function WordRotator({ words, className = "text-[#BEF221]", delay = 0 }: { words
 }
 
 export function Hero({
+  badge,
+  crumbs,
   title,
   titleAccent,
   subtitle,
@@ -104,7 +108,7 @@ export function Hero({
   ctaHref = "https://go.robi-app.com/?signup",
   variant = "default",
   launchOffer,
-  rotatingWords = ["Facture", "Envoi", "Relance", "Notifie"],
+  rotatingWords = [],
   titleWords,
   visual = "mockups",
   story,
@@ -147,44 +151,38 @@ export function Hero({
   );
 
   return (
-    <section className={`relative overflow-hidden bg-[#0D0630] ${isEditorial ? storyStyles.hero : `pt-24 md:pt-32 ${ctaText ? "pb-14 md:pb-16" : "pb-10 md:pb-10"}`}`}>
+    <section className={`relative overflow-hidden bg-[#0D0630] ${isEditorial ? storyStyles.hero : isCenter ? "pt-32 pb-14 md:pt-44 md:pb-20" : `pt-24 md:pt-32 ${ctaText ? "pb-14 md:pb-16" : "pb-10 md:pb-10"}`}`}>
       {isEditorial && <HeroShaderBackground />}
+      {isCenter && (
+        <div className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] max-w-[160vw] -translate-x-1/2 -translate-y-1/3 rounded-full" style={{ background: "radial-gradient(closest-side, rgba(24,49,79,0.9), rgba(24,49,79,0))" }} aria-hidden="true" />
+      )}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {isCenter ? (
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] mb-6 md:mb-8 tracking-tighter">
-              <span className="block opacity-90">
-                {titleWords && titleWords.length > 1
-                  ? <WordRotator words={titleWords} className="text-white" delay={1250} />
-                  : title}
-              </span>
-              {rotatingWords.length > 0 && (
-                <span className="flex items-center justify-center gap-3">
-                  Robi <WordRotator words={rotatingWords} />
-                </span>
-              )}
-              <span className="block text-[#BEF221]">{titleAccent}</span>
+            {crumbs && <div className="mb-6 flex justify-center md:mb-8">{crumbs}</div>}
+            {badge && (
+              <p className="mb-5 inline-flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.17em] text-white/65 md:mb-7 md:text-[11px]">
+                <span className="h-px w-7 bg-[#BEF221]" aria-hidden="true" />
+                {badge}
+              </p>
+            )}
+            <h1 className="text-[34px] md:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight [text-wrap:balance]">
+              {title}
+              {titleAccent && <> <span className="text-[#BEF221]">{titleAccent}</span></>}
             </h1>
 
-            <p className="text-base md:text-xl text-white/90 font-medium mb-8 md:mb-10 leading-relaxed max-w-2xl mx-auto bg-[#0D0630]/50 backdrop-blur-sm p-4 rounded-2xl border border-white/5 whitespace-pre-line">
-              {subtitle}
-            </p>
+            {subtitle && (
+              <p className="mx-auto mt-5 max-w-2xl whitespace-pre-line text-base leading-relaxed text-white/65 [text-wrap:balance] md:mt-7 md:text-xl">
+                {subtitle}
+              </p>
+            )}
 
             {ctaText && (
-              <div className="flex flex-col items-center gap-3">
-                <Button href={ctaHref} size="sm" className="!text-xs !px-5 !py-2.5 md:!px-8 md:!py-4 md:!text-base shadow-glow-sm hover:shadow-glow transition-all duration-300">
+              <div className="mt-8 flex flex-col items-center gap-3 md:mt-10">
+                <Button href={ctaHref} size="sm" className="!text-sm !px-7 !py-3.5 md:!px-8 md:!py-4 md:!text-base">
                   {ctaText}
-                  <ArrowRight className="ml-1.5 w-3.5 h-3.5 md:w-5 md:h-5" />
+                  <ArrowRight className="ml-1.5 w-4 h-4 md:w-5 md:h-5" />
                 </Button>
-                {launchOffer && (
-                  <div className="flex items-center gap-2 bg-white/5 border border-[#BEF221]/20 rounded-full px-3 py-1.5">
-                    <Zap className="w-3.5 h-3.5 text-[#BEF221]" />
-                    <span className="text-white/70 text-xs">
-                      {launchOffer.text}{" "}
-                      <span className="text-[#BEF221] font-bold">{offerHighlight}</span>
-                    </span>
-                  </div>
-                )}
               </div>
             )}
           </div>

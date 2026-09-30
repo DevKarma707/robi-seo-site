@@ -80,10 +80,10 @@ export default async function PricingPage({
       />
 
       {/* Guarantees */}
-      <section className="py-24 bg-gray-50 relative">
+      <section className="py-16 md:py-24 lg:py-28 bg-gray-50 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900">
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">
               {p.guarantees}
             </h2>
           </ScrollReveal>
@@ -91,8 +91,8 @@ export default async function PricingPage({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <ScrollReveal delay={0}>
               <Card className="text-center h-full">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#BEF221]/20 flex items-center justify-center">
-                  <Zap className="w-8 h-8 text-[#BEF221]" />
+                <div className="w-14 h-14 mx-auto mb-6 rounded-2xl bg-[#0D0630] flex items-center justify-center">
+                  <Zap className="w-7 h-7 text-[#BEF221]" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">
                   {p.freeTrial}
@@ -105,8 +105,8 @@ export default async function PricingPage({
 
             <ScrollReveal delay={100}>
               <Card className="text-center h-full">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#BEF221]/20 flex items-center justify-center">
-                  <Shield className="w-8 h-8 text-[#BEF221]" />
+                <div className="w-14 h-14 mx-auto mb-6 rounded-2xl bg-[#0D0630] flex items-center justify-center">
+                  <Shield className="w-7 h-7 text-[#BEF221]" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">
                   {p.moneyBack}
@@ -119,8 +119,8 @@ export default async function PricingPage({
 
             <ScrollReveal delay={200}>
               <Card className="text-center h-full">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#BEF221]/20 flex items-center justify-center">
-                  <HeartHandshake className="w-8 h-8 text-[#BEF221]" />
+                <div className="w-14 h-14 mx-auto mb-6 rounded-2xl bg-[#0D0630] flex items-center justify-center">
+                  <HeartHandshake className="w-7 h-7 text-[#BEF221]" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">
                   {p.humanSupport}

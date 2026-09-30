@@ -572,7 +572,7 @@ export default async function FactureAIPage({
           <div className="grid grid-cols-3 gap-8">
             {c.stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <p className="text-4xl md:text-5xl font-black text-[#BEF221]">{stat.value}</p>
+                <p className="text-4xl md:text-5xl font-black tracking-tight tabular-nums text-[#0D0630]">{stat.value}</p>
                 <p className="text-gray-500 mt-2">{stat.label}</p>
               </div>
             ))}
@@ -581,9 +581,9 @@ export default async function FactureAIPage({
       </section>
 
       {/* Definition — long-form, citable */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-16 md:py-24 lg:py-28 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-8">
+          <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630] mb-8">
             {c.definition.title}
           </h2>
           <div className="space-y-6">
@@ -595,9 +595,9 @@ export default async function FactureAIPage({
       </section>
 
       {/* Prompt examples */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 lg:py-28 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-3">{c.prompts.title}</h2>
+          <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630] mb-3">{c.prompts.title}</h2>
           <p className="text-gray-500 mb-10">{c.prompts.subtitle}</p>
           <div className="space-y-4">
             {c.prompts.examples.map((example, index) => (
@@ -614,10 +614,10 @@ export default async function FactureAIPage({
       </section>
 
       {/* Creation vs processing */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-16 md:py-24 lg:py-28 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900">{c.comparison.title}</h2>
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">{c.comparison.title}</h2>
             <p className="text-gray-500 mt-3">{c.comparison.subtitle}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -640,18 +640,16 @@ export default async function FactureAIPage({
       </section>
 
       {/* How it works */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 lg:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900">{c.steps.title}</h2>
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">{c.steps.title}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {c.steps.items.map((step, index) => (
               <div key={index} className="relative">
-                <div className="text-8xl font-black text-[#BEF221]/20 absolute -top-4 -left-2">
-                  {index + 1}
-                </div>
                 <Card className="relative z-10 h-full">
+                  <span className="mb-5 grid h-10 w-10 place-items-center rounded-full bg-[#0D0630] text-sm font-black tabular-nums text-[#BEF221]">{index + 1}</span>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
                   <p className="text-gray-500">{step.description}</p>
                 </Card>
@@ -662,10 +660,10 @@ export default async function FactureAIPage({
       </section>
 
       {/* Benefits */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-16 md:py-24 lg:py-28 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900">{c.benefits.title}</h2>
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">{c.benefits.title}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {c.benefits.items.map((benefit, index) => {

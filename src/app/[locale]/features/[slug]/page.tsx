@@ -170,7 +170,7 @@ export default async function FeaturePage({
           <div className="grid grid-cols-3 gap-8">
             {content.stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <p className="text-4xl md:text-5xl font-black text-[#BEF221]">
+                <p className="text-4xl md:text-5xl font-black tracking-tight tabular-nums text-[#0D0630]">
                   {stat.value}
                 </p>
                 <p className="text-gray-500 mt-2">{t(stat.label, locale)}</p>
@@ -181,10 +181,10 @@ export default async function FeaturePage({
       </section>
 
       {/* Benefits Section */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-16 md:py-24 lg:py-28 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900">
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">
               {fp.whyYouWillLove}
             </h2>
           </div>
@@ -203,10 +203,10 @@ export default async function FeaturePage({
       </section>
 
       {/* How It Works Section */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 lg:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900">
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">
               {fp.simpleAs123}
             </h2>
           </div>
@@ -214,10 +214,8 @@ export default async function FeaturePage({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {content.howItWorks.map((step, index) => (
               <div key={index} className="relative">
-                <div className="text-8xl font-black text-[#BEF221]/20 absolute -top-4 -left-2">
-                  {index + 1}
-                </div>
                 <Card className="relative z-10 h-full">
+                  <span className="mb-5 grid h-10 w-10 place-items-center rounded-full bg-[#0D0630] text-sm font-black tabular-nums text-[#BEF221]">{index + 1}</span>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     {t(step.title, locale)}
                   </h3>

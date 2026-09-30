@@ -78,7 +78,7 @@ export default async function FeaturesPage({
         variant="centered"
       />
 
-      <section className="py-20 bg-[#0D0630]">
+      <section className="py-14 md:py-20 lg:py-24 bg-[#0D0630]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* First row - 3 cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
