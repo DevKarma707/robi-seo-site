@@ -195,6 +195,8 @@ export interface CostMonth {
   month: string;
   ai: { tokens: number; calls: number; cost: number };
   declared: { total: number; items: { label: string; amount: number; kind: string }[] };
+  /** Dépense publicitaire Meta du mois (compte « Robi AI »), depuis le 30/09. */
+  ads?: { spend: number; currency: string | null };
   total: number;
   activeUsers: number;
   costPerActiveUser: number | null;
@@ -205,6 +207,7 @@ export interface CostReport {
   declared: DeclaredCost[];
   pricePerMillionTokens: number;
   note: string;
+  ads?: { source: "meta"; currency: string | null; error?: string };
   computedAt: string;
 }
 

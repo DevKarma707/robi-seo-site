@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAdmin, callRobiFunction } from "@/lib/adminAuth";
+import { metaMonthlySpend } from "@/lib/metaSpend";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,24 @@ export async function GET(req: Request) {
   const { status, json } = await callRobiFunction("getCostReport", {
     query: `months=${encodeURIComponent(months)}`,
   });
-  return NextResponse.json(json, { status });
+  const report = json as { months?: { month: string; total: number; activeUsers: number }[]; ads?: unknown };
+  if (status !== 200 || !Array.isArray(report?.months)) return NextResponse.json(json, { status });
+
+  // Pubs Meta, mois par mois, ajoutées au total et au coût par actif.
+  const meta = await metaMonthlySpend(report.months.map((m) => m.month));
+  const round2 = (x: number) => Math.round(x * 100) / 100;
+  report.months = report.months.map((m) => {
+    const spend = meta.byMonth[m.month] ?? 0;
+    const total = round2(m.total + spend);
+    return {
+      ...m,
+      ads: { spend, currency: meta.currency },
+      total,
+      costPerActiveUser: m.activeUsers > 0 ? round2(total / m.activeUsers) : null,
+    };
+  });
+  report.ads = { source: "meta", currency: meta.currency, ...(meta.error ? { error: meta.error } : {}) };
+  return NextResponse.json(report, { status });
 }
 
 /** Créer ou modifier une dépense déclarée, ou régler le tarif des tokens. */
