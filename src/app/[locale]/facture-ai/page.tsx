@@ -4,6 +4,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale, isContentIndexable } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { getHeroStoryCopy } from "@/lib/i18n/heroStory";
+import { getHeroDeviceCopy } from "@/lib/i18n/heroDevice";
 import { Card } from "@/components/ui/Card";
 import { Pricing } from "@/components/sections/Pricing";
 import { FAQ } from "@/components/sections/FAQ";
@@ -562,8 +563,9 @@ export default async function FactureAIPage({
         subtitle={c.hero.subtitle}
         ctaText={dict.cta.button}
         rotatingWords={[]}
-        visual="editorial"
+        visual="device"
         story={getHeroStoryCopy(locale)}
+        device={getHeroDeviceCopy(locale)}
       />
 
       {/* Stats */}
