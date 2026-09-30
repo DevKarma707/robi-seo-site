@@ -8,7 +8,7 @@
   --s: calc((var(--lwn) - 31) / 1280);           /* échelle de l'interface (dessinée à 1280 × 800) */
   --sh: calc(800px * var(--s));                  /* hauteur de la dalle */
   --lh: calc(var(--sh) + 35px);                  /* hauteur de l'écran, cadre compris */
-  --dw: calc(var(--lw) * 1.1);                   /* plateau : largeur */
+  --dw: var(--lw);                               /* plateau : même largeur que l'écran, comme un MacBook */
   --dd: calc(var(--lw) * .5);                    /* plateau : profondeur */
   --top: 34px;                                   /* haut de l'écran dans la scène */
   --ease: cubic-bezier(.2, .8, .2, 1);
@@ -156,15 +156,15 @@
 }
 /* Grilles des haut-parleurs, de part et d'autre du clavier. */
 .speaker {
-  position: absolute; top: 8%; height: 45%; width: 7%; border-radius: 8px;
+  position: absolute; top: 8%; height: 45%; width: 5%; border-radius: 8px;
   background-image: radial-gradient(circle, #09080e 42%, transparent 55%);
   background-size: 6px 6px; opacity: .85;
 }
-.speakerL { left: 2.6%; }
-.speakerR { right: 2.6%; }
+.speakerL { left: 2%; }
+.speakerR { right: 2%; }
 /* Clavier rétroéclairé : de vraies touches, une lueur lime entre elles. */
 .keyboard {
-  position: absolute; left: 11.5%; right: 11.5%; top: 7%; height: 47%;
+  position: absolute; left: 8.5%; right: 8.5%; top: 7%; height: 47%;
   display: flex; flex-direction: column; gap: 2.4%;
   padding: 1.1% 1%;
   border-radius: 12px;
@@ -180,7 +180,7 @@
 }
 /* Pavé tactile en verre, avec le reflet de l'écran. */
 .trackpad {
-  position: absolute; left: 31%; right: 31%; top: 59%; height: 34%;
+  position: absolute; left: 30%; right: 30%; top: 59%; height: 34%;
   border-radius: 14px;
   background:
     linear-gradient(105deg, #ffffff00 30%, #ffffff1a 46%, #ffffff00 62%),
@@ -712,7 +712,7 @@
 .cursor {
   position: absolute; left: 0; top: 0; z-index: 10; pointer-events: none;
   transform: translate(var(--cx, 960px), var(--cy, 610px));
-  transition: transform 1s cubic-bezier(.45, .05, .25, 1);
+  transition: transform .9s cubic-bezier(.45, .05, .25, 1);
   filter: drop-shadow(0 3px 5px #0d063059);
 }
 .cursor svg { display: block; margin: -2px 0 0 -2px; transform-origin: 2px 2px; transition: transform .2s var(--ease); }

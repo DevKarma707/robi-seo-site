@@ -44,9 +44,10 @@ type Step = (typeof INVOICE_STEPS)[number] | (typeof QUOTE_STEPS)[number];
 
 /* Même rythme posé que le téléphone : rien de brusque, le temps de lire. */
 const BASE_DURATIONS: Record<Step, number> = {
-  idle: 3400, toRobi: 1300, clickRobi: 500, robi: 1100, toMic: 1000, typing: 0, sendMsg: 800, reply: 1500,
+  // Les gestes (curseur, clics, changements d'écran) vont 10 % plus vite ; les notifications gardent leur temps (Ralph, 30/09).
+  idle: 3400, toRobi: 1170, clickRobi: 450, robi: 990, toMic: 900, typing: 0, sendMsg: 720, reply: 1500,
   fillClient: 950, fillLine: 1050, fillTotal: 1700, ask: 1700, yes: 950, sending: 1000, fly: 1200, sent: 2300,
-  list: 1500, toRow: 1000, clickRow: 500, detail: 2100, opened: 3000, toPdf: 1000, clickPdf: 500, pdf: 2800, notif: 4400, toDash: 1100, clickDash: 500,
+  list: 1350, toRow: 900, clickRow: 450, detail: 2100, opened: 3000, toPdf: 900, clickPdf: 450, pdf: 2800, notif: 4400, toDash: 990, clickDash: 450,
   back: 4800, hold: 3200, clear: 800,
 };
 /** Pas où le curseur clique (anneau + bouton enfoncé). */
