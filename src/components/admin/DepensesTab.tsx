@@ -6,8 +6,9 @@ import {
 } from "lucide-react";
 import {
   fetchCostReport, saveCost, deleteCost,
-  type CostReport, type DeclaredCost,
+  type CostReport, type CostSector, type DeclaredCost,
 } from "@/lib/adminApi";
+import SecteursDonut, { SECTORS, guessSector } from "./SecteursDonut";
 import { ACCENT_INK, btn, btnAccent, card, input, select, kpiLabel, kpiValue, sectionTitle } from "./ui";
 
 /**
@@ -45,6 +46,9 @@ const EMPTY_FORM = {
   kind: "monthly" as DeclaredCost["kind"],
   from: thisMonth(),
   to: "",
+  category: "autre" as CostSector,
+  /** Tant qu'on n'a pas choisi, le secteur suit le libellé tapé. */
+  categoryTouched: false,
 };
 
 export default function DepensesTab() {
@@ -87,11 +91,24 @@ export default function DepensesTab() {
         kind: form.kind,
         from: form.from,
         to: form.kind === "monthly" && form.to ? form.to : null,
+        category: form.category,
       });
       setForm({ ...EMPTY_FORM, from: form.from });
       await load();
     } catch (e: any) {
       setError(e?.message || "Enregistrement impossible.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const setSector = async (c: DeclaredCost, category: CostSector) => {
+    setSaving(true);
+    try {
+      await saveCost({ ...c, category });
+      await load();
+    } catch (e: any) {
+      setError(e?.message || "Secteur non enregistré.");
     } finally {
       setSaving(false);
     }
@@ -188,6 +205,11 @@ export default function DepensesTab() {
         </p>
       </div>
 
+      {/* ── Par secteur ─────────────────────────────────── */}
+      {report && report.months.length > 0 && (
+        <SecteursDonut months={report.months} adsOk={!report.ads?.error} />
+      )}
+
       {/* ── Historique mensuel ──────────────────────────── */}
       <div className={`${card} p-4`}>
         <h3 className={sectionTitle}>Les 6 derniers mois</h3>
@@ -231,7 +253,7 @@ export default function DepensesTab() {
           Récurrente pour un abonnement, ponctuelle pour un achat unique comme un nom de domaine.
         </p>
 
-        <form onSubmit={submit} className="grid gap-3 mt-3 sm:grid-cols-2 lg:grid-cols-5">
+        <form onSubmit={submit} className="grid gap-3 mt-3 sm:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-2">
             <label htmlFor="cost-label" className={kpiLabel}>Libellé</label>
             <input
@@ -239,7 +261,10 @@ export default function DepensesTab() {
               className={`${input} mt-1`}
               placeholder="Pinecone, nom de domaine…"
               value={form.label}
-              onChange={(e) => setForm({ ...form, label: e.target.value })}
+              onChange={(e) => {
+                const label = e.target.value;
+                setForm({ ...form, label, category: form.categoryTouched ? form.category : guessSector(label) });
+              }}
             />
           </div>
 
@@ -265,6 +290,18 @@ export default function DepensesTab() {
             >
               <option value="monthly">Chaque mois</option>
               <option value="oneoff">Une seule fois</option>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="cost-sector" className={kpiLabel}>Secteur</label>
+            <select
+              id="cost-sector"
+              className={`${select} mt-1 w-full`}
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value as CostSector, categoryTouched: true })}
+            >
+              {SECTORS.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
             </select>
           </div>
 
@@ -318,6 +355,21 @@ export default function DepensesTab() {
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
+                <span className="flex items-center gap-1.5">
+                  <span
+                    className="w-2 h-2 rounded-full"
+                    style={{ background: SECTORS.find((s) => s.key === (c.category ?? guessSector(c.label)))!.color }}
+                  />
+                  <select
+                    className={`${select} h-8 text-[12px]`}
+                    value={c.category ?? guessSector(c.label)}
+                    onChange={(e) => void setSector(c, e.target.value as CostSector)}
+                    disabled={saving}
+                    aria-label={`Secteur de ${c.label}`}
+                  >
+                    {SECTORS.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
+                  </select>
+                </span>
                 <span className="tabular-nums font-semibold text-slate-900 text-[13.5px]">{eur(c.amount)}</span>
                 <button
                   type="button"

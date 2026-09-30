@@ -535,6 +535,11 @@ body {
    ─────────────────────────────────────────────────────────────── */
 
 .a-root {
+  /* Secteurs du camembert Dépenses — ordre et teintes fixes, validés CVD. */
+  --sec-fonctionnement: #2a78d6;
+  --sec-marketing: #eb6834;
+  --sec-outils: #1baf7a;
+  --sec-autre: #eda100;
   --a-bg: #FAFAFC;
   --a-side: #F4F3F8;
   --a-surface: #FFFFFF;
@@ -564,6 +569,10 @@ body {
 }
 
 [data-admin-mode="dark"] .a-root {
+  --sec-fonctionnement: #3987e5;
+  --sec-marketing: #d95926;
+  --sec-outils: #199e70;
+  --sec-autre: #c98500;
   --a-bg: #0B0720;
   --a-side: #0B0720;
   --a-surface: #130D2E;

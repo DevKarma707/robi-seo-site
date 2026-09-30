@@ -22,7 +22,8 @@ import {
 } from "lucide-react";
 import { Lancement, Revenu, Alertes } from "@/components/admin/PilotageTab";
 import { IncidentHistory, ServicesBoard } from "@/components/admin/SanteTab";
-import type { HealthReport } from "@/lib/adminApi";
+import type { CostMonth, HealthReport } from "@/lib/adminApi";
+import SecteursDonut from "@/components/admin/SecteursDonut";
 import WorldMapBlock from "@/components/admin/WorldMapBlock";
 import ThemePicker from "@/components/admin/ThemePicker";
 import { ACCENT, btn, btnAccent, btnGhost, btnPill, btnPrimary, card, focusRing, kpiLabel, kpiValue, sectionTitle } from "@/components/admin/ui";
@@ -30,6 +31,18 @@ import ModeToggle from "@/components/admin/ModeToggle";
 import { Toaster, toast } from "@/components/admin/toast";
 import { AreaCurve, CountUp } from "@/components/admin/motion";
 
+
+/** Dépenses factices : IA mesurée, pubs Meta, Blotato saisi sans secteur (deviné). */
+const COSTS_DEMO: CostMonth[] = ["2026-08", "2026-09"].map((month, i) => ({
+  month,
+  ai: { tokens: 4_000_000, calls: 900, cost: 6.4 + i * 3 },
+  declared: { total: 49, items: [
+    { label: "Blotato", amount: 29, kind: "monthly" },
+    { label: "Vercel Pro", amount: 20, kind: "monthly", category: "fonctionnement" },
+  ] },
+  ads: { spend: 38 + i * 45, currency: "EUR" },
+  total: 0, activeUsers: 12, costPerActiveUser: null,
+}));
 
 /** Rapport de santé factice, calqué sur le 29/09 (Gemini surchargé le matin). */
 const h = (hoursAgo: number) => new Date(Date.now() - hoursAgo * 3_600_000).toISOString();
@@ -158,6 +171,7 @@ export default function ApercuAdmin() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ServicesBoard report={HEALTH_DEMO} days={7} setDays={() => {}} />
           <IncidentHistory report={HEALTH_DEMO} />
+          <SecteursDonut months={COSTS_DEMO} adsOk />
               <Revenu stats={{ revenue: { oneShot: 177, mrr: 14, total: 191 }, byPlan: { lifetime: 3, monthly: 1 } }} />
               <Alertes
                 health={{

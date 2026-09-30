@@ -178,6 +178,9 @@ export const fetchLaunchConfig = () => authedFetch("/api/admin/launch") as Promi
 // de ces factures n'étant lisible par une API. Le rapport le dit lui-même,
 // pour qu'un total bas ne se lise pas comme une absence de dépenses.
 
+/** Secteur d'une dépense, pour le camembert de l'onglet Dépenses. */
+export type CostSector = "fonctionnement" | "marketing" | "outils" | "autre";
+
 export interface DeclaredCost {
   id?: string;
   label: string;
@@ -189,12 +192,14 @@ export interface DeclaredCost {
   /** Mois de fin inclus. Vide = toujours en cours. */
   to?: string | null;
   note?: string | null;
+  /** Absent sur les dépenses saisies avant le 30/09 : deviné d'après le libellé. */
+  category?: CostSector;
 }
 
 export interface CostMonth {
   month: string;
   ai: { tokens: number; calls: number; cost: number };
-  declared: { total: number; items: { label: string; amount: number; kind: string }[] };
+  declared: { total: number; items: { label: string; amount: number; kind: string; category?: CostSector | null }[] };
   /** Dépense publicitaire Meta du mois (compte « Robi AI »), depuis le 30/09. */
   ads?: { spend: number; currency: string | null };
   total: number;
