@@ -193,20 +193,21 @@ export default async function Home({
         }}
       />
 
-      <Process dict={dict} />
+      <Process dict={dict} locale={locale} />
 
-      <QuoteSignature dict={dict} />
+      <QuoteSignature dict={dict} locale={locale} />
 
-      <AdminSimplicity dict={dict} />
+      <AdminSimplicity dict={dict} locale={locale} />
 
       <Features
         title={dict.features.title}
         titleAccent={dict.features.titleAccent}
         subtitle={dict.features.titleEnd}
         dict={dict}
+        locale={locale}
       />
 
-      <Dashboard dict={dict} />
+      <Dashboard dict={dict} locale={locale} />
 
       <Payments dict={dict} locale={locale} />
 

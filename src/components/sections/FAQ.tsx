@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { H2, SECTION } from "./shared";
 
 interface FAQItem {
   question: string;
@@ -28,7 +29,9 @@ export function FAQ({ title = "Questions fréquentes", badge, dict, items }: FAQ
     { question: dict.faq.q8, answer: dict.faq.a8 },
     { question: dict.faq.q9, answer: dict.faq.a9 },
     { question: dict.faq.q10, answer: dict.faq.a10 },
-  ].filter(item => item.question && item.answer) : []);
+  ].filter(item => item.question && item.answer)
+    // La question sur l'ouverture du devis passe en tête : le héros vient de la montrer.
+    .sort((x, y) => Number(y.question === dict.faq.q2) - Number(x.question === dict.faq.q2)) : []);
 
   const [openIndices, setOpenIndices] = useState<Set<number>>(new Set([0]));
 
@@ -44,38 +47,30 @@ export function FAQ({ title = "Questions fréquentes", badge, dict, items }: FAQ
     });
   };
 
-  // Split into 2 columns
-  const midPoint = Math.ceil(faqItems.length / 2);
-  const leftColumn = faqItems.slice(0, midPoint);
-  const rightColumn = faqItems.slice(midPoint);
-
-  const faqBadge = badge || (dict ? dict.faq.badge : "Pas encore convaincu ?");
-
   const renderItem = (item: FAQItem, index: number) => (
     <ScrollReveal key={index} delay={index * 40}>
       <div
-        className={`rounded-2xl border overflow-hidden transition-all duration-300 ${
-          openIndices.has(index)
-            ? "bg-gray-50 border-[#BEF221]/30 shadow-[0_0_20px_rgba(190,242,33,0.06)]"
-            : "bg-gray-50 border-gray-200 hover:border-gray-300"
+        className={`overflow-hidden rounded-[22px] border transition-colors duration-500 ${
+          openIndices.has(index) ? "border-[#0D0630]/15 bg-gray-50" : "border-gray-200 bg-white hover:border-gray-300"
         }`}
       >
         <button
           onClick={() => toggleIndex(index)}
-          className="w-full flex items-center justify-between p-5 text-left gap-3"
+          className="flex w-full items-center justify-between gap-4 p-5 text-left md:p-6"
+          aria-expanded={openIndices.has(index)}
         >
-          <span className="font-bold text-gray-900 text-sm leading-snug">
+          <span className="text-[15px] font-bold leading-snug text-[#0D0630] md:text-lg">
             {item.question}
           </span>
           <ChevronDown
-            className={`w-4 h-4 text-[#BEF221] transition-transform duration-300 flex-shrink-0 ${
+            className={`h-5 w-5 flex-shrink-0 text-[#0D0630]/50 transition-transform duration-500 ${
               openIndices.has(index) ? "rotate-180" : ""
             }`}
           />
         </button>
         <div className={`faq-answer ${openIndices.has(index) ? "open" : ""}`}>
           <div>
-            <div className="px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+            <div className="px-5 pb-5 text-sm leading-relaxed text-gray-600 md:px-6 md:pb-6 md:text-base">
               {item.answer}
             </div>
           </div>
@@ -85,23 +80,13 @@ export function FAQ({ title = "Questions fréquentes", badge, dict, items }: FAQ
   );
 
   return (
-    <section id="faq" className="py-8 md:py-24 bg-white relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ScrollReveal className="text-center mb-6 md:mb-12">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-gray-900">
-            {title}
-          </h2>
+    <section id="faq" className={`${SECTION} bg-white relative`}>
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ScrollReveal className="text-center mb-8 md:mb-14">
+          <h2 className={`${H2} text-[#0D0630]`}>{title}</h2>
         </ScrollReveal>
 
-        {/* Two column layout on desktop */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="space-y-4">
-            {leftColumn.map((item, i) => renderItem(item, i))}
-          </div>
-          <div className="space-y-4">
-            {rightColumn.map((item, i) => renderItem(item, i + midPoint))}
-          </div>
-        </div>
+        <div className="space-y-3">{faqItems.map((item, i) => renderItem(item, i))}</div>
       </div>
     </section>
   );

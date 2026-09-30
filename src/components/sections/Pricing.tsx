@@ -48,7 +48,12 @@ export function Pricing({
     p.features?.voiceCreation || "Création par la voix grâce à l'IA",
     p.features?.designCustomization || "Personnalisation design avancée",
     p.features?.oneClickPayment || "Paiement en un clic",
-  ];
+    p.features?.eSignature,
+    p.features?.openTracking,
+    // Factur-X : France uniquement (la clé n'existe que dans fr.json).
+    p.features?.facturX,
+    p.features?.humanSupport,
+  ].filter(Boolean);
 
   // Offre de lancement par tranches (59 € → 79 € → 99 €) : le prix affiché
   // est celui de la tranche courante, lu en direct. Tant qu'il n'est pas
@@ -247,9 +252,9 @@ export function Pricing({
 
         {/* Abonnements — cartes compactes : les fonctionnalités sont les
             mêmes partout, elles sont listées une seule fois en dessous. */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 pt-3">
+        <div className="home-snap -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 pt-3 md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 md:pb-0">
           {plans.map((plan) => (
-            <ScrollReveal key={plan.key}>
+            <ScrollReveal key={plan.key} className="w-[82%] shrink-0 md:w-auto">
               <div className={`relative h-full flex flex-col rounded-2xl p-6 ${plan.featured ? "border-2 border-[#BEF221] bg-[#BEF221]/[.06]" : "border border-white/10 bg-white/[.04]"}`}>
                 {plan.badge && (
                   <span className={`absolute -top-3 left-6 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap ${plan.featured ? "bg-[#BEF221] text-[#0D0630]" : "bg-[#1a1040] border border-white/20 text-white"}`}>
@@ -285,7 +290,7 @@ export function Pricing({
 
         <ScrollReveal className="mt-5">
           <div className="rounded-2xl border border-white/10 bg-white/[.03] px-6 py-5 flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-widest md:max-w-[9rem] shrink-0">
+            <p className="text-white text-lg font-extrabold tracking-tight leading-snug md:max-w-[11rem] shrink-0">
               {p.includedTitle || "Inclus dans toutes les formules"}
             </p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2.5 flex-1">

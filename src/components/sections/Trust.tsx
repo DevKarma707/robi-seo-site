@@ -1,86 +1,58 @@
 "use client";
 
-import { Shield, Server, Cloud, Lock } from "lucide-react";
+import { Cloud, Lock, Server, ShieldCheck } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { H2, SECTION } from "./shared";
 
 interface TrustProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dict: any;
 }
 
+/**
+ * Sécurité et conformité : carte verre à contour lime (plus d'aplat lime,
+ * contraire à la charte), trois preuves lisibles, tout visible sur mobile.
+ */
 export function Trust({ dict }: TrustProps) {
   const tr = dict.trust;
+  const proofs = [
+    { icon: Server, title: tr.hostingTitle, description: tr.hostingDesc },
+    { icon: Cloud, title: tr.cloudTitle, description: tr.cloudDesc },
+    { icon: Lock, title: tr.encryptionTitle, description: tr.encryptionDesc },
+  ];
 
   return (
-    <section className="py-8 md:py-32 bg-[#0D0630] relative overflow-hidden">
+    <section className={`${SECTION} bg-[#0D0630] relative overflow-hidden`}>
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] -translate-x-1/2 -translate-y-1/3 rounded-full" style={{ background: "radial-gradient(closest-side, rgba(24,49,79,0.9), rgba(24,49,79,0))" }} aria-hidden="true" />
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ScrollReveal className="text-center mb-5 md:mb-16">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white">
-            {tr.title}
-          </h2>
+        <ScrollReveal className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
+          <h2 className={`${H2} text-white`}>{tr.title}</h2>
         </ScrollReveal>
 
-        {/* Main card - highlighted */}
-        <ScrollReveal className="mb-3 md:mb-6">
-          <div className="bg-[#BEF221] rounded-2xl p-4 md:p-8 relative overflow-hidden">
-            <div className="relative z-10 max-w-2xl">
-              <div className="w-9 h-9 md:w-12 md:h-12 rounded-xl bg-[#0D0630] flex items-center justify-center mb-3 md:mb-4">
-                <Shield className="w-5 h-5 md:w-6 md:h-6 text-[#BEF221]" />
+        <ScrollReveal className="mb-4 md:mb-6">
+          <div className="relative overflow-hidden rounded-[28px] border border-[#BEF221]/55 bg-[rgba(24,49,79,0.55)] p-6 md:p-10 shadow-[0_0_80px_rgba(190,242,33,0.10)] backdrop-blur-xl">
+            <div className="pointer-events-none absolute -right-16 -top-20 h-60 w-60 rounded-full" style={{ background: "radial-gradient(circle, rgba(190,242,33,0.25), rgba(190,242,33,0) 70%)" }} aria-hidden="true" />
+            <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:gap-8">
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-[#BEF221] text-[#0D0630]"><ShieldCheck className="h-7 w-7" /></span>
+              <div className="max-w-2xl">
+                <h3 className="text-xl font-extrabold tracking-tight text-white md:text-2xl">{tr.mainTitle}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/70 md:text-base">{tr.mainDesc}</p>
               </div>
-              <h3 className="text-base md:text-xl font-black text-[#0D0630] mb-1.5 md:mb-3">
-                {tr.mainTitle}
-              </h3>
-              <p className="text-[#0D0630]/70 text-sm md:text-base leading-relaxed">
-                {tr.mainDesc}
-              </p>
             </div>
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#0D0630]/5 rounded-full -translate-y-1/3 translate-x-1/3" />
           </div>
         </ScrollReveal>
 
-        {/* Secondary cards */}
-        <div className="grid grid-cols-3 md:grid-cols-3 gap-2 md:gap-6">
-          <ScrollReveal delay={100}>
-            <div className="bg-white/5 border border-white/10 rounded-xl md:rounded-2xl p-3 md:p-6 h-full hover:border-[#BEF221]/30 transition-colors">
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-white/10 flex items-center justify-center mb-2 md:mb-4">
-                <Server className="w-4 h-4 md:w-5 md:h-5 text-[#BEF221]" />
+        <ScrollReveal>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-6">
+            {proofs.map((proof, index) => (
+              <div key={index} className="home-rise h-full rounded-[24px] border border-white/10 bg-white/[0.05] p-5 md:p-7" style={{ "--i": index } as React.CSSProperties}>
+                <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-[#BEF221]"><proof.icon className="h-5 w-5" /></span>
+                <h3 className="mt-4 text-base font-extrabold tracking-tight text-white md:text-lg">{proof.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-white/55">{proof.description}</p>
               </div>
-              <h3 className="text-xs md:text-base font-bold text-white mb-1 md:mb-2 leading-tight">
-                {tr.hostingTitle}
-              </h3>
-              <p className="text-white/50 text-[10px] md:text-sm leading-relaxed hidden md:block">
-                {tr.hostingDesc}
-              </p>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={200}>
-            <div className="bg-white/5 border border-white/10 rounded-xl md:rounded-2xl p-3 md:p-6 h-full hover:border-[#BEF221]/30 transition-colors">
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-white/10 flex items-center justify-center mb-2 md:mb-4">
-                <Cloud className="w-4 h-4 md:w-5 md:h-5 text-[#BEF221]" />
-              </div>
-              <h3 className="text-xs md:text-base font-bold text-white mb-1 md:mb-2 leading-tight">
-                {tr.cloudTitle}
-              </h3>
-              <p className="text-white/50 text-[10px] md:text-sm leading-relaxed hidden md:block">
-                {tr.cloudDesc}
-              </p>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={300}>
-            <div className="bg-white/5 border border-white/10 rounded-xl md:rounded-2xl p-3 md:p-6 h-full hover:border-[#BEF221]/30 transition-colors">
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-white/10 flex items-center justify-center mb-2 md:mb-4">
-                <Lock className="w-4 h-4 md:w-5 md:h-5 text-[#BEF221]" />
-              </div>
-              <h3 className="text-xs md:text-base font-bold text-white mb-1 md:mb-2 leading-tight">
-                {tr.encryptionTitle}
-              </h3>
-              <p className="text-white/50 text-[10px] md:text-sm leading-relaxed hidden md:block">
-                {tr.encryptionDesc}
-              </p>
-            </div>
-          </ScrollReveal>
-        </div>
+            ))}
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

@@ -17,7 +17,10 @@
   "hero": {
     "badge": "Nuevo: Seguimiento de facturas con IA",
     "title": "Habla",
-    "titleWords": ["Habla", "Escribe"],
+    "titleWords": [
+      "Habla",
+      "Escribe"
+    ],
     "titleAccent": "Cobra",
     "rotatingWords": [
       "Factura",
@@ -155,7 +158,10 @@
       "autoReminders": "Recordatorios y notificaciones automáticos",
       "voiceCreation": "Creación por voz con IA",
       "designCustomization": "Personalización de diseño avanzada",
-      "oneClickPayment": "Pago en un clic"
+      "oneClickPayment": "Pago en un clic",
+      "eSignature": "Firma electrónica de presupuestos",
+      "openTracking": "Aviso cuando el cliente lo abre",
+      "humanSupport": "Soporte humano en menos de 24 h"
     }
   },
   "faq": {

@@ -65,7 +65,7 @@ export default async function HeroLab({
           lifetimeLabel: dict.pricing?.launchOfferLifetime || "Accès à vie",
         }}
       />
-      <Process dict={dict} />
+      <Process dict={dict} locale={locale} />
     </>
   );
 }

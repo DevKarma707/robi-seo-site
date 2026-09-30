@@ -17,7 +17,10 @@
   "hero": {
     "badge": "New: AI Invoice Chasing",
     "title": "Talk",
-    "titleWords": ["Talk", "Type"],
+    "titleWords": [
+      "Talk",
+      "Type"
+    ],
     "titleAccent": "Cash in",
     "rotatingWords": [
       "Invoice",
@@ -161,7 +164,10 @@
       "autoReminders": "Automatic reminders & notifications",
       "voiceCreation": "Voice creation with AI",
       "designCustomization": "Advanced design customization",
-      "oneClickPayment": "One-click payment"
+      "oneClickPayment": "One-click payment",
+      "eSignature": "E-signature for quotes",
+      "openTracking": "See when your client opens it",
+      "humanSupport": "Human support within 24 hours"
     },
     "launchBar": {
       "badge": "Launch offer",

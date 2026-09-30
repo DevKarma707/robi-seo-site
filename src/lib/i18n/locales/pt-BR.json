@@ -17,7 +17,10 @@
   "hero": {
     "badge": "Novo: Lembretes Inteligentes via IA",
     "title": "Fale",
-    "titleWords": ["Fale", "Escreva"],
+    "titleWords": [
+      "Fale",
+      "Escreva"
+    ],
     "titleAccent": "Receba",
     "rotatingWords": [
       "Fature",
@@ -157,7 +160,10 @@
       "autoReminders": "Ativação de lembretes autônomos",
       "voiceCreation": "Geração AI via comandos de voz",
       "designCustomization": "Layouts customizáveis exclusivos",
-      "oneClickPayment": "Checkout imediato global Stripe/PayPal"
+      "oneClickPayment": "Checkout imediato global Stripe/PayPal",
+      "eSignature": "Assinatura eletrônica de orçamentos",
+      "openTracking": "Aviso quando o cliente abre",
+      "humanSupport": "Suporte humano em até 24 h"
     }
   },
   "faq": {

@@ -17,7 +17,10 @@
   "hero": {
     "badge": "Nouveau : Relance facture par IA",
     "title": "Parle",
-    "titleWords": ["Parle", "Écris"],
+    "titleWords": [
+      "Parle",
+      "Écris"
+    ],
     "titleAccent": "Encaisse",
     "rotatingWords": [
       "Facture",
@@ -161,7 +164,11 @@
       "autoReminders": "Relances et notifications automatiques",
       "voiceCreation": "Création par la voix grâce à l'IA",
       "designCustomization": "Personnalisation design avancée",
-      "oneClickPayment": "Paiement en un clic"
+      "oneClickPayment": "Paiement en un clic",
+      "eSignature": "Signature électronique des devis",
+      "openTracking": "Suivi d’ouverture par le client",
+      "humanSupport": "Support français sur WhatsApp",
+      "facturX": "Factur-X, conforme à la réforme 2026"
     },
     "launchBar": {
       "badge": "Offre de lancement",

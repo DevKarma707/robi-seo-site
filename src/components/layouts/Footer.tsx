@@ -35,12 +35,12 @@ export function Footer({ locale, dict }: FooterProps) {
     industries: {
       title: dict.footer.industries,
       links: [
-        { name: `🔧 ${indCat.btp}`, href: `/${locale}/industries` },
-        { name: `💻 ${indCat.tech}`, href: `/${locale}/industries` },
-        { name: `🎨 ${indCat.creatif}`, href: `/${locale}/industries` },
-        { name: `🎉 ${indCat.evenementiel}`, href: `/${locale}/industries` },
-        { name: `💼 ${indCat.conseil}`, href: `/${locale}/industries` },
-        { name: `❤️ ${indCat.sante}`, href: `/${locale}/industries` },
+        { name: `${indCat.btp}`, href: `/${locale}/industries` },
+        { name: `${indCat.tech}`, href: `/${locale}/industries` },
+        { name: `${indCat.creatif}`, href: `/${locale}/industries` },
+        { name: `${indCat.evenementiel}`, href: `/${locale}/industries` },
+        { name: `${indCat.conseil}`, href: `/${locale}/industries` },
+        { name: `${indCat.sante}`, href: `/${locale}/industries` },
       ],
     },
     company: {

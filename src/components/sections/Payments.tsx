@@ -33,7 +33,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
   const amount = new Intl.NumberFormat(locale, { style: "currency", currency: "EUR" }).format(1240);
 
   return (
-    <section id="payments" className="py-12 md:py-14 lg:py-24 bg-gray-50 relative overflow-hidden">
+    <section id="payments" className="py-16 md:py-24 lg:py-32 bg-white relative overflow-hidden">
       {/* Ambient glow */}
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -142,10 +142,10 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
 
           {/* Text Content */}
           <ScrollReveal className="flex-1 text-left" delay={200}>
-            <h2 className="text-2xl md:text-2xl lg:text-3xl font-black text-gray-900 mb-3 md:mb-6 lg:mb-8 leading-[1.1] tracking-tight">
+            <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black text-[#0D0630] mb-4 md:mb-6 leading-[1.08] tracking-tight [text-wrap:balance]">
               {t.title}
             </h2>
-            <p className="text-sm md:text-base lg:text-xl text-gray-500 leading-relaxed mb-4 md:mb-8 lg:mb-10 max-w-lg font-medium">
+            <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed max-w-lg">
               {t.subtitle}
             </p>
           </ScrollReveal>
