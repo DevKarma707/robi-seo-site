@@ -871,12 +871,12 @@ export const comparisons: Comparison[] = [
     pricing: {
       price: 0,
       currency: "EUR",
-      checkedAt: "2026-07-31",
+      checkedAt: "2026-09-30",
       label: { fr: "Gratuit — offres payantes dès 9 €/mois HT", en: "Free — paid plans from €9/month excl. VAT", es: "Gratis — planes de pago desde 9 €/mes sin IVA" },
       note: {
-        fr: "L'offre Basique d'Abby est gratuite (devis et factures illimités, estimation URSSAF). Les formules Start (9 €/mois HT), Pro (15 €/mois HT) et Business (33 €/mois HT) ajoutent le paiement par carte, la déclaration URSSAF, les relances d'impayés, la signature électronique et le multi-utilisateur.",
-        en: "Abby's Basique plan is free (unlimited quotes and invoices, URSSAF estimate). The Start (€9/mo excl. VAT), Pro (€15/mo) and Business (€33/mo) plans add card payments, URSSAF filing, overdue reminders, e-signature and multi-user access.",
-        es: "El plan Basique de Abby es gratuito (presupuestos y facturas ilimitados, estimación URSSAF). Los planes Start (9 €/mes sin IVA), Pro (15 €/mes) y Business (33 €/mes) añaden pago con tarjeta, declaración URSSAF, recordatorios de impagos, firma electrónica y multiusuario.",
+        fr: "L'offre Basique d'Abby est gratuite (devis et factures illimités, facturation électronique, estimation URSSAF). Abby se présente comme plateforme agréée, facturation électronique incluse dans tous les plans. Les formules Start (9 €/mois HT), Pro (15 €/mois HT) et Business (33 €/mois HT) ajoutent le paiement par carte, la déclaration URSSAF, les relances d'impayés, la signature électronique et le multi-utilisateur. Abby n'annonce pas de création de facture à la voix.",
+        en: "Abby's Basique plan is free (unlimited quotes and invoices, e-invoicing, URSSAF estimate). Abby presents itself as an approved e-invoicing platform, with e-invoicing in every plan. The Start (€9/mo excl. VAT), Pro (€15/mo) and Business (€33/mo) plans add card payments, URSSAF filing, overdue reminders, e-signature and multi-user access. Abby does not advertise voice invoice creation.",
+        es: "El plan Basique de Abby es gratuito (presupuestos y facturas ilimitados, factura electrónica, estimación URSSAF). Abby se presenta como plataforma autorizada, con factura electrónica en todos los planes. Los planes Start (9 €/mes sin IVA), Pro (15 €/mes) y Business (33 €/mes) añaden pago con tarjeta, declaración URSSAF, recordatorios de impagos, firma electrónica y multiusuario. Abby no anuncia la creación de facturas por voz.",
       },
     },
     matrix: { aiInvoicing: false, autoReminders: "partial", aiDashboards: false, accountingExport: "partial" },
