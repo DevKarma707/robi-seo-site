@@ -32,6 +32,23 @@ const content: Record<Lang, {
   stats: { value: string; label: string }[];
   definition: { title: string; paragraphs: string[] };
   prompts: { title: string; subtitle: string; examples: string[] };
+  /** Une phrase dictée → la facture qu'elle produit (exemple illustratif, calculs exacts). */
+  example: {
+    title: string;
+    saidLabel: string;
+    said: string;
+    docLabel: string;
+    rows: { label: string; value: string; strong?: boolean }[];
+    note: string;
+  };
+  /** Comparatif rapide : "yes" = coche, "no" = tiret, sinon texte court. */
+  quickCompare: {
+    title: string;
+    columns: [string, string, string];
+    rows: { label: string; values: [string, string, string] }[];
+  };
+  /** Uniquement des faits vérifiables (voir kanban : veraPDF + schematron EN 16931 passés le 14/09/2026). */
+  proofs: { title: string; items: { title: string; description: string }[] };
   comparison: {
     title: string;
     subtitle: string;
@@ -64,9 +81,9 @@ const content: Record<Lang, {
         "Créez une facture par intelligence artificielle en 30 secondes : dites « Prépare une facture de 500 € pour Alice » et Robi génère un document conforme, prêt à envoyer.",
     },
     stats: [
-      { value: "30s", label: "Pour créer une facture AI" },
-      { value: "99%", label: "Précision de l'IA" },
-      { value: "10h", label: "Gagnées chaque mois" },
+      { value: "30 s", label: "Pour créer une facture en parlant" },
+      { value: "EN 16931", label: "Factur-X natif" },
+      { value: "0 €", label: "Pour commencer, sans carte" },
     ],
     definition: {
       title: "Qu'est-ce qu'une facture IA (ou facture AI) ?",
@@ -83,6 +100,43 @@ const content: Record<Lang, {
         "« Prépare un devis de 1 200 € pour la rénovation de la salle de bain de M. Dupont »",
         "« Transforme le devis signé d'Alice en facture »",
         "« Facture 3 jours de développement à 450 € la journée pour la société Nova »",
+      ],
+    },
+    example: {
+      title: "Un exemple : de la phrase à la facture",
+      saidLabel: "Vous dites",
+      said: "« Facture la société Nova pour 3 jours de développement à 450 € la journée, paiement à 30 jours »",
+      docLabel: "Robi prépare la facture",
+      rows: [
+        { label: "Client", value: "Nova" },
+        { label: "Prestation", value: "Développement — 3 jours × 450 €" },
+        { label: "Total HT", value: "1 350,00 €" },
+        { label: "TVA 20 %", value: "270,00 €" },
+        { label: "Total TTC", value: "1 620,00 €", strong: true },
+        { label: "Échéance", value: "30 jours" },
+        { label: "Numéro", value: "Suivant de votre série, sans trou" },
+      ],
+      note: "Exemple illustratif, calculé pour une entreprise soumise à la TVA à 20 %. En franchise en base, Robi remplace la ligne de TVA par la mention « TVA non applicable ». Vous relisez et modifiez avant d'envoyer.",
+    },
+    quickCompare: {
+      title: "Robi, un modèle de facture ou ChatGPT ?",
+      columns: ["Robi AI", "Modèle Word / Excel", "ChatGPT"],
+      rows: [
+        { label: "Créer la facture en une phrase, à la voix", values: ["yes", "no", "Texte à recopier"] },
+        { label: "Numérotation séquentielle légale", values: ["yes", "À la main", "no"] },
+        { label: "TVA et totaux calculés", values: ["yes", "Formules à tenir", "À vérifier"] },
+        { label: "Fichier clients et historique", values: ["yes", "no", "no"] },
+        { label: "Envoi, relances et lien de paiement", values: ["yes", "no", "no"] },
+        { label: "Format Factur-X (EN 16931)", values: ["yes", "no", "no"] },
+      ],
+    },
+    proofs: {
+      title: "Ce qu'on peut vérifier",
+      items: [
+        { title: "Factur-X contrôlé", description: "Nos fichiers Factur-X passent veraPDF (PDF/A-3) et le schematron officiel de la norme EN 16931." },
+        { title: "Gratuit pour commencer", description: "Un compte gratuit, sans carte bancaire : jugez sur une vraie facture avant de choisir une offre." },
+        { title: "Hébergé en Europe", description: "Vos données sont stockées dans des centres de données européens." },
+        { title: "Sans engagement", description: "L'offre mensuelle est sans engagement : vous arrêtez quand vous voulez." },
       ],
     },
     comparison: {
@@ -138,7 +192,7 @@ const content: Record<Lang, {
         { title: "Facturation vocale", description: "Créez devis et factures en parlant, depuis le chantier, la voiture ou le bureau." },
         { title: "Conformité automatique", description: "Numérotation séquentielle, mentions TVA, identifiants fiscaux : conforme en France et dans 15 pays." },
         { title: "Relances par IA", description: "Des emails de relance polis et contextuels, envoyés au bon moment, sans y penser." },
-        { title: "Paiement intégré", description: "Lien de paiement Stripe ou PayPal sur chaque facture : soyez payé 2x plus vite." },
+        { title: "Paiement intégré", description: "Lien de paiement Stripe ou PayPal sur chaque facture : vos clients paient en un clic." },
         { title: "100% mobile", description: "Depuis le navigateur de votre téléphone, sans rien installer : votre facturation AI tient dans votre poche." },
         { title: "Sécurité bancaire", description: "Chiffrement AES-256, hébergement européen, conforme RGPD." },
       ],
@@ -189,12 +243,27 @@ const content: Record<Lang, {
         answer:
           "Oui. Depuis le 1er septembre 2026, les entreprises doivent pouvoir recevoir des factures électroniques, et l'émission devient obligatoire pour les micro-entreprises en 2027. Robi génère nativement le format Factur-X (norme EN 16931). La transmission, elle, passe par une plateforme agréée (PDP) : Robi crée la facture conforme, la plateforme l'achemine.",
       },
+      {
+        question: "Existe-t-il un générateur de facture IA gratuit ?",
+        answer:
+          "Oui : Robi est gratuit pour 4 factures ou devis par mois, sans carte bancaire. Vous avez le générateur de facture IA complet — voix ou texte, numérotation conforme, TVA, lien de paiement — pour juger sur une vraie facture avant de choisir une offre.",
+      },
+      {
+        question: "L'IA peut-elle créer une facture à partir d'une phrase écrite ?",
+        answer:
+          "Oui. Écrivez ou dites « Facture 3 jours de conseil à 450 € la journée pour la société Nova » : l'IA de Robi extrait le client, la quantité, le prix et la TVA, puis génère une facture complète et numérotée.",
+      },
+      {
+        question: "Puis-je corriger la facture avant de l'envoyer ?",
+        answer:
+          "Oui. L'IA prépare le document, vous le relisez : chaque ligne, montant ou mention se modifie avant l'envoi. Rien ne part chez le client sans votre validation.",
+      },
     ],
   },
   en: {
-    metaTitle: "Invoice AI: the AI Invoice Generator, Invoices in 30s | Robi",
+    metaTitle: "Invoice AI — Free AI Invoice Generator by Voice | Robi AI",
     metaDescription:
-      "Invoice AI: generate compliant quotes and invoices in 30 seconds by typing or speaking to AI. Automatic reminders, e-signature, online payments. Free for 4 invoices or quotes a month.",
+      "Say \"Invoice Nova Ltd 3 days at £450\" and get a numbered invoice with VAT in 30 seconds. Reminders, payment link, e-signature. Free for 4 invoices a month, no card.",
     keywords: [
       "ai invoice",
       "invoice ai",
@@ -213,9 +282,9 @@ const content: Record<Lang, {
         "Create an invoice with artificial intelligence in 30 seconds: say \"Prepare a £500 invoice for Alice\" and Robi generates a compliant document, ready to send.",
     },
     stats: [
-      { value: "30s", label: "To create an AI invoice" },
-      { value: "99%", label: "AI accuracy" },
-      { value: "10h", label: "Saved every month" },
+      { value: "30s", label: "To create an invoice by voice" },
+      { value: "EN 16931", label: "E-invoice format built in" },
+      { value: "£0", label: "To start, no card needed" },
     ],
     definition: {
       title: "What is an AI invoice?",
@@ -233,6 +302,43 @@ const content: Record<Lang, {
         "\"Prepare a £1,200 quote for Mr Smith's bathroom renovation\"",
         "\"Turn Alice's signed quote into an invoice\"",
         "\"Invoice 3 days of development at £450 a day for Nova Ltd\"",
+      ],
+    },
+    example: {
+      title: "Example: from one sentence to a finished invoice",
+      saidLabel: "You say",
+      said: "\"Invoice Nova Ltd for 3 days of development at £450 a day, due in 30 days\"",
+      docLabel: "Robi prepares the invoice",
+      rows: [
+        { label: "Client", value: "Nova Ltd" },
+        { label: "Service", value: "Development — 3 days × £450" },
+        { label: "Net", value: "£1,350.00" },
+        { label: "VAT 20%", value: "£270.00" },
+        { label: "Total due", value: "£1,620.00", strong: true },
+        { label: "Due", value: "30 days" },
+        { label: "Invoice number", value: "Next in your sequence, no gaps" },
+      ],
+      note: "Illustrative example at the 20% standard VAT rate. The rate and wording follow the tax settings of your account, and you review and edit everything before sending.",
+    },
+    quickCompare: {
+      title: "Robi vs an invoice template vs ChatGPT",
+      columns: ["Robi AI", "Word / Excel template", "ChatGPT"],
+      rows: [
+        { label: "Create the invoice in one sentence, by voice", values: ["yes", "no", "Text to copy over"] },
+        { label: "Legal sequential numbering", values: ["yes", "By hand", "no"] },
+        { label: "VAT and totals calculated", values: ["yes", "Formulas to maintain", "To double-check"] },
+        { label: "Client list and history", values: ["yes", "no", "no"] },
+        { label: "Sending, reminders and payment link", values: ["yes", "no", "no"] },
+        { label: "Structured e-invoice (Factur-X, EN 16931)", values: ["yes", "no", "no"] },
+      ],
+    },
+    proofs: {
+      title: "What you can check",
+      items: [
+        { title: "E-invoices validated", description: "Our Factur-X files pass veraPDF (PDF/A-3) and the official EN 16931 schematron — the European e-invoicing standard." },
+        { title: "Free to start", description: "A free account with no card: judge it on a real invoice before choosing a plan." },
+        { title: "Hosted in Europe", description: "Your data is stored in European data centres." },
+        { title: "No commitment", description: "The monthly plan has no commitment: stop whenever you want." },
       ],
     },
     comparison: {
@@ -288,7 +394,7 @@ const content: Record<Lang, {
         { title: "Voice invoicing", description: "Create quotes and invoices by speaking — from the job site, the van or the office." },
         { title: "Automatic compliance", description: "Sequential numbering, VAT mentions, fiscal IDs: compliant in 16 countries." },
         { title: "AI reminders", description: "Polite, contextual follow-up emails sent at the right time, without thinking about it." },
-        { title: "Built-in payments", description: "Stripe or PayPal payment link on every invoice: get paid 2x faster." },
+        { title: "Built-in payments", description: "Stripe or PayPal payment link on every invoice: clients pay in one click." },
         { title: "100% mobile", description: "Right in your phone's browser, nothing to install: your AI invoicing fits in your pocket." },
         { title: "Bank-grade security", description: "AES-256 encryption, European hosting, GDPR compliant." },
       ],
@@ -345,12 +451,17 @@ const content: Record<Lang, {
         answer:
           "Robi is free for 4 invoices or quotes a month. In the UK, paid plans are £12/month with no commitment, £75/year, £125 for 2 years, or a lifetime launch deal at £49 (one-time payment). Pricing is local in each of the 16 countries Robi supports.",
       },
+      {
+        question: "Can I edit the AI invoice before sending it?",
+        answer:
+          "Yes. The AI prepares the document and you review it: every line, amount or mention can be changed before sending. Nothing reaches your client without your approval.",
+      },
     ],
   },
   es: {
-    metaTitle: "Factura con IA: Crea Facturas por Inteligencia Artificial | Robi",
+    metaTitle: "Factura con IA: genera facturas hablando, gratis | Robi AI",
     metaDescription:
-      "Factura con IA: crea presupuestos y facturas conformes en 30 segundos hablando con la IA. Recordatorios automáticos, firma electrónica, pagos Stripe.",
+      "Di «Factura a Nova 3 días a 450 €» y obtén una factura numerada con IVA en 30 segundos. Recordatorios, firma electrónica, pago online. Gratis para empezar.",
     keywords: [
       "factura ia",
       "factura con ia",
@@ -366,9 +477,9 @@ const content: Record<Lang, {
         "Crea una factura por inteligencia artificial en 30 segundos: di «Prepara una factura de 500 € para Alice» y Robi genera un documento conforme, listo para enviar.",
     },
     stats: [
-      { value: "30s", label: "Para crear una factura IA" },
-      { value: "99%", label: "Precisión de la IA" },
-      { value: "10h", label: "Ahorradas cada mes" },
+      { value: "30 s", label: "Para crear una factura hablando" },
+      { value: "EN 16931", label: "Factura electrónica integrada" },
+      { value: "0 €", label: "Para empezar, sin tarjeta" },
     ],
     definition: {
       title: "¿Qué es una factura con IA?",
@@ -385,6 +496,43 @@ const content: Record<Lang, {
         "«Prepara un presupuesto de 1.200 € para la reforma del baño del Sr. García»",
         "«Convierte el presupuesto firmado de Alice en factura»",
         "«Factura 3 días de desarrollo a 450 € el día para la empresa Nova»",
+      ],
+    },
+    example: {
+      title: "Un ejemplo: de la frase a la factura",
+      saidLabel: "Tú dices",
+      said: "«Factura a la empresa Nova 3 días de desarrollo a 450 € el día, pago a 30 días»",
+      docLabel: "Robi prepara la factura",
+      rows: [
+        { label: "Cliente", value: "Nova" },
+        { label: "Servicio", value: "Desarrollo — 3 días × 450 €" },
+        { label: "Base imponible", value: "1.350,00 €" },
+        { label: "IVA 21 %", value: "283,50 €" },
+        { label: "Total", value: "1.633,50 €", strong: true },
+        { label: "Vencimiento", value: "30 días" },
+        { label: "Número", value: "El siguiente de tu serie, sin saltos" },
+      ],
+      note: "Ejemplo ilustrativo con IVA al 21 %. El tipo y las menciones siguen la configuración fiscal de tu cuenta, y lo revisas y modificas todo antes de enviar.",
+    },
+    quickCompare: {
+      title: "Robi, una plantilla de factura o ChatGPT",
+      columns: ["Robi AI", "Plantilla Word / Excel", "ChatGPT"],
+      rows: [
+        { label: "Crear la factura en una frase, por voz", values: ["yes", "no", "Texto que copiar"] },
+        { label: "Numeración secuencial legal", values: ["yes", "A mano", "no"] },
+        { label: "IVA y totales calculados", values: ["yes", "Fórmulas que mantener", "Hay que comprobar"] },
+        { label: "Ficha de clientes e historial", values: ["yes", "no", "no"] },
+        { label: "Envío, recordatorios y link de pago", values: ["yes", "no", "no"] },
+        { label: "Factura electrónica Factur-X (EN 16931)", values: ["yes", "no", "no"] },
+      ],
+    },
+    proofs: {
+      title: "Lo que puedes comprobar",
+      items: [
+        { title: "Factur-X validado", description: "Nuestros archivos Factur-X pasan veraPDF (PDF/A-3) y el schematron oficial de la norma europea EN 16931." },
+        { title: "Gratis para empezar", description: "Una cuenta gratuita, sin tarjeta: juzga con una factura real antes de elegir un plan." },
+        { title: "Alojado en Europa", description: "Tus datos se guardan en centros de datos europeos." },
+        { title: "Sin permanencia", description: "El plan mensual no tiene permanencia: lo dejas cuando quieras." },
       ],
     },
     comparison: {
@@ -440,7 +588,7 @@ const content: Record<Lang, {
         { title: "Facturación por voz", description: "Crea presupuestos y facturas hablando, desde la obra, el coche o la oficina." },
         { title: "Conformidad automática", description: "Numeración secuencial, menciones de IVA, identificadores fiscales: conforme en 16 países." },
         { title: "Recordatorios por IA", description: "Emails de reclamación educados y contextuales, enviados en el momento justo." },
-        { title: "Pago integrado", description: "Link de pago Stripe o PayPal en cada factura: cobra 2 veces más rápido." },
+        { title: "Pago integrado", description: "Link de pago Stripe o PayPal en cada factura: tus clientes pagan en un clic." },
         { title: "100% móvil", description: "Desde el navegador de tu teléfono, sin instalar nada: tu facturación IA cabe en tu bolsillo." },
         { title: "Seguridad bancaria", description: "Cifrado AES-256, alojamiento europeo, conforme con el RGPD." },
       ],
@@ -484,6 +632,21 @@ const content: Record<Lang, {
         question: "¿Cuánto cuesta un programa de facturas con IA?",
         answer:
           "Robi es gratis para 4 facturas o presupuestos al mes. Después, en España: 14 €/mes sin compromiso, 89 €/año, 149 € por 2 años, o la oferta de lanzamiento de por vida a 59 € (pago único, reservada a los 1.000 primeros).",
+      },
+      {
+        question: "¿Existe un generador de facturas con IA gratis?",
+        answer:
+          "Sí: Robi es gratis para 4 facturas o presupuestos al mes, sin tarjeta. Tienes el generador completo — voz o texto, numeración conforme, IVA y link de pago — para juzgarlo con una factura real antes de elegir un plan.",
+      },
+      {
+        question: "¿La IA puede crear una factura a partir de una frase escrita?",
+        answer:
+          "Sí. Escribe o di «Factura 3 días de consultoría a 450 € el día para la empresa Nova»: la IA de Robi extrae el cliente, la cantidad, el precio y el IVA, y genera una factura completa y numerada.",
+      },
+      {
+        question: "¿Puedo corregir la factura antes de enviarla?",
+        answer:
+          "Sí. La IA prepara el documento y tú lo revisas: cada línea, importe o mención se puede modificar antes del envío. Nada llega a tu cliente sin tu validación.",
       },
     ],
   },
@@ -615,8 +778,36 @@ export default async function FactureAIPage({
         </div>
       </section>
 
-      {/* Creation vs processing */}
+      {/* Worked example — one dictated sentence → the invoice it produces */}
       <section className="py-16 md:py-24 lg:py-28 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-center text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630] mb-12">{c.example.title}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+            <div className="flex flex-col justify-center gap-4 bg-[#0D0630] text-white rounded-2xl p-6 md:p-8">
+              <p className="text-xs font-bold uppercase tracking-widest text-[#BEF221]">{c.example.saidLabel}</p>
+              <div className="flex items-start gap-4">
+                <Mic className="w-6 h-6 text-[#BEF221] flex-shrink-0 mt-1" />
+                <p className="text-lg md:text-xl leading-relaxed">{c.example.said}</p>
+              </div>
+            </div>
+            <Card>
+              <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">{c.example.docLabel}</p>
+              <dl className="divide-y divide-gray-100">
+                {c.example.rows.map((row, index) => (
+                  <div key={index} className="flex items-baseline justify-between gap-4 py-2.5">
+                    <dt className="text-gray-500">{row.label}</dt>
+                    <dd className={`text-right tabular-nums ${row.strong ? "text-lg font-black text-[#0D0630]" : "font-medium text-gray-900"}`}>{row.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </Card>
+          </div>
+          <p className="text-sm text-gray-500 mt-6 max-w-3xl mx-auto text-center">{c.example.note}</p>
+        </div>
+      </section>
+
+      {/* Creation vs processing */}
+      <section className="py-16 md:py-24 lg:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630]">{c.comparison.title}</h2>
@@ -637,6 +828,43 @@ export default async function FactureAIPage({
                 </ul>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Quick comparison — Robi vs template vs ChatGPT */}
+      <section className="py-16 md:py-24 lg:py-28 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-center text-[28px] md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630] mb-12">{c.quickCompare.title}</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[560px] text-left border-collapse">
+              <thead>
+                <tr className="border-b-2 border-gray-200">
+                  <th className="py-3 pr-4" />
+                  {c.quickCompare.columns.map((col, index) => (
+                    <th key={index} className={`py-3 px-3 text-sm font-bold text-center ${index === 0 ? "text-[#0D0630]" : "text-gray-500"}`}>{col}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {c.quickCompare.rows.map((row, rowIndex) => (
+                  <tr key={rowIndex} className="border-b border-gray-100">
+                    <th scope="row" className="py-3 pr-4 font-medium text-gray-900">{row.label}</th>
+                    {row.values.map((value, index) => (
+                      <td key={index} className="py-3 px-3 text-center text-sm text-gray-600">
+                        {value === "yes" ? (
+                          <Check className="w-5 h-5 mx-auto text-[#0D0630]" aria-label="✓" />
+                        ) : value === "no" ? (
+                          <span aria-label="—" className="text-gray-300">—</span>
+                        ) : (
+                          value
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -680,6 +908,22 @@ export default async function FactureAIPage({
                 </Card>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Proofs — verifiable facts only */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-center text-[28px] md:text-4xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630] mb-12">{c.proofs.title}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {c.proofs.items.map((item, index) => (
+              <Card key={index}>
+                <Shield className="w-5 h-5 text-[#0D0630] mb-3" />
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
+                <p className="text-gray-500">{item.description}</p>
+              </Card>
+            ))}
           </div>
         </div>
       </section>

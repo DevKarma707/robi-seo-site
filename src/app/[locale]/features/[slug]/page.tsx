@@ -11,6 +11,7 @@ import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
 import { Check, Sparkles, Zap, Clock, TrendingUp } from "lucide-react";
 
+import { AiInvoiceLink } from "@/components/ui/AiInvoiceLink";
 import { pageSeo } from "@/lib/seo/pageSeo";
 export async function generateStaticParams() {
   return features.map((feature) => ({
@@ -226,6 +227,8 @@ export default async function FeaturePage({
           </div>
         </div>
       </section>
+
+      <AiInvoiceLink locale={locale} />
 
       <Pricing locale={locale} dict={dict} fadeBottom={false} />
 

@@ -13,6 +13,7 @@ import { CTA } from "@/components/sections/CTA";
 import { Check, X, Zap, Clock, AlertTriangle } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 
+import { AiInvoiceLink } from "@/components/ui/AiInvoiceLink";
 import { pageSeo } from "@/lib/seo/pageSeo";
 // Generate static pages for all industries
 export async function generateStaticParams() {
@@ -254,6 +255,8 @@ export default async function IndustryPage({
           </div>
         </div>
       </section>
+
+      <AiInvoiceLink locale={locale} />
 
       <Pricing locale={locale} dict={dict} />
 

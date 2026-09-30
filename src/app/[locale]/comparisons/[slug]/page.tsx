@@ -13,6 +13,7 @@ import {
   priceMap,
   localeCurrencies,
 } from "@/lib/i18n/config";
+import { AiInvoiceLink } from "@/components/ui/AiInvoiceLink";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export async function generateStaticParams() {
@@ -433,6 +434,8 @@ export default async function ComparisonPage({
           </div>
         </div>
       </section>
+
+      <AiInvoiceLink locale={locale} />
 
       <CTA
         title={comp.switchFrom.replace("{competitor}", comparison.competitor)}
