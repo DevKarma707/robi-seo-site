@@ -75,13 +75,13 @@ export function Features({ title = "", titleAccent, subtitle, dict, locale = "fr
               <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#0D0630] text-[#BEF221]"><ShieldCheck className="h-6 w-6" /></span>
               <h3 className="mt-5 text-2xl font-extrabold tracking-tight text-[#0D0630] md:text-3xl">{f.compliant.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-gray-500 md:text-base">{f.compliant.description}</p>
-              <div className="mt-5 flex flex-wrap gap-2">
+              {demo.facturX && <div className="mt-5 flex flex-wrap gap-2">
                 <span className="inline-flex items-center gap-2 rounded-full bg-[#0D0630] px-3.5 py-2 text-xs font-bold text-white">
                   <span className="h-3 w-[18px] rounded-[3px]" style={{ background: "linear-gradient(90deg,#0055a4 0 33.4%,#fff 33.4% 66.7%,#ef4135 66.7%)" }} aria-hidden="true" />
                   Factur-X
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3.5 py-2 text-xs font-bold text-[#0D0630]"><Check className="h-3.5 w-3.5 text-[#5b7a00]" strokeWidth={3} />EN 16931</span>
-              </div>
+              </div>}
             </div>
           </ScrollReveal>
 

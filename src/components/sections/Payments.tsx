@@ -1,6 +1,7 @@
 "use client";
 
 import { Apple, Bot, Check, CreditCard, Lock, Zap } from "lucide-react";
+import { getHeroDeviceCopy } from "@/lib/i18n/heroDevice";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 interface PaymentsProps {
@@ -30,7 +31,8 @@ const labels: Record<string, { link: string; secure: string; invoice: string; to
 export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
   const t = dict.payments || defaultDict.payments;
   const l = labels[locale.split("-")[0]] || labels.en;
-  const amount = new Intl.NumberFormat(locale, { style: "currency", currency: "EUR" }).format(1240);
+  const demo = getHeroDeviceCopy(locale);
+  const amount = new Intl.NumberFormat(demo.locale, { style: "currency", currency: demo.currency }).format(demo.scenarios[0].amount);
 
   return (
     <section id="payments" className="py-16 md:py-24 lg:py-32 bg-white relative overflow-hidden">

@@ -20,7 +20,7 @@ export function Process({ dict, locale = "fr" }: ProcessProps) {
   const t = dict.process;
   const demo = getHeroDeviceCopy(locale);
   const sc = demo.scenarios[0];
-  const amount = money(demo.locale, sc.amount);
+  const amount = money(demo, sc.amount);
 
   const steps = [
     {

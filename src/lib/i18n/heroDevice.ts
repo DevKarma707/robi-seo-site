@@ -11,6 +11,8 @@
  * Atelier Dubois 2 274 €, Studio Vernier, Boulangerie Lefèvre, Sophie
  * Nadaud), objectif du dashboard des pubs (2 390 € sur 4 800 €).
  */
+import { localeCurrencies } from "./config";
+
 export interface HeroDeviceRow { client: string; number: string; amount: number; badge: "sent" | "paid" | "late" | "draft" | "accepted" }
 
 export interface HeroDeviceScenario {
@@ -80,6 +82,10 @@ export interface HeroDeviceCopy {
   openedTitle: string;
   goalFrom: number;
   goalTotal: number;
+  /** Multiplicateur des montants de démo pour la devise du pays (dirham, franc CFA…). */
+  scale: number;
+  /** Paiement par carte (Visa · Mastercard · Stripe) proposé dans ce pays. */
+  cardPayments: boolean;
   facturX?: string;
   /** Chip « Encaissez par carte » (Visa · Mastercard · Stripe, paiement en ligne de l'app). */
   stripe: string;
@@ -128,31 +134,31 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
     badges: { sent: "Envoyé", paid: "Payé", late: "Retard", draft: "Brouillon", accepted: "Accepté" },
     nav: ["Factures", "Devis", "Clients", "Produits"],
     openedTitle: "Document ouvert",
-    goalFrom: 2390, goalTotal: 4800,
+    goalFrom: 2390, goalTotal: 4800, scale: 1, cardPayments: true,
     facturX: "Conforme Factur-X",
     stripe: "Encaissez par carte",
     stageAlt: "Un téléphone flottant montre Robi : on dicte, la facture se remplit, part au client, le client l’ouvre, le paiement arrive",
     scenarios: [
-      { kind: "invoice", prompt: "Facture pour Maison Laurent, meuble en chêne, mille deux cent quarante euros.",
+      { kind: "invoice", prompt: "Facture pour Maison Laurent, meuble en chêne, {amount}.",
         client: "Maison Laurent", service: "Meuble sur mesure en chêne", amount: 1240, number: "FAC-2026-004", docLabel: "Facture",
         created: "Facture créée", sent: "Facture envoyée", sentChip: "Envoyée à Maison Laurent",
         reply: "C’est noté ! Voici votre facture pour Maison Laurent.",
         ask: "C’est fait ! Je l’envoie à Maison Laurent ?", yes: "Oui, envoie.",
         openedLine: "Maison Laurent a ouvert la facture à 20:30",
-        doneTitle: "Paiement reçu", doneLine: "Maison Laurent · 1 240,00 € via Stripe", doneHistory: "💰 Paiement reçu via Stripe", doneBadge: "paid",
+        doneTitle: "Paiement reçu", doneLine: "Maison Laurent · {full} via Stripe", doneHistory: "💰 Paiement reçu via Stripe", doneBadge: "paid",
         rows: [
           { client: "Studio Vernier", number: "FAC-2026-002", amount: 1620, badge: "sent" },
           { client: "Boulangerie Lefèvre", number: "FAC-2026-003", amount: 1248, badge: "paid" },
           { client: "Sophie Nadaud", number: "FAC-2026-001", amount: 312, badge: "late" },
         ],
         tabs: ["Tout", "Non payées", "Payées", "Brouillons"], tabCounts: [4, 3, 1, 0] },
-      { kind: "quote", prompt: "Devis pour Atelier Dubois, pose d’une cuisine, deux mille deux cent soixante-quatorze euros.",
+      { kind: "quote", prompt: "Devis pour Atelier Dubois, pose d’une cuisine, {amount}.",
         client: "Atelier Dubois", service: "Pose d’une cuisine équipée", amount: 2274, number: "DEV-2026-003", docLabel: "Devis",
         created: "Devis créé", sent: "Devis envoyé", sentChip: "Envoyé à Atelier Dubois",
         reply: "Je m’en occupe ! Voici le devis pour Atelier Dubois.",
         ask: "C’est fait ! Je l’envoie à Atelier Dubois ?", yes: "Oui, envoie.",
         openedLine: "Atelier Dubois a ouvert le devis à 20:30",
-        doneTitle: "Devis signé", doneLine: "Atelier Dubois · 2 274,00 €", doneHistory: "✍️ Devis signé électroniquement", doneBadge: "accepted",
+        doneTitle: "Devis signé", doneLine: "Atelier Dubois · {full}", doneHistory: "✍️ Devis signé électroniquement", doneBadge: "accepted",
         rows: [
           { client: "Studio Vernier", number: "DEV-2026-002", amount: 2304, badge: "accepted" },
           { client: "Boulangerie Lefèvre", number: "DEV-2026-001", amount: 960, badge: "draft" },
@@ -190,30 +196,30 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
     badges: { sent: "Sent", paid: "Paid", late: "Late", draft: "Draft", accepted: "Accepted" },
     nav: ["Invoices", "Quotes", "Clients", "Products"],
     openedTitle: "Document opened",
-    goalFrom: 2390, goalTotal: 4800,
+    goalFrom: 2390, goalTotal: 4800, scale: 1, cardPayments: true,
     stripe: "Accept card payments",
     stageAlt: "A floating phone shows Robi: you dictate, the invoice fills in, goes to the client, the client opens it, the payment arrives",
     scenarios: [
-      { kind: "invoice", prompt: "Invoice for Maison Laurent, oak cabinet, one thousand two hundred forty euros.",
+      { kind: "invoice", prompt: "Invoice for Maison Laurent, oak cabinet, {amount}.",
         client: "Maison Laurent", service: "Custom oak cabinet", amount: 1240, number: "INV-2026-004", docLabel: "Invoice",
         created: "Invoice created", sent: "Invoice sent", sentChip: "Sent to Maison Laurent",
         reply: "Got it! Here’s your invoice for Maison Laurent.",
         ask: "Done! Shall I send it to Maison Laurent?", yes: "Yes, send it.",
         openedLine: "Maison Laurent opened the invoice at 8:30 pm",
-        doneTitle: "Payment received", doneLine: "Maison Laurent · €1,240.00 via Stripe", doneHistory: "💰 Payment received via Stripe", doneBadge: "paid",
+        doneTitle: "Payment received", doneLine: "Maison Laurent · {full} via Stripe", doneHistory: "💰 Payment received via Stripe", doneBadge: "paid",
         rows: [
           { client: "Studio Vernier", number: "INV-2026-002", amount: 1620, badge: "sent" },
           { client: "Boulangerie Lefèvre", number: "INV-2026-003", amount: 1248, badge: "paid" },
           { client: "Sophie Nadaud", number: "INV-2026-001", amount: 312, badge: "late" },
         ],
         tabs: ["All", "Unpaid", "Paid", "Drafts"], tabCounts: [4, 3, 1, 0] },
-      { kind: "quote", prompt: "Quote for Atelier Dubois, kitchen installation, two thousand two hundred seventy-four euros.",
+      { kind: "quote", prompt: "Quote for Atelier Dubois, kitchen installation, {amount}.",
         client: "Atelier Dubois", service: "Fitted kitchen installation", amount: 2274, number: "QUO-2026-003", docLabel: "Quote",
         created: "Quote created", sent: "Quote sent", sentChip: "Sent to Atelier Dubois",
         reply: "On it! Here’s the quote for Atelier Dubois.",
         ask: "Done! Shall I send it to Atelier Dubois?", yes: "Yes, send it.",
         openedLine: "Atelier Dubois opened the quote at 8:30 pm",
-        doneTitle: "Quote signed", doneLine: "Atelier Dubois · €2,274.00", doneHistory: "✍️ Quote signed electronically", doneBadge: "accepted",
+        doneTitle: "Quote signed", doneLine: "Atelier Dubois · {full}", doneHistory: "✍️ Quote signed electronically", doneBadge: "accepted",
         rows: [
           { client: "Studio Vernier", number: "QUO-2026-002", amount: 2304, badge: "accepted" },
           { client: "Boulangerie Lefèvre", number: "QUO-2026-001", amount: 960, badge: "draft" },
@@ -251,30 +257,30 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
     badges: { sent: "Enviado", paid: "Pagado", late: "Retraso", draft: "Borrador", accepted: "Aceptado" },
     nav: ["Facturas", "Presupuestos", "Clientes", "Productos"],
     openedTitle: "Documento abierto",
-    goalFrom: 2390, goalTotal: 4800,
+    goalFrom: 2390, goalTotal: 4800, scale: 1, cardPayments: true,
     stripe: "Cobra con tarjeta",
     stageAlt: "Un teléfono flotante muestra Robi: dictas, la factura se rellena, llega al cliente, el cliente la abre, entra el pago",
     scenarios: [
-      { kind: "invoice", prompt: "Factura para Maison Laurent, mueble de roble, mil doscientos cuarenta euros.",
+      { kind: "invoice", prompt: "Factura para Maison Laurent, mueble de roble, {amount}.",
         client: "Maison Laurent", service: "Mueble a medida de roble", amount: 1240, number: "FAC-2026-004", docLabel: "Factura",
         created: "Factura creada", sent: "Factura enviada", sentChip: "Enviada a Maison Laurent",
         reply: "¡Anotado! Aquí tienes tu factura para Maison Laurent.",
         ask: "¡Listo! ¿La envío a Maison Laurent?", yes: "Sí, envíala.",
         openedLine: "Maison Laurent abrió la factura a las 20:30",
-        doneTitle: "Pago recibido", doneLine: "Maison Laurent · 1.240,00 € vía Stripe", doneHistory: "💰 Pago recibido vía Stripe", doneBadge: "paid",
+        doneTitle: "Pago recibido", doneLine: "Maison Laurent · {full} vía Stripe", doneHistory: "💰 Pago recibido vía Stripe", doneBadge: "paid",
         rows: [
           { client: "Studio Vernier", number: "FAC-2026-002", amount: 1620, badge: "sent" },
           { client: "Boulangerie Lefèvre", number: "FAC-2026-003", amount: 1248, badge: "paid" },
           { client: "Sophie Nadaud", number: "FAC-2026-001", amount: 312, badge: "late" },
         ],
         tabs: ["Todo", "No pagadas", "Pagadas", "Borradores"], tabCounts: [4, 3, 1, 0] },
-      { kind: "quote", prompt: "Presupuesto para Atelier Dubois, instalación de cocina, dos mil doscientos setenta y cuatro euros.",
+      { kind: "quote", prompt: "Presupuesto para Atelier Dubois, instalación de cocina, {amount}.",
         client: "Atelier Dubois", service: "Instalación de cocina equipada", amount: 2274, number: "PRE-2026-003", docLabel: "Presupuesto",
         created: "Presupuesto creado", sent: "Presupuesto enviado", sentChip: "Enviado a Atelier Dubois",
         reply: "¡Me encargo! Aquí está el presupuesto para Atelier Dubois.",
         ask: "¡Listo! ¿Lo envío a Atelier Dubois?", yes: "Sí, envíalo.",
         openedLine: "Atelier Dubois abrió el presupuesto a las 20:30",
-        doneTitle: "Presupuesto firmado", doneLine: "Atelier Dubois · 2.274,00 €", doneHistory: "✍️ Presupuesto firmado electrónicamente", doneBadge: "accepted",
+        doneTitle: "Presupuesto firmado", doneLine: "Atelier Dubois · {full}", doneHistory: "✍️ Presupuesto firmado electrónicamente", doneBadge: "accepted",
         rows: [
           { client: "Studio Vernier", number: "PRE-2026-002", amount: 2304, badge: "accepted" },
           { client: "Boulangerie Lefèvre", number: "PRE-2026-001", amount: 960, badge: "draft" },
@@ -312,30 +318,30 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
     badges: { sent: "Enviado", paid: "Pago", late: "Atraso", draft: "Rascunho", accepted: "Aceite" },
     nav: ["Faturas", "Orçamentos", "Clientes", "Produtos"],
     openedTitle: "Documento aberto",
-    goalFrom: 2390, goalTotal: 4800,
+    goalFrom: 2390, goalTotal: 4800, scale: 1, cardPayments: true,
     stripe: "Receba por cartão",
     stageAlt: "Um telemóvel flutuante mostra o Robi: dita, a fatura preenche-se, segue para o cliente, o cliente abre-a, o pagamento chega",
     scenarios: [
-      { kind: "invoice", prompt: "Fatura para Maison Laurent, móvel em carvalho, mil duzentos e quarenta euros.",
+      { kind: "invoice", prompt: "Fatura para Maison Laurent, móvel em carvalho, {amount}.",
         client: "Maison Laurent", service: "Móvel por medida em carvalho", amount: 1240, number: "FAT-2026-004", docLabel: "Fatura",
         created: "Fatura criada", sent: "Fatura enviada", sentChip: "Enviada a Maison Laurent",
         reply: "Anotado! Aqui está a sua fatura para a Maison Laurent.",
         ask: "Feito! Envio para a Maison Laurent?", yes: "Sim, envia.",
         openedLine: "Maison Laurent abriu a fatura às 20:30",
-        doneTitle: "Pagamento recebido", doneLine: "Maison Laurent · 1 240,00 € via Stripe", doneHistory: "💰 Pagamento recebido via Stripe", doneBadge: "paid",
+        doneTitle: "Pagamento recebido", doneLine: "Maison Laurent · {full} via Stripe", doneHistory: "💰 Pagamento recebido via Stripe", doneBadge: "paid",
         rows: [
           { client: "Studio Vernier", number: "FAT-2026-002", amount: 1620, badge: "sent" },
           { client: "Boulangerie Lefèvre", number: "FAT-2026-003", amount: 1248, badge: "paid" },
           { client: "Sophie Nadaud", number: "FAT-2026-001", amount: 312, badge: "late" },
         ],
         tabs: ["Tudo", "Por pagar", "Pagas", "Rascunhos"], tabCounts: [4, 3, 1, 0] },
-      { kind: "quote", prompt: "Orçamento para Atelier Dubois, instalação de cozinha, dois mil duzentos e setenta e quatro euros.",
+      { kind: "quote", prompt: "Orçamento para Atelier Dubois, instalação de cozinha, {amount}.",
         client: "Atelier Dubois", service: "Instalação de cozinha equipada", amount: 2274, number: "ORC-2026-003", docLabel: "Orçamento",
         created: "Orçamento criado", sent: "Orçamento enviado", sentChip: "Enviado a Atelier Dubois",
         reply: "Trato disso! Aqui está o orçamento para a Atelier Dubois.",
         ask: "Feito! Envio para a Atelier Dubois?", yes: "Sim, envia.",
         openedLine: "Atelier Dubois abriu o orçamento às 20:30",
-        doneTitle: "Orçamento assinado", doneLine: "Atelier Dubois · 2 274,00 €", doneHistory: "✍️ Orçamento assinado eletronicamente", doneBadge: "accepted",
+        doneTitle: "Orçamento assinado", doneLine: "Atelier Dubois · {full}", doneHistory: "✍️ Orçamento assinado eletronicamente", doneBadge: "accepted",
         rows: [
           { client: "Studio Vernier", number: "ORC-2026-002", amount: 2304, badge: "accepted" },
           { client: "Boulangerie Lefèvre", number: "ORC-2026-001", amount: 960, badge: "draft" },
@@ -345,7 +351,52 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
   },
 };
 
+/** Ordre de grandeur réaliste par devise : les mêmes scénarios, pas le même chiffre. */
+const CURRENCY_SCALE: Record<string, number> = { MAD: 10, AED: 4, XOF: 500 };
+/* Format des nombres : on évite les régions dont le rendu diffère entre le serveur et le
+   navigateur (fr-CH, fr-LU, fr-MA…), sinon React signale un écart à l'hydratation. */
+const INTL_LOCALE: Record<string, string> = {
+  fr: "fr-FR", "fr-BE": "fr-FR", "fr-CH": "fr-FR", "fr-LU": "fr-FR", "fr-MA": "fr-FR", "fr-SN": "fr-FR", "fr-CI": "fr-FR",
+  en: "en-GB", es: "es-ES",
+};
+
+/**
+ * La démo du pays : langue, devise et montants locaux (config.ts), Factur-X
+ * pour la France seulement, pas de paiement Stripe au Maroc. Les gabarits
+ * `{amount}` / `{full}` des textes sont résolus ici, avec la devise du pays.
+ */
 export function getHeroDeviceCopy(locale: string): HeroDeviceCopy {
   const language = locale.split("-")[0].toLowerCase() as keyof typeof copy;
-  return copy[language] ?? copy.en;
+  const base: HeroDeviceCopy = JSON.parse(JSON.stringify(copy[language] ?? copy.en));
+  const currency = localeCurrencies[locale]?.currency ?? base.currency;
+  const scale = CURRENCY_SCALE[currency] ?? 1;
+  const intl = INTL_LOCALE[locale] ?? locale;
+  const short = new Intl.NumberFormat(intl, { style: "currency", currency, maximumFractionDigits: 0 });
+  const full = new Intl.NumberFormat(intl, { style: "currency", currency });
+  const cardPayments = locale !== "fr-MA";
+  const noStripe = (text: string) => (cardPayments ? text : text.replace(/ v[ií]a Stripe/, ""));
+  const up = (rows: HeroDeviceRow[]) => rows.map((r) => ({ ...r, amount: r.amount * scale }));
+
+  return {
+    ...base,
+    locale: intl,
+    currency,
+    scale,
+    cardPayments,
+    facturX: locale === "fr" ? base.facturX : undefined,
+    goalFrom: base.goalFrom * scale,
+    goalTotal: base.goalTotal * scale,
+    reminder: { ...base.reminder, rows: up(base.reminder.rows) },
+    scenarios: base.scenarios.map((sc) => {
+      const amount = sc.amount * scale;
+      return {
+        ...sc,
+        amount,
+        rows: up(sc.rows),
+        prompt: sc.prompt.replace("{amount}", short.format(amount)),
+        doneLine: noStripe(sc.doneLine.replace("{full}", full.format(amount))),
+        doneHistory: noStripe(sc.doneHistory),
+      };
+    }),
+  };
 }

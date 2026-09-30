@@ -22,7 +22,7 @@ import { BadgeCheck, Bot, Calendar, Check, CheckSquare, ChevronDown, CreditCard,
 import { SALES_PAID, SALES_PENDING, SALES_SCALE, type HeroDeviceCopy } from "@/lib/i18n/heroDevice";
 import styles from "./HeroDevice.module.css";
 
-const STEPS = ["idle", "sheet", "typing", "reply", "open", "client", "service", "total", "created", "ask", "yes", "sending", "fly", "sent", "list", "opened", "detail", "pdf", "notif", "back", "clear"] as const;
+const STEPS = ["idle", "sheet", "typing", "reply", "open", "client", "service", "total", "created", "ask", "yes", "sending", "fly", "sent", "list", "opened", "tap", "detail", "pdf", "notif", "back", "clear"] as const;
 /** Scénario « relances » : pas de document, trois factures impayées qui partent. */
 const REMINDER_STEPS = ["idle", "sheet", "typing", "reply", "rows", "ask", "yes", "sending", "fly", "sent", "back", "clear"] as const;
 type Step = (typeof STEPS)[number] | (typeof REMINDER_STEPS)[number];
@@ -30,7 +30,7 @@ type Step = (typeof STEPS)[number] | (typeof REMINDER_STEPS)[number];
    (30/09) — tout est ralenti d'environ 40 %, sauf la dictée. */
 const BASE_DURATIONS: Record<Step, number> = {
   idle: 1300, sheet: 750, typing: 0, reply: 1500, open: 1100, client: 780, service: 780, total: 1400,
-  rows: 2600, created: 1200, ask: 1600, yes: 650, sending: 1050, fly: 1150, sent: 3500, list: 2600, opened: 3400, detail: 2400, pdf: 4400, notif: 3800, back: 2200, clear: 700,
+  rows: 2600, created: 1200, ask: 1600, yes: 650, sending: 1050, fly: 1150, sent: 3500, list: 2600, opened: 3400, tap: 800, detail: 2400, pdf: 4400, notif: 3800, back: 2200, clear: 700,
 };
 const waveHeights = [8, 14, 23, 12, 30, 20, 36, 17, 26, 40, 22, 32, 16, 28, 35, 18, 25, 12, 21, 9];
 const slabs = [1, 2, 3, 4, 5, 6, 7];
@@ -206,7 +206,7 @@ export function HeroDevice({ copy }: { copy: HeroDeviceCopy }) {
     { key: "done", label: scenario.doneHistory, time: "20:41", on: done },
   ].filter((h) => h.on).reverse();
   // Ventes (12 mois) : 11 mois passés + le mois en cours (le chiffre qui compte).
-  const salesTotal = SALES_PAID.reduce((sum, v) => sum + v, 0) + goal;
+  const salesTotal = SALES_PAID.reduce((sum, v) => sum + v, 0) * copy.scale + goal;
   const salesAvg = salesTotal / 12;
   const flags = {
     "data-step": step,
@@ -290,7 +290,7 @@ export function HeroDevice({ copy }: { copy: HeroDeviceCopy }) {
                             </div>
                             <div className={styles.salesChart} aria-hidden="true">
                               {SALES_PENDING.map((pending, i) => {
-                                const paidValue = i === 11 ? goal : SALES_PAID[i];
+                                const paidValue = i === 11 ? goal / copy.scale : SALES_PAID[i];
                                 return (
                                   <span key={i} className={styles.salesCol}>
                                     {/* En attente (gris) empilé sur l'encaissé (lime), comme dans l'app. */}
@@ -325,6 +325,8 @@ export function HeroDevice({ copy }: { copy: HeroDeviceCopy }) {
                           <div className={styles.month}><span>{monthTitle}</span><b>{money.format(monthTotal)}</b></div>
                           <div className={styles.rows}>
                             <div key={`new-${scenarioIndex}`} className={`${styles.row} ${styles.rowNew}`}>
+                              {/* Le toucher : on appuie sur la ligne, puis sa fiche s'ouvre. */}
+                              <span className={styles.touch} aria-hidden="true" />
                               <span className={styles.avatar}>{scenario.client.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}</span>
                               <span className={styles.rowText}><strong>{scenario.client}</strong><small>{scenario.number}</small></span>
                               <span className={styles.rowAmount}><strong>{money.format(scenario.amount)}</strong><i className={styles.badge} data-badge={badge}>{copy.badges[badge]}</i></span>
@@ -344,7 +346,7 @@ export function HeroDevice({ copy }: { copy: HeroDeviceCopy }) {
                           <div className={styles.detailBar}>
                             <X size={16} strokeWidth={2.2} aria-hidden="true" />
                             <i key={badge} className={styles.badge} data-badge={badge}>{copy.badges[badge]}</i>
-                            <span className={styles.detailView} data-tap={step === "pdf"}><Eye size={13} aria-hidden="true" />{copy.detail.view}</span>
+                            <span className={styles.detailView} data-tap={step === "pdf"}><span className={styles.touch} aria-hidden="true" /><Eye size={13} aria-hidden="true" />{copy.detail.view}</span>
                             <Download size={15} strokeWidth={2} aria-hidden="true" />
                             <span className={styles.detailMore}>{copy.detail.more}<ChevronDown size={13} aria-hidden="true" /></span>
                           </div>
@@ -559,17 +561,19 @@ export function HeroDevice({ copy }: { copy: HeroDeviceCopy }) {
             <span>{copy.facturX.split("Factur-X")[0]}<b>Factur-X</b></span>
           </div>
         )}
+        {copy.cardPayments && (
         <div className={styles.payGroup}>
-          <div className={`${styles.fxChip} ${styles.payChip}`}>
-            <span className={styles.payIcon}><CreditCard size={15} strokeWidth={2.4} aria-hidden="true" /></span>
-            <span>{copy.stripe}</span>
+            <div className={`${styles.fxChip} ${styles.payChip}`}>
+              <span className={styles.payIcon}><CreditCard size={15} strokeWidth={2.4} aria-hidden="true" /></span>
+              <span>{copy.stripe}</span>
+            </div>
+            <div className={`${styles.fxChip} ${styles.logoChip}`}>
+              <span className={styles.visa}>VISA</span>
+              <span className={styles.mastercard}><i /><i /></span>
+              <span className={styles.stripeBadge}><b>S</b>Stripe</span>
+            </div>
           </div>
-          <div className={`${styles.fxChip} ${styles.logoChip}`}>
-            <span className={styles.visa}>VISA</span>
-            <span className={styles.mastercard}><i /><i /></span>
-            <span className={styles.stripeBadge}><b>S</b>Stripe</span>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

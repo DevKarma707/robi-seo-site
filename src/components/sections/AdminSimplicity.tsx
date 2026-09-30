@@ -63,7 +63,7 @@ export function AdminSimplicity({ dict, locale = "fr" }: AdminSimplicityProps) {
                         <span className="block text-[10px] font-bold tracking-wider text-white/40">{row.number}</span>
                       </span>
                       <span className="text-right">
-                        <span className="block text-sm font-extrabold tabular-nums">{money(demo.locale, row.amount)}</span>
+                        <span className="block text-sm font-extrabold tabular-nums">{money(demo, row.amount)}</span>
                         <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider ${badgeClass(row.badge)}`}>{demo.badges[row.badge]}</span>
                       </span>
                     </div>
@@ -85,7 +85,7 @@ export function AdminSimplicity({ dict, locale = "fr" }: AdminSimplicityProps) {
                     <span className="block truncate text-sm font-extrabold">{invoice.created}</span>
                     <span className="block text-[10px] font-bold tracking-wider opacity-70">{invoice.number.replace(/\d+$/, "005")} · {quote.client}</span>
                   </span>
-                  <span className="text-sm font-black tabular-nums">{money(demo.locale, quote.amount)}</span>
+                  <span className="text-sm font-black tabular-nums">{money(demo, quote.amount)}</span>
                 </div>
               </div>
             </div>

@@ -22,7 +22,7 @@ export function Dashboard({ dict, locale = "fr" }: DashboardProps) {
   const demo = getHeroDeviceCopy(locale);
   const revenue = demo.goalFrom + demo.scenarios[0].amount;
   const pct = Math.round((revenue / demo.goalTotal) * 100);
-  const paid = [...SALES_PAID, revenue];
+  const paid = [...SALES_PAID.map((v) => v * demo.scale), revenue];
   const salesTotal = paid.reduce((sum, v) => sum + v, 0);
 
   return (
@@ -43,13 +43,13 @@ export function Dashboard({ dict, locale = "fr" }: DashboardProps) {
                   <div className="relative">
                     <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">{demo.dashboard.revenueMonth}</div>
                     <div className="mt-2 text-4xl font-black tracking-tight md:text-5xl">
-                      <CountUp value={revenue} format={(n) => money(demo.locale, Math.round(n), 0)} />
+                      <CountUp value={revenue} format={(n) => money(demo, Math.round(n), 0)} />
                     </div>
                     <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
                       <div className="home-fill h-full rounded-full bg-[#BEF221] shadow-[0_0_16px_rgba(190,242,33,0.55)]" style={{ "--w": `${pct}%` } as React.CSSProperties} />
                     </div>
                     <div className="mt-2 flex justify-between text-[11px] font-bold text-white/60">
-                      <span>{demo.dashboard.goal} · {money(demo.locale, demo.goalTotal, 0)}</span>
+                      <span>{demo.dashboard.goal} · {money(demo, demo.goalTotal, 0)}</span>
                       <span className="text-[#BEF221] tabular-nums">{pct} %</span>
                     </div>
                   </div>
@@ -72,14 +72,14 @@ export function Dashboard({ dict, locale = "fr" }: DashboardProps) {
                       <span className="grid h-6 w-6 place-items-center rounded-md bg-white/10"><TrendingUp className="h-3.5 w-3.5" /></span>
                       {demo.dashboard.sales12m}
                     </span>
-                    <span className="rounded-lg bg-white/10 px-2.5 py-1 text-xs font-extrabold tabular-nums">{money(demo.locale, salesTotal, 0)}</span>
+                    <span className="rounded-lg bg-white/10 px-2.5 py-1 text-xs font-extrabold tabular-nums">{money(demo, salesTotal, 0)}</span>
                   </div>
                   <div className="mt-4 flex h-24 items-end gap-1.5 border-b border-dashed border-white/15" aria-hidden="true">
                     {paid.map((value, i) => (
                       <span key={i} className="relative flex h-full flex-1 flex-col items-center justify-end">
                         {/* En attente (gris) empilé sur l'encaissé (lime), comme dans l'app. */}
                         <i className="home-bar block w-[70%] rounded-t bg-white/25" style={{ height: `${(SALES_PENDING[i] / SALES_SCALE) * 100}%`, "--i": i } as React.CSSProperties} />
-                        <i className={`home-bar block w-[70%] ${SALES_PENDING[i] ? "" : "rounded-t"} ${i === 11 ? "bg-[#BEF221] shadow-[0_0_14px_rgba(190,242,33,0.5)]" : "bg-[#BEF221]/70"}`} style={{ height: `${(value / SALES_SCALE) * 100}%`, "--i": i } as React.CSSProperties} />
+                        <i className={`home-bar block w-[70%] ${SALES_PENDING[i] ? "" : "rounded-t"} ${i === 11 ? "bg-[#BEF221] shadow-[0_0_14px_rgba(190,242,33,0.5)]" : "bg-[#BEF221]/70"}`} style={{ height: `${(value / demo.scale / SALES_SCALE) * 100}%`, "--i": i } as React.CSSProperties} />
                         <small className="absolute -bottom-5 text-[8px] font-semibold text-white/40">{demo.dashboard.months[i]}</small>
                       </span>
                     ))}
@@ -93,7 +93,7 @@ export function Dashboard({ dict, locale = "fr" }: DashboardProps) {
                   </div>
                   <div className="rounded-[18px] border border-white/10 bg-[#101540] p-4">
                     <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-white/70"><Activity className="h-3 w-3" />{demo.dashboard.avgMonth}</div>
-                    <div className="mt-2 text-2xl font-black tabular-nums">{money(demo.locale, Math.round(salesTotal / 12), 0)}</div>
+                    <div className="mt-2 text-2xl font-black tabular-nums">{money(demo, Math.round(salesTotal / 12), 0)}</div>
                   </div>
                 </div>
                 <p className="sr-only">{d.revenueChart}</p>

@@ -291,7 +291,14 @@
 .month b { font-size: 11px; letter-spacing: 0; text-transform: none; font-variant-numeric: tabular-nums; }
 .rows { display: block; }
 .row { display: flex; align-items: center; gap: 11px; padding: 11px 12px; border-bottom: 1px solid #ffffff10; }
-.rowNew { animation: rowIn .9s var(--ease) both, rowGlow 3s ease-out .2s; }
+.rowNew { position: relative; animation: rowIn .9s var(--ease) both, rowGlow 3s ease-out .2s; transition: background .3s ease; }
+.stage[data-step="tap"] .rowNew { background: #ffffff1a; }
+/* Le toucher : un rond discret qui appuie puis s'estompe, avant l'ouverture d'un panneau. */
+.touch { position: absolute; left: 58%; top: 50%; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; background: #ffffff4d; border: 1.5px solid #ffffffb3; box-shadow: 0 0 0 0 #ffffff33; opacity: 0; pointer-events: none; z-index: 2; }
+.stage[data-step="tap"] .rowNew .touch { animation: touch .8s ease-out both; }
+.detailView { position: relative; }
+.detailView .touch { left: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; }
+.stage[data-pdf="true"] .detailView .touch { animation: touch .8s ease-out both; }
 .avatar { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #ffffff14; color: #b9b2ca; font-size: 10px; font-weight: 700; flex-shrink: 0; }
 .rowText { flex: 1; min-width: 0; }
 .rowText strong { display: block; font-size: 13px; font-weight: 700; letter-spacing: -.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -598,7 +605,7 @@
 }
 .pill { position: absolute; left: 0; top: 0; opacity: 0; transform: translate(-50%, -50%) scale(.4); }
 .stage[data-pill="true"] .pill { animation: popPill .85s .75s var(--spring) forwards; }
-.stage[data-step="notif"] .pill { animation: pillOut .6s ease-in forwards; }
+
 .pillBody {
   position: relative;
   display: flex; align-items: center; gap: 9px;
@@ -639,7 +646,10 @@
 .stage[data-pill="true"] .sentChip { animation: popPill .8s .75s var(--spring) forwards; }
 .sentRing { position: absolute; inset: -8px; border-radius: 999px; border: 2px solid #bef221; opacity: 0; }
 .stage[data-pill="true"] .sentRing { animation: ring 1.1s 1.2s ease-out forwards; }
-.stage[data-step="notif"] .sentChip { animation: pillOut .6s ease-in forwards; }
+/* Le chip sort au pas qui suit l'envoi (liste pour un document, retour pour les relances),
+   jamais plus tard : sinon il réapparaît un instant au moment du paiement. */
+.stage[data-step="list"] .sentChip,
+.stage[data-kind="reminder"][data-step="back"] .sentChip { animation: pillOut .6s ease-in forwards; }
 
 /* Chip « Conforme Factur-X » (FR), qui flotte. */
 .fxWrap {
@@ -696,6 +706,12 @@
 @keyframes wave { from { transform: scaleY(.25); } to { transform: scaleY(1); } }
 @keyframes blink { 50% { opacity: 0; } }
 @keyframes swapIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+@keyframes touch {
+  0% { opacity: 0; transform: scale(1.5); }
+  30% { opacity: 1; transform: scale(.82); box-shadow: 0 0 0 0 #ffffff40; }
+  55% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 10px #ffffff1f; }
+  100% { opacity: 0; transform: scale(1.7); box-shadow: 0 0 0 22px #ffffff00; }
+}
 @keyframes rowIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
 @keyframes rowGlow { 0% { background: #bef22133; } 100% { background: transparent; } }
 @keyframes barIn { from { transform: scaleY(0); } to { transform: scaleY(1); } }
@@ -744,5 +760,6 @@
 @media (prefers-reduced-motion: reduce) {
   .float, .turn, .glass, .shadow, .light, .dust i, .ripple, .wave i, .caret, .statusText, .activityText,
   .bar i, .chartBars i, .tabMic::after, .flyer, .pill, .pillBody, .pillRing, .pillSheen, .sentChip, .fxChip, .device { animation: none !important; }
+  .touch { animation: none !important; }
   .remItem, .remRow, .remOrb, .pdf, .document, .documentStatus, .check, .line i, .line b, .sheet, .orb, .notif, .light, .pillWrap, .fxWrap, .reply, .ask, .yes { transition: none !important; }
 }

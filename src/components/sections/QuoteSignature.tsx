@@ -42,7 +42,7 @@ export function QuoteSignature({ dict, locale = "fr" }: QuoteSignatureProps) {
                     <div className="text-[11px] font-bold uppercase tracking-widest text-white/50">{sc.docLabel} {sc.number}</div>
                     <div className="mt-1 text-xl font-extrabold tracking-tight">{sc.client}</div>
                   </div>
-                  <div className="text-right text-xl font-black tabular-nums">{money(demo.locale, sc.amount)}</div>
+                  <div className="text-right text-xl font-black tabular-nums">{money(demo, sc.amount)}</div>
                 </div>
 
                 <ol className="mt-6 space-y-3">

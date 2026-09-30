@@ -51,7 +51,7 @@ export function Pricing({
     p.features?.eSignature,
     p.features?.openTracking,
     // Factur-X : France uniquement (la clé n'existe que dans fr.json).
-    p.features?.facturX,
+    locale === "fr" ? p.features?.facturX : undefined,
     p.features?.humanSupport,
   ].filter(Boolean);
 

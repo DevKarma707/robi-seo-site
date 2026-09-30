@@ -9,8 +9,9 @@ export const LEAD = "text-base md:text-lg lg:text-xl leading-relaxed";
 /** Carte « verre sombre » : la surface des visuels produit. */
 export const GLASS = "rounded-[28px] border border-white/10 bg-[#0D0630] shadow-[0_30px_80px_rgba(13,6,48,0.30)]";
 
-export function money(locale: string, amount: number, decimals = 2) {
-  return new Intl.NumberFormat(locale, { style: "currency", currency: "EUR", minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(amount);
+/** Montant dans la devise du pays (`demo` = getHeroDeviceCopy(locale)). */
+export function money(demo: { locale: string; currency: string }, amount: number, decimals = 2) {
+  return new Intl.NumberFormat(demo.locale, { style: "currency", currency: demo.currency, minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(amount);
 }
 export function today(locale: string) {
   return new Intl.DateTimeFormat(locale, { day: "2-digit", month: "2-digit", year: "2-digit" }).format(new Date());
