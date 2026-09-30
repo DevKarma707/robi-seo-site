@@ -158,7 +158,7 @@ export function Hero({
   // Ordinateur 3D : le texte centré en haut, le portable en grand dessous (façon page produit Apple).
   if (visual === "laptop" && laptop && story) {
     return (
-      <section className="relative overflow-hidden bg-[#0D0630] pt-28 pb-10 md:pt-32 md:pb-14">
+      <section className="relative overflow-hidden bg-[#0D0630] pt-28 pb-16 md:pt-32 md:pb-24">
         <HeroShaderBackground />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">

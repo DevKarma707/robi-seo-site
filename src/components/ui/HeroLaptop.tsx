@@ -21,8 +21,8 @@
  */
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import {
-  Activity, ArrowLeft, ArrowRight, Bot, Calendar, Check, ChevronDown, CreditCard, FileCheck, FilePlus, FileText,
-  LayoutGrid, MapPin, Mic, Moon, Package, Paperclip, Plus, Receipt, RotateCcw, Save, Search, Send, Settings, Star,
+  Activity, ArrowLeft, ArrowRight, Bot, Calendar, Check, CheckSquare, ChevronDown, CreditCard, Download, Eye, FileCheck, FilePlus, FileText,
+  LayoutGrid, Mail, MapPin, Mic, Moon, Package, Paperclip, Plus, Receipt, RotateCcw, Save, Search, Send, Settings, Star,
   Sun, TrendingDown, TrendingUp, Users, X,
 } from "lucide-react";
 import { SALES_PAID, SALES_PENDING, SALES_SCALE } from "@/lib/i18n/heroDevice";
@@ -31,12 +31,14 @@ import styles from "./HeroLaptop.module.css";
 
 const INVOICE_STEPS = [
   "idle", "toRobi", "clickRobi", "robi", "toMic", "typing", "sendMsg", "reply", "fillClient", "fillLine", "fillTotal",
-  "ask", "yes", "sending", "fly", "sent", "list", "toRow", "clickRow", "detail", "opened", "notif", "toDash", "clickDash", "back", "clear",
+  "ask", "yes", "sending", "fly", "sent", "list", "toRow", "clickRow", "detail", "opened", "toPdf", "clickPdf", "pdf", "notif",
+  "toDash", "clickDash", "back", "clear",
 ] as const;
 /** Le devis : même parcours, il se termine sur la signature (le tableau de bord ne bouge pas). */
 const QUOTE_STEPS = [
   "idle", "toRobi", "clickRobi", "robi", "toMic", "typing", "sendMsg", "reply", "fillClient", "fillLine", "fillTotal",
-  "ask", "yes", "sending", "fly", "sent", "list", "toRow", "clickRow", "detail", "opened", "notif", "hold", "clear",
+  "ask", "yes", "sending", "fly", "sent", "list", "toRow", "clickRow", "detail", "opened", "toPdf", "clickPdf", "pdf", "notif",
+  "hold", "clear",
 ] as const;
 type Step = (typeof INVOICE_STEPS)[number] | (typeof QUOTE_STEPS)[number];
 
@@ -44,20 +46,30 @@ type Step = (typeof INVOICE_STEPS)[number] | (typeof QUOTE_STEPS)[number];
 const BASE_DURATIONS: Record<Step, number> = {
   idle: 3400, toRobi: 1300, clickRobi: 500, robi: 1100, toMic: 1000, typing: 0, sendMsg: 800, reply: 1500,
   fillClient: 950, fillLine: 1050, fillTotal: 1700, ask: 1700, yes: 950, sending: 1000, fly: 1200, sent: 2300,
-  list: 1500, toRow: 1000, clickRow: 500, detail: 2100, opened: 3300, notif: 4000, toDash: 1100, clickDash: 500,
-  back: 4800, hold: 2800, clear: 800,
+  list: 1500, toRow: 1000, clickRow: 500, detail: 2100, opened: 3000, toPdf: 1000, clickPdf: 500, pdf: 2800, notif: 4400, toDash: 1100, clickDash: 500,
+  back: 4800, hold: 3200, clear: 800,
 };
 /** Pas où le curseur clique (anneau + bouton enfoncé). */
-const CLICKS: Step[] = ["clickRobi", "typing", "sendMsg", "clickRow", "clickDash"];
+const CLICKS: Step[] = ["clickRobi", "typing", "sendMsg", "clickRow", "clickPdf", "clickDash"];
 /** Cible du curseur à chaque pas (valeur de `data-cursor`), ou une position de repos. */
 const CURSOR: Partial<Record<Step, string>> = {
   toRobi: "nav-robi", clickRobi: "nav-robi", robi: "nav-robi",
   toMic: "mic", typing: "mic", sendMsg: "send", reply: "send",
   fillClient: "rest-editor", fillLine: "rest-editor", fillTotal: "rest-editor", ask: "rest-editor", yes: "rest-editor",
   sending: "ready", fly: "ready", sent: "ready",
-  list: "rest-list", toRow: "row-new", clickRow: "row-new", detail: "row-new", opened: "row-new", notif: "row-new",
-  toDash: "nav-dashboard", clickDash: "nav-dashboard", back: "rest-dash", hold: "row-new",
+  list: "rest-list", toRow: "row-new", clickRow: "row-new", detail: "row-new", opened: "row-new",
+  toPdf: "view-pdf", clickPdf: "view-pdf", pdf: "rest-pdf", notif: "rest-pdf",
+  toDash: "nav-dashboard", clickDash: "nav-dashboard", back: "rest-dash", hold: "rest-pdf",
 };
+/** Rangées du clavier (largeur relative de chaque touche), rangée des fonctions en tête. */
+const KEY_ROWS = [
+  [1.4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.7],
+  [1.6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.1],
+  [1.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.9],
+  [2.4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2.4],
+  [1, 1, 1, 1.3, 5.4, 1.3, 1, 1, 1, 1],
+];
 const waveHeights = [8, 14, 22, 12, 26, 18, 30, 15, 22, 28, 16, 24, 12, 20];
 const lidSlabs = [1, 2, 3, 4];
 const dust = [
@@ -166,7 +178,7 @@ export function HeroLaptop({ copy }: { copy: HeroLaptopCopy }) {
     ...BASE_DURATIONS,
     typing: prompt.length * 42 + 450,
     idle: scenarioIndex === 0 ? BASE_DURATIONS.idle : 2200,
-    notif: isQuote ? 5000 : BASE_DURATIONS.notif,
+    notif: isQuote ? 5200 : BASE_DURATIONS.notif,
   }), [prompt.length, scenarioIndex, isQuote]);
 
   // Séquenceur : au bout du dernier pas, le scénario suivant repart de zéro.
@@ -333,6 +345,7 @@ export function HeroLaptop({ copy }: { copy: HeroLaptopCopy }) {
     "data-fly": step === "fly",
     "data-chip": step === "sent" || step === "list",
     "data-selected": is("clickRow"),
+    "data-pdf": is("pdf") && !is("toDash"),
     "data-toast": step === "opened" || step === "notif",
     "data-done": done,
     "data-back": paidIn,
@@ -355,10 +368,20 @@ export function HeroLaptop({ copy }: { copy: HeroLaptopCopy }) {
             <div className={styles.laptop}>
               {/* ---- Le plateau : clavier et pavé tactile, vus d'en haut ---- */}
               <div className={styles.deck} aria-hidden="true">
-                <div className={styles.keyboard}><span className={styles.keys} /></div>
+                <span className={`${styles.speaker} ${styles.speakerL}`} />
+                <span className={`${styles.speaker} ${styles.speakerR}`} />
+                <div className={styles.keyboard}>
+                  {KEY_ROWS.map((row, r) => (
+                    <div key={r} className={styles.keyRow} data-fn={r === 0}>
+                      {row.map((g, k) => <i key={k} style={{ "--g": g } as CSSProperties} />)}
+                    </div>
+                  ))}
+                </div>
                 <div className={styles.trackpad} />
-                <div className={styles.lip} />
               </div>
+              <div className={styles.lip} aria-hidden="true" />
+              <div className={`${styles.deckSide} ${styles.deckSideL}`} aria-hidden="true" />
+              <div className={`${styles.deckSide} ${styles.deckSideR}`} aria-hidden="true" />
               <div className={styles.hinge} aria-hidden="true" />
 
               {/* ---- L'écran : épaisseur, cadre, dalle ---- */}
@@ -528,6 +551,11 @@ export function HeroLaptop({ copy }: { copy: HeroLaptopCopy }) {
                                 </div>
                                 <strong className={styles.detailClient}>{scenario.client}</strong>
                                 <span className={styles.detailAmount}>{money.format(scenario.amount)}</span>
+                                <div className={styles.detailActions}>
+                                  <span className={styles.viewBtn} data-cursor="view-pdf"><Eye size={14} />{copy.detail.view}</span>
+                                  <span className={styles.iconBtn}><Download size={14} /></span>
+                                  <span className={styles.iconBtn}><Mail size={14} /></span>
+                                </div>
                                 {/* Aperçu du PDF : l'en-tête de l'entreprise de démo, la ligne, le total. */}
                                 <div className={styles.paper}>
                                   <div className={styles.paperHead}>
@@ -653,6 +681,73 @@ export function HeroLaptop({ copy }: { copy: HeroLaptopCopy }) {
                             </div>
                           </div>
                         </section>
+
+                        {/* ================= La page du document (aperçu PDF) et les quatre boutons de l'app ================= */}
+                        <div className={styles.pdfModal}>
+                          <div className={styles.pdfSheet}>
+                            <div className={styles.pdfBar}>
+                              <span><FileText size={15} />{scenario.number}.pdf</span>
+                              <span className={styles.pdfBarIcons}><Download size={15} /><X size={16} /></span>
+                            </div>
+                            <div className={styles.a4}>
+                              <div className={styles.a4Head}>
+                                <span className={styles.a4Logo}>{initialsOf(copy.pdf.issuer)}</span>
+                                <span className={styles.a4Issuer}><b>{copy.pdf.issuer}</b><small>{copy.pdf.issuerLine}</small><small>{d.robi.issuerAddress}</small></span>
+                                <span className={styles.a4Title}>{scenario.docLabel}<em>{scenario.number}</em></span>
+                              </div>
+                              <div className={styles.a4Meta}>
+                                <span><em>{isQuote ? copy.fields.client : copy.pdf.billTo}</em><b>{scenario.client}</b><small>{d.robi.clientAddress}</small></span>
+                                <span className={styles.a4Dates}><em>{copy.pdf.date}</em><b>{dayOffset(0)}</b><em>{copy.detail.due}</em><b>{dayOffset(30)}</b></span>
+                              </div>
+                              <div className={styles.a4Table}>
+                                <span className={styles.a4Th}><em>{copy.pdf.designation}</em><em>{d.robi.qty}</em><em>{d.robi.price}</em><em>{d.robi.vat}</em><em>{copy.pdf.amount}</em></span>
+                                <span className={styles.a4Tr}><b>{scenario.service}</b><b>1</b><b>{money.format(ht)}</b><b>20 %</b><b>{money.format(ht)}</b></span>
+                                <span className={styles.a4Ghost}><i /><i /><i /></span>
+                              </div>
+                              <div className={styles.a4Bottom}>
+                                {isQuote ? (
+                                  <span className={styles.a4Sign}>
+                                    <em>{copy.pdf.approve}</em>
+                                    <svg width="150" height="46" viewBox="0 0 120 44" fill="none" aria-hidden="true">
+                                      <path d="M6 32 C 14 10, 24 6, 30 22 C 34 34, 42 36, 48 20 C 52 9, 60 10, 62 24 C 64 34, 74 30, 80 18 C 86 8, 96 14, 114 12" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+                                    </svg>
+                                  </span>
+                                ) : (
+                                  <span className={styles.a4Pay}>
+                                    <span className={styles.a4PayBtn}><CreditCard size={13} strokeWidth={2.4} />{copy.pdf.payOnline}</span>
+                                    <span className={styles.a4Ghost}><i /><i /></span>
+                                  </span>
+                                )}
+                                <div className={styles.a4Totals}>
+                                  <span><em>{copy.detail.totalHt}</em><b>{money.format(ht)}</b></span>
+                                  <span><em>{copy.detail.vat} 20 %</em><b>{money.format(scenario.amount - ht)}</b></span>
+                                  <span className={styles.a4Total}><em>{copy.detail.total}</em><b>{money.format(scenario.amount)}</b></span>
+                                </div>
+                              </div>
+                              <div className={styles.a4Foot}>
+                                {copy.facturX && !isQuote ? <span className={styles.a4Fx}>Factur-X</span> : <span />}
+                                <span>{scenario.number}.pdf · 1/1</span>
+                              </div>
+                              {!isQuote && <span className={styles.stamp}>{copy.badges.paid}</span>}
+                            </div>
+                            <div className={styles.pdfActions}>
+                              <span><Download size={15} strokeWidth={2.2} />{copy.pdf.actions.pdf}</span>
+                              <span><Mail size={15} strokeWidth={2.2} />{copy.pdf.actions.send}</span>
+                              {isQuote ? (
+                                <>
+                                  <span><FileText size={15} strokeWidth={2.2} />{copy.pdf.actions.draft}</span>
+                                  <span className={styles.pdfMain}><Check size={15} strokeWidth={2.6} />{done ? copy.pdf.actions.approved : copy.pdf.actions.approveBtn}</span>
+                                </>
+                              ) : (
+                                <>
+                                  <span><Check size={15} strokeWidth={2.6} />{copy.pdf.actions.approved}</span>
+                                  <span className={styles.pdfMain}><CheckSquare size={15} strokeWidth={2.4} />{copy.pdf.actions.paid}</span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <span className={styles.restPdf} data-cursor="rest-pdf" />
 
                         {/* Repères invisibles pour le curseur (positions de repos). */}
                         <span className={styles.restList} data-cursor="rest-list" />
