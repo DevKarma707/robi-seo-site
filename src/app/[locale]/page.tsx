@@ -14,6 +14,7 @@ import { StickyMobileCTA } from "@/components/ui/StickyMobileCTA";
 import { Locale, locales, defaultLocale, localeCurrencies, priceMap } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getHeroStoryCopy } from "@/lib/i18n/heroStory";
+import { getHeroDeviceCopy } from "@/lib/i18n/heroDevice";
 
 import { pageSeo } from "@/lib/seo/pageSeo";
 
@@ -170,8 +171,9 @@ export default async function Home({
         secondaryCtaText={dict.hero.secondaryCta}
         secondaryCtaHref="https://go.robi-app.com/?demo"
         variant="default"
-        visual="editorial"
+        visual="device"
         story={getHeroStoryCopy(locale)}
+        device={getHeroDeviceCopy(locale)}
         launchOffer={{
           text: dict.pricing?.launchOfferBadge || "OFFRE LIMITEE",
           highlight: new Intl.NumberFormat(locale, {

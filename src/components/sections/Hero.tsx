@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { LaunchSeats, useLaunchOffer, formatCurrentLaunchPrice } from "@/components/ui/LaunchSeats";
 import { HeroMockups } from "@/components/ui/HeroMockups";
 import { HeroStory } from "@/components/ui/HeroStory";
+import { HeroDevice } from "@/components/ui/HeroDevice";
+import type { HeroDeviceCopy } from "@/lib/i18n/heroDevice";
 import dynamic from "next/dynamic";
 
 // Fond WebGL chargé à part, sans rendu serveur : le héro s'affiche d'abord sur l'Amethyst.
@@ -44,8 +46,13 @@ interface HeroProps {
   /** Le titre lui-même défile (« Parlez » ↔ « Écrivez ») : Robi se pilote à
    *  la voix comme au clavier. Sans liste, le titre reste fixe. */
   titleWords?: string[];
-  visual?: "mockups" | "editorial";
+  /** `device` : le téléphone 3D flottant (essai du 30/09/2026), même mise
+   *  en page que `editorial`, seul le visuel change ; la démo à l'écran
+   *  rejoue les scénarios de `story`. */
+  visual?: "mockups" | "editorial" | "device";
   story?: HeroStoryCopy;
+  /** Textes de la démo du téléphone 3D (`visual="device"`). */
+  device?: HeroDeviceCopy;
 }
 
 function WordRotator({ words, className = "text-[#BEF221]", delay = 0 }: { words: string[]; className?: string; delay?: number }) {
@@ -101,9 +108,13 @@ export function Hero({
   titleWords,
   visual = "mockups",
   story,
+  device,
 }: HeroProps) {
   const isCenter = variant === "centered";
-  const isEditorial = !isCenter && visual === "editorial" && !!story;
+  const isEditorial = !isCenter && (visual === "editorial" || visual === "device") && !!story;
+  const editorialVisual = isEditorial && story
+    ? visual === "device" && device ? <HeroDevice copy={device} /> : <HeroStory copy={story} />
+    : null;
 
   const offreLive = useLaunchOffer();
   const prixLive = launchOffer?.seats && offreLive?.tranche
@@ -204,7 +215,7 @@ export function Hero({
             </div>
 
             <div className={isEditorial ? storyStyles.visual : "relative hidden h-[520px] lg:block"}>
-              {isEditorial ? <HeroStory copy={story} /> : <HeroMockups />}
+              {isEditorial ? editorialVisual : <HeroMockups />}
             </div>
           </div>
         )}
