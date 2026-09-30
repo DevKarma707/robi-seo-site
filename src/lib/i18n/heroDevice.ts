@@ -64,6 +64,12 @@ export interface HeroDeviceCopy {
     months: string[];
   };
   list: { create: string; search: string; invoices: string; quotes: string };
+  /** Aperçu PDF du document : l'émetteur est une entreprise fictive de démo. */
+  pdf: { billTo: string; date: string; designation: string; amount: string; issuer: string; issuerLine: string; payOnline: string; approve: string;
+    /** Les quatre boutons de l'app sous l'aperçu : PDF, Envoyer, Approuvé / Brouillon, Payée / Approuver. */
+    actions: { pdf: string; send: string; approved: string; paid: string; draft: string; approveBtn: string } };
+  /** Troisième scénario : les relances d'impayés. `{total}` = somme des trois factures. */
+  reminder: { prompt: string; answer: string; ask: string; yes: string; sentChip: string; rows: HeroDeviceRow[] };
   detail: {
     view: string; more: string; totalHt: string; vat: string; total: string; markPaid: string; paid: string;
     createdOn: string; due: string; history: string; lines: string; on: string; at: string;
@@ -74,13 +80,22 @@ export interface HeroDeviceCopy {
   openedTitle: string;
   goalFrom: number;
   goalTotal: number;
-  avgMonth: number;
   facturX?: string;
   /** Chip « Encaissez par carte » (Visa · Mastercard · Stripe, paiement en ligne de l'app). */
   stripe: string;
   stageAlt: string;
   scenarios: HeroDeviceScenario[];
 }
+
+/**
+ * Ventes des 11 mois passés (encaissé) et ce qui reste en attente sur les
+ * derniers mois : le graphique « Ventes (12 mois) » de l'app empile l'encaissé
+ * (lime) et l'en-attente (gris). Le 12e mois est le chiffre d'affaires du mois.
+ * La moyenne mensuelle se calcule sur ces 12 valeurs, elle n'est pas écrite en dur.
+ */
+export const SALES_PAID = [1850, 2100, 1640, 2480, 2210, 2760, 2340, 2590, 2120, 2680, 2950];
+export const SALES_PENDING = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 792, 1620];
+export const SALES_SCALE = 4800;
 
 const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
   fr: {
@@ -95,6 +110,15 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
       sales12m: "Ventes (12 mois)", goal: "Objectif", avgMonth: "Moyenne mensuelle", avgMonthSub: "/ Objectif / mois",
       months: ["oct.", "nov.", "déc.", "janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept."],
     },
+    pdf: { billTo: "Facturé à", date: "Date", designation: "Désignation", amount: "Montant", issuer: "Menuiserie Martin", issuerLine: "Artisan menuisier · Lyon", payOnline: "Payer en ligne", approve: "Bon pour accord", actions: { pdf: "PDF", send: "Envoyer", approved: "Approuvé", paid: "Payée", draft: "Brouillon", approveBtn: "Approuver" } },
+    reminder: {
+      prompt: "Robi, combien j’ai de factures impayées ce mois-ci ?", answer: "Il y en a trois, pour {total}.", ask: "Je les relance ?", yes: "Oui, relance-les.", sentChip: "3 relances envoyées",
+      rows: [
+        { client: "Sophie Nadaud", number: "FAC-2026-001", amount: 312, badge: "late" },
+        { client: "Studio Bernard", number: "FAC-2026-003", amount: 480, badge: "late" },
+        { client: "Studio Vernier", number: "FAC-2026-002", amount: 1620, badge: "sent" },
+      ],
+    },
     list: { create: "Créer", search: "Rechercher…", invoices: "Factures", quotes: "Devis" },
     detail: {
       view: "Afficher", more: "Plus", totalHt: "Total HT", vat: "TVA", total: "Total", markPaid: "Marquer comme payée", paid: "Payée",
@@ -104,7 +128,7 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
     badges: { sent: "Envoyé", paid: "Payé", late: "Retard", draft: "Brouillon", accepted: "Accepté" },
     nav: ["Factures", "Devis", "Clients", "Produits"],
     openedTitle: "Document ouvert",
-    goalFrom: 2390, goalTotal: 4800, avgMonth: 294,
+    goalFrom: 2390, goalTotal: 4800,
     facturX: "Conforme Factur-X",
     stripe: "Encaissez par carte",
     stageAlt: "Un téléphone flottant montre Robi : on dicte, la facture se remplit, part au client, le client l’ouvre, le paiement arrive",
@@ -113,7 +137,7 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
         client: "Maison Laurent", service: "Meuble sur mesure en chêne", amount: 1240, number: "FAC-2026-004", docLabel: "Facture",
         created: "Facture créée", sent: "Facture envoyée", sentChip: "Envoyée à Maison Laurent",
         reply: "C’est noté ! Voici votre facture pour Maison Laurent.",
-        ask: "C’est fait ! Je l’envoie à Maison Laurent ?", yes: "Oui, envoie.",
+        ask: "C’est fait ! Je l’envoie à Maison Laurent ?", yes: "Oui, envoie.",
         openedLine: "Maison Laurent a ouvert la facture à 20:30",
         doneTitle: "Paiement reçu", doneLine: "Maison Laurent · 1 240,00 € via Stripe", doneHistory: "💰 Paiement reçu via Stripe", doneBadge: "paid",
         rows: [
@@ -126,7 +150,7 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
         client: "Atelier Dubois", service: "Pose d’une cuisine équipée", amount: 2274, number: "DEV-2026-003", docLabel: "Devis",
         created: "Devis créé", sent: "Devis envoyé", sentChip: "Envoyé à Atelier Dubois",
         reply: "Je m’en occupe ! Voici le devis pour Atelier Dubois.",
-        ask: "C’est fait ! Je l’envoie à Atelier Dubois ?", yes: "Oui, envoie.",
+        ask: "C’est fait ! Je l’envoie à Atelier Dubois ?", yes: "Oui, envoie.",
         openedLine: "Atelier Dubois a ouvert le devis à 20:30",
         doneTitle: "Devis signé", doneLine: "Atelier Dubois · 2 274,00 €", doneHistory: "✍️ Devis signé électroniquement", doneBadge: "accepted",
         rows: [
@@ -148,6 +172,15 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
       sales12m: "Sales (12 months)", goal: "Goal", avgMonth: "Monthly average", avgMonthSub: "/ goal / month",
       months: ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
     },
+    pdf: { billTo: "Bill to", date: "Date", designation: "Description", amount: "Amount", issuer: "Martin Woodworks", issuerLine: "Custom carpentry · Lyon", payOnline: "Pay online", approve: "Approved by", actions: { pdf: "PDF", send: "Send", approved: "Approved", paid: "Paid", draft: "Draft", approveBtn: "Approve" } },
+    reminder: {
+      prompt: "Robi, how many unpaid invoices do I have this month?", answer: "Three, for {total}.", ask: "Shall I send reminders?", yes: "Yes, remind them.", sentChip: "3 reminders sent",
+      rows: [
+        { client: "Sophie Nadaud", number: "INV-2026-001", amount: 312, badge: "late" },
+        { client: "Studio Bernard", number: "INV-2026-003", amount: 480, badge: "late" },
+        { client: "Studio Vernier", number: "INV-2026-002", amount: 1620, badge: "sent" },
+      ],
+    },
     list: { create: "Create", search: "Search…", invoices: "Invoices", quotes: "Quotes" },
     detail: {
       view: "View", more: "More", totalHt: "Subtotal", vat: "VAT", total: "Total", markPaid: "Mark as paid", paid: "Paid",
@@ -157,7 +190,7 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
     badges: { sent: "Sent", paid: "Paid", late: "Late", draft: "Draft", accepted: "Accepted" },
     nav: ["Invoices", "Quotes", "Clients", "Products"],
     openedTitle: "Document opened",
-    goalFrom: 2390, goalTotal: 4800, avgMonth: 294,
+    goalFrom: 2390, goalTotal: 4800,
     stripe: "Accept card payments",
     stageAlt: "A floating phone shows Robi: you dictate, the invoice fills in, goes to the client, the client opens it, the payment arrives",
     scenarios: [
@@ -200,6 +233,15 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
       sales12m: "Ventas (12 meses)", goal: "Objetivo", avgMonth: "Media mensual", avgMonthSub: "/ objetivo / mes",
       months: ["oct.", "nov.", "dic.", "ene.", "feb.", "mar.", "abr.", "may.", "jun.", "jul.", "ago.", "sept."],
     },
+    pdf: { billTo: "Facturado a", date: "Fecha", designation: "Concepto", amount: "Importe", issuer: "Carpintería Martín", issuerLine: "Carpintería a medida · Lyon", payOnline: "Pagar en línea", approve: "Conforme", actions: { pdf: "PDF", send: "Enviar", approved: "Aprobado", paid: "Pagada", draft: "Borrador", approveBtn: "Aprobar" } },
+    reminder: {
+      prompt: "Robi, ¿cuántas facturas sin pagar tengo este mes?", answer: "Hay tres, por {total}.", ask: "¿Les envío un recordatorio?", yes: "Sí, recuérdaselo.", sentChip: "3 recordatorios enviados",
+      rows: [
+        { client: "Sophie Nadaud", number: "FAC-2026-001", amount: 312, badge: "late" },
+        { client: "Studio Bernard", number: "FAC-2026-003", amount: 480, badge: "late" },
+        { client: "Studio Vernier", number: "FAC-2026-002", amount: 1620, badge: "sent" },
+      ],
+    },
     list: { create: "Crear", search: "Buscar…", invoices: "Facturas", quotes: "Presupuestos" },
     detail: {
       view: "Ver", more: "Más", totalHt: "Base", vat: "IVA", total: "Total", markPaid: "Marcar como pagada", paid: "Pagada",
@@ -209,7 +251,7 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
     badges: { sent: "Enviado", paid: "Pagado", late: "Retraso", draft: "Borrador", accepted: "Aceptado" },
     nav: ["Facturas", "Presupuestos", "Clientes", "Productos"],
     openedTitle: "Documento abierto",
-    goalFrom: 2390, goalTotal: 4800, avgMonth: 294,
+    goalFrom: 2390, goalTotal: 4800,
     stripe: "Cobra con tarjeta",
     stageAlt: "Un teléfono flotante muestra Robi: dictas, la factura se rellena, llega al cliente, el cliente la abre, entra el pago",
     scenarios: [
@@ -252,6 +294,15 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
       sales12m: "Vendas (12 meses)", goal: "Objetivo", avgMonth: "Média mensal", avgMonthSub: "/ objetivo / mês",
       months: ["out.", "nov.", "dez.", "jan.", "fev.", "mar.", "abr.", "mai.", "jun.", "jul.", "ago.", "set."],
     },
+    pdf: { billTo: "Faturado a", date: "Data", designation: "Descrição", amount: "Valor", issuer: "Carpintaria Martins", issuerLine: "Carpintaria por medida · Lyon", payOnline: "Pagar online", approve: "De acordo", actions: { pdf: "PDF", send: "Enviar", approved: "Aprovado", paid: "Paga", draft: "Rascunho", approveBtn: "Aprovar" } },
+    reminder: {
+      prompt: "Robi, quantas faturas por pagar tenho este mês?", answer: "São três, no total de {total}.", ask: "Envio um lembrete?", yes: "Sim, lembra-os.", sentChip: "3 lembretes enviados",
+      rows: [
+        { client: "Sophie Nadaud", number: "FAT-2026-001", amount: 312, badge: "late" },
+        { client: "Studio Bernard", number: "FAT-2026-003", amount: 480, badge: "late" },
+        { client: "Studio Vernier", number: "FAT-2026-002", amount: 1620, badge: "sent" },
+      ],
+    },
     list: { create: "Criar", search: "Pesquisar…", invoices: "Faturas", quotes: "Orçamentos" },
     detail: {
       view: "Ver", more: "Mais", totalHt: "Subtotal", vat: "IVA", total: "Total", markPaid: "Marcar como paga", paid: "Paga",
@@ -261,7 +312,7 @@ const copy: Record<"fr" | "en" | "es" | "pt", HeroDeviceCopy> = {
     badges: { sent: "Enviado", paid: "Pago", late: "Atraso", draft: "Rascunho", accepted: "Aceite" },
     nav: ["Faturas", "Orçamentos", "Clientes", "Produtos"],
     openedTitle: "Documento aberto",
-    goalFrom: 2390, goalTotal: 4800, avgMonth: 294,
+    goalFrom: 2390, goalTotal: 4800,
     stripe: "Receba por cartão",
     stageAlt: "Um telemóvel flutuante mostra o Robi: dita, a fatura preenche-se, segue para o cliente, o cliente abre-a, o pagamento chega",
     scenarios: [

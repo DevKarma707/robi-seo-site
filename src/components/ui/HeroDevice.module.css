@@ -13,8 +13,8 @@
   --spring: cubic-bezier(.34, 1.45, .64, 1);
   --px: 76%;                                 /* pastille « Robi AI » : position d'arrivée */
   --py: 13%;
-  --fxx: 20%;                                /* chips Factur-X / carte */
-  --fxy: 84%;
+  --fxx: 9%;                                 /* chips Factur-X / carte : à gauche, hors de l'écran */
+  --fxy: 80%;
   position: relative;
   width: 100%;
   height: 700px;
@@ -261,8 +261,11 @@
 .salesHead b { padding: 5px 9px; border-radius: 8px; background: #ffffff14; font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .salesChart { display: flex; align-items: flex-end; gap: 4px; height: 70px; margin-top: 10px; border-bottom: 1px dashed #ffffff2b; }
 .salesCol { position: relative; flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
-.salesBar { display: block; width: 70%; height: var(--h); min-height: 2px; border-radius: 3px 3px 0 0; background: #ffffff26; transition: height 1.4s var(--ease), background .6s ease; }
+/* Encaissé en lime (tous les mois), en attente en gris par-dessus, comme dans l'app. */
+.salesBar { display: block; width: 70%; height: var(--h); min-height: 2px; background: #bef221b3; transition: height 1.4s var(--ease); }
 .salesBar[data-current="true"] { background: #bef221; box-shadow: 0 0 14px #bef22180; }
+.salesPending { display: block; width: 70%; height: var(--h); background: #ffffff38; border-radius: 3px 3px 0 0; }
+.salesCol .salesBar:first-of-type, .salesCol .salesPending[style*="0%"] + .salesBar { border-radius: 3px 3px 0 0; }
 .salesCol small { position: absolute; bottom: -14px; font-size: 6.5px; color: #8b8aa8; font-weight: 600; }
 .sales { padding-bottom: 22px; }
 
@@ -304,6 +307,7 @@
 .detailBar { display: flex; align-items: center; gap: 10px; padding: 6px 12px 10px; border-bottom: 1px solid #ffffff14; color: #d6d1e0; }
 .detailBar .badge { margin: 0; }
 .detailView { display: flex; align-items: center; gap: 5px; margin-left: auto; padding: 7px 10px; border-radius: 10px; background: #ffffff14; font-size: 10px; font-weight: 600; }
+.detailView[data-tap="true"] { background: #bef221; color: #0d0630; box-shadow: 0 0 0 6px #bef22133; transition: background .4s ease, box-shadow .6s ease; }
 .detailMore { display: flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; }
 .detailBody { padding: 12px 14px 0; }
 .detailNumber { display: block; font-size: 8px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #8b8aa8; }
@@ -329,6 +333,78 @@
 .timeline li[data-latest="true"] i { border-color: #bef221; background: #bef221; box-shadow: 0 0 10px #bef221a6; }
 .timeline strong { display: block; font-size: 10.5px; font-weight: 700; }
 .timeline small { display: block; margin-top: 2px; font-size: 8.5px; color: #8b8aa8; }
+
+/* Aperçu PDF : une feuille blanche qui monte par-dessus la fiche. */
+.pdf {
+  position: absolute; left: 0; right: 0; top: 40px; bottom: 0; z-index: 3;
+  padding: 0 12px 0;
+  background: #0b0a2ef7;
+  transform: translateY(104%);
+  transition: transform .95s var(--ease);
+}
+.stage[data-pdf="true"] .pdf { transform: none; transition-delay: .7s; }
+.pdfBar { display: flex; align-items: center; justify-content: space-between; padding: 8px 4px 12px; color: #d6d1e0; font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+/* Le document : en-tête coloré d'une entreprise de démo, accent ambre, mise en page de vraie facture. */
+.paper { --ink: #1d2a44; --brand: #1f4e79; --accent: #f2a33a; background: #fff; color: var(--ink); border-radius: 8px; overflow: hidden; min-height: 452px; box-shadow: 0 24px 50px -20px #000; display: flex; flex-direction: column; }
+.paperHead { display: flex; align-items: center; gap: 10px; padding: 16px 16px 15px; background: linear-gradient(120deg, #1f4e79 0%, #2a6aa0 100%); color: #fff; position: relative; }
+.paperHead::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--accent); }
+.paperLogo { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--accent); color: #1d2a44; font-size: 14px; font-weight: 800; letter-spacing: -.03em; flex-shrink: 0; box-shadow: 0 0 0 3px #ffffff33; }
+.paperIssuer { flex: 1; min-width: 0; }
+.paperIssuer b { display: block; font-size: 13px; font-weight: 800; letter-spacing: -.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.paperIssuer small { display: block; margin-top: 2px; font-size: 8.5px; opacity: .8; }
+.paperTitle { text-align: right; font-size: 19px; font-weight: 800; letter-spacing: -.03em; line-height: 1; text-transform: uppercase; }
+.paperTitle em { display: block; margin-top: 5px; font-size: 8px; font-style: normal; font-weight: 700; letter-spacing: .08em; opacity: .8; }
+.paperBody { flex: 1; display: flex; flex-direction: column; padding: 16px 16px 12px; }
+.paperMeta { display: flex; justify-content: space-between; gap: 12px; padding: 12px; border-radius: 8px; background: #f3f6fa; }
+.paperMeta span { display: block; }
+.paperMeta em, .paperTh em, .paperTotals em, .paperSign em { font-style: normal; font-size: 7.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #7a879c; }
+.paperMeta b { display: block; margin-top: 3px; font-size: 12px; font-weight: 700; }
+.paperMeta i { display: block; height: 3px; width: 86px; margin-top: 5px; border-radius: 2px; background: #d9e0ea; }
+.paperDate { text-align: right; }
+.paperDate b { font-size: 10.5px; font-variant-numeric: tabular-nums; margin-bottom: 5px; }
+.paperTable { margin-top: 16px; }
+.paperTh { display: flex; justify-content: space-between; padding: 7px 10px; background: var(--brand); border-radius: 6px 6px 0 0; }
+.paperTh em { color: #fff; }
+.paperTr { display: flex; justify-content: space-between; gap: 10px; padding: 11px 10px; background: #f8fafc; border-bottom: 1px solid #e3e9f1; font-size: 11px; }
+.paperTr b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.paperGhost { display: flex; justify-content: space-between; padding: 11px 10px; border-bottom: 1px solid #e3e9f1; }
+.paperGhost i { display: block; height: 3px; border-radius: 2px; background: #e3e9f1; width: 46%; }
+.paperGhost i:last-child { width: 16%; }
+.paperTotals { margin: 14px 0 0 auto; width: 64%; display: grid; gap: 6px; }
+.paperTotals span { display: flex; justify-content: space-between; align-items: baseline; font-size: 11px; }
+.paperTotals b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.paperTotal { margin-top: 4px; padding: 9px 10px; border-radius: 7px; background: var(--brand); color: #fff; }
+.paperTotal em { color: #ffffffcc; }
+.paperTotal b { font-size: 14px; font-weight: 800; }
+.paperPay { align-self: flex-end; display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 8px 14px; border-radius: 999px; background: var(--accent); color: #1d2a44; font-size: 10.5px; font-weight: 800; }
+.paperSign { align-self: flex-end; display: flex; flex-direction: column; align-items: flex-end; margin-top: 10px; padding: 8px 12px 4px; border: 1px dashed #b8c4d6; border-radius: 8px; color: var(--brand); }
+.paperFoot { margin-top: auto; padding-top: 12px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #e3e9f1; font-size: 8px; font-weight: 600; color: #7a879c; letter-spacing: .04em; }
+.paperFx { padding: 3px 7px; border-radius: 999px; background: var(--brand); color: #fff; font-weight: 800; }
+
+/* Les quatre boutons de l'app sous l'aperçu (PDF · Envoyer · Approuvé · Payée). */
+.pdfActions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+.pdfActions span { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 11px 8px; border-radius: 12px; background: #fff; color: #334155; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; box-shadow: 0 8px 18px -10px #000; }
+.pdfActions span[data-accent="true"] { background: #bef221; color: #0d0630; }
+.pdfActions span[data-ghost="true"] { background: #ffffff33; color: #fff; box-shadow: none; }
+
+/* Relances : trois factures impayées, puis chacune devient une bulle qui part. */
+.remRows { display: grid; gap: 8px; margin-top: 12px; }
+.remItem { position: relative; opacity: 0; transform: translateY(10px); transition: opacity .6s ease, transform .7s var(--ease); transition-delay: calc(var(--i) * .35s); }
+.stage[data-rows="true"] .remItem { opacity: 1; transform: none; }
+.remRow { display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: 16px; background: #ffffff10; border: 1px solid #ffffff26; box-shadow: inset 0 1px 0 #ffffff26; transition: opacity .6s ease, transform .7s var(--ease), filter .7s ease; transition-delay: calc(var(--i) * .22s); }
+.stage[data-envelope="true"] .remRow { opacity: 0; transform: scale(.92); filter: blur(6px); }
+.remOrb {
+  position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px;
+  display: grid; place-items: center; border-radius: 50%;
+  background: #bef221; color: #0d0630;
+  box-shadow: 0 0 0 6px #bef22129, 0 0 36px #bef221a6;
+  opacity: 0; transform: scale(.3);
+  transition: opacity .5s ease, transform .8s var(--spring);
+  transition-delay: calc(.2s + var(--i) * .22s);
+}
+.stage[data-kind="reminder"][data-envelope="true"] .remOrb { opacity: 1; transform: scale(1); }
+.stage[data-kind="reminder"][data-fly="true"] .remOrb { transform: translateY(-440px) scale(.55); opacity: 0; transition: transform 1s cubic-bezier(.55, 0, .7, .2), opacity .35s ease .55s; transition-delay: calc(var(--i) * .3s), calc(.55s + var(--i) * .3s); }
+.stage.stage[data-kind="reminder"] .flyer { animation-delay: calc(.6s + var(--n) * .3s); }
 
 /* Feuille de dictée */
 .sheet {
@@ -368,8 +444,8 @@
 
 /* La réponse de Robi : bulle lime qui surgit à l'ouverture du document. */
 .reply { display: flex; align-items: flex-end; gap: 8px; margin-top: 12px; opacity: 0; transform: translateY(8px) scale(.92); transform-origin: left bottom; transition: opacity .5s ease, transform .7s var(--spring); }
-.stage[data-doc="true"] .reply { opacity: 1; transform: none; }
-.stage[data-envelope="true"] .reply { opacity: 0; transform: translateY(-10px) scale(.96); }
+.stage[data-reply="true"] .first { opacity: 1; transform: none; }
+.stage[data-envelope="true"] .first { opacity: 0; transform: translateY(-10px) scale(.96); }
 .replyMark { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: #0d0630; border: 1px solid #ffffff2b; color: #bef221; flex-shrink: 0; }
 .replyMark svg { width: 17px; height: 17px; }
 .ask { margin-top: 12px; }
@@ -480,6 +556,9 @@
 .tabBar > span[data-active="true"] { color: #fff; }
 .tabMic { position: relative; display: grid; place-items: center; width: 52px; height: 52px; margin-top: -26px; border-radius: 50%; background: #bef221; border: 3px solid #0b0a2e; color: #0d0630; box-shadow: 0 0 26px #bef22173; }
 .tabMic svg { width: 24px; height: 24px; }
+/* La mascotte bien au centre du cercle : on annule la colonne des autres onglets. */
+.tabBar > .tabMic { display: grid; place-items: center; gap: 0; width: 52px; }
+.tabBar > .tabMic svg { display: block; margin: 0; }
 .tabMic::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #bef221; opacity: 0; }
 .stage[data-step="idle"] .tabMic::after { animation: micRing 1.8s ease-out infinite; }
 .homeBar { position: absolute; left: 50%; bottom: 9px; width: 120px; height: 5px; border-radius: 3px; background: #ffffff59; transform: translateX(-50%); z-index: 2; }
@@ -644,10 +723,10 @@
   .stage { --pwn: 270; height: 640px; --px: 78%; --py: 13%; }
 }
 @media (max-width: 1023px) {
-  .stage { --pwn: 260; height: 620px; --px: 80%; --py: 12%; --fxx: 18%; --fxy: 84%; }
+  .stage { --pwn: 260; height: 620px; --px: 80%; --py: 12%; --fxx: 14%; --fxy: 84%; }
 }
 @media (max-width: 639px) {
-  .stage { --pwn: 236; height: 580px; perspective: 1300px; --px: 76%; --py: 12%; --fxx: 19%; --fxy: 86%; }
+  .stage { --pwn: 236; height: 580px; perspective: 1300px; --px: 76%; --py: 12%; --fxx: 20%; --fxy: 93%; }
   .light { inset: -10% -40%; }
   .pillText { font-size: 16px; }
   .pillBody { padding: 8px 15px 8px 11px; }
@@ -665,5 +744,5 @@
 @media (prefers-reduced-motion: reduce) {
   .float, .turn, .glass, .shadow, .light, .dust i, .ripple, .wave i, .caret, .statusText, .activityText,
   .bar i, .chartBars i, .tabMic::after, .flyer, .pill, .pillBody, .pillRing, .pillSheen, .sentChip, .fxChip, .device { animation: none !important; }
-  .document, .documentStatus, .check, .line i, .line b, .sheet, .orb, .notif, .light, .pillWrap, .fxWrap, .reply, .ask, .yes { transition: none !important; }
+  .remItem, .remRow, .remOrb, .pdf, .document, .documentStatus, .check, .line i, .line b, .sheet, .orb, .notif, .light, .pillWrap, .fxWrap, .reply, .ask, .yes { transition: none !important; }
 }

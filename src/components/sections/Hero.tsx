@@ -130,8 +130,8 @@ export function Hero({
         {ctaText}
         <ArrowRight className="ml-1.5 w-4 h-4 md:w-5 md:h-5" />
       </Button>
-      {/* Launch offer pill */}
-      {launchOffer && (
+      {/* Launch offer pill — pas avec le téléphone 3D : l'offre est déjà dans le bandeau du haut (Ralph, 01/10/2026). */}
+      {launchOffer && visual !== "device" && (
         <div className={`flex items-center justify-center gap-2 w-full lg:w-auto bg-white/5 border border-[#BEF221]/20 rounded-full px-4 py-2 ${isEditorial ? storyStyles.offer : ""}`}>
           <Zap className="w-3.5 h-3.5 text-[#BEF221] shrink-0" />
           <span className="text-white/70 text-xs">
