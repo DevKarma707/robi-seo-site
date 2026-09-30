@@ -33,7 +33,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
   const amount = new Intl.NumberFormat(locale, { style: "currency", currency: "EUR" }).format(1240);
 
   return (
-    <section id="payments" className="hidden md:block py-8 md:py-14 lg:py-24 bg-gray-50 relative overflow-hidden">
+    <section id="payments" className="py-12 md:py-14 lg:py-24 bg-gray-50 relative overflow-hidden">
       {/* Ambient glow */}
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,7 +43,7 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
             <div className="relative">
               {/* Notification « Paiement reçu », qui flotte au coin de la carte */}
               <div
-                className="absolute -top-5 -right-3 lg:-right-6 z-10 flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-[0_18px_40px_rgba(13,6,48,0.18)] border border-gray-100"
+                className="absolute -top-5 right-2 md:-right-3 lg:-right-6 z-10 flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-[0_18px_40px_rgba(13,6,48,0.18)] border border-gray-100"
                 style={{ animation: "float 6s ease-in-out infinite" }}
               >
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#BEF221] text-[#0D0630]">
@@ -69,11 +69,11 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
 
                 <div className="relative">
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-white/80">
+                    <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-white/80">
                       <Bot className="h-4 w-4 text-[#BEF221]" strokeWidth={2.2} />
                       {l.link}
                     </span>
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/60">
+                    <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-[11px] md:text-xs font-semibold text-white/60">
                       <Lock className="h-3.5 w-3.5 text-[#BEF221]" />
                       {l.secure}
                     </span>
@@ -81,12 +81,12 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
 
                   {/* La facture à régler */}
                   <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.06] p-5 text-left backdrop-blur">
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                       <div className="min-w-0">
-                        <div className="text-[11px] font-bold uppercase tracking-widest text-white/50">{l.invoice} FAC-2026-004</div>
-                        <div className="mt-1 truncate text-lg font-extrabold tracking-tight">Maison Laurent</div>
+                        <div className="whitespace-nowrap text-[11px] font-bold uppercase tracking-widest text-white/50">{l.invoice} FAC-2026-004</div>
+                        <div className="mt-1 text-lg font-extrabold tracking-tight">Maison Laurent</div>
                       </div>
-                      <div className="text-right">
+                      <div className="flex items-baseline justify-between gap-3 sm:block sm:text-right">
                         <div className="text-[11px] font-bold uppercase tracking-widest text-white/50">{l.total}</div>
                         <div className="mt-1 text-2xl lg:text-3xl font-black tracking-tight tabular-nums">{amount}</div>
                       </div>
@@ -142,10 +142,10 @@ export function Payments({ dict = defaultDict, locale = "fr" }: PaymentsProps) {
 
           {/* Text Content */}
           <ScrollReveal className="flex-1 text-left" delay={200}>
-            <h2 className="text-lg md:text-2xl lg:text-3xl font-black text-gray-900 mb-3 md:mb-6 lg:mb-8 leading-[1.1] tracking-tight">
+            <h2 className="text-2xl md:text-2xl lg:text-3xl font-black text-gray-900 mb-3 md:mb-6 lg:mb-8 leading-[1.1] tracking-tight">
               {t.title}
             </h2>
-            <p className="text-xs md:text-base lg:text-xl text-gray-500 leading-relaxed mb-4 md:mb-8 lg:mb-10 max-w-lg font-medium">
+            <p className="text-sm md:text-base lg:text-xl text-gray-500 leading-relaxed mb-4 md:mb-8 lg:mb-10 max-w-lg font-medium">
               {t.subtitle}
             </p>
           </ScrollReveal>
