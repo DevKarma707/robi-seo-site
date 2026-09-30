@@ -7,6 +7,8 @@ import { LaunchSeats, useLaunchOffer, formatCurrentLaunchPrice } from "@/compone
 import { HeroMockups } from "@/components/ui/HeroMockups";
 import { HeroStory } from "@/components/ui/HeroStory";
 import { HeroDevice } from "@/components/ui/HeroDevice";
+import { HeroLaptop } from "@/components/ui/HeroLaptop";
+import type { HeroLaptopCopy } from "@/lib/i18n/heroLaptop";
 import type { HeroDeviceCopy } from "@/lib/i18n/heroDevice";
 import dynamic from "next/dynamic";
 
@@ -51,10 +53,12 @@ interface HeroProps {
   /** `device` : le téléphone 3D flottant (essai du 30/09/2026), même mise
    *  en page que `editorial`, seul le visuel change ; la démo à l'écran
    *  rejoue les scénarios de `story`. */
-  visual?: "mockups" | "editorial" | "device";
+  visual?: "mockups" | "editorial" | "device" | "laptop";
   story?: HeroStoryCopy;
   /** Textes de la démo du téléphone 3D (`visual="device"`). */
   device?: HeroDeviceCopy;
+  /** Textes de la démo de l'ordinateur 3D (`visual="laptop"`, version bureau, pas encore branchée). */
+  laptop?: HeroLaptopCopy;
 }
 
 function WordRotator({ words, className = "text-[#BEF221]", delay = 0 }: { words: string[]; className?: string; delay?: number }) {
@@ -113,6 +117,7 @@ export function Hero({
   visual = "mockups",
   story,
   device,
+  laptop,
 }: HeroProps) {
   const isCenter = variant === "centered";
   const isEditorial = !isCenter && (visual === "editorial" || visual === "device") && !!story;
@@ -149,6 +154,43 @@ export function Hero({
       )}
     </div>
   );
+
+  // Ordinateur 3D : le texte centré en haut, le portable en grand dessous (façon page produit Apple).
+  if (visual === "laptop" && laptop && story) {
+    return (
+      <section className="relative overflow-hidden bg-[#0D0630] pt-28 pb-10 md:pt-32 md:pb-14">
+        <HeroShaderBackground />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className={`${storyStyles.eyebrow} justify-center !mb-5`}>{story.eyebrow}</p>
+            <h1 className="mb-4 text-[40px] font-semibold leading-[1.04] tracking-[-0.05em] text-white md:mb-5 md:text-[56px] lg:text-[60px]">
+              <span className="block opacity-90">
+                {titleWords && titleWords.length > 1 ? <WordRotator words={titleWords} className="text-white" delay={1250} /> : title}
+              </span>
+              {rotatingWords.length > 0 && (
+                <span className="flex items-center justify-center gap-3">
+                  Robi <WordRotator words={rotatingWords} />
+                </span>
+              )}
+              <span className="block text-[#BEF221]">{titleAccent}</span>
+            </h1>
+            <p className="mx-auto mb-6 max-w-xl whitespace-pre-line text-base leading-relaxed text-white/70 md:text-[17px]">{subtitle}</p>
+            {ctaText && (
+              <div className="flex justify-center">
+                <Button href={ctaHref} size="sm" className="!text-sm !px-7 !py-3.5 md:!px-8 md:!py-4 md:!text-base">
+                  {ctaText}
+                  <ArrowRight className="ml-1.5 w-4 h-4 md:w-5 md:h-5" />
+                </Button>
+              </div>
+            )}
+          </div>
+          <div className="mt-6 md:mt-8">
+            <HeroLaptop copy={laptop} />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={`relative overflow-hidden bg-[#0D0630] ${isEditorial ? storyStyles.hero : isCenter ? "pt-32 pb-14 md:pt-44 md:pb-20" : `pt-24 md:pt-32 ${ctaText ? "pb-14 md:pb-16" : "pb-10 md:pb-10"}`}`}>

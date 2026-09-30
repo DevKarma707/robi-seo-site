@@ -4,7 +4,7 @@
  *
  * Rejoue l'accueil avec les mêmes textes et la même offre, mais permet de
  * choisir le visuel du héro : `?v=story` (actuel), `?v=device` (téléphone
- * 3D flottant, démo en verre). Essai du 30/09/2026 pour Ralph, bureau et mobile.
+ * 3D flottant, démo en verre), `?v=laptop` (ordinateur 3D, version bureau). Essai du 30/09/2026 pour Ralph, bureau et mobile.
  */
 import { notFound } from "next/navigation";
 import { Hero } from "@/components/sections/Hero";
@@ -13,10 +13,11 @@ import { Locale, locales, defaultLocale, localeCurrencies, priceMap } from "@/li
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getHeroStoryCopy } from "@/lib/i18n/heroStory";
 import { getHeroDeviceCopy } from "@/lib/i18n/heroDevice";
+import { getHeroLaptopCopy } from "@/lib/i18n/heroLaptop";
 
 export const metadata = { robots: { index: false, follow: false } };
 
-const VISUALS = ["story", "device"] as const;
+const VISUALS = ["story", "device", "laptop"] as const;
 type Visual = (typeof VISUALS)[number];
 
 export default async function HeroLab({
@@ -50,6 +51,7 @@ export default async function HeroLab({
         visual={visual === "story" ? "editorial" : visual}
         story={getHeroStoryCopy(locale)}
         device={getHeroDeviceCopy(locale)}
+        laptop={getHeroLaptopCopy(locale)}
         launchOffer={{
           text: dict.pricing?.launchOfferBadge || "OFFRE LIMITEE",
           highlight:

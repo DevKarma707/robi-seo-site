@@ -201,7 +201,7 @@ export function HeroDevice({ copy }: { copy: HeroDeviceCopy }) {
   const historyWhen = (time: string) => `${copy.detail.on} ${today} ${copy.detail.at} ${time}`;
   const history = [
     { key: "created", label: scenario.created, time: "20:12", on: true },
-    { key: "sent", label: `${scenario.docLabel} ${copy.detail.emailSent}`, time: "20:13", on: true },
+    { key: "sent", label: scenario.sent, time: "20:13", on: true },
     { key: "opened", label: copy.detail.emailOpen, time: "20:30", on: is("opened") },
     { key: "done", label: scenario.doneHistory, time: "20:41", on: done },
   ].filter((h) => h.on).reverse();
