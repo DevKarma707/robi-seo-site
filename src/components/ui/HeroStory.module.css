@@ -19,7 +19,8 @@
 .eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; color: #ffffffa8; font-size: 10px; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; }
 .eyebrow::before { content: ""; height: 1px; width: 28px; background: #bef221; }
 .hero .heading { font-size: clamp(56px, 5.65vw, 78px); line-height: 1.06; letter-spacing: -.055em; font-weight: 600; margin-bottom: 26px; }
-.hero .heading > span:last-child { color: #f9f9fc; }
+/* La dernière ligne du titre reste en Lime (classe text-[#BEF221] du Hero) : la forcer en blanc
+   avait fait disparaître tout le vert après le retrait des mots qui défilaient (Ralph, 03/10). */
 .hero .subtitle { max-width: 430px; font-size: 16px; line-height: 1.8; color: #c6c2d3; font-weight: 400; margin-bottom: 30px; }
 .hero .actions { align-items: flex-start; gap: 17px; }
 .hero .cta { box-shadow: none; padding: 17px 28px !important; font-size: 14px !important; }
