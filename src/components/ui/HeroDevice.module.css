@@ -156,7 +156,8 @@
   background: linear-gradient(112deg, #ffffff00 40%, #ffffff12 46%, #ffffff2e 50%, #ffffff10 54%, #ffffff00 60%);
   background-size: 260% 100%;
   background-position: 120% 0;
-  animation: sweep 13s ease-in-out infinite;
+  /* Reflet qui balayait l'écran à l'aller et au retour : retiré, il scintillait (Ralph, 03/10). */
+  display: none;
 }
 .rim {
   position: absolute;

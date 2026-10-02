@@ -18,7 +18,8 @@
 .hero .content { position: relative; z-index: 2; padding-bottom: 24px; }
 .eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; color: #ffffffa8; font-size: 10px; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; }
 .eyebrow::before { content: ""; height: 1px; width: 28px; background: #bef221; }
-.hero .heading { font-size: clamp(56px, 5.65vw, 78px); line-height: 1.06; letter-spacing: -.055em; font-weight: 600; margin-bottom: 26px; }
+/* Titre sur deux lignes (« Parle. » / « Encaisse plus vite. ») pour équilibrer le téléphone (Ralph, 03/10). */
+.hero .heading { font-size: clamp(46px, 4.3vw, 64px); line-height: 1.06; letter-spacing: -.055em; font-weight: 600; margin-bottom: 26px; }
 /* La dernière ligne du titre reste en Lime (classe text-[#BEF221] du Hero) : la forcer en blanc
    avait fait disparaître tout le vert après le retrait des mots qui défilaient (Ralph, 03/10). */
 .hero .subtitle { max-width: 430px; font-size: 16px; line-height: 1.8; color: #c6c2d3; font-weight: 400; margin-bottom: 30px; }
@@ -92,7 +93,7 @@
 @media (min-width: 1440px) { .hero { padding-top: 150px; padding-bottom: 90px; } }
 @media (max-width: 1199px) and (min-width: 1024px) {
   .hero .layout { gap: 30px; grid-template-columns: 1fr 1fr; }
-  .hero .heading { font-size: 58px; }
+  .hero .heading { font-size: 50px; }
   .story { height: 580px; }
   .photo { left: 45px; }
   .demo { width: 290px; left: -8px; }
