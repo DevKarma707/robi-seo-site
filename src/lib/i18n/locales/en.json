@@ -16,21 +16,17 @@
   },
   "hero": {
     "badge": "New: AI Invoice Chasing",
-    "title": "Talk",
+    "title": "Talk.",
     "titleWords": [
-      "Talk",
-      "Type"
+      "Talk.",
+      "Type."
     ],
-    "titleAccent": "Cash in",
-    "rotatingWords": [
-      "Invoice",
-      "Send",
-      "Follow-up",
-      "Notify"
-    ],
-    "subtitle": "Let AI handle everything.\nSimplify your invoices and get paid faster.",
-    "cta": "Start for Free",
-    "secondaryCta": "Watch Demo"
+    "titleAccent": "Get paid faster.",
+    "rotatingWords": [],
+    "subtitle": "Robi sends your invoices the moment the job's done and chases the clients who forget to pay.",
+    "cta": "Start for free",
+    "secondaryCta": "Watch Demo",
+    "ctaNote": "4 free invoices or estimates a month · no credit card · 1 minute"
   },
   "features": {
     "title": "All the tools to",

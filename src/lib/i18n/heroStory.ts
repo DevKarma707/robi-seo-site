@@ -41,7 +41,7 @@ export interface HeroScenario {
 const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
   fr: {
     tracking: {"title": "Devis", "search": "Rechercher…", "create": "Créer", "all": "Tout", "sent": "Envoyé", "paid": "Accepté", "draft": "Brouillon"},
-    eyebrow: "Assistant de facturation IA",
+    eyebrow: "Pour les artisans et les indépendants",
     photoAlt: "Un artisan dans son atelier dicte une demande à Robi",
     photoCaption: "Consacrez votre temps à ce que vous faites de mieux.",
     demoLabel: "Exemple illustratif",
@@ -72,7 +72,7 @@ const heroStoryCopy: Record<"fr" | "en" | "es" | "pt", HeroStoryCopy> = {
   },
   en: {
     tracking: {"title": "Quotes", "search": "Search…", "create": "Create", "all": "All", "sent": "Sent", "paid": "Accepted", "draft": "Draft"},
-    eyebrow: "AI invoicing assistant",
+    eyebrow: "For contractors and freelancers",
     photoAlt: "A craftsperson in their workshop dictates a request to Robi",
     photoCaption: "Your work deserves your full attention.",
     demoLabel: "Illustrative example",

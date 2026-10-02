@@ -16,21 +16,17 @@
   },
   "hero": {
     "badge": "Nouveau : Relance facture par IA",
-    "title": "Parle",
+    "title": "Parle.",
     "titleWords": [
-      "Parle",
-      "Écris"
+      "Parle.",
+      "Écris."
     ],
-    "titleAccent": "Encaisse",
-    "rotatingWords": [
-      "Facture",
-      "Envoi",
-      "Relance",
-      "Notifie"
-    ],
-    "subtitle": "Laissez l'IA s'occuper de tout.\nSimplifiez vos factures et encaissez plus vite.",
-    "cta": "Démarrer Gratuitement",
-    "secondaryCta": "Voir la démo"
+    "titleAccent": "Encaisse plus vite.",
+    "rotatingWords": [],
+    "subtitle": "Robi envoie tes factures dès la fin du chantier et relance ceux qui oublient de payer.",
+    "cta": "Commencer gratuitement",
+    "secondaryCta": "Voir la démo",
+    "ctaNote": "4 factures ou devis gratuits par mois · sans carte bancaire · 1 minute"
   },
   "features": {
     "title": "Tous les outils pour",
