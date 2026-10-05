@@ -26,6 +26,8 @@ interface HeroProps {
   subtitle: string;
   /** Petite ligne sous le bouton (gratuit, sans carte, durée) : la réassurance des concurrents qui convertissent (benchmark du 30/09). */
   ctaNote?: string;
+  /** Ligne verte qui tourne (« rédige tes devis. » ↔ « envoie tes factures. »…) ; sinon titleAccent fixe. */
+  accentWords?: string[];
   ctaText?: string;
   ctaHref?: string;
   secondaryCtaText?: string;
@@ -111,6 +113,7 @@ export function Hero({
   titleAccent,
   subtitle,
   ctaNote,
+  accentWords,
   ctaText = "",
   ctaHref = "https://go.robi-app.com/?signup",
   variant = "default",
@@ -176,7 +179,7 @@ export function Hero({
                   Robi <WordRotator words={rotatingWords} />
                 </span>
               )}
-              <span className="block text-[#BEF221]">{titleAccent}</span>
+              <span className="block text-[#BEF221]">{accentWords && accentWords.length > 1 ? <WordRotator words={accentWords} delay={600} /> : titleAccent}</span>
             </h1>
             <p className="mx-auto mb-6 max-w-xl whitespace-pre-line text-base leading-relaxed text-white/70 md:text-[17px]">{subtitle}</p>
             {ctaText && (
@@ -248,7 +251,7 @@ export function Hero({
                     Robi <WordRotator words={rotatingWords} />
                   </span>
                 )}
-                <span className="block text-[#BEF221]">{titleAccent}</span>
+                <span className="block text-[#BEF221]">{accentWords && accentWords.length > 1 ? <WordRotator words={accentWords} delay={600} /> : titleAccent}</span>
               </h1>
 
               <p className={`text-base md:text-xl text-white/90 font-medium mb-6 md:mb-10 leading-relaxed max-w-2xl whitespace-pre-line mx-auto lg:mx-0 ${isEditorial ? storyStyles.subtitle : ""}`}>

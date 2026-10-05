@@ -16,18 +16,20 @@
   },
   "hero": {
     "badge": "Nouveau : Relance facture par IA",
-    "title": "Tes devis,",
-    "titleWords": [
-      "Tes devis,",
-      "Tes factures,",
-      "Tes relances,"
-    ],
-    "titleAccent": "ton IA s'en occupe.",
+    "title": "Ton assistant IA",
+    "titleWords": [],
+    "titleAccent": "rédige tes devis.",
     "rotatingWords": [],
-    "subtitle": "Tu dictes ou tu écris : Robi rédige tes devis et factures, les envoie et relance jusqu'au paiement.",
+    "subtitle": "Tu parles ou tu écris, il s'occupe du reste. Sur ton téléphone ou ton ordi.",
     "cta": "Commencer gratuitement",
     "secondaryCta": "Voir la démo",
-    "ctaNote": "4 factures ou devis gratuits par mois · sans carte bancaire · 1 minute"
+    "ctaNote": "4 factures ou devis gratuits par mois · sans carte bancaire · 1 minute",
+    "accentWords": [
+      "rédige tes devis.",
+      "envoie tes factures.",
+      "relance tes clients.",
+      "fait rentrer l'argent."
+    ]
   },
   "features": {
     "title": "Tous les outils pour",

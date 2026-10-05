@@ -16,18 +16,20 @@
   },
   "hero": {
     "badge": "New: AI Invoice Chasing",
-    "title": "Your estimates,",
-    "titleWords": [
-      "Your estimates,",
-      "Your invoices,",
-      "Your follow-ups,"
-    ],
-    "titleAccent": "your AI's on it.",
+    "title": "Your AI assistant",
+    "titleWords": [],
+    "titleAccent": "writes your estimates.",
     "rotatingWords": [],
-    "subtitle": "Speak or type: Robi writes your estimates and invoices, sends them and follows up until you're paid.",
+    "subtitle": "Talk or type, it handles the rest. On your phone or computer.",
     "cta": "Start for free",
     "secondaryCta": "Watch Demo",
-    "ctaNote": "4 free invoices or estimates a month · no credit card · 1 minute"
+    "ctaNote": "4 free invoices or estimates a month · no credit card · 1 minute",
+    "accentWords": [
+      "writes your estimates.",
+      "sends your invoices.",
+      "chases your clients.",
+      "brings the money in."
+    ]
   },
   "features": {
     "title": "All the tools to",
