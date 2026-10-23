@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { adminDb } from "@/lib/firebaseAdmin";
 import { requireAdmin } from "@/lib/adminAuth";
-import { mailBienvenue, sendPartnerMail } from "@/lib/partenaires";
+import { mailBienvenue, sendPartnerMail, type PartnerForMail } from "@/lib/partenaires";
 
 export const dynamic = "force-dynamic";
 
@@ -23,11 +23,14 @@ export async function POST(req: Request) {
   const ref = db.collection("influencers").doc(influencerId);
   const snap = await ref.get();
   if (!snap.exists) return NextResponse.json({ error: "inconnu" }, { status: 404 });
-  const inf = snap.data() as { name: string; email?: string; promoCode?: string; polarDiscountId?: string; discountPct?: number; commissionPct?: number; language?: string };
+  const inf = snap.data() as Omit<PartnerForMail, "email" | "promoCode"> & { email?: string; promoCode?: string; polarDiscountId?: string };
   if (!inf.email) return NextResponse.json({ error: "sans_email" }, { status: 400 });
   if (!inf.promoCode || !inf.polarDiscountId) return NextResponse.json({ error: "code_non_actif" }, { status: 400 });
 
-  const mail = mailBienvenue({ name: inf.name, email: inf.email, promoCode: inf.promoCode, discountPct: inf.discountPct, commissionPct: inf.commissionPct, language: inf.language });
+  const mail = mailBienvenue({
+    name: inf.name, email: inf.email, promoCode: inf.promoCode, discountPct: inf.discountPct, language: inf.language,
+    programme: inf.programme, commissionPct: inf.commissionPct, commissionMonths: inf.commissionMonths, bonus: inf.bonus,
+  });
   const sent = await sendPartnerMail({ to: inf.email, ...mail });
   if (sent) await ref.set({ welcomeSentAt: FieldValue.serverTimestamp() }, { merge: true });
   return NextResponse.json({ ok: sent, sent });

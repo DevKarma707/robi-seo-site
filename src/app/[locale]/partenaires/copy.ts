@@ -1,9 +1,10 @@
-import { PROGRAMME } from "@/lib/partenaires";
+import { AMBASSADEUR, PROGRAMME } from "@/lib/partenaires";
 
 /**
- * Textes de la page /partenaires. Trois langues (fr, en, es) plus un bloc en
- * darija latin affiché sur fr-MA : les créateurs marocains parlent en darija
- * dans leurs vidéos, la page doit leur parler pareil.
+ * Textes de la page /partenaires. Trois langues (fr, en, es) pour le
+ * programme partenaires, et une page à part sur fr-MA : le programme
+ * Ambassadeurs Robi Maroc (23/10/2026), en français du Maroc + un bloc en
+ * darija latin.
  */
 
 export interface PartnerCopy {
@@ -182,13 +183,78 @@ const es: PartnerCopy = {
   },
 };
 
-/** Bloc darija (latin) pour fr-MA, en plus du français. */
+// ─── fr-MA : Ambassadeurs Robi Maroc ──────────────────────────────────
+const A = AMBASSADEUR;
+const aPrime = `${A.bonus.montant} DH`;
+const aMin = `${A.minPayout.EUR} € (ou ${A.minPayout.MAD} DH)`;
+
+/**
+ * Exemple chiffré : uniquement avec la grille en dirhams validée le 28/09/2026
+ * (59 DH/mois, 590 DH/an — ROBI_APP components/settings/SubscriptionTab.tsx, PRICE_MAP_BY_CURRENCY),
+ * présentée comme les tarifs prévus pour le Maroc : au 23/10/2026, Polar n'a
+ * encore aucun prix en MAD, un client marocain paie en euros. Calculs vérifiés
+ * par scripts/checkCommissions.ts (208,86 DH et 141,60 DH).
+ */
+const exempleMensuel = "208,86 DH";
+const exempleAnnuel = "141,60 DH";
+const exempleDix = "2 088,60 DH";
+
+const frMA: PartnerCopy = {
+  metaTitle: `Ambassadeurs Robi Maroc — ${A.commissionPct} % pendant ${A.commissionMonths} mois sur chaque client`,
+  metaDescription: `Comptable, fiduciaire, freelance : recommande Robi à tes clients. Ils ont ${A.discountPct} % sur leur premier paiement, tu touches ${A.commissionPct} % de tout ce qu'ils paient pendant ${A.commissionMonths} mois, et ${aPrime} de prime à ton ${A.bonus.seuil}e client payant.`,
+  badge: "Ambassadeurs Maroc",
+  title: "Recommande Robi.",
+  titleAccent: `Touche ${A.commissionPct} % pendant ${A.commissionMonths} mois.`,
+  subtitle: `Robi transforme la voix d'un indépendant en devis et en facture. Tes clients ont ${A.discountPct} % sur leur premier paiement avec ton code. Toi, tu touches ${A.commissionPct} % de tout ce qu'ils paient pendant ${A.commissionMonths} mois, renouvellements compris. Rien à avancer, rien à encaisser toi-même.`,
+  steps: [
+    { title: "1. Tu t'inscris", text: "Deux minutes, en bas de cette page. On regarde ton profil et on active ton code sous 24 h." },
+    { title: "2. Tu reçois ton lien et ton code", text: "Un lien à envoyer à tes clients sur WhatsApp ou par mail, un code à donner de vive voix. Les deux appliquent la remise tout seuls." },
+    { title: "3. Tu es payé chaque mois", text: `Un mail à chaque paiement d'un de tes clients, un récap le 1er du mois, virement, PayPal ou Wise dès ${aMin} cumulés.` },
+  ],
+  numbers: [
+    { value: `${A.commissionPct} %`, label: `de tout ce que paie ton client pendant ${A.commissionMonths} mois` },
+    { value: aPrime, label: `de prime à ton ${A.bonus.seuil}e client payant` },
+    { value: `${A.discountPct} %`, label: "de remise pour ton client sur son premier paiement" },
+  ],
+  who: {
+    title: "Pour qui ?",
+    items: [
+      "Comptables et fiduciaires qui suivent des indépendants, des auto-entrepreneurs et des TPE",
+      "Freelances qui ont un réseau d'autres freelances (graphistes, développeurs, photographes, consultants)",
+      "Formateurs, coachs, espaces de coworking qui parlent aux indépendants",
+      "Créateurs qui parlent aux freelances marocains",
+    ],
+  },
+  faq: [
+    { q: "Combien je gagne exactement ?", a: `${A.commissionPct} % de tout ce que paie chaque client que tu amènes, pendant ${A.commissionMonths} mois à partir de son premier paiement : abonnement mensuel ou annuel, renouvellements compris. Pour l'accès à vie, ${A.commissionPct} % du paiement unique. Toujours sur le montant hors taxes, remise déduite, remboursements exclus.` },
+    { q: "Un exemple ?", a: `Avec les tarifs en dirhams prévus pour le Maroc (59 DH par mois, 590 DH par an) : un client au mensuel qui reste 12 mois te rapporte ${exempleMensuel} (14,16 DH sur son premier mois remisé, puis 17,70 DH par mois). Un client à l'année : ${exempleAnnuel}. Dix clients au mensuel : ${exempleDix}, plus la prime de ${aPrime}. Tant que le paiement en dirhams n'est pas ouvert, ton client paie en euros : même règle, ${A.commissionPct} % de ce qu'il paie vraiment.` },
+    { q: "C'est quoi la prime ?", a: `Le jour où ${A.bonus.seuil} clients différents ont payé grâce à toi, on ajoute ${aPrime} à ton solde. Une seule fois.` },
+    { q: "Quand est-ce que je suis payé ?", a: `Chaque début de mois, dès que ton solde atteint ${aMin}. En dessous, il est reporté au mois suivant.` },
+    { q: "Comment je suis payé ?", a: "Virement bancaire, PayPal ou Wise, selon ce que tu indiques à l'inscription. Tu peux changer en nous répondant par mail." },
+    { q: "Est-ce que je dois faire une facture ?", a: "Si tu as un statut (auto-entrepreneur, société, cabinet), oui, une facture de commission par versement. Sinon on t'explique la marche à suivre par mail." },
+    { q: "Il y a un engagement ?", a: "Aucun. Tu arrêtes quand tu veux, on désactive ton code, on te verse ce qui reste." },
+  ],
+  form: {
+    ...fr.form,
+    subtitle: "On te répond sous 24 h avec ton lien et ton code.",
+    platform: "Où tu parles à tes clients", handle: "Ton pseudo (si tu en as un)", url: "Ton site, ta page ou ton compte",
+    message: "Un mot sur tes clients (combien, quels métiers) — facultatif",
+  },
+};
+
+/**
+ * Bloc darija (lettres latines) de fr-MA.
+ * À FAIRE RELIRE PAR UN NATIF avant de le pousser en pub (écrit le 23/10/2026,
+ * non relu) : orthographe latine et tournures.
+ */
 const darija = {
-  title: "Bel darija, bach tkoun l'affaire wad7a",
+  title: "Bel darija : chno kayn ?",
   lines: [
-    `Robi kaybaddel sout dyal l'artisan l devis w facture. Nta kat3ti code l jomhour dyalek : ${d} % remise lihom, w ${c} % lik 3la kol wa7ed khallas.`,
-    `Ma kaddir walou b yedik, ma kat9addem walou : ghir story wla video, w l'link f bio.`,
-    `Kol chhar f l'awwel, kanseftou lik flousek b virement wla PayPal, men ${m} € lfou9.`,
+    "Robi kaybeddel sout dyal l'freelance wla l'artisan l devis w facture f thawani.",
+    `Kat3ref nass khddamin 3la rassehom wla charikat sghar ? 3tihom l code dyalek : ${A.discountPct} % remise 3la awwel khlass.`,
+    `W nta katakhod ${A.commissionPct} % men ga3 dakchi li kaykhellsou ${A.commissionMonths} chhar, m3a tajdid l'abonnement.`,
+    `F l'client l 3achr li khelles, katzid lik Robi prime dyal ${aPrime}.`,
+    `Kol chhar f l'awwel, kansiftou lik flousek b virement, PayPal wla Wise, men ${A.minPayout.EUR} € wla ${A.minPayout.MAD} DH lfou9.`,
     "Sajjel lta7t, kanjawbouk f 24 sa3a b l'link w l code dyalek.",
   ],
 };
@@ -196,5 +262,5 @@ const darija = {
 export const partnerCopy = (locale: string): PartnerCopy => {
   const base = (locale || "fr").slice(0, 2).toLowerCase();
   const copy = base === "en" ? en : base === "es" ? es : fr;
-  return locale === "fr-MA" ? { ...copy, darija } : copy;
+  return locale === "fr-MA" ? { ...frMA, darija } : copy;
 };

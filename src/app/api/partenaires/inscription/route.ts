@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { adminDb } from "@/lib/firebaseAdmin";
-import { PROGRAMME, adminEmail, langFromLocale, renderPartnerMail, sendPartnerMail } from "@/lib/partenaires";
+import { AMBASSADEUR, PROGRAMME, adminEmail, isAmbassadorLocale, langFromLocale, renderPartnerMail, sendPartnerMail } from "@/lib/partenaires";
 
 export const dynamic = "force-dynamic";
 
@@ -49,7 +49,10 @@ export async function POST(req: Request) {
   const payoutMethod = clean(body.payoutMethod, 10);
   const payoutDetails = clean(body.payoutDetails, 120);
   const notes = clean(body.message, 500);
-  const language = langFromLocale(clean(body.locale, 8));
+  const locale = clean(body.locale, 8);
+  const language = langFromLocale(locale);
+  // /fr-MA/partenaires = programme Ambassadeurs Robi Maroc (23/10/2026).
+  const ambassadeur = isAmbassadorLocale(locale);
 
   if (name.length < 2) return NextResponse.json({ error: "nom" }, { status: 400 });
   if (!EMAIL.test(email)) return NextResponse.json({ error: "email" }, { status: 400 });
@@ -82,8 +85,19 @@ export async function POST(req: Request) {
       language,
       status: "prospect",
       source: "site",
-      discountPct: PROGRAMME.discountPct,
-      commissionPct: PROGRAMME.commissionPct,
+      ...(ambassadeur
+        ? {
+            programme: "ambassadeur",
+            discountPct: AMBASSADEUR.discountPct,
+            commissionPct: AMBASSADEUR.commissionPct,
+            commissionMonths: AMBASSADEUR.commissionMonths,
+            bonus: AMBASSADEUR.bonus,
+          }
+        : {
+            programme: "partenaire",
+            discountPct: PROGRAMME.discountPct,
+            commissionPct: PROGRAMME.commissionPct,
+          }),
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
     });
@@ -92,7 +106,7 @@ export async function POST(req: Request) {
     const to = adminEmail();
     if (to) {
       const { html, text } = renderPartnerMail({
-        title: `Nouveau partenaire à activer : ${name}`,
+        title: `${ambassadeur ? "Nouvel ambassadeur Maroc" : "Nouveau partenaire"} à activer : ${name}`,
         blocks: [
           { kind: "p", text: `${platform} · ${handle ? `@${handle}` : url} · ${audience ? `${audience.toLocaleString("fr-FR")} abonnés` : "audience non renseignée"} · ${country || "pays ?"} · ${language}` },
           { kind: "p", text: `Paiement : ${payoutMethod || "non renseigné"} ${payoutDetails ? `(${payoutDetails})` : ""}` },
@@ -101,7 +115,7 @@ export async function POST(req: Request) {
         ],
         footer: `Fiche ${ref.id}, créée depuis /partenaires.`,
       });
-      await sendPartnerMail({ to, subject: `[Robi] Nouveau partenaire : ${name} (${platform})`, html, text });
+      await sendPartnerMail({ to, subject: `[Robi] ${ambassadeur ? "Nouvel ambassadeur Maroc" : "Nouveau partenaire"} : ${name} (${platform})`, html, text });
     }
 
     return NextResponse.json({ ok: true });
