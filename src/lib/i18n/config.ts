@@ -129,7 +129,7 @@ export const priceMap: Record<string, { launch: number; normal: number; monthly:
   // Dollars canadiens
   "fr-CA": { launch: 89,      normal: 199,    monthly: 19,    yearly: 119,    biYearly: 199 },
   // Dirham marocain
-  "fr-MA": { launch: 599,     normal: 1500,   monthly: 149,   yearly: 890,    biYearly: 1490 },
+  "fr-MA": { launch: 599,     normal: 1500,   monthly: 59,    yearly: 590,    biYearly: 990 },
   // Dirham émirati
   "en-AE": { launch: 229,     normal: 549,    monthly: 49,    yearly: 329,    biYearly: 549 },
   // Franc CFA — Sénégal & Côte d'Ivoire
