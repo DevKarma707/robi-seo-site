@@ -26,5 +26,11 @@ Autres gains : « ai invoice » 29,9 → **15,5** · « ai invoice generator » 
 ## Mots-clés ajoutés au suivi (seo-keywords-2026-10.json)
 devis auto entrepreneur · ai invoice maker · free ai invoice generator · factur-x validator · factura x
 
+## Mis en ligne le 25/10 (commit bd737d6)
+- Titles réécrits sur les 4 pages vues sans clic, plus l'article EN « Factur-X validator ».
+- Redirections 301 : /en/facture-ai → /en/ai-invoice-generator · /en/tools/generateur-facture → /en/tools/invoice-generator · article Factur-X ES → /es/blog/que-es-factur-x · article EN vérifier → /en/blog/check-factur-x-invoice-valid.
+- Nouvelle page /fr/tools/modele-devis-auto-entrepreneur.
+- Reste à faire : H2 + FAQ « ¿para qué sirve? » dans l'article ES (contenu Firestore, onglet Blog).
+
 ## À refaire
 Export fin novembre pour mesurer les nouveaux titles.

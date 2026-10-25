@@ -12,14 +12,14 @@
     "clicks": 0,
     "lastCheckedAt": "2026-10-25",
     "lastReportId": "2026-10-23_2026-07-24",
-    "notes": "Forme la plus tapée de l'intention « devis auto-entrepreneur » (101 imp. contre 0 pour « comment faire un devis auto-entrepreneur »). Variantes de la même intention : « exemple devis auto entrepreneur » (25 imp., pos. 4,1), « modèle devis auto-entrepreneur » (15 imp., pos. 4,9). 0 clic en page 1 → c'est le title/la description qui ne donnent pas envie.",
-    "nextAction": "Réécrire title + meta description avec « modèle gratuit » et « exemple » avant le 01/11, mesurer à l'export de novembre."
+    "notes": "Title réécrit le 25/10 (« Devis auto-entrepreneur : modèle, exemple et mentions 2026 ») + nouvelle page /fr/tools/modele-devis-auto-entrepreneur reliée dans les deux sens. Variantes de la même intention : « exemple devis auto entrepreneur » (25 imp., pos. 4,1), « modèle devis auto-entrepreneur » (15 imp., pos. 4,9).",
+    "nextAction": "Mesurer le CTR à l'export de fin novembre (0 clic sur 101 imp. avant le nouveau title)."
   },
   {
     "keyword": "ai invoice maker",
     "segment": "Veine IA · EN",
     "market": "Anglophone (UK en tête)",
-    "targetUrl": "/en/facture-ai",
+    "targetUrl": "/en/ai-invoice-generator",
     "goal": 10,
     "status": "contenu-publie",
     "query": "ai invoice maker",
@@ -28,14 +28,14 @@
     "clicks": 0,
     "lastCheckedAt": "2026-10-25",
     "lastReportId": "2026-10-23_2026-07-24",
-    "notes": "3e requête EN de la veine après « ai invoice generator » (310) et « invoice ai » (203). Absente de la page EN aujourd'hui.",
-    "nextAction": "Ajouter « AI invoice maker » dans un H2 et la FAQ de /en/facture-ai avant le 01/11."
+    "notes": "Le 25/10, /en/facture-ai est passée en 301 vers /en/ai-invoice-generator, avec un H2 et une FAQ « AI invoice maker ».",
+    "nextAction": "Mesurer à l'export de fin novembre."
   },
   {
     "keyword": "free ai invoice generator",
     "segment": "Veine IA · EN",
     "market": "Anglophone (UK en tête)",
-    "targetUrl": "/en/tools/generateur-facture",
+    "targetUrl": "/en/ai-invoice-generator",
     "goal": 10,
     "status": "contenu-publie",
     "query": "free ai invoice generator",
@@ -44,14 +44,14 @@
     "clicks": 0,
     "lastCheckedAt": "2026-10-25",
     "lastReportId": "2026-10-23_2026-07-24",
-    "notes": "Intention « outil gratuit », distincte de la page pilier. Variantes : « ai invoice generator free » (15, pos. 7,7), « free invoice generator ai » (6). Le générateur EN a déjà eu 1 clic.",
-    "nextAction": "Mettre « Free AI invoice generator » dans le title et le H1 de /en/tools/generateur-facture."
+    "notes": "Le 25/10, le title de la page pilier est devenu « Free AI Invoice Generator: Type or Say It ». Le générateur (/en/tools/invoice-generator) vise « free invoice generator » pour ne pas concurrencer la page pilier. Variantes : « ai invoice generator free » (15 imp., pos. 7,7).",
+    "nextAction": "Mesurer à l'export de fin novembre."
   },
   {
     "keyword": "factur-x validator",
     "segment": "Factur-X",
     "market": "Anglophone (UK en tête)",
-    "targetUrl": "/en/blog/verifier-facture-factur-x-valide",
+    "targetUrl": "/en/blog/check-factur-x-invoice-valid",
     "goal": 3,
     "status": "page-1",
     "query": "factur-x validator",
@@ -60,14 +60,14 @@
     "clicks": 0,
     "lastCheckedAt": "2026-10-25",
     "lastReportId": "2026-10-23_2026-07-24",
-    "notes": "Premier signal anglophone du cluster Factur-X. L'article « vérifier facture Factur-X » a fait 2 clics (version en-NL).",
-    "nextAction": "Ajouter « Factur-X validator » dans le title EN et un lien vers l'outil de vérification."
+    "notes": "Le 25/10, l'article EN est passé en 301 vers /en/blog/check-factur-x-invoice-valid, title « Factur-X validator: check your invoice is valid ».",
+    "nextAction": "Mesurer à l'export de fin novembre."
   },
   {
     "keyword": "factura x",
     "segment": "Factur-X",
     "market": "Espagne",
-    "targetUrl": "/es/blog/factur-x-c-est-quoi-format-facture-electronique",
+    "targetUrl": "/es/blog/que-es-factur-x",
     "goal": 5,
     "status": "page-1",
     "query": "factura x",
@@ -76,7 +76,7 @@
     "clicks": 0,
     "lastCheckedAt": "2026-10-25",
     "lastReportId": "2026-10-23_2026-07-24",
-    "notes": "Graphie hispanophone de Factur-X (aussi « factura x para que sirve », 4 imp.). L'article ES fait 73 imp. pour 0 clic.",
-    "nextAction": "Ajouter « Factura-X : ¿para qué sirve? » en H2 + FAQ dans l'article ES."
+    "notes": "Le 25/10, l'article ES est passé en 301 vers /es/blog/que-es-factur-x, title « Factura X (Factur-X): ¿qué es y para qué sirve? ». Le H2 et la FAQ (dans le contenu Firestore) n'ont pas encore été modifiés.",
+    "nextAction": "Ajouter le H2 « ¿Para qué sirve Factura-X? » et la FAQ dans l'article ES (onglet Blog)."
   }
 ]
