@@ -12,6 +12,8 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { pageSeo } from "@/lib/seo/pageSeo";
 import { getMarketCopy } from "@/lib/seo/marketCopy";
 import { MarketFocus } from "@/components/sections/MarketFocus";
+import { SubscriptionNote } from "@/components/sections/SubscriptionNote";
+import { localePath } from "@/lib/seo/localizedPaths";
 export async function generateMetadata({
   params,
 }: {
@@ -137,6 +139,8 @@ export default async function PricingPage({
       </section>
 
       <MarketFocus locale={locale} />
+
+      <SubscriptionNote locale={locale} loginHref={localePath(locale, "/connexion")} />
 
       <FAQ
         title={p.faqTitle}

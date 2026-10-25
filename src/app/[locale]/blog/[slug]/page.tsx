@@ -26,6 +26,7 @@ import {
 import { pageSeo } from "@/lib/seo/pageSeo";
 import { localePath, localizeHrefs } from "@/lib/seo/localizedPaths";
 import { seoTitle, seoDescription } from "@/lib/seo/blogSeo";
+import { isTableRow, isTableContinuation, renderTableAt } from "@/lib/markdownTable";
 // Static slugs are prerendered; articles published from /admin (Firestore)
 // render on-demand (dynamicParams) and are cached/revalidated.
 export const dynamicParams = true;
@@ -1610,7 +1611,8 @@ export default async function BlogPostPage({
       .replace(/\*\*(.+?)\*\*/g, '<strong class="text-gray-900">$1</strong>');
   const htmlContent = localizeHrefs(content
     .split("\n")
-    .map((line) => {
+    .map((line, i, all) => {
+      if (isTableRow(line)) return isTableContinuation(all, i) ? "" : renderTableAt(all, i, inline);
       if (line.startsWith("## ")) return `<h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">${line.slice(3)}</h2>`;
       if (line.startsWith("### ")) return `<h3 class="text-xl font-semibold text-gray-900 mt-8 mb-3">${line.slice(4)}</h3>`;
       if (line.startsWith("- **")) {

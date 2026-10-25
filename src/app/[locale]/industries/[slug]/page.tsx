@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { industries, t } from "@/data/seo-config";
 import { industryContent } from "@/data/industry-content";
+import { industryGuides } from "@/data/industry-guides";
+import { IndustryGuide } from "@/components/sections/IndustryGuide";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale, localeCurrencies, priceMap, isContentIndexable } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
@@ -78,6 +80,13 @@ export default async function IndustryPage({
   const rich = industryContent[slug];
   const pick = (l: { fr: string; en: string; es: string }) =>
     locale.startsWith("es") ? l.es : locale.startsWith("en") || locale.startsWith("pt") ? l.en : l.fr;
+  const lang = locale.startsWith("es") ? "es" : locale.startsWith("en") || locale.startsWith("pt") ? "en" : "fr";
+
+  // Guide métier (exemple de devis, règles sourcées, articles) — métiers qui ont des impressions.
+  const guide = industryGuides[slug];
+  const intro = rich?.intro ?? guide?.intro;
+  const faqItems = [...(rich?.faq ?? []), ...(guide?.faq ?? [])];
+  const blogHref = (s: string) => localePath(locale, `/blog/${s}`);
 
   return (
     <>
@@ -132,14 +141,14 @@ export default async function IndustryPage({
       />
 
       {/* FAQPage schema (GEO) — quand un contenu FAQ unique existe pour le métier */}
-      {rich && rich.faq.length > 0 && (
+      {faqItems.length > 0 && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "FAQPage",
-              mainEntity: rich.faq.map((f) => ({
+              mainEntity: faqItems.map((f) => ({
                 "@type": "Question",
                 name: pick(f.q),
                 acceptedAnswer: { "@type": "Answer", text: pick(f.a) },
@@ -161,12 +170,16 @@ export default async function IndustryPage({
       />
 
       {/* Intro éditoriale unique au métier */}
-      {rich && (
+      {intro && (
         <section className="py-16 bg-white">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p className="text-lg text-gray-600 leading-relaxed">{pick(rich.intro)}</p>
+            <p className="text-lg text-gray-600 leading-relaxed">{pick(intro)}</p>
           </div>
         </section>
+      )}
+
+      {guide && (
+        <IndustryGuide guide={guide} pick={pick} lang={lang} industryName={industryName} blogHref={blogHref} />
       )}
 
       {/* Pain Points Section */}
@@ -264,8 +277,8 @@ export default async function IndustryPage({
 
       <FAQ
         items={
-          rich
-            ? rich.faq.map((f) => ({ question: pick(f.q), answer: pick(f.a) }))
+          faqItems.length > 0
+            ? faqItems.map((f) => ({ question: pick(f.q), answer: pick(f.a) }))
             : [
                 {
                   question: ind.faq1q.replace("{name}", industryName),

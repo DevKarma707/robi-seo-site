@@ -101,7 +101,8 @@ export default async function Home({
             logo: "https://robi-app.com/logo.png",
             description: getMarketCopy(locale).homeDescription,
             sameAs: [
-              "https://instagram.com/robi.ai.app",
+              "https://www.instagram.com/robi.ai.app/",
+              "https://www.tiktok.com/@robi.ai7",
               "https://x.com/iamrobiai",
               "https://linkedin.com/company/robi-ai",
             ],

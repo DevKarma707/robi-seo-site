@@ -1002,7 +1002,8 @@ export const schemaTemplates = {
     logo: "https://robi-app.com/logo.png",
     description: "AI invoicing software for freelancers",
     sameAs: [
-      "https://instagram.com/robi.ai.app",
+      "https://www.instagram.com/robi.ai.app/",
+      "https://www.tiktok.com/@robi.ai7",
       "https://x.com/iamrobiai",
       "https://linkedin.com/company/robi-ai",
     ],

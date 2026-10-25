@@ -24,6 +24,7 @@ type SlugMap = Record<string, Partial<Record<SlugLang, string>>>;
 
 const PAGES: SlugMap = {
   "facture-ai": { en: "ai-invoice-generator", es: "factura-ia" },
+  connexion: { en: "login", es: "iniciar-sesion" },
 };
 
 const TOOLS: SlugMap = {

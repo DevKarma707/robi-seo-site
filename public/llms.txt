@@ -119,6 +119,23 @@ HR Consultants, Business Coaches, Accountants, Real Estate Agents, Insurance Bro
 ### Health & Wellness
 Osteopaths, Personal Trainers, Nutritionists, Psychologists, Physiotherapists, Life Coaches
 
+### Detailed trade guides (French rules, official sources cited)
+Each page has a sample quote for the trade, the invoicing rules specific to it (VAT regime, mandatory documents) with a link to the official source (Légifrance, BOFiP, Service-Public), and an FAQ:
+- Sophrologist (no healthcare VAT exemption): https://robi-app.com/fr/industries/sophrologue
+- Naturopath (not VAT-exempt): https://robi-app.com/fr/industries/naturopathe
+- Osteopath (VAT exemption, art. 261-4-1° CGI): https://robi-app.com/fr/industries/osteopathe
+- Physiotherapist: https://robi-app.com/fr/industries/kinesitherapeute
+- Psychologist: https://robi-app.com/fr/industries/psychologue
+- Lawyer (written fee agreement, art. 10 law of 31 Dec 1971): https://robi-app.com/fr/industries/avocat
+- Accountant (engagement letter, art. 151 decree 2012-432): https://robi-app.com/fr/industries/expert-comptable
+- Plumber (quote required for any call-out since 1 April 2017): https://robi-app.com/fr/industries/plombier
+- Heating engineer (5.5% VAT, RGE for MaPrimeRénov'): https://robi-app.com/fr/industries/chauffagiste
+- Roofer: https://robi-app.com/fr/industries/couvreur
+- Tiler: https://robi-app.com/fr/industries/carreleur
+- Carpenter: https://robi-app.com/fr/industries/menuisier
+- Locksmith: https://robi-app.com/fr/industries/serrurier
+- Caterer (10% / 5.5% / 20% VAT on one quote): https://robi-app.com/fr/industries/traiteur
+
 ---
 
 ## Who It's For
@@ -190,6 +207,7 @@ Each country page (homepage and pricing) is written for its market: local curren
 | United States | https://robi-app.com/en-US | https://robi-app.com/en-US/pricing |
 
 **Sign Up**: https://go.robi-app.com
+**Log in (Robi AI login)**: https://robi-app.com/fr/connexion (EN: https://robi-app.com/en/login, ES: https://robi-app.com/es/iniciar-sesion) — explains where to sign in (the app at go.robi-app.com), password reset, subscription management. Robi AI is not related to the Robi mobile operator in Bangladesh.
 
 ---
 
@@ -203,6 +221,7 @@ e-invoicing reforms and freelancer questions:
 - **How to create an invoice as a French auto-entrepreneur (2026)**: https://robi-app.com/fr/blog/comment-faire-une-facture-auto-entrepreneur — mandatory mentions, example, numbering.
 - **AI invoicing — create an invoice by voice**: https://robi-app.com/fr/blog/facturation-par-ia-creer-facture-voix — what AI/voice invoicing is and how it works.
 - **E-invoicing since 1 September 2026 — what changed, what is left to do**: https://robi-app.com/fr/blog/facture-electronique-septembre-2026-etes-vous-pret — receive since Sept 2026, issue from Sept 2027 for micro-businesses.
+- **AI invoice management software ("logiciel de gestion des factures avec IA", generative AI / gen AI) — pillar guide**: https://robi-app.com/fr/blog/logiciel-gestion-factures-ia — creating vs processing invoices, honest comparison table of five approaches (spreadsheet, ChatGPT, classic software, generative-AI invoicing, OCR), 7 questions before choosing; Robi creates Factur-X invoices, it is neither an OCR tool nor an approved platform.
 - **Factur-X explained (the French e-invoice format)**: https://robi-app.com/fr/blog/factur-x-c-est-quoi-format-facture-electronique — PDF/A-3 + CII XML, EN 16931 profile.
 - **Choosing e-invoicing software in 2026 — 7 criteria**: https://robi-app.com/fr/blog/logiciel-facture-electronique-2026-comment-choisir — format/profile, validation, 3-year cost, generation vs transmission.
 - **How to check a Factur-X invoice is valid**: https://robi-app.com/fr/blog/verifier-facture-factur-x-valide — common EN 16931 rejection errors and fixes.
@@ -220,7 +239,8 @@ e-invoicing reforms and freelancer questions:
 
 ## Social & Brand
 
-- Instagram: https://instagram.com/robi.ai.app
+- Instagram: https://www.instagram.com/robi.ai.app/
+- TikTok: https://www.tiktok.com/@robi.ai7
 - X (Twitter): https://x.com/iamrobiai
 - LinkedIn: https://linkedin.com/company/robi-ai
 

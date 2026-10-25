@@ -64,6 +64,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...coreUrls("/blog", "daily", 0.8),
     ...coreUrls("/tools", "monthly", 0.7),
     ...coreUrls("/contact", "monthly", 0.6),
+    // Connexion : porte les requêtes de marque « robi ai login » (l'app reste en noindex)
+    ...coreUrls("/connexion", "monthly", 0.6),
     ...coreUrls("/partenaires", "monthly", 0.7),
     ...coreUrls("/legal", "yearly", 0.3),
     ...coreUrls("/privacy", "yearly", 0.3),
