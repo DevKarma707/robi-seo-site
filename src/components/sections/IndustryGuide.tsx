@@ -7,7 +7,7 @@ type L = { fr: string; en: string; es: string };
 const UI = {
   fr: { quoteTitle: "Exemple : le devis d'un", said: "Tu dictes", built: "Robi prépare", price: "à ton tarif", rulesTitle: "Les règles propres au métier", source: "Source", readTitle: "À lire aussi" },
   en: { quoteTitle: "Example quote:", said: "You say", built: "Robi prepares", price: "your rate", rulesTitle: "The rules specific to this trade", source: "Source", readTitle: "Read next" },
-  es: { quoteTitle: "Ejemplo: el presupuesto de un", said: "Tú dictas", built: "Robi prepara", price: "tu tarifa", rulesTitle: "Las reglas propias del oficio", source: "Fuente", readTitle: "Para seguir leyendo" },
+  es: { quoteTitle: "Ejemplo: presupuesto de", said: "Tú dictas", built: "Robi prepara", price: "tu tarifa", rulesTitle: "Las reglas propias del oficio", source: "Fuente", readTitle: "Para seguir leyendo" },
 };
 
 /**
@@ -19,13 +19,11 @@ export function IndustryGuide({
   guide,
   pick,
   lang,
-  industryName,
   blogHref,
 }: {
   guide: Guide;
   pick: (l: L) => string;
   lang: "fr" | "en" | "es";
-  industryName: string;
   blogHref: (slug: string) => string;
 }) {
   const ui = UI[lang];
@@ -34,7 +32,7 @@ export function IndustryGuide({
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-[28px] md:text-4xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630] mb-8">
-            {ui.quoteTitle} {industryName}
+            {ui.quoteTitle} {pick(guide.who)}
           </h2>
           <div className="rounded-2xl bg-[#0D0630] p-6 md:p-8 text-white">
             <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#BEF221]">

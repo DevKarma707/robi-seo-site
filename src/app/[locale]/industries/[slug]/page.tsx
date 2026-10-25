@@ -179,7 +179,7 @@ export default async function IndustryPage({
       )}
 
       {guide && (
-        <IndustryGuide guide={guide} pick={pick} lang={lang} industryName={industryName} blogHref={blogHref} />
+        <IndustryGuide guide={guide} pick={pick} lang={lang} blogHref={blogHref} />
       )}
 
       {/* Pain Points Section */}

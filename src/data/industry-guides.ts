@@ -14,6 +14,8 @@ type L = { fr: string; en: string; es: string };
 type Source = { label: string; url: string };
 
 export type IndustryGuide = {
+  /** Le métier au singulier, pour les titres (« le devis d'un plombier »). */
+  who: L;
   intro?: L;
   /** Exemple de devis : la phrase dictée, puis les lignes que Robi prépare (sans prix). */
   quote: { said: L; lines: L[]; note: L };
@@ -93,6 +95,7 @@ const ruleSanteExo = (who: L): IndustryGuide["rules"][number] => ({
 export const industryGuides: Record<string, IndustryGuide> = {
   // ───────────────────────── Bien-être & santé ─────────────────────────
   sophrologue: {
+    who: { fr: "sophrologue", en: "sophrologist", es: "sofrólogo" },
     quote: {
       said: {
         fr: "« Devis pour Atelier Nova : trois ateliers de gestion du stress d'une heure trente pour leurs équipes, douze participants maximum, plus le support remis à chaque participant. »",
@@ -140,6 +143,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
   },
 
   naturopathe: {
+    who: { fr: "naturopathe", en: "naturopath", es: "naturópata" },
     intro: {
       fr: "Bilan de vitalité, séances de suivi, conseils en hygiène de vie, parfois vente de compléments ou ateliers collectifs : un naturopathe facture des prestations de natures différentes, à des particuliers surtout. Le piège est de croire que tout cela est exonéré de TVA comme une consultation médicale. Robi AI te laisse dicter la séance juste après le rendez-vous et sort une facture claire, avec la bonne mention, que ton client peut transmettre à sa mutuelle.",
       en: "Vitality assessments, follow-up sessions, lifestyle advice, sometimes supplement sales or group workshops: a naturopath invoices services of different kinds, mostly to individuals. The trap is assuming it's all VAT-exempt like a medical consultation. Robi AI lets you dictate the session right after the appointment and produces a clear invoice with the right statement, ready for the client's insurer.",
@@ -199,6 +203,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
   },
 
   osteopathe: {
+    who: { fr: "ostéopathe", en: "osteopath", es: "osteópata" },
     quote: {
       said: {
         fr: "« Devis pour la société Atelier Bois : une demi-journée de prévention des troubles musculo-squelettiques pour l'équipe de l'atelier, avec un atelier collectif et des consultations individuelles l'après-midi. »",
@@ -237,6 +242,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
   },
 
   kinesitherapeute: {
+    who: { fr: "kinésithérapeute", en: "physiotherapist", es: "fisioterapeuta" },
     intro: {
       fr: "Un kinésithérapeute facture rarement comme un freelance : une grande partie des séances passe par l'Assurance Maladie. Restent tout ce qui sort du circuit des remboursements : dépassements, séances non prescrites, prévention en entreprise, interventions auprès d'un club sportif, formations. C'est là que les factures se font souvent à la main, le soir. Robi AI les prépare en quelques secondes à partir de ta voix, avec la bonne mention de TVA selon qu'il s'agit d'un soin ou non.",
       en: "A physiotherapist rarely invoices like a freelancer: in France most sessions go through national health insurance. What's left is everything outside reimbursement: extra fees, sessions without prescription, workplace prevention, work with a sports club, training. That's where invoices get done by hand in the evening. Robi AI prepares them in seconds from your voice, with the right VAT statement depending on whether it's care or not.",
@@ -283,6 +289,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
   },
 
   psychologue: {
+    who: { fr: "psychologue", en: "psychologist", es: "psicólogo" },
     intro: {
       fr: "Séances individuelles, thérapies de couple, bilans, supervision de collègues, interventions en entreprise ou en établissement : un psychologue libéral facture des formats variés, à des patients comme à des structures. La confidentialité compte jusque dans la facture, qui doit rester sobre. Robi AI te laisse dicter la séance en une phrase, garde un intitulé neutre et applique la mention d'exonération de TVA propre à ton titre.",
       en: "Individual sessions, couples therapy, assessments, peer supervision, interventions in companies or institutions: a private-practice psychologist invoices many formats, to patients and organisations alike. Confidentiality matters right down to the invoice, which should stay discreet. Robi AI lets you dictate the session in one sentence, keeps a neutral description and applies the VAT exemption statement tied to your title.",
@@ -326,6 +333,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
 
   // ───────────────────────── Professions du droit et du chiffre ─────────────────────────
   avocat: {
+    who: { fr: "avocat", en: "lawyer", es: "abogado" },
     intro: {
       fr: "Un avocat ne facture pas « une prestation » mais des diligences : consultations, rédaction d'actes, audiences, déplacements, frais avancés pour le client. Au forfait, au temps passé, avec parfois un honoraire de résultat. Le tout encadré par une convention d'honoraires signée en amont. Robi AI ne remplace pas ton logiciel de cabinet pour la gestion des dossiers ; il te fait gagner le temps de la facture : tu dictes les diligences de la semaine, il les met en forme, numérote et envoie.",
       en: "A lawyer doesn't invoice « a service » but work done: consultations, drafting, hearings, travel, costs advanced for the client. Flat fee, time spent, sometimes a success fee, all framed in France by a fee agreement signed upfront. Robi AI doesn't replace your practice-management software; it saves the time spent on the invoice itself: dictate the week's work, it formats, numbers and sends it.",
@@ -387,6 +395,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
   },
 
   "expert-comptable": {
+    who: { fr: "expert-comptable", en: "accountant", es: "contable" },
     intro: {
       fr: "Un expert-comptable facture des missions encadrées par une lettre de mission : tenue, révision, bilan, liasse, social, conseil ponctuel, souvent en forfait mensuel avec des prestations exceptionnelles en plus. Et depuis la réforme, tes clients te demandent tous quel outil prendre pour émettre leurs factures électroniques. Robi AI répond aux deux : il prépare tes propres factures d'honoraires en une phrase, et c'est un outil simple à recommander aux TPE et indépendants que tu accompagnes.",
       en: "An accountant invoices assignments framed by an engagement letter: bookkeeping, review, year-end accounts, payroll, ad-hoc advice, often as a monthly flat fee plus extras. And since the French e-invoicing reform, every client asks which tool to use. Robi AI covers both: it prepares your own fee invoices from one sentence, and it's a simple tool to recommend to the small businesses you support.",
@@ -448,6 +457,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
 
   // ───────────────────────── Bâtiment ─────────────────────────
   plombier: {
+    who: { fr: "plombier", en: "plumber", es: "fontanero" },
     quote: {
       said: {
         fr: "« Devis pour Mme Garnier, appartement de 1998 : remplacement du ballon d'eau chaude de 200 litres, dépose et évacuation de l'ancien, groupe de sécurité neuf, déplacement et deux heures de main-d'œuvre. »",
@@ -477,6 +487,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
   },
 
   chauffagiste: {
+    who: { fr: "chauffagiste", en: "heating engineer", es: "instalador de calefacción" },
     intro: {
       fr: "Entretien annuel de chaudière, dépannage en plein hiver, remplacement par une pompe à chaleur avec dossier d'aides : un chauffagiste enchaîne des documents qui n'ont rien à voir. Le devis de rénovation énergétique est le plus exigeant : taux de TVA réduit, mentions RGE, détail que le client devra fournir pour sa prime. Robi AI te laisse dicter le chantier depuis la chaufferie et sort un devis propre, ligne par ligne, au bon taux.",
       en: "Annual boiler servicing, mid-winter breakdowns, replacing a boiler with a heat pump including the grant paperwork: a heating engineer juggles very different documents. The energy-renovation quote is the most demanding: reduced VAT, certification details, the breakdown the customer needs for their grant. Robi AI lets you dictate the job from the boiler room and produces a clean, line-by-line quote at the right rate.",
@@ -531,6 +542,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
   },
 
   couvreur: {
+    who: { fr: "couvreur", en: "roofer", es: "techador" },
     intro: {
       fr: "Réfection de toiture, remplacement de tuiles après un coup de vent, zinguerie, isolation par l'extérieur, démoussage : un couvreur chiffre des chantiers où l'échafaudage, la dépose et l'évacuation pèsent autant que la pose. Et c'est souvent après la visite, en haut de l'échelle, qu'il faut sortir le devis. Robi AI te laisse dicter le chantier depuis le toit et range chaque poste à sa place, avec le bon taux de TVA quand l'isolation entre en jeu.",
       en: "Re-roofing, replacing tiles after a storm, guttering, external insulation, moss removal: a roofer prices jobs where scaffolding, stripping and disposal weigh as much as the fitting. And the quote is often needed right after the inspection, at the top of the ladder. Robi AI lets you dictate the job from the roof and files each item in its place, with the right VAT when insulation is involved.",
@@ -573,6 +585,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
   },
 
   carreleur: {
+    who: { fr: "carreleur", en: "tiler", es: "alicatador" },
     intro: {
       fr: "Chape, ragréage, pose droite ou en diagonale, plinthes, faïence de salle de bains, joints : un carreleur chiffre au mètre carré mais chaque chantier a ses préparations, ses découpes et ses pertes. Fournir le carrelage ou poser celui du client change aussi tout le devis. Robi AI te laisse dicter les surfaces pièce par pièce et sépare d'office fourniture et pose.",
       en: "Screed, levelling, straight or diagonal laying, skirting, bathroom wall tiles, grouting: a tiler prices by the square metre, but every job has its prep, cuts and wastage. Supplying the tiles or laying the customer's own also changes the whole quote. Robi AI lets you dictate areas room by room and keeps supply and labour apart.",
@@ -611,6 +624,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
   },
 
   menuisier: {
+    who: { fr: "menuisier", en: "carpenter", es: "carpintero" },
     intro: {
       fr: "Fabrication sur mesure à l'atelier, pose de fenêtres, portes, escaliers, agencement de cuisine ou de dressing : un menuisier mélange fabrication, fourniture et pose, et les délais entre le devis et la livraison sont longs. Il faut donc un devis précis dès le départ, des acomptes bien suivis et une facture de solde qui reprend tout. Robi AI te laisse dicter le projet avec ses cotes et ses essences, et garde le fil jusqu'au solde.",
       en: "Bespoke workshop fabrication, fitting windows, doors, staircases, kitchens or wardrobes: a carpenter mixes fabrication, supply and fitting, with long lead times between quote and delivery. That calls for a precise quote from the start, well-tracked deposits and a final invoice that brings it all together. Robi AI lets you dictate the project with its dimensions and wood species, and follows it through to the balance.",
@@ -653,6 +667,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
   },
 
   serrurier: {
+    who: { fr: "serrurier", en: "locksmith", es: "cerrajero" },
     intro: {
       fr: "Ouverture de porte claquée, changement de cylindre après une perte de clés, pose de serrure multipoints, réparation après effraction : un serrurier travaille souvent dans l'urgence, chez des clients stressés, et c'est le métier où le prix annoncé fait le plus l'objet de contrôles. Un devis détaillé, signé avant d'intervenir, te protège autant que ton client. Robi AI te permet de le dicter sur le palier et de le faire signer sur ton téléphone.",
       en: "Opening a slammed door, changing a cylinder after lost keys, fitting a multi-point lock, repairing after a break-in: a locksmith often works in emergencies with stressed customers, and in France it's the trade where quoted prices are most scrutinised. A detailed quote signed before you start protects you as much as the customer. Robi AI lets you dictate it on the doorstep and get it signed on your phone.",
@@ -695,6 +710,7 @@ export const industryGuides: Record<string, IndustryGuide> = {
 
   // ───────────────────────── Événementiel ─────────────────────────
   traiteur: {
+    who: { fr: "traiteur", en: "caterer", es: "catering" },
     intro: {
       fr: "Cocktail d'entreprise, mariage, plateaux-repas livrés, buffet avec service, location de vaisselle : un traiteur facture des prestations où la TVA change selon ce qu'on vend et comment on le sert. Un même devis peut mêler plusieurs taux, et un devis mal ventilé coûte cher. Robi AI te laisse dicter la prestation ligne par ligne et applique à chacune son taux.",
       en: "Corporate cocktails, weddings, delivered meal trays, buffets with service, tableware hire: a caterer invoices services where French VAT changes with what's sold and how it's served. One quote can mix several rates, and a poorly broken-down quote is costly. Robi AI lets you dictate the event line by line and applies each line's rate.",

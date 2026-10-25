@@ -28,7 +28,6 @@ const content: Record<Lang, {
   title: string;
   subtitle: string;
   login: string;
-  signup: string;
   cards: { icon: "login" | "signup" | "plan" | "help"; title: string; text: string; href: string; cta: string }[];
   notUs: { title: string; text: string };
   faq: { question: string; answer: string }[];
@@ -40,7 +39,6 @@ const content: Record<Lang, {
     title: "Robi AI : se connecter",
     subtitle: "Ton espace Robi AI est sur go.robi-app.com : tes devis, tes factures, tes clients et ton abonnement. Connecte-toi avec ton e-mail ou ton compte Google.",
     login: "Se connecter à Robi AI",
-    signup: "Créer un compte gratuit",
     cards: [
       { icon: "login", title: "Déjà client", text: "Connecte-toi sur go.robi-app.com avec l'e-mail ou le compte Google utilisé à l'inscription. Sur téléphone, ajoute la page à ton écran d'accueil pour l'ouvrir comme une app.", href: APP, cta: "Ouvrir l'app" },
       { icon: "signup", title: "Pas encore de compte", text: "L'inscription prend une minute, sans carte bancaire : 4 factures ou devis gratuits par mois pour essayer.", href: SIGNUP, cta: "Créer mon compte" },
@@ -65,7 +63,6 @@ const content: Record<Lang, {
     title: "Robi AI login",
     subtitle: "Your Robi AI workspace lives at go.robi-app.com: quotes, invoices, clients and your subscription. Sign in with your email or your Google account.",
     login: "Sign in to Robi AI",
-    signup: "Create a free account",
     cards: [
       { icon: "login", title: "Already a customer", text: "Sign in at go.robi-app.com with the email or Google account you signed up with. On a phone, add the page to your home screen to open it like an app.", href: APP, cta: "Open the app" },
       { icon: "signup", title: "No account yet", text: "Signing up takes a minute, no card needed: 4 free invoices or quotes a month to try it.", href: SIGNUP, cta: "Create my account" },
@@ -90,7 +87,6 @@ const content: Record<Lang, {
     title: "Robi AI: iniciar sesión",
     subtitle: "Tu espacio Robi AI está en go.robi-app.com: presupuestos, facturas, clientes y tu suscripción. Entra con tu correo o tu cuenta de Google.",
     login: "Iniciar sesión en Robi AI",
-    signup: "Crear una cuenta gratis",
     cards: [
       { icon: "login", title: "Ya eres cliente", text: "Entra en go.robi-app.com con el correo o la cuenta de Google con la que te registraste. En el móvil, añade la página a tu pantalla de inicio para abrirla como una app.", href: APP, cta: "Abrir la app" },
       { icon: "signup", title: "Aún sin cuenta", text: "El registro lleva un minuto, sin tarjeta: 4 facturas o presupuestos gratis al mes para probar.", href: SIGNUP, cta: "Crear mi cuenta" },
@@ -160,8 +156,6 @@ export default async function LoginPage({
         subtitle={c.subtitle}
         ctaText={c.login}
         ctaHref={APP}
-        secondaryCtaText={c.signup}
-        secondaryCtaHref={SIGNUP}
         variant="centered"
       />
 
