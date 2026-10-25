@@ -38,7 +38,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Devis et factures gratuits en parlant — Robi AI",
     homeDescription:
       "Gratuit pour commencer : dis ta prestation, Robi AI rédige le devis ou la facture en 30 secondes, au format Factur-X. Relances et paiement en ligne inclus.",
-    pricingTitle: "Tarifs Robi AI : gratuit, puis {monthly}/mois",
+    pricingTitle: "Abonnement Robi AI : gratuit, puis {monthly}/mois",
     pricingDescription:
       "4 devis ou factures gratuits par mois, sans carte bancaire. Ensuite {monthly}/mois sans engagement ou {yearly}/an. Factur-X inclus dans toutes les offres.",
     focus: {
@@ -57,7 +57,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Facture en parlant, gratuit en Belgique — Robi AI",
     homeDescription:
       "Indépendant en Belgique ? Dicte ta prestation : Robi AI rédige devis et factures en euros, TVA belge calculée, numéro BCE imprimé. Gratuit pour commencer.",
-    pricingTitle: "Prix de Robi AI en Belgique : dès {monthly}/mois",
+    pricingTitle: "Abonnement Robi AI en Belgique : dès {monthly}/mois",
     pricingDescription:
       "Facturation IA pour indépendants belges : 4 documents gratuits par mois, puis {monthly}/mois ou {yearly}/an, TVA comprise dans le calcul. Sans engagement.",
     focus: {
@@ -76,7 +76,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Devis et factures en francs, en parlant — Robi AI Suisse",
     homeDescription:
       "Indépendants en Suisse romande : dicte ta prestation, Robi AI rédige devis et factures en francs suisses avec ton numéro IDE. Gratuit pour commencer.",
-    pricingTitle: "Prix de Robi AI en Suisse : dès {monthly} par mois",
+    pricingTitle: "Abonnement Robi AI en Suisse : dès {monthly} par mois",
     pricingDescription:
       "Facturation IA en francs suisses : 4 devis ou factures gratuits par mois, puis {monthly}/mois sans engagement ou {yearly}/an. Sans engagement.",
     focus: {
@@ -95,7 +95,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Factures et soumissions en parlant — Robi AI Canada",
     homeDescription:
       "Travailleur autonome au Québec ? Dis ta prestation : Robi AI rédige ta soumission ou ta facture en dollars canadiens, en 30 secondes. Gratuit pour commencer.",
-    pricingTitle: "Prix de Robi AI au Canada : dès {monthly} par mois",
+    pricingTitle: "Abonnement Robi AI au Canada : dès {monthly} par mois",
     pricingDescription:
       "Facturation IA en dollars canadiens : 4 soumissions ou factures gratuites par mois, puis {monthly}/mois ou {yearly}/an. Sans engagement, annulable en un clic.",
     focus: {
@@ -114,7 +114,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Facturation IA au Luxembourg, en parlant — Robi AI",
     homeDescription:
       "Indépendants au Luxembourg : dicte ta prestation, Robi AI rédige devis et factures en euros avec ton numéro RCS et la TVA luxembourgeoise. Gratuit au départ.",
-    pricingTitle: "Prix de Robi AI au Luxembourg : dès {monthly}/mois",
+    pricingTitle: "Abonnement Robi AI au Luxembourg : dès {monthly}/mois",
     pricingDescription:
       "Facturation IA pour le Luxembourg : 4 devis ou factures gratuits par mois, puis {monthly}/mois ou {yearly}/an. Sans engagement, annulable en un clic.",
     focus: {
@@ -133,7 +133,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Devis et factures en dirhams, en parlant — Robi AI Maroc",
     homeDescription:
       "Freelances et créatifs au Maroc : dis ta prestation, Robi AI rédige le devis ou la facture en dirhams, avec ton ICE, en 30 secondes. Gratuit pour commencer.",
-    pricingTitle: "Prix de Robi AI au Maroc : dès {monthly} par mois",
+    pricingTitle: "Abonnement Robi AI au Maroc : dès {monthly} par mois",
     pricingDescription:
       "Facturation IA en dirhams : 4 devis ou factures gratuits par mois, puis {monthly}/mois ou {yearly}/an. Sans engagement, annulable en un clic.",
     focus: {
@@ -152,7 +152,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Facturation IA au Sénégal, en francs CFA — Robi AI",
     homeDescription:
       "Entrepreneurs au Sénégal : dicte ta prestation, Robi AI rédige devis et factures en francs CFA avec ton NINEA, en 30 secondes. Gratuit pour commencer.",
-    pricingTitle: "Prix de Robi AI au Sénégal : dès {monthly} par mois",
+    pricingTitle: "Abonnement Robi AI au Sénégal : dès {monthly}/mois",
     pricingDescription:
       "Facturation IA en francs CFA : 4 devis ou factures gratuits par mois, puis {monthly}/mois ou {yearly}/an. Sans engagement, annulable en un clic.",
     focus: {
@@ -171,7 +171,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Devis et factures en francs CFA, en parlant — Robi AI CI",
     homeDescription:
       "Entrepreneurs en Côte d'Ivoire : dis ta prestation, Robi AI rédige devis et factures en francs CFA avec ton NCC, en 30 secondes. Gratuit pour commencer.",
-    pricingTitle: "Prix de Robi AI en Côte d'Ivoire : dès {monthly}/mois",
+    pricingTitle: "Abonnement Robi AI en Côte d'Ivoire : {monthly}/mois",
     pricingDescription:
       "Facturation IA en francs CFA pour la Côte d'Ivoire : 4 documents gratuits par mois, puis {monthly}/mois ou {yearly}/an. Sans engagement.",
     focus: {
@@ -190,7 +190,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Free AI Invoice & Quote Maker, by Voice — Robi AI",
     homeDescription:
       "Free to start: say the job out loud and Robi AI writes the quote or invoice in 30 seconds, in pounds, with VAT done. Reminders and online payment built in.",
-    pricingTitle: "Robi AI Pricing UK: free, then {monthly}/month",
+    pricingTitle: "Robi AI Subscription UK: free, then {monthly}/month",
     pricingDescription:
       "Invoice by voice in pounds: 4 free quotes or invoices a month, no card. Then {monthly}/month, no contract, or {yearly}/year. Cancel anytime.",
     focus: {
@@ -209,7 +209,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Free AI Invoice Generator for Contractors — Robi AI",
     homeDescription:
       "Say the job out loud: Robi AI writes the estimate or invoice in 30 seconds, in dollars, with your EIN. Reminders and online payments built in. Free to start.",
-    pricingTitle: "Robi AI Pricing (US): free, then {monthly}/month",
+    pricingTitle: "Robi AI Subscription (US): free, then {monthly}/month",
     pricingDescription:
       "AI invoicing in US dollars: 4 free estimates or invoices a month, no credit card. Then {monthly}/month or {yearly}/year. Cancel anytime.",
     focus: {
@@ -228,7 +228,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Free AI Invoice App for Tradies, by Voice — Robi AI",
     homeDescription:
       "Say the job out loud: Robi AI writes the quote or tax invoice in 30 seconds, in Australian dollars, with your ABN and GST. Free to start, no card needed.",
-    pricingTitle: "Robi AI Pricing Australia: from {monthly}/month",
+    pricingTitle: "Robi AI Subscription Australia: from {monthly}/month",
     pricingDescription:
       "AI invoicing in AUD: 4 free quotes or invoices a month, then {monthly}/month or {yearly}/year. No lock-in contract.",
     focus: {
@@ -247,7 +247,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "AI Invoicing in Ireland, Free to Start — Robi AI",
     homeDescription:
       "Sole traders in Ireland: say the job, Robi AI writes the quote or invoice in 30 seconds, in euro, with Irish VAT and your CRO number. Free to start.",
-    pricingTitle: "Robi AI Pricing Ireland: free, then {monthly}/month",
+    pricingTitle: "Robi AI Subscription Ireland: free, then {monthly}/month",
     pricingDescription:
       "AI invoicing in euro: 4 free quotes or invoices a month, no card. Then {monthly}/month or {yearly}/year. No contract, cancel anytime.",
     focus: {
@@ -266,7 +266,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "AI Invoicing for ZZP in the Netherlands — Robi AI",
     homeDescription:
       "Freelancers (ZZP) in the Netherlands: say the job, Robi AI writes the quote or invoice in 30 seconds, in euro, with your KVK number and BTW. Free to start.",
-    pricingTitle: "Robi AI Pricing Netherlands: from {monthly}/month",
+    pricingTitle: "Robi AI Subscription Netherlands: from {monthly}/month",
     pricingDescription:
       "AI invoicing in euro for ZZP: 4 free quotes or invoices a month, then {monthly}/month or {yearly}/year. Cancel anytime.",
     focus: {
@@ -285,7 +285,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "AI Invoice Generator in the UAE, in AED — Robi AI",
     homeDescription:
       "Freelancers in the UAE: say the job, Robi AI writes the quote or invoice in 30 seconds, in dirhams, with your TRN and 5% VAT. Free to start, no card needed.",
-    pricingTitle: "Robi AI Pricing UAE: free, then {monthly}/month",
+    pricingTitle: "Robi AI Subscription UAE: free, then {monthly}/month",
     pricingDescription:
       "AI invoicing in AED: 4 free quotes or invoices a month, then {monthly}/month or {yearly}/year. No contract, cancel anytime.",
     focus: {
@@ -304,7 +304,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Facturas y presupuestos gratis hablando — Robi AI",
     homeDescription:
       "Gratis para empezar: di el trabajo y Robi AI redacta el presupuesto o la factura en 30 segundos, con IVA y tu NIF. Recordatorios y pago online incluidos.",
-    pricingTitle: "Precios de Robi AI: gratis y luego {monthly}/mes",
+    pricingTitle: "Suscripción a Robi AI: gratis y luego {monthly}/mes",
     pricingDescription:
       "4 presupuestos o facturas gratis al mes, sin tarjeta. Después {monthly}/mes sin permanencia o {yearly}/año. Cancela cuando quieras.",
     focus: {
@@ -323,7 +323,7 @@ const COPY: Record<string, MarketCopy> = {
     homeTitle: "Faturas e orçamentos grátis a falar — Robi AI",
     homeDescription:
       "Grátis para começar: diz o serviço e o Robi AI escreve o orçamento ou a fatura em 30 segundos, em euros, com IVA e o teu NIF. Lembretes e pagamento online.",
-    pricingTitle: "Preços do Robi AI: grátis, depois {monthly}/mês",
+    pricingTitle: "Subscrição do Robi AI: grátis, depois {monthly}/mês",
     pricingDescription:
       "4 orçamentos ou faturas grátis por mês, sem cartão. Depois {monthly}/mês sem fidelização ou {yearly}/ano. Cancela quando quiseres.",
     focus: {
