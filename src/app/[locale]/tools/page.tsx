@@ -6,10 +6,27 @@ import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { Card } from "@/components/ui/Card";
 import { CTA } from "@/components/sections/CTA";
-import { Calculator, FileText, Scale, ArrowRight, ReceiptText } from "lucide-react";
+import { Calculator, FileText, Scale, ArrowRight, ReceiptText, FileSignature } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 import { pageSeo } from "@/lib/seo/pageSeo";
+import { localePath } from "@/lib/seo/localizedPaths";
+// Titre et description propres (avant : ceux de l'accueil, en double).
+const META = {
+  fr: {
+    title: { absolute: "Outils gratuits pour freelances et artisans | Robi AI" },
+    description: "Générateur de facture PDF, modèle de devis auto-entrepreneur, calculateur de TJM, simulateur de charges, mentions légales : gratuits, sans inscription.",
+  },
+  en: {
+    title: { absolute: "Free tools for freelancers and contractors | Robi AI" },
+    description: "Free invoice generator, day rate calculator, tax simulator and legal notice generator. No sign-up needed: fill in, download, done.",
+  },
+  es: {
+    title: { absolute: "Herramientas gratis para autónomos | Robi AI" },
+    description: "Generador de facturas en PDF, calculadora de tarifa diaria, simulador de impuestos y generador de aviso legal: gratis y sin registro.",
+  },
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -21,8 +38,7 @@ export async function generateMetadata({
 
   return {
     ...pageSeo(locale, "/tools"),
-    title: `${dict.nav.tools}`,
-    description: dict.meta.description,
+    ...META[locale.startsWith("es") ? "es" : locale.startsWith("fr") ? "fr" : "en"],
     keywords: ["outils freelance", "calculateur tjm", "simulateur charges freelance"],
   };
 }
@@ -32,7 +48,17 @@ const toolIcons: Record<string, React.ElementType> = {
   "calculateur-tjm": Calculator,
   "simulateur-charges": Scale,
   "generateur-mentions-legales": FileText,
+  "modele-devis-auto-entrepreneur": FileSignature,
 };
+
+// Outil propre à la France (statut auto-entrepreneur) : listé sur /fr seulement.
+const FR_ONLY_TOOLS = [
+  {
+    slug: "modele-devis-auto-entrepreneur",
+    name: { fr: "Modèle de devis auto-entrepreneur", en: "", es: "" },
+    description: { fr: "Un devis rempli, avec ou sans TVA, et les mentions obligatoires expliquées.", en: "", es: "" },
+  },
+];
 
 export default async function ToolsPage({
   params,
@@ -82,11 +108,11 @@ export default async function ToolsPage({
       <section className="py-16 md:py-24 lg:py-28 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {tools.map((tool, index) => {
+            {[...(locale === "fr" ? FR_ONLY_TOOLS : []), ...tools].map((tool, index) => {
               const Icon = toolIcons[tool.slug] || Calculator;
               return (
                 <ScrollReveal key={tool.slug} delay={index * 100} className="h-full">
-                  <Link href={`/${locale}/tools/${tool.slug}`} className="block h-full">
+                  <Link href={localePath(locale, `/tools/${tool.slug}`)} className="block h-full">
                     <Card className="h-full group cursor-pointer text-center">
                       <div className="w-14 h-14 mx-auto mb-6 rounded-2xl bg-[#0D0630] flex items-center justify-center">
                         <Icon className="w-7 h-7 text-[#BEF221]" />

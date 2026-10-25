@@ -34,8 +34,8 @@ const c = PROGRAMME.commissionPct;
 const m = PROGRAMME.minPayoutEur;
 
 const fr: PartnerCopy = {
-  metaTitle: "Programme partenaires Robi AI — gagne une commission sur chaque vente",
-  metaDescription: `Tu parles à des artisans, des indépendants, des pros du BTP ? Ton code offre ${d} % à ton audience, tu touches ${c} % de chaque vente. Inscription en 2 minutes, sans engagement.`,
+  metaTitle: `Programme partenaires Robi AI : ${c} % sur chaque vente`,
+  metaDescription: `Tu parles à des artisans, des indépendants, des pros du BTP ? Ton code offre ${d} % à ton audience, tu touches ${c} % de chaque vente. Inscription en 2 min.`,
   badge: "Partenaires",
   title: "Parle de Robi.",
   titleAccent: `Touche ${c} % de chaque vente.`,
@@ -84,7 +84,7 @@ const fr: PartnerCopy = {
 };
 
 const en: PartnerCopy = {
-  metaTitle: "Robi AI partner programme — earn a commission on every sale",
+  metaTitle: `Robi AI partner programme: earn ${c}% on every sale`,
   metaDescription: `Do you talk to tradespeople, freelancers, contractors? Your code gives your audience ${d}% off, you earn ${c}% of every sale. Sign up in 2 minutes, no commitment.`,
   badge: "Partners",
   title: "Talk about Robi.",
@@ -134,8 +134,8 @@ const en: PartnerCopy = {
 };
 
 const es: PartnerCopy = {
-  metaTitle: "Programa de socios Robi AI — gana una comisión por cada venta",
-  metaDescription: `¿Hablas con autónomos, artesanos, profesionales de la construcción? Tu código da un ${d} % de descuento a tu audiencia y tú ganas el ${c} % de cada venta. Registro en 2 minutos, sin compromiso.`,
+  metaTitle: `Programa de socios Robi AI: gana el ${c} % de cada venta`,
+  metaDescription: `¿Hablas con autónomos y artesanos? Tu código da un ${d} % de descuento a tu audiencia y tú ganas el ${c} % de cada venta. Registro en 2 minutos.`,
   badge: "Socios",
   title: "Habla de Robi.",
   titleAccent: `Gana el ${c} % de cada venta.`,
@@ -200,8 +200,8 @@ const exempleAnnuel = "141,60 DH";
 const exempleDix = "2 088,60 DH";
 
 const frMA: PartnerCopy = {
-  metaTitle: `Ambassadeurs Robi Maroc — ${A.commissionPct} % pendant ${A.commissionMonths} mois sur chaque client`,
-  metaDescription: `Comptable, fiduciaire, freelance : recommande Robi à tes clients. Ils ont ${A.discountPct} % sur leur premier paiement, tu touches ${A.commissionPct} % de tout ce qu'ils paient pendant ${A.commissionMonths} mois, et ${aPrime} de prime à ton ${A.bonus.seuil}e client payant.`,
+  metaTitle: `Ambassadeurs Robi Maroc : ${A.commissionPct} % pendant ${A.commissionMonths} mois`,
+  metaDescription: `Comptable, fiduciaire, freelance : recommande Robi. Tes clients ont ${A.discountPct} % sur leur 1er paiement, tu touches ${A.commissionPct} % pendant ${A.commissionMonths} mois, plus ${aPrime} de prime.`,
   badge: "Ambassadeurs Maroc",
   title: "Recommande Robi.",
   titleAccent: `Touche ${A.commissionPct} % pendant ${A.commissionMonths} mois.`,

@@ -24,6 +24,8 @@ import {
 } from "@/lib/blog-articles";
 
 import { pageSeo } from "@/lib/seo/pageSeo";
+import { localePath, localizeHrefs } from "@/lib/seo/localizedPaths";
+import { seoTitle, seoDescription } from "@/lib/seo/blogSeo";
 // Static slugs are prerendered; articles published from /admin (Firestore)
 // render on-demand (dynamicParams) and are cached/revalidated.
 export const dynamicParams = true;
@@ -98,15 +100,19 @@ export async function generateMetadata({
 
   const path = `/blog/${slug}`;
 
+  // <title> ≤ 60 et description ≤ 160 caractères (lib/seo/blogSeo) ; le H1 garde le titre complet.
+  const metaTitle = seoTitle(slug, locale, title);
+  const metaDescription = seoDescription(slug, locale, description);
+
   return {
-    title,
-    description,
+    title: { absolute: metaTitle },
+    description: metaDescription,
     keywords,
     ...pageSeo(locale, path),
     openGraph: {
       title,
       description,
-      url: `https://robi-app.com/${locale}${path}`,
+      url: `https://robi-app.com${localePath(locale, path)}`,
       siteName: "Robi AI",
       locale: locale.replace("-", "_"),
       type: "article",
@@ -1602,7 +1608,7 @@ export default async function BlogPostPage({
         '<a href="$2" class="text-gray-900 underline decoration-[#BEF221] decoration-2 underline-offset-2 hover:text-[#BEF221]">$1</a>'
       )
       .replace(/\*\*(.+?)\*\*/g, '<strong class="text-gray-900">$1</strong>');
-  const htmlContent = content
+  const htmlContent = localizeHrefs(content
     .split("\n")
     .map((line) => {
       if (line.startsWith("## ")) return `<h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">${line.slice(3)}</h2>`;
@@ -1620,7 +1626,7 @@ export default async function BlogPostPage({
       if (line.trim() === "") return "";
       return `<p class="text-gray-500 mb-4 leading-relaxed">${inline(line)}</p>`;
     })
-    .join("\n");
+    .join("\n"));
 
   return (
     <>
@@ -1631,7 +1637,7 @@ export default async function BlogPostPage({
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
-            "@id": `https://robi-app.com/${locale}/blog/${slug}`,
+            "@id": `https://robi-app.com${localePath(locale, `/blog/${slug}`)}`,
             headline: view.title,
             description: view.description,
             articleBody: content,
@@ -1690,7 +1696,7 @@ export default async function BlogPostPage({
                 "@type": "ListItem",
                 position: 3,
                 name: view.title,
-                item: `https://robi-app.com/${locale}/blog/${slug}`,
+                item: `https://robi-app.com${localePath(locale, `/blog/${slug}`)}`,
               },
             ],
           }),
@@ -1792,6 +1798,20 @@ export default async function BlogPostPage({
             dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
 
+          {/* Maillage article ↔ outil (le modèle rempli que la requête « devis auto entrepreneur » attend) */}
+          {locale === "fr" && slug === "comment-faire-un-devis-auto-entrepreneur" && (
+            <Link
+              href="/fr/tools/modele-devis-auto-entrepreneur"
+              className="mt-10 flex items-center justify-between gap-4 rounded-2xl bg-[#0D0630] p-6 text-white hover:brightness-110"
+            >
+              <span>
+                <span className="block text-xs font-bold uppercase tracking-widest text-[#BEF221]">Modèle gratuit</span>
+                <span className="mt-1 block text-lg font-bold">Le modèle de devis auto-entrepreneur, rempli, avec ou sans TVA</span>
+              </span>
+              <ArrowLeft className="h-5 w-5 flex-shrink-0 rotate-180 text-[#BEF221]" aria-hidden="true" />
+            </Link>
+          )}
+
           {/* FAQ (GEO : FAQPage schema ci-dessus) */}
           {view.faq.length > 0 && (
             <section className="mt-14">
@@ -1834,7 +1854,7 @@ export default async function BlogPostPage({
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {otherPosts.map((relatedPost) => (
-              <Link key={relatedPost.slug} href={`/${locale}/blog/${relatedPost.slug}`}>
+              <Link key={relatedPost.slug} href={localePath(locale, `/blog/${relatedPost.slug}`)}>
                 <Card className="h-full group cursor-pointer">
                   <Badge className={categoryColors[relatedPost.category]}>
                     {dict.pages.blog.categories[relatedPost.category as keyof typeof dict.pages.blog.categories]}

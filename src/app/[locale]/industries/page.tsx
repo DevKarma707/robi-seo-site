@@ -9,6 +9,7 @@ import { CTA } from "@/components/sections/CTA";
 import { ArrowRight, Hammer, Code, Palette, PartyPopper, Briefcase, Heart } from "lucide-react";
 
 import { pageSeo } from "@/lib/seo/pageSeo";
+import { localePath } from "@/lib/seo/localizedPaths";
 export async function generateMetadata({
   params,
 }: {
@@ -85,7 +86,7 @@ export default async function IndustriesPage({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {category.industries.map((industry) => (
-                    <Link key={industry.slug} href={`/${locale}/industries/${industry.slug}`}>
+                    <Link key={industry.slug} href={localePath(locale, `/industries/${industry.slug}`)}>
                       <Card className="h-full group cursor-pointer hover:border-[#BEF221] transition-all">
                         <div className="flex items-start justify-between mb-3">
                           <h3 className="text-lg font-bold text-gray-900 group-hover:text-gray-900">

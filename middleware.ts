@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { locales, defaultLocale } from "@/lib/i18n/config";
+import { publicPath, internalPath } from "@/lib/seo/localizedPaths";
 
 function getLocale(request: NextRequest): string {
   // Check if locale is in cookie
@@ -66,6 +67,23 @@ export function middleware(request: NextRequest) {
   );
 
   if (pathnameHasLocale) {
+    // Slugs dans la langue du marché (lib/seo/localizedPaths) : l'ancienne
+    // adresse française d'une page EN/ES part en 301 vers la nouvelle, et la
+    // nouvelle est servie par la route interne (nommée en français).
+    const [, locale, ...segments] = pathname.replace(/\/$/, "").split("/");
+    const rest = segments.length ? `/${segments.join("/")}` : "";
+    const pub = publicPath(locale, rest);
+    if (pub !== rest) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${locale}${pub}`;
+      return NextResponse.redirect(url, 301);
+    }
+    const internal = internalPath(locale, rest);
+    if (internal !== rest) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${locale}${internal}`;
+      return NextResponse.rewrite(url);
+    }
     return NextResponse.next();
   }
 

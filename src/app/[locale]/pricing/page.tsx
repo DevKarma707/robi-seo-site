@@ -10,6 +10,8 @@ import { Locale } from "@/lib/i18n/config";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 import { pageSeo } from "@/lib/seo/pageSeo";
+import { getMarketCopy } from "@/lib/seo/marketCopy";
+import { MarketFocus } from "@/components/sections/MarketFocus";
 export async function generateMetadata({
   params,
 }: {
@@ -17,12 +19,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale: rawLocale } = await params;
   const locale = rawLocale as Locale;
-  const dict = await getDictionary(locale);
+  const market = getMarketCopy(locale);
 
   return {
     ...pageSeo(locale, "/pricing", "regional"),
-    title: dict.pages.pricing.title,
-    description: dict.pages.pricing.description,
+    title: { absolute: market.pricingTitle },
+    description: market.pricingDescription,
     keywords: ["prix robi ai", "tarif facturation freelance", "logiciel facturation prix"],
   };
 }
@@ -133,6 +135,8 @@ export default async function PricingPage({
           </div>
         </div>
       </section>
+
+      <MarketFocus locale={locale} />
 
       <FAQ
         title={p.faqTitle}

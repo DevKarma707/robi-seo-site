@@ -8,6 +8,23 @@ import { CTA } from "@/components/sections/CTA";
 import { ArrowRight, Bot, Zap, Bell, CreditCard, BarChart3 } from "lucide-react";
 
 import { pageSeo } from "@/lib/seo/pageSeo";
+import { localePath } from "@/lib/seo/localizedPaths";
+// Titre et description propres (avant : ceux de l'accueil, en double).
+const META = {
+  fr: {
+    title: { absolute: "Fonctionnalités : devis, factures, relances par IA | Robi AI" },
+    description: "Tout ce que fait Robi AI : devis et factures dictés en 30 secondes, Factur-X, signature à distance, relances automatiques, paiement en ligne, tableau de bord.",
+  },
+  en: {
+    title: { absolute: "Features: AI quotes, invoices and reminders | Robi AI" },
+    description: "Everything Robi AI does: quotes and invoices dictated in 30 seconds, e-signature, automatic reminders, online payments and a live revenue dashboard.",
+  },
+  es: {
+    title: { absolute: "Funciones: presupuestos, facturas y avisos con IA | Robi AI" },
+    description: "Todo lo que hace Robi AI: presupuestos y facturas dictados en 30 segundos, firma electrónica, recordatorios automáticos, pago online y panel de control.",
+  },
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -19,8 +36,7 @@ export async function generateMetadata({
 
   return {
     ...pageSeo(locale, "/features"),
-    title: `${dict.nav.features}`,
-    description: dict.meta.description,
+    ...META[locale.startsWith("es") ? "es" : locale.startsWith("fr") ? "fr" : "en"],
     keywords: ["fonctionnalités robi", "facturation ia", "logiciel facturation features"],
   };
 }
@@ -87,7 +103,7 @@ export default async function FeaturesPage({
               return (
                 <Link
                   key={feature.slug}
-                  href={`/${locale}/features/${feature.slug}`}
+                  href={localePath(locale, `/features/${feature.slug}`)}
                   className="group"
                 >
                   <div className="h-full rounded-2xl p-7 bg-white/5 border border-white/10 backdrop-blur-sm transition-all duration-300 hover:border-[#BEF221]/40 hover:bg-white/10 hover:-translate-y-1">
@@ -115,7 +131,7 @@ export default async function FeaturesPage({
               return (
                 <Link
                   key={feature.slug}
-                  href={`/${locale}/features/${feature.slug}`}
+                  href={localePath(locale, `/features/${feature.slug}`)}
                   className="group"
                 >
                   <div className="h-full rounded-2xl p-7 bg-white/5 border border-white/10 backdrop-blur-sm transition-all duration-300 hover:border-[#BEF221]/40 hover:bg-white/10 hover:-translate-y-1">

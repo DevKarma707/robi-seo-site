@@ -4,6 +4,7 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Globe, ChevronDown } from "lucide-react";
 import { locales, localeNames, localeFlags, Locale } from "@/lib/i18n/config";
+import { internalPath, localePath } from "@/lib/seo/localizedPaths";
 
 interface LanguageSwitcherProps {
   currentLocale: Locale;
@@ -22,7 +23,9 @@ export function LanguageSwitcher({ currentLocale }: LanguageSwitcherProps) {
     document.cookie = `NEXT_LOCALE=${newLocale};path=/;max-age=31536000`;
 
     // Navigate to new locale
-    router.push(`/${newLocale}${pathWithoutLocale}`);
+    // (le slug change avec la langue : « /en/ai-invoice-generator » → « /es/factura-ia »)
+    const internal = internalPath(currentLocale, pathWithoutLocale);
+    router.push(internal === "/" ? `/${newLocale}/` : localePath(newLocale, internal));
     setIsOpen(false);
   };
 

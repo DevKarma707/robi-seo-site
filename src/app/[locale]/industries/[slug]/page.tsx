@@ -15,6 +15,8 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 
 import { AiInvoiceLink } from "@/components/ui/AiInvoiceLink";
 import { pageSeo } from "@/lib/seo/pageSeo";
+import { fitTitle } from "@/lib/seo/blogSeo";
+import { localePath } from "@/lib/seo/localizedPaths";
 // Generate static pages for all industries
 export async function generateStaticParams() {
   return industries.map((industry) => ({
@@ -40,7 +42,7 @@ export async function generateMetadata({
 
   return {
     ...pageSeo(locale, `/industries/${slug}`),
-    title: t(industry.title, locale),
+    title: { absolute: fitTitle(t(industry.title, locale)) },
     description: t(industry.description, locale),
     keywords: industry.keywords,
     robots: isContentIndexable(locale) ? undefined : { index: false, follow: true },
@@ -103,7 +105,7 @@ export default async function IndustryPage({
                 "@type": "ListItem",
                 position: 3,
                 name: t(industry.name, locale),
-                item: `https://robi-app.com/${locale}/industries/${slug}`,
+                item: `https://robi-app.com${localePath(locale, `/industries/${slug}`)}`,
               },
             ],
           }),

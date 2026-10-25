@@ -1,7 +1,9 @@
 import { Metadata } from "next";
+import { pageSeo } from "@/lib/seo/pageSeo";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { Locale, isContentIndexable } from "@/lib/i18n/config";
+import { Locale } from "@/lib/i18n/config";
 import { GenerateurFactureClient } from "./client";
+import { localePath } from "@/lib/seo/localizedPaths";
 
 type Lang = "fr" | "en" | "es";
 
@@ -13,9 +15,9 @@ function lang(locale: string): Lang {
 
 const seo: Record<Lang, { title: string; description: string; keywords: string[] }> = {
   fr: {
-    title: "Générateur de Facture Gratuit en Ligne (PDF) — sans inscription",
+    title: "Générateur de facture gratuit en PDF, sans inscription",
     description:
-      "Créez une facture professionnelle conforme en ligne et téléchargez-la en PDF gratuitement, sans inscription. Calcul TVA automatique. Ou laissez l'IA la faire pour vous.",
+      "Crée une facture conforme en ligne et télécharge-la en PDF, gratuitement et sans inscription. TVA calculée automatiquement. Ou laisse l'IA la faire en parlant.",
     keywords: [
       "générateur de facture",
       "générateur de facture gratuit",
@@ -27,7 +29,7 @@ const seo: Record<Lang, { title: string; description: string; keywords: string[]
     ],
   },
   en: {
-    title: "Free Online Invoice Generator (PDF) — no sign-up",
+    title: "Free Invoice Generator: PDF or AI, No Sign-up | Robi AI",
     description:
       "Create a professional, compliant invoice online and download it as a PDF for free, no sign-up. Automatic VAT calculation. Or let AI do it for you.",
     keywords: [
@@ -68,16 +70,7 @@ export async function generateMetadata({
     title: { absolute: s.title },
     description: s.description,
     keywords: s.keywords,
-    robots: isContentIndexable(locale) ? undefined : { index: false, follow: true },
-    alternates: {
-      canonical: `/${locale}/tools/generateur-facture`,
-      languages: {
-        fr: "/fr/tools/generateur-facture",
-        en: "/en/tools/generateur-facture",
-        es: "/es/tools/generateur-facture",
-        "x-default": "/fr/tools/generateur-facture",
-      },
-    },
+    ...pageSeo(locale, "/tools/generateur-facture"),
   };
 }
 
@@ -178,7 +171,7 @@ export default async function GenerateurFacturePage({
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
-    url: `https://robi-app.com/${locale}/tools/generateur-facture`,
+    url: `https://robi-app.com${localePath(locale, "/tools/generateur-facture")}`,
   };
 
   const breadcrumbSchema = {
@@ -191,7 +184,7 @@ export default async function GenerateurFacturePage({
         "@type": "ListItem",
         position: 3,
         name: seo[l].title,
-        item: `https://robi-app.com/${locale}/tools/generateur-facture`,
+        item: `https://robi-app.com${localePath(locale, "/tools/generateur-facture")}`,
       },
     ],
   };

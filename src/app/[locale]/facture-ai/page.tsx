@@ -1,7 +1,8 @@
 import { Metadata } from "next";
+import { pageSeo } from "@/lib/seo/pageSeo";
 import Link from "next/link";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { Locale, isContentIndexable } from "@/lib/i18n/config";
+import { Locale } from "@/lib/i18n/config";
 import { Hero } from "@/components/sections/Hero";
 import { getHeroStoryCopy } from "@/lib/i18n/heroStory";
 import { getHeroDeviceCopy } from "@/lib/i18n/heroDevice";
@@ -10,6 +11,8 @@ import { Pricing } from "@/components/sections/Pricing";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
 import { Check, Mic, FileText, Zap, Shield, Bell, Smartphone } from "lucide-react";
+import { AiInvoiceDemo } from "@/components/tools/AiInvoiceDemo";
+import { localePath } from "@/lib/seo/localizedPaths";
 
 // Page pilier SEO — cible la requête exacte "facture AI" / "facture IA".
 // Contenu éditorial complet en FR/EN/ES ; les autres locales servent la
@@ -58,12 +61,14 @@ const content: Record<Lang, {
   steps: { title: string; items: { title: string; description: string }[] };
   benefits: { title: string; items: { title: string; description: string }[] };
   related: { title: string; links: { label: string; href: string }[] };
+  /** Sections calées sur les requêtes Search Console (EN : « ai invoice maker », « ai generated invoice »…). */
+  queries?: { title: string; items: { title: string; text: string }[] };
   faq: { question: string; answer: string }[];
 }> = {
   fr: {
-    metaTitle: "Facture IA (Facture AI) : créez vos factures par l'IA | Robi",
+    metaTitle: "Facture AI gratuite : crée tes factures en parlant | Robi",
     metaDescription:
-      "Facture IA : créez devis et factures conformes Factur-X en 30 secondes en parlant à l'intelligence artificielle. Relances automatiques, paiement en ligne. 4 factures ou devis gratuits par mois.",
+      "Facture IA gratuite : dis ta prestation, l'IA crée la facture ou le devis Factur-X en 30 secondes. 4 documents gratuits par mois, sans carte bancaire.",
     keywords: [
       "facture ia",
       "facture ai",
@@ -261,9 +266,9 @@ const content: Record<Lang, {
     ],
   },
   en: {
-    metaTitle: "Invoice AI — Free AI Invoice Generator by Voice | Robi AI",
+    metaTitle: "Free AI Invoice Generator: Type or Say It | Robi AI",
     metaDescription:
-      "Say \"Invoice Nova Ltd 3 days at £450\" and get a numbered invoice with VAT in 30 seconds. Reminders, payment link, e-signature. Free for 4 invoices a month, no card.",
+      "Free AI invoice generator: describe the job and get a numbered invoice with tax in seconds. Try it below, no sign-up. 4 free invoices a month, no card.",
     keywords: [
       "ai invoice",
       "invoice ai",
@@ -275,11 +280,11 @@ const content: Record<Lang, {
       "voice invoicing",
     ],
     hero: {
-      badge: "Invoice AI · AI Invoice Generator",
-      title: "Invoice AI:",
-      titleAccent: "say it, Robi invoices it",
+      badge: "Free AI Invoice Generator",
+      title: "AI invoice generator:",
+      titleAccent: "type it, get the invoice",
       subtitle:
-        "Create an invoice with artificial intelligence in 30 seconds: say \"Prepare a £500 invoice for Alice\" and Robi generates a compliant document, ready to send.",
+        "Describe the job in one sentence and get a ready-to-send invoice. Try it right here, no sign-up — then say it out loud in the app.",
     },
     stats: [
       { value: "30s", label: "To create an invoice by voice" },
@@ -399,6 +404,27 @@ const content: Record<Lang, {
         { title: "Bank-grade security", description: "AES-256 encryption, European hosting, GDPR compliant." },
       ],
     },
+    queries: {
+      title: "One AI invoice maker, every way you search for it",
+      items: [
+        {
+          title: "AI invoice generator",
+          text: "Type or say what you did, for whom and how much. Robi reads the client, quantity, rate and tax, and builds the invoice — numbered in sequence, totals checked.",
+        },
+        {
+          title: "AI invoice maker for freelancers and trades",
+          text: "Built for people who invoice between two jobs: dictate from your phone on site, in the van or after a meeting, and send before you forget.",
+        },
+        {
+          title: "AI-generated invoice you can trust",
+          text: "Every AI-generated invoice is a real document: your business details and tax ID, legal mentions, sequential numbering and the right tax rate. You review it before it goes out.",
+        },
+        {
+          title: "Invoice AI that also gets you paid",
+          text: "Each invoice carries a Stripe or PayPal payment link, Robi tells you when it's opened, and polite AI reminders chase late payers for you.",
+        },
+      ],
+    },
     related: {
       title: "Go further",
       links: [
@@ -450,6 +476,16 @@ const content: Record<Lang, {
         question: "How much does AI invoicing software cost?",
         answer:
           "Robi is free for 4 invoices or quotes a month. In the UK, paid plans are £12/month with no commitment, £75/year, £125 for 2 years, or a lifetime launch deal at £49 (one-time payment). Pricing is local in each of the 16 countries Robi supports.",
+      },
+      {
+        question: "Can I try the AI invoice maker without signing up?",
+        answer:
+          "Yes. The demo at the top of this page builds a sample invoice from your sentence right in your browser, with no account. To save it, add your business details and send it with a payment link, create a free Robi account — no card needed.",
+      },
+      {
+        question: "What does an AI-generated invoice include?",
+        answer:
+          "The same as any compliant invoice: your business name, address and tax ID, your client's details, a unique sequential number, issue and due dates, line items with quantity and rate, tax and totals. Robi fills all of it from your sentence and your saved details.",
       },
       {
         question: "Can I edit the AI invoice before sending it?",
@@ -664,16 +700,7 @@ export async function generateMetadata({
     title: { absolute: c.metaTitle },
     description: c.metaDescription,
     keywords: c.keywords,
-    robots: isContentIndexable(locale) ? undefined : { index: false, follow: true },
-    alternates: {
-      canonical: `/${locale}/facture-ai`,
-      languages: {
-        fr: "/fr/facture-ai",
-        en: "/en/facture-ai",
-        es: "/es/facture-ai",
-        "x-default": "/fr/facture-ai",
-      },
-    },
+    ...pageSeo(locale, "/facture-ai"),
   };
 }
 
@@ -704,7 +731,7 @@ export default async function FactureAIPage({
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Robi AI", item: `https://robi-app.com/${locale}` },
-      { "@type": "ListItem", position: 2, name: c.hero.badge, item: `https://robi-app.com/${locale}/facture-ai` },
+      { "@type": "ListItem", position: 2, name: c.hero.badge, item: `https://robi-app.com${localePath(locale, "/facture-ai")}` },
     ],
   };
 
@@ -730,6 +757,9 @@ export default async function FactureAIPage({
         story={getHeroStoryCopy(locale)}
         device={getHeroDeviceCopy(locale)}
       />
+
+      {/* Démo testable sans compte (EN) : la page 1 de Google sur « ai invoice generator » en propose une */}
+      {lang(locale) === "en" && <AiInvoiceDemo locale={locale} />}
 
       {/* Stats */}
       <section className="py-16 bg-white">
@@ -928,6 +958,22 @@ export default async function FactureAIPage({
         </div>
       </section>
 
+      {c.queries && (
+        <section className="py-16 md:py-24 bg-gray-50">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-center text-[28px] md:text-4xl font-black tracking-tight leading-[1.08] [text-wrap:balance] text-[#0D0630] mb-12">{c.queries.title}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {c.queries.items.map((item) => (
+                <Card key={item.title}>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-gray-500">{item.text}</p>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <FAQ items={c.faq} />
 
       {/* Internal links */}
@@ -938,7 +984,7 @@ export default async function FactureAIPage({
             {c.related.links.map((link, index) => (
               <li key={index}>
                 <Link
-                  href={`/${locale}${link.href}`}
+                  href={localePath(locale, link.href)}
                   className="text-gray-600 hover:text-[#0D0630] underline underline-offset-4 decoration-[#BEF221] decoration-2"
                 >
                   {link.label}

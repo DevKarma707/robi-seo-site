@@ -8,7 +8,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const c = partnerCopy(locale);
   return {
-    title: c.metaTitle,
+    title: { absolute: c.metaTitle },
     description: c.metaDescription,
     ...pageSeo(locale, "/partenaires"),
   };

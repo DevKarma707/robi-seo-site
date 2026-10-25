@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Mic } from "lucide-react";
+import { localePath } from "@/lib/seo/localizedPaths";
 
 /**
  * Encart de maillage interne vers la page pilier /facture-ai
@@ -19,7 +20,7 @@ export function AiInvoiceLink({ locale }: { locale: string }) {
     <section className="py-10 bg-white">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
-          href={`/${locale}/facture-ai`}
+          href={localePath(locale, "/facture-ai")}
           className="group flex items-center gap-4 rounded-2xl border border-gray-200 px-5 py-4 hover:border-[#0D0630] transition-colors"
         >
           <span className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full bg-[#0D0630]">

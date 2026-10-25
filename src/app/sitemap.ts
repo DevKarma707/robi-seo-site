@@ -8,6 +8,7 @@ import {
 } from "@/data/seo-config";
 import { locales, indexableContentLocales } from "@/lib/i18n/config";
 import { getPublishedArticles } from "@/lib/blog-articles";
+import { localePath } from "@/lib/seo/localizedPaths";
 
 // Revalidate so articles published from /admin appear in the sitemap.
 export const revalidate = 3600;
@@ -23,14 +24,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: number
   ) {
     return localeSet.map((locale) => ({
-      url: `${baseUrl}/${locale}${path}`,
+      url: `${baseUrl}${localePath(locale, path)}`,
       lastModified: new Date(),
       changeFrequency,
       priority,
       alternates: {
         languages: {
-          ...Object.fromEntries(localeSet.map((l) => [l, `${baseUrl}/${l}${path}`])),
-          "x-default": `${baseUrl}/fr${path}`,
+          ...Object.fromEntries(localeSet.map((l) => [l, `${baseUrl}${localePath(l, path)}`])),
+          "x-default": `${baseUrl}${localePath("fr", path)}`,
         },
       },
     }));
@@ -102,8 +103,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     coreUrls(`/tools/${tool.slug}`, "monthly", 0.7)
   );
 
+  // Outils propres à la France : une seule URL, sans variantes (pageSeo "fr-only").
+  const frOnlyPages = [
+    {
+      url: `${baseUrl}/fr/tools/modele-devis-auto-entrepreneur`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+  ];
+
   return [
     ...staticPages,
+    ...frOnlyPages,
     ...industryPages,
     ...comparisonPages,
     ...featurePages,

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { locales, indexableContentLocales, isContentIndexable } from "@/lib/i18n/config";
+import { localePath } from "@/lib/seo/localizedPaths";
 
 /**
  * Adresse officielle (canonical), versions linguistiques (hreflang) et
@@ -16,20 +17,31 @@ import { locales, indexableContentLocales, isContentIndexable } from "@/lib/i18n
  *   (fr-BE, en-US…) répètent le même texte → noindex, follow.
  * - `regional` : la page change vraiment selon le marché (accueil, tarifs en
  *   devise locale) → toutes les locales sont indexables et se citent.
+ * - `fr-only` : page écrite pour la France seule (modèle de devis
+ *   auto-entrepreneur…) → indexable en `fr` uniquement, sans hreflang.
+ *
+ * `path` est la route interne (slug français) : l'adresse publique de chaque
+ * langue vient de lib/seo/localizedPaths (« /facture-ai » → « /en/ai-invoice-generator »).
  */
 export function pageSeo(
   locale: string,
   path: string,
-  scope: "content" | "regional" = "content",
+  scope: "content" | "regional" | "fr-only" = "content",
 ): Pick<Metadata, "alternates" | "robots"> {
+  if (scope === "fr-only") {
+    return {
+      alternates: { canonical: `/fr${path}`, languages: { fr: `/fr${path}`, "x-default": `/fr${path}` } },
+      ...(locale === "fr" ? {} : { robots: { index: false, follow: true } }),
+    };
+  }
   const set = scope === "regional" ? locales : indexableContentLocales;
   const indexable = scope === "regional" || isContentIndexable(locale);
   return {
     alternates: {
-      canonical: `/${locale}${path}`,
+      canonical: localePath(locale, path),
       languages: {
-        ...Object.fromEntries(set.map((l) => [l, `/${l}${path}`])),
-        "x-default": `/fr${path}`,
+        ...Object.fromEntries(set.map((l) => [l, localePath(l, path)])),
+        "x-default": localePath("fr", path),
       },
     },
     ...(indexable ? {} : { robots: { index: false, follow: true } }),

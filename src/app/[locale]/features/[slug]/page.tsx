@@ -13,6 +13,7 @@ import { Check, Sparkles, Zap, Clock, TrendingUp } from "lucide-react";
 
 import { AiInvoiceLink } from "@/components/ui/AiInvoiceLink";
 import { pageSeo } from "@/lib/seo/pageSeo";
+import { fitTitle } from "@/lib/seo/blogSeo";
 export async function generateStaticParams() {
   return features.map((feature) => ({
     slug: feature.slug,
@@ -34,7 +35,7 @@ export async function generateMetadata({
 
   return {
     ...pageSeo(locale, `/features/${slug}`),
-    title: t(feature.title, locale),
+    title: { absolute: fitTitle(t(feature.title, locale)) },
     description: t(feature.description, locale),
     keywords: feature.keywords,
     robots: isContentIndexable(locale) ? undefined : { index: false, follow: true },

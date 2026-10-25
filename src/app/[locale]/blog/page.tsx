@@ -16,6 +16,7 @@ import {
 } from "@/lib/blog-articles";
 
 import { pageSeo } from "@/lib/seo/pageSeo";
+import { localePath } from "@/lib/seo/localizedPaths";
 // Revalidate so articles published from /admin (Firestore) appear within ~1 min.
 export const revalidate = 60;
 
@@ -40,7 +41,14 @@ export async function generateMetadata({
 
   return {
     ...pageSeo(locale, "/blog"),
-    title: dict.pages.blog.title,
+    // Un titre par langue (avant : « Blog | Robi AI » identique en FR/EN/ES).
+    title: {
+      absolute: locale.startsWith("es")
+        ? "Blog de Robi AI: facturación y factura electrónica"
+        : locale.startsWith("fr")
+        ? "Blog Robi AI : facturation, Factur-X et freelance"
+        : "Robi AI Blog: invoicing tips for freelancers",
+    },
     description: dict.pages.blog.description,
     keywords: ["blog freelance", "conseils facturation", "guide auto-entrepreneur"],
   };
@@ -136,7 +144,7 @@ export default async function BlogPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Featured Post */}
           {featured && (
-            <Link href={`/${locale}/blog/${featured.slug}`} className="block mb-12">
+            <Link href={localePath(locale, `/blog/${featured.slug}`)} className="block mb-12">
               <Card variant="dark" className="group cursor-pointer overflow-hidden">
                 <div className="md:flex md:items-center md:gap-12">
                   {featured.coverImage && (
@@ -170,7 +178,7 @@ export default async function BlogPage({
           {/* Other Posts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {rest.map((post) => (
-              <Link key={post.slug} href={`/${locale}/blog/${post.slug}`}>
+              <Link key={post.slug} href={localePath(locale, `/blog/${post.slug}`)}>
                 <Card className="h-full group cursor-pointer">
                   {post.coverImage && (
                     // eslint-disable-next-line @next/next/no-img-element

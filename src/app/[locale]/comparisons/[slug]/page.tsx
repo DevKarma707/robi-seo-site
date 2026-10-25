@@ -1,4 +1,6 @@
 import { Metadata } from "next";
+import { pageSeo } from "@/lib/seo/pageSeo";
+import { fitTitle } from "@/lib/seo/blogSeo";
 import { notFound } from "next/navigation";
 import { comparisons, t } from "@/data/seo-config";
 import { Hero } from "@/components/sections/Hero";
@@ -9,7 +11,6 @@ import { Check, X, Minus } from "lucide-react";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import {
   Locale,
-  isContentIndexable,
   priceMap,
   localeCurrencies,
 } from "@/lib/i18n/config";
@@ -35,13 +36,10 @@ export async function generateMetadata({
   }
 
   return {
-    title: t(comparison.title, locale as Locale),
+    title: { absolute: fitTitle(t(comparison.title, locale as Locale)) },
     description: t(comparison.description, locale as Locale),
     keywords: comparison.keywords,
-    alternates: {
-      canonical: `https://robi-app.com/${locale}/comparisons/${slug}`,
-    },
-    robots: isContentIndexable(locale) ? undefined : { index: false, follow: true },
+    ...pageSeo(locale, `/comparisons/${slug}`),
   };
 }
 

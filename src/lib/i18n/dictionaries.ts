@@ -1,4 +1,6 @@
 import { Locale } from "./config";
+import { regionalOverrides } from "./regionalOverrides";
+import { getMarketCopy } from "@/lib/seo/marketCopy";
 
 const dictionaries: Record<string, () => Promise<any>> = {
   // Fichiers dédiés
@@ -18,7 +20,7 @@ const dictionaries: Record<string, () => Promise<any>> = {
   "en-IE": () => import("./locales/en.json").then((m) => m.default),   // Irlande → anglais
   "en-NL": () => import("./locales/en.json").then((m) => m.default),   // Pays-Bas → anglais
   "en-AE": () => import("./locales/en.json").then((m) => m.default),   // Émirats → anglais
-  "pt-PT": () => import("./locales/pt-BR.json").then((m) => m.default), // Portugal → portugais (BR base)
+  "pt-PT": () => import("./locales/pt-PT.json").then((m) => m.default), // Portugal → portugais européen (25/10/2026)
   "fr-BE": () => import("./locales/fr.json").then((m) => m.default),   // Belgique → français
   "fr-CH": () => import("./locales/fr.json").then((m) => m.default),   // Suisse → français
   "fr-CA": () => import("./locales/fr.json").then((m) => m.default),   // Canada → français
@@ -50,7 +52,19 @@ function deepMerge(target: any, source: any): any {
   return output;
 }
 
-export const getDictionary = async (locale: Locale) => {
+/**
+ * Titre/description du marché (lib/seo/marketCopy) et retouches de FAQ par
+ * pays (regionalOverrides) par-dessus le fichier de langue.
+ */
+function localize(dict: any, locale: string) {
+  const market = getMarketCopy(locale);
+  const withOverrides = regionalOverrides[locale] ? deepMerge(dict, regionalOverrides[locale]) : dict;
+  return { ...withOverrides, meta: { ...withOverrides.meta, title: market.homeTitle, description: market.homeDescription } };
+}
+
+export const getDictionary = async (locale: Locale) => localize(await loadDictionary(locale), locale);
+
+const loadDictionary = async (locale: Locale) => {
   const dict = await dictionaries[locale]();
   if (locale === "fr") return dict;
 

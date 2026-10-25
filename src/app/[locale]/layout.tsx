@@ -11,6 +11,7 @@ import { ConsentModeSync } from "@/components/ConsentModeSync";
 import { CookieConsent } from "@/components/CookieConsent";
 import { locales, Locale, defaultLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getMarketCopy } from "@/lib/seo/marketCopy";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -33,22 +34,25 @@ export async function generateMetadata({
   const { locale: rawLocale } = await params;
   const locale = getValidLocale(rawLocale);
   const dict = await getDictionary(locale);
+  // Titre et description par marché (lib/seo/marketCopy) : avant, les 7
+  // accueils francophones partageaient le même titre.
+  const market = getMarketCopy(locale);
 
   return {
     title: {
       // `absolute` empêche le template "%s | Robi AI" du root layout de
       // s'appliquer au title par défaut (sinon suffixe dupliqué).
-      absolute: dict.meta.title,
+      absolute: market.homeTitle,
       template: `%s | Robi AI`,
     },
-    description: dict.meta.description,
+    description: market.homeDescription,
     metadataBase: new URL("https://robi-app.com"),
     // Pas de canonical ni de hreflang ici : posés au niveau du layout, ils
     // s'appliquaient à toutes les pages et désignaient l'accueil comme version
     // officielle de 165 pages. Chaque page les déclare via pageSeo().
     openGraph: {
-      title: dict.meta.title,
-      description: dict.meta.description,
+      title: market.homeTitle,
+      description: market.homeDescription,
       url: `https://robi-app.com/${locale}`,
       siteName: "Robi AI",
       locale: locale.replace("-", "_"),
@@ -64,8 +68,8 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: dict.meta.title,
-      description: dict.meta.description,
+      title: market.homeTitle,
+      description: market.homeDescription,
       images: ["https://robi-app.com/og.png"],
       creator: "@iamrobiai",
     },

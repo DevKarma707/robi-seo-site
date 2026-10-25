@@ -7,6 +7,7 @@ import { CTA } from "@/components/sections/CTA";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Locale } from "@/lib/i18n/config";
 import { Plus, Trash2, Download, Sparkles, Mic } from "lucide-react";
+import { localePath } from "@/lib/seo/localizedPaths";
 
 type Lang = "fr" | "en" | "es";
 
@@ -524,7 +525,7 @@ export function GenerateurFactureClient({ locale, lang, ctaDict, toolsLabel, faq
             <a href="https://go.robi-app.com/?signup" className="btn-slide inline-flex items-center gap-2 px-7 py-3.5 font-bold rounded-full bg-[#BEF221] text-[#0D0630] hover:shadow-[0_0_30px_rgba(190,242,33,0.4)]">
               <Mic className="w-5 h-5" /> {T.ctaBlockButton}
             </a>
-            <a href={`/${locale}/facture-ai`} className="text-white/70 hover:text-[#BEF221] font-medium underline underline-offset-4">
+            <a href={localePath(locale, "/facture-ai")} className="text-white/70 hover:text-[#BEF221] font-medium underline underline-offset-4">
               {T.learnMore}
             </a>
           </div>

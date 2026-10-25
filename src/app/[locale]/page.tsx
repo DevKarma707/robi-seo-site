@@ -17,11 +17,18 @@ import { getHeroStoryCopy } from "@/lib/i18n/heroStory";
 import { getHeroDeviceCopy } from "@/lib/i18n/heroDevice";
 
 import { pageSeo } from "@/lib/seo/pageSeo";
+import { getMarketCopy } from "@/lib/seo/marketCopy";
+import { MarketFocus } from "@/components/sections/MarketFocus";
 
 /** Accueil : adresse officielle et versions de chaque marché (voir pageSeo). */
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return pageSeo(locale, "", "regional");
+  const market = getMarketCopy(locale);
+  return {
+    title: { absolute: market.homeTitle },
+    description: market.homeDescription,
+    ...pageSeo(locale, "", "regional"),
+  };
 }
 function getValidLocale(locale: string): Locale {
   return locales.includes(locale as Locale) ? (locale as Locale) : defaultLocale;
@@ -69,7 +76,7 @@ export default async function Home({
             name: "Robi AI",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
-            description: dict.meta.description,
+            description: getMarketCopy(locale).homeDescription,
             offers: {
               "@type": "Offer",
               price: prices.monthly,
@@ -92,7 +99,7 @@ export default async function Home({
             name: "Robi AI",
             url: "https://robi-app.com",
             logo: "https://robi-app.com/logo.png",
-            description: dict.meta.description,
+            description: getMarketCopy(locale).homeDescription,
             sameAs: [
               "https://instagram.com/robi.ai.app",
               "https://x.com/iamrobiai",
@@ -221,6 +228,8 @@ export default async function Home({
       />
 
       <MadeForYou dict={dict} />
+
+      <MarketFocus locale={locale} />
 
       <Trust dict={dict} />
 

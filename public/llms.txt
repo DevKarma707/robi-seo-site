@@ -44,25 +44,26 @@ Robi AI is an AI-powered invoicing and quoting web app designed for freelancers,
 
 Prices are adapted to local markets — no generic USD conversion.
 
-| Country | Currency | Launch (lifetime) | Monthly | Yearly |
-|---------|----------|-------------------|---------|--------|
-| Australia | AUD | A$99 | A$22/mo | A$139/yr |
-| Belgique | EUR | €59 | €14/mo | €89/yr |
-| Canada | CAD | CA$89 | CA$19/mo | CA$119/yr |
-| Côte d'Ivoire | XOF | 29,000 CFA | 7,500 CFA/mo | 45,000 CFA/yr |
-| Emirates (UAE) | AED | 229 AED | 49 AED/mo | 329 AED/yr |
-| España | EUR | €59 | €14/mo | €89/yr |
-| France | EUR | €59 | €14/mo | €89/yr |
-| Ireland | EUR | €59 | €14/mo | €89/yr |
-| Luxembourg | EUR | €59 | €14/mo | €89/yr |
-| Maroc | MAD | 599 MAD | 149 MAD/mo | 890 MAD/yr |
-| Netherlands | EUR | €59 | €14/mo | €89/yr |
-| Portugal | EUR | €59 | €14/mo | €89/yr |
-| Sénégal | XOF | 29,000 CFA | 7,500 CFA/mo | 45,000 CFA/yr |
-| Suisse | CHF | CHF 59 | CHF 14/mo | CHF 89/yr |
-| United Kingdom | GBP | £49 | £12/mo | £75/yr |
-| United States | USD | $59 | $14/mo | $89/yr |
+| Country | Currency | Monthly | Yearly | 2 years | Launch (lifetime) |
+|---------|----------|---------|--------|---------|-------------------|
+| Australia | AUD | $22/mo | $139/yr | $229/2 yrs | $99 |
+| Belgique | EUR | 14 €/mo | 89 €/yr | 149 €/2 yrs | 59 € |
+| Canada | CAD | 19 $/mo | 119 $/yr | 199 $/2 yrs | 89 $ |
+| Côte d'Ivoire | XOF | 7 500 F CFA/mo | 45 000 F CFA/yr | 75 000 F CFA/2 yrs | 29 000 F CFA |
+| Emirates | AED | AED 49/mo | AED 329/yr | AED 549/2 yrs | AED 229 |
+| España | EUR | 14 €/mo | 89 €/yr | 149 €/2 yrs | 59 € |
+| France | EUR | 14 €/mo | 89 €/yr | 149 €/2 yrs | 59 € |
+| Ireland | EUR | €14/mo | €89/yr | €149/2 yrs | €59 |
+| Luxembourg | EUR | 14 €/mo | 89 €/yr | 149 €/2 yrs | 59 € |
+| Maroc | MAD | 59 MAD/mo | 590 MAD/yr | 990 MAD/2 yrs | 599 MAD |
+| Netherlands | EUR | €14/mo | €89/yr | €149/2 yrs | €59 |
+| Portugal | EUR | 14 €/mo | 89 €/yr | 149 €/2 yrs | 59 € |
+| Sénégal | XOF | 7 500 F CFA/mo | 45 000 F CFA/yr | 75 000 F CFA/2 yrs | 29 000 F CFA |
+| Suisse | CHF | 14 CHF/mo | 89 CHF/yr | 149 CHF/2 yrs | 59 CHF |
+| United Kingdom | GBP | £12/mo | £75/yr | £125/2 yrs | £49 |
+| United States | USD | $14/mo | $89/yr | $149/2 yrs | $69 |
 
+**Free plan**: 4 invoices or quotes per month, no credit card.
 **Launch offer**: Lifetime access to Robi Pro — limited to the first 1,000 users per country.
 
 ---
@@ -143,8 +144,8 @@ Yes. Robi adapts to each country's legal requirements: sequential numbering, VAT
 **Can I track if a client opened my quote?**
 Yes. Robi shows the exact time and number of times a client opened your quote.
 
-**Is there a free trial?**
-Yes. No credit card required. Sign up at go.robi-app.com.
+**Is there a free plan?**
+Yes: 4 invoices or quotes per month, no credit card required. Sign up at go.robi-app.com.
 
 **How long to create my first invoice?**
 Under 30 seconds. Just say what you want to invoice.
@@ -156,9 +157,14 @@ Yes. Switch between companies in one click from a single account.
 
 ## Free Tools Available
 
-- **TJM Calculator** (Day Rate Calculator): https://robi-app.com/fr/tools/calculateur-tjm
+- **AI Invoice Generator (try it without signing up)**: https://robi-app.com/en/ai-invoice-generator — French: https://robi-app.com/fr/facture-ai — Spanish: https://robi-app.com/es/factura-ia
+- **Free Invoice Generator (PDF, no sign-up)**: https://robi-app.com/fr/tools/generateur-facture — English: https://robi-app.com/en/tools/invoice-generator — Spanish: https://robi-app.com/es/tools/generador-de-facturas
+- **Quote template for French auto-entrepreneurs (with or without VAT)**: https://robi-app.com/fr/tools/modele-devis-auto-entrepreneur
+- **TJM Calculator** (Day Rate Calculator): https://robi-app.com/fr/tools/calculateur-tjm — English: https://robi-app.com/en/tools/day-rate-calculator
 - **Charges Simulator**: https://robi-app.com/fr/tools/simulateur-charges
 - **Legal Mentions Generator**: https://robi-app.com/fr/tools/generateur-mentions-legales
+
+Each country page (homepage and pricing) is written for its market: local currency, standard VAT/GST rate, the tax ID printed on invoices (SIRET, BCE, IDE, RCS, ICE, NINEA, NCC, UTR, EIN, ABN, CRO, KVK, TRN, NIF) and local rules.
 
 ---
 

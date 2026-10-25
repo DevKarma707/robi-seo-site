@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Bot } from "lucide-react";
 import { Locale } from "@/lib/i18n/config";
 import { ManageCookiesButton } from "@/components/ui/ManageCookiesButton";
+import { localePath } from "@/lib/seo/localizedPaths";
 
 interface FooterProps {
   locale: Locale;
@@ -15,7 +16,7 @@ export function Footer({ locale, dict }: FooterProps) {
     product: {
       title: dict.footer.product,
       links: [
-        { name: dict.footer.aiInvoice || "Facture IA", href: `/${locale}/facture-ai` },
+        { name: dict.footer.aiInvoice || "Facture IA", href: localePath(locale, "/facture-ai") },
         { name: dict.footer.features, href: `/${locale}/features` },
         { name: dict.footer.pricing, href: `/${locale}/pricing` },
         { name: dict.footer.comparisons, href: `/${locale}/comparisons` },
@@ -26,10 +27,10 @@ export function Footer({ locale, dict }: FooterProps) {
       title: dict.footer.resources,
       links: [
         { name: dict.footer.tools, href: `/${locale}/tools` },
-        { name: dict.footer.invoiceGenerator || "Générateur de facture", href: `/${locale}/tools/generateur-facture` },
-        { name: dict.footer.calculator, href: `/${locale}/tools/calculateur-tjm` },
-        { name: dict.footer.chargesSimulator, href: `/${locale}/tools/simulateur-charges` },
-        { name: dict.footer.legalGenerator, href: `/${locale}/tools/generateur-mentions-legales` },
+        { name: dict.footer.invoiceGenerator || "Générateur de facture", href: localePath(locale, "/tools/generateur-facture") },
+        { name: dict.footer.calculator, href: localePath(locale, "/tools/calculateur-tjm") },
+        { name: dict.footer.chargesSimulator, href: localePath(locale, "/tools/simulateur-charges") },
+        { name: dict.footer.legalGenerator, href: localePath(locale, "/tools/generateur-mentions-legales") },
       ],
     },
     industries: {
