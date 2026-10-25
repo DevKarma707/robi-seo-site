@@ -1,0 +1,2367 @@
+{
+ "periode": "2026-06-28→2026-09-27",
+ "totals": {
+  "clicks": 103,
+  "impressions": 5546,
+  "ctr": 1.857194374323837,
+  "position": 11.36
+ },
+ "queries": [
+  {
+   "key": "robi",
+   "clicks": 2,
+   "impressions": 522,
+   "ctr": 0.38,
+   "position": 10.97
+  },
+  {
+   "key": "invoice ai",
+   "clicks": 0,
+   "impressions": 243,
+   "ctr": 0,
+   "position": 15.25
+  },
+  {
+   "key": "facture ia",
+   "clicks": 3,
+   "impressions": 228,
+   "ctr": 1.32,
+   "position": 10.19
+  },
+  {
+   "key": "facture ai",
+   "clicks": 8,
+   "impressions": 204,
+   "ctr": 3.92,
+   "position": 3.82
+  },
+  {
+   "key": "factureai",
+   "clicks": 8,
+   "impressions": 149,
+   "ctr": 5.37,
+   "position": 4.44
+  },
+  {
+   "key": "ai invoice",
+   "clicks": 1,
+   "impressions": 100,
+   "ctr": 1,
+   "position": 28.6
+  },
+  {
+   "key": "logiciel facturation sophrologue",
+   "clicks": 0,
+   "impressions": 83,
+   "ctr": 0,
+   "position": 27.33
+  },
+  {
+   "key": "logiciel de gestion des factures avec gen ai",
+   "clicks": 0,
+   "impressions": 68,
+   "ctr": 0,
+   "position": 31.94
+  },
+  {
+   "key": "roby login",
+   "clicks": 0,
+   "impressions": 62,
+   "ctr": 0,
+   "position": 35.06
+  },
+  {
+   "key": "devis auto entrepreneur",
+   "clicks": 0,
+   "impressions": 61,
+   "ctr": 0,
+   "position": 6.69
+  },
+  {
+   "key": "ia facture",
+   "clicks": 1,
+   "impressions": 44,
+   "ctr": 2.27,
+   "position": 5.8
+  },
+  {
+   "key": "générateur de facture ia",
+   "clicks": 1,
+   "impressions": 44,
+   "ctr": 2.27,
+   "position": 7.43
+  },
+  {
+   "key": "robi ai subscription",
+   "clicks": 1,
+   "impressions": 32,
+   "ctr": 3.12,
+   "position": 7.84
+  },
+  {
+   "key": "robi ia",
+   "clicks": 0,
+   "impressions": 28,
+   "ctr": 0,
+   "position": 5.21
+  },
+  {
+   "key": "logiciel de gestion des factures avec ia",
+   "clicks": 0,
+   "impressions": 27,
+   "ctr": 0,
+   "position": 40.22
+  },
+  {
+   "key": "factureai.ai",
+   "clicks": 0,
+   "impressions": 26,
+   "ctr": 0,
+   "position": 14.69
+  },
+  {
+   "key": "logiciel de gestion des factures avec intelligence artificielle",
+   "clicks": 0,
+   "impressions": 25,
+   "ctr": 0,
+   "position": 38.24
+  },
+  {
+   "key": "logiciel de gestion des factures avec ia générative",
+   "clicks": 0,
+   "impressions": 25,
+   "ctr": 0,
+   "position": 68.4
+  },
+  {
+   "key": "factura x",
+   "clicks": 0,
+   "impressions": 24,
+   "ctr": 0,
+   "position": 7.38
+  },
+  {
+   "key": "r.o.b.i",
+   "clicks": 0,
+   "impressions": 23,
+   "ctr": 0,
+   "position": 47.57
+  },
+  {
+   "key": "ai facture",
+   "clicks": 1,
+   "impressions": 22,
+   "ctr": 4.55,
+   "position": 4.91
+  },
+  {
+   "key": "facturation automatique ia",
+   "clicks": 0,
+   "impressions": 17,
+   "ctr": 0,
+   "position": 60.59
+  },
+  {
+   "key": "générer une facture",
+   "clicks": 0,
+   "impressions": 16,
+   "ctr": 0,
+   "position": 1.19
+  },
+  {
+   "key": "robi e",
+   "clicks": 0,
+   "impressions": 16,
+   "ctr": 0,
+   "position": 23.19
+  },
+  {
+   "key": "ai generated invoice",
+   "clicks": 0,
+   "impressions": 15,
+   "ctr": 0,
+   "position": 28.8
+  },
+  {
+   "key": "ai facturation",
+   "clicks": 0,
+   "impressions": 13,
+   "ctr": 0,
+   "position": 6.08
+  },
+  {
+   "key": "logiciel facturation freelance",
+   "clicks": 0,
+   "impressions": 13,
+   "ctr": 0,
+   "position": 14.46
+  },
+  {
+   "key": "facture avec ia",
+   "clicks": 0,
+   "impressions": 13,
+   "ctr": 0,
+   "position": 21.92
+  },
+  {
+   "key": "ai generate an invoice",
+   "clicks": 0,
+   "impressions": 13,
+   "ctr": 0,
+   "position": 24.15
+  },
+  {
+   "key": "exemple devis auto entrepreneur",
+   "clicks": 0,
+   "impressions": 12,
+   "ctr": 0,
+   "position": 4.42
+  },
+  {
+   "key": "robi ai",
+   "clicks": 1,
+   "impressions": 9,
+   "ctr": 11.11,
+   "position": 22.44
+  },
+  {
+   "key": "modele demande de devis exemple",
+   "clicks": 0,
+   "impressions": 9,
+   "ctr": 0,
+   "position": 5.44
+  },
+  {
+   "key": "robi.",
+   "clicks": 0,
+   "impressions": 8,
+   "ctr": 0,
+   "position": 6.38
+  },
+  {
+   "key": "facturation ia",
+   "clicks": 0,
+   "impressions": 8,
+   "ctr": 0,
+   "position": 6.88
+  },
+  {
+   "key": "ai invoices",
+   "clicks": 0,
+   "impressions": 8,
+   "ctr": 0,
+   "position": 14.5
+  },
+  {
+   "key": "e-reporting définition",
+   "clicks": 0,
+   "impressions": 7,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "modèle devis auto-entrepreneur",
+   "clicks": 0,
+   "impressions": 7,
+   "ctr": 0,
+   "position": 4.86
+  },
+  {
+   "key": "format ubl",
+   "clicks": 0,
+   "impressions": 7,
+   "ctr": 0,
+   "position": 6.43
+  },
+  {
+   "key": "robi ai space",
+   "clicks": 0,
+   "impressions": 7,
+   "ctr": 0,
+   "position": 13.86
+  },
+  {
+   "key": "ai invoice maker",
+   "clicks": 0,
+   "impressions": 7,
+   "ctr": 0,
+   "position": 52.57
+  },
+  {
+   "key": "ai robi",
+   "clicks": 1,
+   "impressions": 6,
+   "ctr": 16.67,
+   "position": 10.33
+  },
+  {
+   "key": "robi a",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 2.67
+  },
+  {
+   "key": "factura ia",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 7.5
+  },
+  {
+   "key": "factur-x",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 7.83
+  },
+  {
+   "key": "chatgpt invoice generator",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "factur",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "facture use ai",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 10.17
+  },
+  {
+   "key": "www robi com",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 17.17
+  },
+  {
+   "key": "facturas ia",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 19
+  },
+  {
+   "key": "ia para hacer facturas",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 26
+  },
+  {
+   "key": "ia facturation",
+   "clicks": 1,
+   "impressions": 5,
+   "ctr": 20,
+   "position": 20.6
+  },
+  {
+   "key": "faire un devis auto entrepreneur",
+   "clicks": 0,
+   "impressions": 5,
+   "ctr": 0,
+   "position": 3.4
+  },
+  {
+   "key": "modele pour faire un devis",
+   "clicks": 0,
+   "impressions": 5,
+   "ctr": 0,
+   "position": 4.6
+  },
+  {
+   "key": "robi mark in a agen",
+   "clicks": 0,
+   "impressions": 5,
+   "ctr": 0,
+   "position": 5.6
+  },
+  {
+   "key": "robi i",
+   "clicks": 0,
+   "impressions": 5,
+   "ctr": 0,
+   "position": 6.4
+  },
+  {
+   "key": "robi login",
+   "clicks": 0,
+   "impressions": 5,
+   "ctr": 0,
+   "position": 20.2
+  },
+  {
+   "key": "ai invoice generator",
+   "clicks": 0,
+   "impressions": 5,
+   "ctr": 0,
+   "position": 20.4
+  },
+  {
+   "key": "robi website",
+   "clicks": 0,
+   "impressions": 5,
+   "ctr": 0,
+   "position": 33.2
+  },
+  {
+   "key": "devis auto-entrepreneur",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 3.5
+  },
+  {
+   "key": "every ai robi",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "factura x para que sirve",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "facture ubl",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "factur x",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 9.5
+  },
+  {
+   "key": "robi every ai",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "crear facturas con ia",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 10.25
+  },
+  {
+   "key": "rôbi",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 10.25
+  },
+  {
+   "key": "ia para crear facturas",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 10.75
+  },
+  {
+   "key": "invoice generator ai",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 25
+  },
+  {
+   "key": "traitement de factures ia",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 27
+  },
+  {
+   "key": "générateur de dévis automatisé",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 41
+  },
+  {
+   "key": "ia pour faire des factures",
+   "clicks": 1,
+   "impressions": 3,
+   "ctr": 33.33,
+   "position": 4
+  },
+  {
+   "key": "facturax",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "facturation ai",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 4.33
+  },
+  {
+   "key": "modèle devis auto-entrepreneur sans tva",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 7.67
+  },
+  {
+   "key": "invoice. ai",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 12.67
+  },
+  {
+   "key": "ai create invoice",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 14.67
+  },
+  {
+   "key": "facturx",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 17.33
+  },
+  {
+   "key": "invoice ia",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 17.67
+  },
+  {
+   "key": "ia pour factures et attestations",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 47.33
+  },
+  {
+   "key": "robiai",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 52.67
+  },
+  {
+   "key": "audit facture gratuit",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 95.67
+  },
+  {
+   "key": "modele devis auto entrepreneur",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 3
+  },
+  {
+   "key": "facturaia",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "ma robi",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "robi prompt",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "robbi ai",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 8.5
+  },
+  {
+   "key": "factur-x format",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "i robi",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "use ai facture",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "ia para hacer facturas gratis",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 12
+  },
+  {
+   "key": "ai for invoice creation",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 12.5
+  },
+  {
+   "key": "invoice maker ai",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 13.5
+  },
+  {
+   "key": "facture",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 14.5
+  },
+  {
+   "key": "robi official website",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 14.5
+  },
+  {
+   "key": "factur-x generator",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 16
+  },
+  {
+   "key": "invoicing software for lawyers",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 19.5
+  },
+  {
+   "key": "robi app login",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 30.5
+  },
+  {
+   "key": "robi portal",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 35
+  },
+  {
+   "key": "robi online",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 36.5
+  },
+  {
+   "key": "robi]",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 40.5
+  },
+  {
+   "key": "robi cloud",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 43
+  },
+  {
+   "key": "robi plan",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 51.5
+  },
+  {
+   "key": "devis micro-entrepreneur",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 54.5
+  },
+  {
+   "key": "robi report",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 60
+  },
+  {
+   "key": "robi.com.bd login",
+   "clicks": 1,
+   "impressions": 1,
+   "ctr": 100,
+   "position": 16
+  },
+  {
+   "key": "api robi",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "es gratis?",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "free robi",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "generer facture",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "non c'est pas lui",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "robi de",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "robi tech",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "robi to mad",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "to robi",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "web robi",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "what is robi",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "desde mi computadora",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "factura ai",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "le reporting est-il inclus dans les plateformes événementielles ou facturé \nen option",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "pdp facture x",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "por robi",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "quel est le meilleur outil de facturation pour les freelances ?",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "factur-x en16931",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 3
+  },
+  {
+   "key": "factura-x",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 3
+  },
+  {
+   "key": "model devis auto entrepreneur",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 4
+  },
+  {
+   "key": "modèle devis auto entrepreneur",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 4
+  },
+  {
+   "key": "robi mobile",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 4
+  },
+  {
+   "key": "robi o",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 4
+  },
+  {
+   "key": "robi ma",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 5
+  },
+  {
+   "key": "robi tools",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 5
+  },
+  {
+   "key": "facturas x",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 6
+  },
+  {
+   "key": "facture chatgpt",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 6
+  },
+  {
+   "key": "faire un devis exemple",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 6
+  },
+  {
+   "key": "logiciel de facturation freelance",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 6
+  },
+  {
+   "key": "robi phone",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 6
+  },
+  {
+   "key": "robi9.come",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 6
+  },
+  {
+   "key": "devis comment faire",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "my robi ai",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "qu'est-ce que l'e-reporting?",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "robi pay",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "ai facturi",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 8
+  },
+  {
+   "key": "create invoice ai",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 8
+  },
+  {
+   "key": "robi secu ll",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 8
+  },
+  {
+   "key": "devis automatique ia",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "favtur",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "roby ai",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "robî",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "factur x format",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "outil de facturation pour freelance",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "robi technology",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "generador de facturas ia",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 11
+  },
+  {
+   "key": "robi ai token",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 11
+  },
+  {
+   "key": "ai to generate invoice",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 17
+  },
+  {
+   "key": "invoice berry",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 18
+  },
+  {
+   "key": "invoice creator ai",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 19
+  },
+  {
+   "key": "robi technology csv pro",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 20
+  },
+  {
+   "key": "ai invoice app",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 21
+  },
+  {
+   "key": "robi technology ai store",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 21
+  },
+  {
+   "key": "রবি অ্যাপ লগইন",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 22
+  },
+  {
+   "key": "robi online chat",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 24
+  },
+  {
+   "key": "invoicing ai",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 26
+  },
+  {
+   "key": "robi log in",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 26
+  },
+  {
+   "key": "robiin",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 26
+  },
+  {
+   "key": "r.o.b.i.",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 28
+  },
+  {
+   "key": "robi ace postpaid",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 28
+  },
+  {
+   "key": "bdapps robi",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 32
+  },
+  {
+   "key": "facture prime",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 32
+  },
+  {
+   "key": "robival",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 35
+  },
+  {
+   "key": "robi e care",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 37
+  },
+  {
+   "key": "robi rdms login",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 39
+  },
+  {
+   "key": "robi wifi robi com bd login",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 39
+  },
+  {
+   "key": "robi labs",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 42
+  },
+  {
+   "key": "rdms robi login",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 47
+  },
+  {
+   "key": "robi support",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 47
+  },
+  {
+   "key": "robi account",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 48
+  },
+  {
+   "key": "www.robi",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 48
+  },
+  {
+   "key": "www.robi wifi.com",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 48
+  },
+  {
+   "key": "robii",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 49
+  },
+  {
+   "key": "ubl",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 50
+  },
+  {
+   "key": "devis autoentrepreneur",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 52
+  },
+  {
+   "key": "edit invoice ai",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 52
+  },
+  {
+   "key": "devis type auto entrepreneur",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 56
+  },
+  {
+   "key": "robi ai store",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 62
+  },
+  {
+   "key": "logiciel de gestion des factures avec gpt",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 74
+  },
+  {
+   "key": "robi clean",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 83
+  },
+  {
+   "key": "robi d",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 96
+  }
+ ],
+ "pages": [
+  {
+   "key": "https://robi-app.com/fr/facture-ai",
+   "clicks": 60,
+   "impressions": 1998,
+   "ctr": 3,
+   "position": 9.26
+  },
+  {
+   "key": "https://robi-app.com/en/facture-ai",
+   "clicks": 7,
+   "impressions": 915,
+   "ctr": 0.77,
+   "position": 14.51
+  },
+  {
+   "key": "https://robi-app.com/fr",
+   "clicks": 9,
+   "impressions": 775,
+   "ctr": 1.16,
+   "position": 10.41
+  },
+  {
+   "key": "https://robi-app.com/es/facture-ai",
+   "clicks": 7,
+   "impressions": 308,
+   "ctr": 2.27,
+   "position": 9.88
+  },
+  {
+   "key": "https://robi-app.com/en-US",
+   "clicks": 2,
+   "impressions": 271,
+   "ctr": 0.74,
+   "position": 11.52
+  },
+  {
+   "key": "https://robi-app.com/en-AE/pricing",
+   "clicks": 4,
+   "impressions": 212,
+   "ctr": 1.89,
+   "position": 7.93
+  },
+  {
+   "key": "https://go.robi-app.com/",
+   "clicks": 1,
+   "impressions": 195,
+   "ctr": 0.51,
+   "position": 35.17
+  },
+  {
+   "key": "https://robi-app.com/fr/blog/comment-faire-un-devis-auto-entrepreneur",
+   "clicks": 1,
+   "impressions": 102,
+   "ctr": 0.98,
+   "position": 8.2
+  },
+  {
+   "key": "https://robi-app.com/fr-MA",
+   "clicks": 0,
+   "impressions": 96,
+   "ctr": 0,
+   "position": 5.11
+  },
+  {
+   "key": "https://robi-app.com/fr/blog/creer-facture-avec-ia",
+   "clicks": 3,
+   "impressions": 93,
+   "ctr": 3.23,
+   "position": 6.32
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/sophrologue",
+   "clicks": 0,
+   "impressions": 83,
+   "ctr": 0,
+   "position": 27.33
+  },
+  {
+   "key": "https://robi-app.com/es/blog/factur-x-c-est-quoi-format-facture-electronique",
+   "clicks": 0,
+   "impressions": 73,
+   "ctr": 0,
+   "position": 7.29
+  },
+  {
+   "key": "https://robi-app.com/es",
+   "clicks": 0,
+   "impressions": 60,
+   "ctr": 0,
+   "position": 6.45
+  },
+  {
+   "key": "https://robi-app.com/en/blog/facture-vocale-creer-en-parlant",
+   "clicks": 0,
+   "impressions": 42,
+   "ctr": 0,
+   "position": 9.86
+  },
+  {
+   "key": "https://robi-app.com/en-IE/blog/mention-tva-facture-2026-293b-cibs",
+   "clicks": 0,
+   "impressions": 40,
+   "ctr": 0,
+   "position": 5.67
+  },
+  {
+   "key": "https://robi-app.com/es/blog/comment-faire-une-facture-auto-entrepreneur",
+   "clicks": 1,
+   "impressions": 38,
+   "ctr": 2.63,
+   "position": 6.03
+  },
+  {
+   "key": "https://robi-app.com/en-AE/tools",
+   "clicks": 1,
+   "impressions": 36,
+   "ctr": 2.78,
+   "position": 6.47
+  },
+  {
+   "key": "https://robi-app.com/es/blog/facture-vocale-creer-en-parlant",
+   "clicks": 0,
+   "impressions": 24,
+   "ctr": 0,
+   "position": 7.33
+  },
+  {
+   "key": "https://robi-app.com/fr-MA/blog/comment-faire-un-devis-auto-entrepreneur",
+   "clicks": 0,
+   "impressions": 21,
+   "ctr": 0,
+   "position": 5.24
+  },
+  {
+   "key": "https://robi-app.com/en/blog/creer-facture-avec-ia",
+   "clicks": 0,
+   "impressions": 21,
+   "ctr": 0,
+   "position": 28.57
+  },
+  {
+   "key": "https://robi-app.com/fr-BE/blog/meilleur-logiciel-facturation-freelance-2026",
+   "clicks": 0,
+   "impressions": 19,
+   "ctr": 0,
+   "position": 11.68
+  },
+  {
+   "key": "https://robi-app.com/en-IE/blog/facture-vocale-creer-en-parlant",
+   "clicks": 1,
+   "impressions": 16,
+   "ctr": 6.25,
+   "position": 9.25
+  },
+  {
+   "key": "https://robi-app.com/fr-SN/blog/creer-facture-avec-ia",
+   "clicks": 1,
+   "impressions": 13,
+   "ctr": 7.69,
+   "position": 5.77
+  },
+  {
+   "key": "https://robi-app.com/fr/tools/generateur-facture",
+   "clicks": 0,
+   "impressions": 12,
+   "ctr": 0,
+   "position": 34.83
+  },
+  {
+   "key": "https://robi-app.com/fr-MA/blog/mention-tva-facture-2026-293b-cibs",
+   "clicks": 1,
+   "impressions": 11,
+   "ctr": 9.09,
+   "position": 6.55
+  },
+  {
+   "key": "https://robi-app.com/fr/blog/facture-vocale-creer-en-parlant",
+   "clicks": 0,
+   "impressions": 11,
+   "ctr": 0,
+   "position": 6
+  },
+  {
+   "key": "https://robi-app.com/fr/blog/factur-x-ubl-chorus-pro-pdp-glossaire",
+   "clicks": 0,
+   "impressions": 11,
+   "ctr": 0,
+   "position": 11.09
+  },
+  {
+   "key": "https://robi-app.com/en-IE/blog/factur-x-c-est-quoi-format-facture-electronique",
+   "clicks": 0,
+   "impressions": 10,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "https://robi-app.com/es/blog/creer-facture-avec-ia",
+   "clicks": 0,
+   "impressions": 9,
+   "ctr": 0,
+   "position": 5.78
+  },
+  {
+   "key": "https://robi-app.com/fr-BE/blog/facturation-electronique-2026-2027-freelance",
+   "clicks": 0,
+   "impressions": 9,
+   "ctr": 0,
+   "position": 5.89
+  },
+  {
+   "key": "https://robi-app.com/en-AU/blog/verifactu-2026-autonomos-guia",
+   "clicks": 0,
+   "impressions": 9,
+   "ctr": 0,
+   "position": 7.67
+  },
+  {
+   "key": "https://robi-app.com/en-US/blog/factur-x-c-est-quoi-format-facture-electronique",
+   "clicks": 0,
+   "impressions": 8,
+   "ctr": 0,
+   "position": 4.62
+  },
+  {
+   "key": "https://robi-app.com/en/blog/facturation-par-ia-creer-facture-voix",
+   "clicks": 1,
+   "impressions": 7,
+   "ctr": 14.29,
+   "position": 4.71
+  },
+  {
+   "key": "https://robi-app.com/fr/features/devis-automatique",
+   "clicks": 0,
+   "impressions": 7,
+   "ctr": 0,
+   "position": 25.43
+  },
+  {
+   "key": "https://robi-app.com/en/blog/facturation-electronique-2026-2027-freelance",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 5.67
+  },
+  {
+   "key": "https://robi-app.com/en",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 6.83
+  },
+  {
+   "key": "https://robi-app.com/es/blog/factur-x-ubl-chorus-pro-pdp-glossaire",
+   "clicks": 0,
+   "impressions": 6,
+   "ctr": 0,
+   "position": 8
+  },
+  {
+   "key": "https://robi-app.com/en/tools/generateur-facture",
+   "clicks": 1,
+   "impressions": 5,
+   "ctr": 20,
+   "position": 4.4
+  },
+  {
+   "key": "https://robi-app.com/fr/blog/e-reporting-2026-qui-est-concerne",
+   "clicks": 0,
+   "impressions": 5,
+   "ctr": 0,
+   "position": 3
+  },
+  {
+   "key": "https://robi-app.com/en-AU/blog/logiciel-facture-electronique-2026-comment-choisir",
+   "clicks": 0,
+   "impressions": 5,
+   "ctr": 0,
+   "position": 5.8
+  },
+  {
+   "key": "https://robi-app.com/fr-CI/blog/creer-facture-avec-ia",
+   "clicks": 0,
+   "impressions": 5,
+   "ctr": 0,
+   "position": 6.6
+  },
+  {
+   "key": "https://robi-app.com/en-AE/industries/expert-comptable",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 5
+  },
+  {
+   "key": "https://robi-app.com/en-US/blog/verifier-facture-factur-x-valide",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 5.25
+  },
+  {
+   "key": "https://robi-app.com/en/blog/facture-electronique-septembre-2026-etes-vous-pret",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 5.5
+  },
+  {
+   "key": "https://robi-app.com/es/blog/facturation-electronique-2026-2027-freelance",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 5.75
+  },
+  {
+   "key": "https://robi-app.com/en-NL/blog/creer-facture-avec-ia",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 6.25
+  },
+  {
+   "key": "https://robi-app.com/en/blog/facturation-electronique-2026-auto-entrepreneur",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 6.5
+  },
+  {
+   "key": "https://robi-app.com/en-IE/blog/mentions-obligatoires-facture",
+   "clicks": 0,
+   "impressions": 4,
+   "ctr": 0,
+   "position": 8.25
+  },
+  {
+   "key": "https://robi-app.com/en-IE/legal",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "https://robi-app.com/fr-SN/blog/e-reporting-2026-qui-est-concerne",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "https://robi-app.com/fr-SN/privacy",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 2.33
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/couvreur",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 4.33
+  },
+  {
+   "key": "https://robi-app.com/fr-CI/blog/facture-electronique-septembre-2026-etes-vous-pret",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 5
+  },
+  {
+   "key": "https://robi-app.com/fr-LU/blog/verifier-facture-factur-x-valide",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 5
+  },
+  {
+   "key": "https://robi-app.com/fr/features/facturation-ia",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 5.67
+  },
+  {
+   "key": "https://robi-app.com/pt-PT/blog/factur-x-c-est-quoi-format-facture-electronique",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 5.67
+  },
+  {
+   "key": "https://robi-app.com/pt-PT/terms",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 6
+  },
+  {
+   "key": "https://robi-app.com/en-AE/blog/facturation-electronique-2026-auto-entrepreneur",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 6.33
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/carreleur",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 6.33
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/plombier",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 6.67
+  },
+  {
+   "key": "https://robi-app.com/en-NL",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 7.67
+  },
+  {
+   "key": "https://robi-app.com/fr/blog/facturation-electronique-2026-auto-entrepreneur",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 7.67
+  },
+  {
+   "key": "https://robi-app.com/pt-PT/blog/facturacion-electronica-mexico-guia-cfdi",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "https://robi-app.com/en-AE/industries/avocat",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 14.33
+  },
+  {
+   "key": "https://robi-app.com/fr/pricing",
+   "clicks": 0,
+   "impressions": 3,
+   "ctr": 0,
+   "position": 20.67
+  },
+  {
+   "key": "https://robi-app.com/fr/blog/facturacion-electronica-mexico-guia-cfdi",
+   "clicks": 1,
+   "impressions": 2,
+   "ctr": 50,
+   "position": 6
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/osteopathe",
+   "clicks": 1,
+   "impressions": 2,
+   "ctr": 50,
+   "position": 6
+  },
+  {
+   "key": "https://robi-app.com/en-AU/blog/facture-electronique-septembre-2026-etes-vous-pret",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 1
+  },
+  {
+   "key": "https://robi-app.com/",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 1.5
+  },
+  {
+   "key": "https://robi-app.com/en-NL/blog/verifier-facture-factur-x-valide",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "https://robi-app.com/en-NL/blog/facturation-electronique-2026-2027-freelance",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 3
+  },
+  {
+   "key": "https://robi-app.com/en-AU/blog/checklist-facturation-electronique-2026-freelance",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 5.5
+  },
+  {
+   "key": "https://robi-app.com/en-US/blog/comment-faire-un-devis-auto-entrepreneur",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 5.5
+  },
+  {
+   "key": "https://robi-app.com/fr-CA/blog/factur-x-ubl-chorus-pro-pdp-glossaire",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 5.5
+  },
+  {
+   "key": "https://robi-app.com/fr/comparisons/vs-freebe",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 6.5
+  },
+  {
+   "key": "https://robi-app.com/en-AE",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "https://robi-app.com/es/blog/verifier-facture-factur-x-valide",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "https://robi-app.com/pt-PT/blog/creer-facture-avec-ia",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "https://robi-app.com/pt-PT/blog/relancer-client-impaye",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 7
+  },
+  {
+   "key": "https://robi-app.com/en/blog/meilleur-logiciel-facturation-freelance-2026",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 7.5
+  },
+  {
+   "key": "https://robi-app.com/en-US/blog/factur-x-ubl-chorus-pro-pdp-glossaire",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 13.5
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/kinesitherapeute",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 17
+  },
+  {
+   "key": "https://robi-app.com/fr-MA/blog/facturation-par-ia-creer-facture-voix",
+   "clicks": 0,
+   "impressions": 2,
+   "ctr": 0,
+   "position": 20.5
+  },
+  {
+   "key": "https://robi-app.com/en-AE/blog/comment-faire-un-devis-auto-entrepreneur",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "https://robi-app.com/en/blog/e-reporting-2026-qui-est-concerne",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "https://robi-app.com/es/blog/comment-faire-un-devis-auto-entrepreneur",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "https://robi-app.com/fr-LU/blog/e-reporting-2026-qui-est-concerne",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 2
+  },
+  {
+   "key": "https://robi-app.com/en-AU/blog/factur-x-ubl-chorus-pro-pdp-glossaire",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 3
+  },
+  {
+   "key": "https://robi-app.com/pt-PT/cgv",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 3
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/avocat",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 4
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/menuisier",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 4
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/psychologue",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 4
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/serrurier",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 5
+  },
+  {
+   "key": "https://robi-app.com/en/industries/plombier",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 6
+  },
+  {
+   "key": "https://robi-app.com/fr-CI/industries/community-manager",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 6
+  },
+  {
+   "key": "https://robi-app.com/en-AE/blog/verifier-facture-factur-x-valide",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 8
+  },
+  {
+   "key": "https://robi-app.com/fr-LU/blog/facturacion-electronica-mexico-guia-cfdi",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 8
+  },
+  {
+   "key": "https://robi-app.com/fr/comparisons",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 8
+  },
+  {
+   "key": "https://robi-app.com/en-AE/industries/graphiste",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "https://robi-app.com/en-IE/blog/verifier-facture-factur-x-valide",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 9
+  },
+  {
+   "key": "https://robi-app.com/en-US/industries/product-manager",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "https://robi-app.com/es/blog/e-reporting-2026-qui-est-concerne",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "https://robi-app.com/fr/blog",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "https://robi-app.com/fr/blog/factur-x-c-est-quoi-format-facture-electronique",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "https://robi-app.com/fr/comparisons/vs-pennylane",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "https://robi-app.com/fr/features/paiement-en-ligne",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 10
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/chauffagiste",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 11
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/naturopathe",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 11
+  },
+  {
+   "key": "https://robi-app.com/fr/industries/traiteur",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 11
+  },
+  {
+   "key": "https://robi-app.com/en-AE/blog/factur-x-ubl-chorus-pro-pdp-glossaire",
+   "clicks": 0,
+   "impressions": 1,
+   "ctr": 0,
+   "position": 15
+  }
+ ],
+ "countries": [
+  {
+   "key": "France",
+   "clicks": 42,
+   "impressions": 1697,
+   "ctr": 2.47,
+   "position": 11.34
+  },
+  {
+   "key": "États-Unis",
+   "clicks": 0,
+   "impressions": 416,
+   "ctr": 0,
+   "position": 16.4
+  },
+  {
+   "key": "Bangladesh",
+   "clicks": 7,
+   "impressions": 384,
+   "ctr": 1.82,
+   "position": 8.96
+  },
+  {
+   "key": "Maroc",
+   "clicks": 2,
+   "impressions": 301,
+   "ctr": 0.66,
+   "position": 5.7
+  },
+  {
+   "key": "Espagne",
+   "clicks": 2,
+   "impressions": 233,
+   "ctr": 0.86,
+   "position": 9.62
+  },
+  {
+   "key": "Canada",
+   "clicks": 1,
+   "impressions": 184,
+   "ctr": 0.54,
+   "position": 11.75
+  },
+  {
+   "key": "Royaume-Uni",
+   "clicks": 2,
+   "impressions": 180,
+   "ctr": 1.11,
+   "position": 15.21
+  },
+  {
+   "key": "Algérie",
+   "clicks": 5,
+   "impressions": 144,
+   "ctr": 3.47,
+   "position": 6.41
+  },
+  {
+   "key": "Tunisie",
+   "clicks": 2,
+   "impressions": 142,
+   "ctr": 1.41,
+   "position": 6.45
+  },
+  {
+   "key": "Belgique",
+   "clicks": 3,
+   "impressions": 90,
+   "ctr": 3.33,
+   "position": 8.44
+  },
+  {
+   "key": "Inde",
+   "clicks": 3,
+   "impressions": 90,
+   "ctr": 3.33,
+   "position": 16.51
+  },
+  {
+   "key": "Sénégal",
+   "clicks": 4,
+   "impressions": 83,
+   "ctr": 4.82,
+   "position": 4.19
+  },
+  {
+   "key": "Vietnam",
+   "clicks": 0,
+   "impressions": 68,
+   "ctr": 0,
+   "position": 31.9
+  },
+  {
+   "key": "Pakistan",
+   "clicks": 2,
+   "impressions": 67,
+   "ctr": 2.99,
+   "position": 10.97
+  },
+  {
+   "key": "Argentine",
+   "clicks": 0,
+   "impressions": 66,
+   "ctr": 0,
+   "position": 7.8
+  },
+  {
+   "key": "Pays-Bas",
+   "clicks": 0,
+   "impressions": 65,
+   "ctr": 0,
+   "position": 11.71
+  },
+  {
+   "key": "Côte d'Ivoire",
+   "clicks": 2,
+   "impressions": 60,
+   "ctr": 3.33,
+   "position": 4.87
+  },
+  {
+   "key": "Cameroun",
+   "clicks": 0,
+   "impressions": 54,
+   "ctr": 0,
+   "position": 6.07
+  },
+  {
+   "key": "Suisse",
+   "clicks": 3,
+   "impressions": 51,
+   "ctr": 5.88,
+   "position": 5.8
+  },
+  {
+   "key": "Mexique",
+   "clicks": 1,
+   "impressions": 48,
+   "ctr": 2.08,
+   "position": 15.42
+  },
+  {
+   "key": "Colombie",
+   "clicks": 1,
+   "impressions": 45,
+   "ctr": 2.22,
+   "position": 7.76
+  },
+  {
+   "key": "Allemagne",
+   "clicks": 0,
+   "impressions": 39,
+   "ctr": 0,
+   "position": 12.85
+  },
+  {
+   "key": "Indonésie",
+   "clicks": 0,
+   "impressions": 38,
+   "ctr": 0,
+   "position": 36.34
+  },
+  {
+   "key": "Émirats Arabes Unis",
+   "clicks": 1,
+   "impressions": 36,
+   "ctr": 2.78,
+   "position": 13.64
+  },
+  {
+   "key": "Chili",
+   "clicks": 0,
+   "impressions": 34,
+   "ctr": 0,
+   "position": 6.21
+  },
+  {
+   "key": "République démocratique du Congo",
+   "clicks": 0,
+   "impressions": 34,
+   "ctr": 0,
+   "position": 6.41
+  },
+  {
+   "key": "Arabie Saoudite",
+   "clicks": 2,
+   "impressions": 32,
+   "ctr": 6.25,
+   "position": 23.88
+  },
+  {
+   "key": "Turquie",
+   "clicks": 1,
+   "impressions": 32,
+   "ctr": 3.12,
+   "position": 20.69
+  },
+  {
+   "key": "Bénin",
+   "clicks": 0,
+   "impressions": 31,
+   "ctr": 0,
+   "position": 7.32
+  },
+  {
+   "key": "Brésil",
+   "clicks": 0,
+   "impressions": 31,
+   "ctr": 0,
+   "position": 13.58
+  },
+  {
+   "key": "Philippines",
+   "clicks": 2,
+   "impressions": 30,
+   "ctr": 6.67,
+   "position": 27.47
+  },
+  {
+   "key": "Italie",
+   "clicks": 0,
+   "impressions": 30,
+   "ctr": 0,
+   "position": 6.07
+  },
+  {
+   "key": "Thaïlande",
+   "clicks": 0,
+   "impressions": 30,
+   "ctr": 0,
+   "position": 18.83
+  },
+  {
+   "key": "Australie",
+   "clicks": 0,
+   "impressions": 28,
+   "ctr": 0,
+   "position": 23.07
+  },
+  {
+   "key": "Burkina Faso",
+   "clicks": 4,
+   "impressions": 27,
+   "ctr": 14.81,
+   "position": 4.74
+  },
+  {
+   "key": "Madagascar",
+   "clicks": 1,
+   "impressions": 26,
+   "ctr": 3.85,
+   "position": 6.31
+  },
+  {
+   "key": "Pérou",
+   "clicks": 0,
+   "impressions": 25,
+   "ctr": 0,
+   "position": 24.68
+  },
+  {
+   "key": "Venezuela",
+   "clicks": 0,
+   "impressions": 24,
+   "ctr": 0,
+   "position": 5.83
+  },
+  {
+   "key": "Portugal",
+   "clicks": 0,
+   "impressions": 19,
+   "ctr": 0,
+   "position": 6.05
+  },
+  {
+   "key": "Mali",
+   "clicks": 0,
+   "impressions": 16,
+   "ctr": 0,
+   "position": 6.75
+  }
+ ]
+}
