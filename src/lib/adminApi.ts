@@ -251,6 +251,8 @@ export interface ProduitReport {
   erreurs?: { type: string; message: string; total: number; personnes: number; dernier: string | null; replay?: string | null }[];
   /** Page d'arrivée (URL complète) et site d'origine des inscrits et payants de la période. */
   origines?: { page: string | null; origine: string | null; inscrits: number; payants: number }[] | null;
+  /** Visiteurs, inscrits et payants par mois (« AAAA-MM »), six derniers mois ; null si PostHog a refusé la lecture. */
+  parMois?: { mois: string; visiteurs: number; inscrits: number; payants: number }[] | null;
   cta?: { page: string; total: number }[];
   /** Parcours d'achat (personnes distinctes) ; null si PostHog a refusé la lecture. */
   paiement?: { vues: number; clics: number; lances: number; echecs: number; payes: number } | null;

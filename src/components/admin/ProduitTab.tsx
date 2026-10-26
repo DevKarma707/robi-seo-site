@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, ArrowDown, ArrowUp, BugPlay, ClipboardCheck, Copy, ExternalLink, Info, MousePointerClick, RefreshCw, Radio, Route, TrendingDown } from "lucide-react";
+import { AlertTriangle, ArrowDown, ArrowUp, BugPlay, CalendarDays, ClipboardCheck, Copy, ExternalLink, Info, MousePointerClick, RefreshCw, Radio, Route, TrendingDown } from "lucide-react";
 import { fetchProduitReport, type ProduitReport } from "@/lib/adminApi";
 import { construireResume, libelleOrigine, libellePage, SEUIL_ECHANTILLON } from "@/lib/produitResume";
 import { ACCENT, ACCENT_INK, btn, card } from "./ui";
@@ -331,6 +331,59 @@ export default function ProduitTab() {
               </div>
             ) : (
               <p className="text-sm text-slate-500">Aucune erreur sur la période.</p>
+            )}
+          </div>
+
+          {/* La tendance longue : ne dépend pas de la période choisie en haut. */}
+          <div className={`${card} p-5`}>
+            <div className="flex items-center gap-2 mb-1">
+              <CalendarDays size={16} style={{ color: ACCENT_INK }} />
+              <p className="text-xs font-black uppercase tracking-widest text-slate-900">Mois par mois</p>
+            </div>
+            <p className="text-[11px] text-slate-500 mb-4">
+              Six derniers mois, équipe exclue. Un mois incomplet (le mois en cours, ou le premier mois de
+              mesure) se compare mal aux autres.
+            </p>
+            {data.parMois?.length ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-[13px]">
+                  <thead>
+                    <tr className="text-[10px] uppercase tracking-wider text-slate-400 border-b border-slate-100">
+                      <th className="py-2 pr-3 font-bold">Mois</th>
+                      <th className="py-2 pr-3 font-bold text-right">Visiteurs</th>
+                      <th className="py-2 pr-3 font-bold text-right">Inscrits</th>
+                      <th className="py-2 pr-3 font-bold text-right">Taux</th>
+                      <th className="py-2 font-bold text-right">Payants</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.parMois.map((m) => (
+                      <tr key={m.mois} className="border-b border-slate-50">
+                        <td className="py-2 pr-3 text-slate-800 capitalize">
+                          {new Date(`${m.mois}-01T12:00:00`).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}
+                        </td>
+                        <td className="py-2 pr-3 text-right tabular-nums text-slate-700">{m.visiteurs}</td>
+                        <td className="py-2 pr-3 text-right font-black tabular-nums text-slate-900">{m.inscrits}</td>
+                        <td className="py-2 pr-3 text-right tabular-nums text-slate-500">
+                          {m.visiteurs ? `${((m.inscrits / m.visiteurs) * 100).toFixed(1).replace(".", ",")} %` : "—"}
+                        </td>
+                        <td
+                          className="py-2 text-right font-black tabular-nums text-slate-900"
+                          style={m.payants ? { color: ACCENT_INK } : undefined}
+                        >
+                          {m.payants}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : data.parMois === null ? (
+              <p className="text-sm text-slate-500">
+                Lecture indisponible : PostHog a refusé la requête (détail dans les logs Vercel).
+              </p>
+            ) : (
+              <p className="text-sm text-slate-500">Aucune visite mesurée sur les six derniers mois.</p>
             )}
           </div>
 

@@ -115,7 +115,7 @@ export async function GET(req: Request) {
     });
 
   try {
-    const [funnelRows, errorRows, ctaRows, hostRows, prevRows, anciensRows, origineRows, sessionRows, paiementRows] = await Promise.all([
+    const [funnelRows, errorRows, ctaRows, hostRows, prevRows, anciensRows, origineRows, sessionRows, paiementRows, moisRows] = await Promise.all([
       hogql(
         `SELECT event, count() AS total, count(DISTINCT person_id) AS personnes
          FROM events WHERE ${since} AND event IN (${eventList})
@@ -191,6 +191,18 @@ export async function GET(req: Request) {
            AND event IN ('paywall_viewed', 'paywall_cta_clicked', 'checkout_started', 'checkout_failed', 'checkout_completed')
          GROUP BY event`
       )),
+      // Mois par mois sur six mois, quelle que soit la période choisie : la
+      // tendance des inscriptions se lit ici, sans toucher à la base de l'app.
+      secondaire(hogql(
+        `SELECT toStartOfMonth(timestamp) AS mois,
+                count(DISTINCT if(event = '$pageview', person_id, NULL)) AS visiteurs,
+                count(DISTINCT if(event = 'signup', person_id, NULL)) AS inscrits,
+                count(DISTINCT if(event = 'checkout_completed', person_id, NULL)) AS payants
+         FROM events WHERE timestamp > now() - INTERVAL 6 MONTH
+           ${exclusionInterne ? `AND ${horsInterne}` : ""}
+           AND event IN ('$pageview', 'signup', 'checkout_completed')
+         GROUP BY mois ORDER BY mois`
+      )),
     ]);
 
     const countBy = (rows: Row[] | null) =>
@@ -236,6 +248,15 @@ export async function GET(req: Request) {
         ? origineRows.map((r) => ({
             page: r[0] ? String(r[0]) : null,
             origine: r[1] ? String(r[1]) : null,
+            inscrits: Number(r[2]) || 0,
+            payants: Number(r[3]) || 0,
+          }))
+        : null,
+      // null = lecture refusée par PostHog.
+      parMois: moisRows
+        ? moisRows.map((r) => ({
+            mois: String(r[0]).slice(0, 7),
+            visiteurs: Number(r[1]) || 0,
             inscrits: Number(r[2]) || 0,
             payants: Number(r[3]) || 0,
           }))
